@@ -108,22 +108,27 @@
 .header-area.style-2 .menu-list > li > a {
     font-size: 16px;
     font-weight: 600;
-    color: #000000;
-    padding: 12px 0;
+    color: #1f2937 !important;
+    padding: 8px 18px !important;
     text-decoration: none;
     transition: all 0.3s;
     letter-spacing: 0.3px;
+    background: transparent !important;
+    border-radius: 8px !important;
 }
 
 .header-area.style-2 .menu-list > li.active > a {
-    font-size: 18px;
-    font-weight: 700;
-    color: #dc2626;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+    color: white !important;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .header-area.style-2 .menu-list > li > a:hover {
-    color: #374151;
-    transform: translateY(-1px);
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
 .header-area.style-2 .contact-area {
@@ -143,6 +148,18 @@
 
 .header-area.style-2 .nav-right * {
     color: #000000 !important;
+}
+
+/* Hide search icon and sign in button */
+.header-area .search-btn,
+.header-area .eg-btn,
+.header-area .primary-btn1:not(.mobile-menu-btn),
+.header-area a[href*="sign"],
+.header-area a[href*="login"],
+.nav-right .eg-btn,
+.nav-right .primary-btn1,
+.sidebar-button:not(.mobile-menu-btn) {
+    display: none !important;
 }
 </style>
 
