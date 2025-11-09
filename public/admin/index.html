@@ -1340,7 +1340,7 @@
 
                         <div class="form-group">
                             <label style="display: flex; justify-content: space-between; align-items: center;">
-                                <span>Day-by-Day Itinerary (Optional)</span>
+                                <span>Itinerary (Optional)</span>
                                 <button type="button" onclick="addItineraryDay()" class="btn-add-day">
                                     + Add Day
                                 </button>
@@ -1366,12 +1366,14 @@
                         <h3 class="step-title">🖼️ Media & Final Settings</h3>
 
                         <div class="form-group">
-                            <label>Cover Image *</label>
-                            <input type="file" id="tourImageFile" accept="image/*" style="padding: 10px; border: 2px dashed #dee2e6; border-radius: 8px; width: 100%;">
+                            <label>Tour Images *</label>
+                            <input type="file" id="tourImageFile" accept="image/*" multiple style="padding: 10px; border: 2px dashed #dee2e6; border-radius: 8px; width: 100%;">
+                            <small style="color: #6c757d; display: block; margin-top: 5px;">You can select multiple images. Click on an image to set it as cover.</small>
+
+                            <div id="imageGallery" style="margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;"></div>
+
                             <input type="hidden" id="tourImage">
-                            <div id="imagePreview" style="margin-top: 15px; max-width: 300px; display: none;">
-                                <img id="previewImg" style="width: 100%; border-radius: 8px; border: 2px solid #e0e0e0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                            </div>
+                            <input type="hidden" id="tourImages">
                         </div>
 
                         <div class="form-group">
@@ -1862,32 +1864,156 @@
             }
         }
 
-        // Image preview functionality
-        document.getElementById('tourImageFile').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const previewDiv = document.getElementById('imagePreview');
-                    const previewImg = document.getElementById('previewImg');
-                    previewImg.src = event.target.result;
-                    previewDiv.style.display = 'block';
+        // Multiple images upload functionality
+        let uploadedImages = [];
+        let coverImageIndex = 0;
 
-                    // Set the filename in the URL field
-                    document.getElementById('tourImage').value = file.name;
-                };
-                reader.readAsDataURL(file);
+        document.getElementById('tourImageFile').addEventListener('change', async function(e) {
+            const files = Array.from(e.target.files);
+            if (files.length === 0) return;
+
+            const gallery = document.getElementById('imageGallery');
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+
+                // Create preview card
+                const card = document.createElement('div');
+                card.style.cssText = `
+                    position: relative;
+                    border: 3px solid #e0e0e0;
+                    border-radius: 12px;
+                    overflow: hidden;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                `;
+
+                // Show loading
+                card.innerHTML = `
+                    <div style="aspect-ratio: 4/3; background: #f8f9fa; display: flex; align-items: center; justify-content: center;">
+                        <span style="color: #6c757d;">Yuklanmoqda...</span>
+                    </div>
+                `;
+
+                gallery.appendChild(card);
+
+                // Upload file
+                try {
+                    const formData = new FormData();
+                    formData.append('image', file);
+
+                    const response = await fetch(`${API_URL}/upload`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const imagePath = data.data.filePath;
+                        uploadedImages.push(imagePath);
+                        const imageIndex = uploadedImages.length - 1;
+
+                        // Update preview card
+                        card.innerHTML = `
+                            <img src="${API_URL}${imagePath}" style="width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3;">
+                            <div style="position: absolute; top: 8px; right: 8px; background: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);" onclick="removeImage(${imageIndex}, this.parentElement)">
+                                <span style="color: #dc3545; font-size: 18px; font-weight: bold;">×</span>
+                            </div>
+                            <div class="cover-badge" style="position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: ${imageIndex === coverImageIndex ? 'block' : 'none'};">
+                                COVER
+                            </div>
+                        `;
+
+                        card.onclick = function() {
+                            setCoverImage(imageIndex);
+                        };
+
+                        card.dataset.imageIndex = imageIndex;
+
+                        // Set as cover if it's the first image
+                        if (imageIndex === 0) {
+                            setCoverImage(0);
+                        }
+
+                        // Update hidden inputs
+                        updateHiddenInputs();
+                    } else {
+                        card.remove();
+                        alert('Rasmni yuklashda xatolik: ' + data.message);
+                    }
+                } catch (error) {
+                    console.error('Error uploading image:', error);
+                    card.remove();
+                    alert('Rasmni yuklashda xatolik: ' + error.message);
+                }
             }
+
+            // Clear file input
+            e.target.value = '';
         });
+
+        function setCoverImage(index) {
+            coverImageIndex = index;
+
+            // Update all cards
+            const cards = document.querySelectorAll('#imageGallery > div');
+            cards.forEach((card, i) => {
+                const badge = card.querySelector('.cover-badge');
+                const currentIndex = parseInt(card.dataset.imageIndex);
+
+                if (badge) {
+                    badge.style.display = currentIndex === index ? 'block' : 'none';
+                }
+
+                // Update border
+                card.style.borderColor = currentIndex === index ? '#6366f1' : '#e0e0e0';
+                card.style.borderWidth = currentIndex === index ? '3px' : '3px';
+            });
+
+            updateHiddenInputs();
+        }
+
+        function removeImage(index, cardElement) {
+            event.stopPropagation();
+
+            if (confirm('Bu rasmni o\'chirmoqchimisiz?')) {
+                uploadedImages[index] = null;
+                cardElement.remove();
+
+                // If removed image was cover, set first available as cover
+                if (index === coverImageIndex) {
+                    for (let i = 0; i < uploadedImages.length; i++) {
+                        if (uploadedImages[i] !== null) {
+                            setCoverImage(i);
+                            break;
+                        }
+                    }
+                }
+
+                updateHiddenInputs();
+            }
+        }
+
+        function updateHiddenInputs() {
+            const validImages = uploadedImages.filter(img => img !== null);
+
+            document.getElementById('tourImages').value = JSON.stringify(validImages);
+            document.getElementById('tourImage').value = validImages[coverImageIndex] || validImages[0] || '';
+        }
 
         // Close modal and reset form
         function closeModal() {
             document.getElementById('tourModal').classList.remove('active');
             document.getElementById('tourForm').reset();
-            document.getElementById('imagePreview').style.display = 'none';
             document.getElementById('itineraryDays').innerHTML = '';
+            document.getElementById('imageGallery').innerHTML = '';
             document.getElementById('modalTitle').textContent = 'Add New Tour';
             currentEditId = null;
+
+            // Reset images
+            uploadedImages = [];
+            coverImageIndex = 0;
         }
 
         // Open modal for new tour
