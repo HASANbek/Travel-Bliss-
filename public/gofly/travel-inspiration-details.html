@@ -1,0 +1,1075 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/jquery-ui.css" rel="stylesheet">
+    <!-- Bootstrap Icon CSS -->
+    <link href="assets/css/bootstrap-icons.css" rel="stylesheet">
+    <!-- CSS -->
+    <link href="assets/css/animate.min.css" rel="stylesheet">
+    <!-- FancyBox CSS -->
+    <link href="assets/css/jquery.fancybox.min.css" rel="stylesheet">
+    <!-- Swiper slider CSS -->
+    <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
+    <!-- Slick slider CSS -->
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <link rel="stylesheet" href="assets/css/slick-theme.css">
+    <link rel="stylesheet" href="assets/css/daterangepicker.css">
+    <!-- BoxIcon  CSS -->
+    <link href="assets/css/boxicons.min.css" rel="stylesheet">
+    <!--  Style CSS  -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Title -->
+    <title>Top 10 Beaches to Visit This Summer - Travel Bliss</title>
+    <link rel="icon" href="assets/img/fav-icon.svg" type="image/gif" sizes="20x20">
+
+<style>
+/* Custom Header Styling - Nuratau Style */
+.top-info-bar {
+    background: #0d8b7a;
+    padding: 10px 0;
+    color: white;
+}
+
+.top-info-bar .container-fluid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top-info-left {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.top-info-left a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.top-info-right {
+    display: flex;
+    gap: 15px;
+}
+
+.top-info-right a {
+    color: white;
+    font-size: 18px;
+}
+
+.header-area.style-2 {
+    background: linear-gradient(to right, #f0f9ff 0%, #e0f2fe 100%);
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    padding: 6px 0;
+}
+
+.header-area.style-2 .header-logo img {
+    width: auto !important;
+    height: 45px !important;
+    max-width: 200px !important;
+    transform: none !important;
+    margin: 6px 0;
+    object-fit: contain !important;
+    image-rendering: -webkit-optimize-contrast !important;
+    image-rendering: crisp-edges !important;
+    mix-blend-mode: multiply !important;
+    background: transparent !important;
+}
+
+.header-area.style-2 .menu-list {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.header-area.style-2 .menu-list {
+    display: flex !important;
+    gap: 35px !important;
+    align-items: center !important;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.header-area.style-2 .menu-list > li {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.header-area.style-2 .menu-list > li > a {
+    color: #000000 !important;
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    text-decoration: none !important;
+    transition: color 0.3s !important;
+    padding: 10px 0 !important;
+    display: inline-block !important;
+}
+
+.header-area.style-2 .menu-list > li:hover > a,
+.header-area.style-2 .menu-list > li.active > a {
+    color: #6366f1 !important;
+}
+
+.header-area.style-2 .logo-and-menu-area {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.header-area.style-2 .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-area.style-2 .mobile-menu-btn {
+    display: none;
+    background: #000000;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+@media (max-width: 1199px) {
+    .header-area.style-2 .main-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 300px;
+        height: 100vh;
+        background: white;
+        box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+        z-index: 9999;
+        transition: right 0.3s;
+        overflow-y: auto;
+        padding: 20px;
+    }
+
+    .header-area.style-2 .main-menu.active {
+        right: 0;
+    }
+
+    .header-area.style-2 .menu-list {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0 !important;
+        width: 100%;
+    }
+
+    .header-area.style-2 .menu-list > li {
+        width: 100%;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .header-area.style-2 .menu-list > li > a {
+        display: block !important;
+        padding: 15px 0 !important;
+        width: 100%;
+    }
+
+    .header-area.style-2 .mobile-menu-btn {
+        display: block;
+    }
+
+    .mobile-logo-area {
+        display: flex !important;
+    }
+
+    /* Contact area in mobile */
+    .main-menu .contact-area {
+        border-top: 2px solid #f3f4f6;
+        border-bottom: 2px solid #f3f4f6;
+        padding: 20px 0 !important;
+        margin: 10px 0 !important;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+        border-radius: 12px;
+    }
+
+    .main-menu .contact-area > div:first-child {
+        margin-bottom: 15px !important;
+    }
+
+    .main-menu .contact-area a[href^="tel"] {
+        font-size: 18px !important;
+        color: #6366f1 !important;
+        font-weight: 700 !important;
+    }
+}
+
+/* Make all text black except logo */
+.header-area.style-2 .contact-area .content span,
+.header-area.style-2 .contact-area .content a {
+    color: #000000 !important;
+}
+
+.header-area.style-2 .primary-btn1 {
+    color: #ffffff !important;
+    background: #000000 !important;
+}
+
+.header-area.style-2 .nav-right * {
+    color: #000000 !important;
+}
+
+/* Hide search icon and sign in button */
+.header-area .search-btn,
+.header-area .eg-btn,
+.header-area .primary-btn1:not(.mobile-menu-btn),
+.header-area a[href*="sign"],
+.header-area a[href*="login"],
+.nav-right .eg-btn,
+.nav-right .primary-btn1,
+.sidebar-button:not(.mobile-menu-btn) {
+    display: none !important;
+}
+
+/* Breadcrumb Styling */
+.breadcrumb {
+    background: transparent;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+.breadcrumb-item a {
+    color: white;
+    text-decoration: none;
+}
+
+.breadcrumb-item.active {
+    color: white;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: ">";
+    color: white;
+    padding: 0 8px;
+}
+
+/* Blog Content Styling */
+.blog-meta span {
+    color: #6c757d;
+}
+
+.blog-meta i {
+    margin-right: 5px;
+}
+
+.blog-content p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #495057;
+    margin-bottom: 20px;
+}
+
+.blog-content h3 {
+    color: #212529;
+    font-weight: 700;
+}
+
+.blog-content ul li {
+    padding: 12px 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #495057;
+}
+
+.blog-content ul li:hover {
+    background: #e9ecef;
+}
+
+/* Comment Section Styling */
+.comment-item {
+    transition: transform 0.3s;
+}
+
+.comment-item:hover {
+    transform: translateX(5px);
+}
+
+/* Sidebar Widget Styling */
+.sidebar-widget:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
+}
+
+.sidebar-widget ul li a {
+    color: #495057;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.sidebar-widget ul li a:hover {
+    color: #667eea;
+}
+
+/* Related Posts Styling */
+.blog-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.blog-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+</style>
+
+</head>
+
+<body class="tt-magic-cursor">
+
+    <div id="magic-cursor">
+        <div id="ball"></div>
+    </div>
+
+    <!-- Back To Top -->
+    <div class="progress-wrap">
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"/>
+        </svg>
+        <svg class="arrow" width="22" height="25" viewBox="0 0 24 23" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M0.556131 11.4439L11.8139 0.186067L13.9214 2.29352L13.9422 20.6852L9.70638 20.7061L9.76793 8.22168L3.6064 14.4941L0.556131 11.4439Z"/>
+            <path d="M23.1276 11.4999L16.0288 4.40105L15.9991 10.4203L20.1031 14.5243L23.1276 11.4999Z"/>
+        </svg>
+    </div>
+
+    <header class="header-area style-2 travel-agency3">
+        <div class="container-fluid d-flex flex-nowrap align-items-center justify-content-between">
+            <div class="logo-and-menu-area">
+                <a href="travel-agency-03.html" class="header-logo">
+                    <img src="assets/img/travel-bliss-logo.png" alt="Travel Bliss" style="height: 45px; width: auto; max-width: 200px; object-fit: contain; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
+                </a>
+                <div class="main-menu">
+                    <div class="mobile-logo-area d-xl-none d-flex align-items-center justify-content-between">
+                        <a href="travel-agency-03.html" class="mobile-logo-wrap">
+                            <img src="assets/img/travel-bliss-logo.png" alt="Travel Bliss" style="height: 40px; width: auto; max-width: 60%; object-fit: contain;">
+                        </a>
+                        <div class="menu-close-btn">
+                            <i class="bi bi-x"></i>
+                        </div>
+                    </div>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="travel-agency-03.html">Home</a>
+                        </li>
+                        <li>
+                            <a href="#homestays-hiking">Homestays & Hiking</a>
+                        </li>
+                        <li>
+                            <a href="#adventure-tours">Adventure Tours</a>
+                        </li>
+                        <li>
+                            <a href="#cultural-tours">Cultural Tours</a>
+                        </li>
+                        <li>
+                            <a href="#day-trips">Day Trips</a>
+                        </li>
+                        <li>
+                            <a href="about.html">About</a>
+                        </li>
+                        <li>
+                            <a href="contact.html">Contact Us</a>
+                        </li>
+                    </ul>
+                    <div class="contact-area d-xl-none d-flex" style="gap: 15px; align-items: center; flex-direction: column; padding: 15px 0;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="icon">
+                                <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                    <g>
+                                        <path
+                                            d="M15.5646 11.7424L13.3317 9.50954C12.5343 8.7121 11.1786 9.03111 10.8596 10.0678C10.6204 10.7855 9.82296 11.1842 9.10526 11.0247C7.51037 10.626 5.35726 8.55261 4.95854 6.87797C4.71931 6.16024 5.19778 5.36279 5.91548 5.12359C6.95216 4.80461 7.27113 3.44895 6.47369 2.65151L4.24084 0.418659C3.60288 -0.139553 2.64595 -0.139553 2.08774 0.418659L0.572591 1.93381C-0.942555 3.5287 0.73208 7.75516 4.48007 11.5032C8.22807 15.2512 12.4545 17.0056 14.0494 15.4106L15.5646 13.8955C16.1228 13.2575 16.1228 12.3006 15.5646 11.7424Z"/>
+                                    </g>
+                                </svg>
+                            </div>
+                            <a href="tel:998901234567" style="color: #1f2937; font-weight: 600; text-decoration: none; font-size: 16px;">+998 90 123 45 67</a>
+                        </div>
+                        <div class="language-selector-mobile" style="position: relative; width: 100%;">
+                            <button class="language-btn-mobile" style="background: transparent; border: 1px solid #e5e7eb; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; color: #1f2937; padding: 10px 20px; border-radius: 8px; transition: all 0.3s; width: 100%;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                </svg>
+                                <span id="currentLangMobile">English</span>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="language-dropdown-mobile" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-top: 5px; z-index: 1000;">
+                                <a href="#" class="lang-option-mobile" data-lang="English" style="display: block; padding: 12px 15px; color: #1f2937; text-decoration: none; transition: all 0.2s; border-bottom: 1px solid #f3f4f6;">English</a>
+                                <a href="#" class="lang-option-mobile" data-lang="O'zbekcha" style="display: block; padding: 12px 15px; color: #1f2937; text-decoration: none; transition: all 0.2s; border-bottom: 1px solid #f3f4f6;">O'zbekcha</a>
+                                <a href="#" class="lang-option-mobile" data-lang="Русский" style="display: block; padding: 12px 15px; color: #1f2937; text-decoration: none; transition: all 0.2s;">Русский</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="contact-and-search-area">
+                    <div class="contact-area d-xl-flex d-none" style="gap: 20px; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="icon">
+                                <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                    <g>
+                                        <path
+                                            d="M15.5646 11.7424L13.3317 9.50954C12.5343 8.7121 11.1786 9.03111 10.8596 10.0678C10.6204 10.7855 9.82296 11.1842 9.10526 11.0247C7.51037 10.626 5.35726 8.55261 4.95854 6.87797C4.71931 6.16024 5.19778 5.36279 5.91548 5.12359C6.95216 4.80461 7.27113 3.44895 6.47369 2.65151L4.24084 0.418659C3.60288 -0.139553 2.64595 -0.139553 2.08774 0.418659L0.572591 1.93381C-0.942555 3.5287 0.73208 7.75516 4.48007 11.5032C8.22807 15.2512 12.4545 17.0056 14.0494 15.4106L15.5646 13.8955C16.1228 13.2575 16.1228 12.3006 15.5646 11.7424Z"/>
+                                    </g>
+                                </svg>
+                            </div>
+                            <a href="tel:998901234567" style="color: #1f2937; font-weight: 600; text-decoration: none;">+998 90 123 45 67</a>
+                        </div>
+                        <div class="language-selector" style="position: relative;">
+                            <button class="language-btn" style="background: transparent; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 600; color: #1f2937; padding: 5px 10px; border-radius: 6px; transition: all 0.3s;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                </svg>
+                                <span id="currentLang">EN</span>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <div class="language-dropdown" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-top: 5px; min-width: 120px; z-index: 1000;">
+                                <a href="#" class="lang-option" data-lang="EN" style="display: block; padding: 10px 15px; color: #1f2937; text-decoration: none; transition: all 0.2s;">English</a>
+                                <a href="#" class="lang-option" data-lang="UZ" style="display: block; padding: 10px 15px; color: #1f2937; text-decoration: none; transition: all 0.2s;">O'zbekcha</a>
+                                <a href="#" class="lang-option" data-lang="RU" style="display: block; padding: 10px 15px; color: #1f2937; text-decoration: none; transition: all 0.2s;">Русский</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-button mobile-menu-btn d-xl-none d-flex">
+                    <i class="bi bi-list"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb Section -->
+    <div class="breadcrumb-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 80px 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 id="blogTitle" style="color: white; font-size: 36px; margin-bottom: 15px;">Top 10 Beaches to Visit This Summer Season</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html" style="color: white;">Home</a></li>
+                            <li class="breadcrumb-item active" style="color: white;">Travel Inspiration</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="blog-details-section" style="padding: 80px 0;">
+        <div class="container">
+            <div class="row">
+                <!-- LEFT COLUMN - Main Content (col-lg-8) -->
+                <div class="col-lg-8">
+                    <!-- Blog Meta -->
+                    <div class="blog-meta" id="blogMeta" style="margin-bottom: 25px;">
+                        <span style="margin-right: 20px;"><i class="bi bi-person"></i> <span id="blogAuthor">Sarah Johnson</span></span>
+                        <span style="margin-right: 20px;"><i class="bi bi-calendar"></i> <span id="blogDate">June 15, 2024</span></span>
+                        <span><i class="bi bi-chat"></i> <span id="blogComments">24</span> Comments</span>
+                    </div>
+
+                    <!-- Featured Image -->
+                    <img id="blogImage" src="assets/img/home3/blog-img1.jpg" alt="Beach" style="width: 100%; border-radius: 12px; margin-bottom: 30px;">
+
+                    <!-- Blog Content -->
+                    <div class="blog-content" id="blogContentContainer">
+                        <p>Summer is here, and it's time to soak up the sun on some of the world's most stunning beaches! Whether you're looking for pristine white sands, crystal-clear turquoise waters, or vibrant beach cultures, we've curated a list of the top 10 beaches that should be on your travel bucket list this summer season.</p>
+
+                        <p>From tropical paradises to Mediterranean gems, these beaches offer unforgettable experiences for every type of traveler. Get ready to discover your next dream destination!</p>
+
+                        <blockquote style="border-left: 4px solid #667eea; padding-left: 20px; margin: 30px 0; font-style: italic; color: #666;">
+                            "Travel is the only thing you buy that makes you richer. It enriches our lives with unforgettable experiences, broadens our perspectives, and creates memories that last a lifetime."
+                            <footer style="margin-top: 10px; font-size: 14px;">- Dr. Samuel Nathan</footer>
+                        </blockquote>
+
+                        <!-- Beach Section 1 -->
+                        <h3 style="margin-top: 40px; margin-bottom: 20px;">1. Maldives - Paradise on Earth</h3>
+                        <img src="assets/img/home3/blog-img2.jpg" alt="Maldives" style="width: 100%; border-radius: 12px; margin-bottom: 20px;">
+                        <p>The Maldives offers crystal-clear waters and luxurious overwater bungalows that make it a perfect romantic getaway. With its pristine white sand beaches, vibrant coral reefs, and incredible marine life, this tropical paradise is ideal for snorkeling, diving, and simply relaxing in absolute luxury.</p>
+                        <p>The warm, inviting waters of the Indian Ocean and the stunning underwater world make the Maldives a must-visit destination for beach lovers and adventure seekers alike.</p>
+                        <div style="margin: 20px 0;">
+                            <a href="#" style="margin-right: 15px; color: #667eea; text-decoration: none; font-weight: 600;">Surfing</a>
+                            <a href="#" style="margin-right: 15px; color: #667eea; text-decoration: none; font-weight: 600;">Snorkeling</a>
+                            <a href="#" style="color: #667eea; text-decoration: none; font-weight: 600;">Diving</a>
+                        </div>
+
+                        <!-- Beach Section 2 -->
+                        <h3 style="margin-top: 40px; margin-bottom: 20px;">2. Maui, Hawaii - Tropical Beauty</h3>
+                        <img src="assets/img/home3/blog-img3.jpg" alt="Maui" style="width: 100%; border-radius: 12px; margin-bottom: 20px;">
+                        <p>Maui combines stunning beaches with volcanic landscapes, offering visitors a unique blend of natural wonders. From the famous Road to Hana to the spectacular sunrise at Haleakala National Park, Maui is an island that truly has it all.</p>
+                        <p>Whether you're surfing the waves at Hookipa Beach, snorkeling at Molokini Crater, or simply relaxing on the golden sands of Wailea Beach, Maui promises an unforgettable Hawaiian experience.</p>
+
+                        <!-- Beach Section 3 -->
+                        <h3 style="margin-top: 40px; margin-bottom: 20px;">3. Phuket, Thailand - Island Paradise</h3>
+                        <p>Phuket offers a perfect blend of beautiful beaches, rich culture, and vibrant nightlife. This Thai island paradise features limestone cliffs, emerald waters, and some of the most photographed beaches in the world.</p>
+                        <p>From the bustling Patong Beach to the serene Kata Noi Beach, Phuket caters to all types of travelers. Don't miss the opportunity to explore nearby islands like Phi Phi and James Bond Island for even more breathtaking coastal scenery.</p>
+
+                        <!-- Also 7 Beaches List -->
+                        <h3 style="margin-top: 50px; margin-bottom: 25px;">Also 07 Beaches Must Visit</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="margin-bottom: 15px;">4. Bali, Indonesia - The Island of the Gods with stunning beaches and spiritual culture</li>
+                            <li style="margin-bottom: 15px;">5. Santorini, Greece - Volcanic beaches with dramatic black and red sands</li>
+                            <li style="margin-bottom: 15px;">6. Cancun, Mexico - Caribbean paradise with Mayan ruins nearby</li>
+                            <li style="margin-bottom: 15px;">7. Gold Coast, Australia - Surfer's paradise with golden stretches of sand</li>
+                            <li style="margin-bottom: 15px;">8. Bora Bora, French Polynesia - Ultimate luxury destination with turquoise lagoons</li>
+                            <li style="margin-bottom: 15px;">9. Dubai Beach, UAE - Modern luxury meets pristine coastline</li>
+                            <li style="margin-bottom: 15px;">10. Miami Beach, USA - Art Deco architecture and vibrant beach culture</li>
+                        </ul>
+
+                        <!-- Tags and Share -->
+                        <div style="margin-top: 50px; padding-top: 30px; border-top: 1px solid #eee; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+                            <div>
+                                <strong>Tags:</strong>
+                                <span style="margin-left: 15px; padding: 5px 15px; background: #f0f0f0; border-radius: 20px; font-size: 14px;">Beach Travel</span>
+                                <span style="margin-left: 10px; padding: 5px 15px; background: #f0f0f0; border-radius: 20px; font-size: 14px;">Summer 2024</span>
+                                <span style="margin-left: 10px; padding: 5px 15px; background: #f0f0f0; border-radius: 20px; font-size: 14px;">Travel Guide</span>
+                            </div>
+                            <div>
+                                <strong style="margin-right: 10px;">Share:</strong>
+                                <a href="#" style="margin-left: 10px; color: #667eea; font-size: 20px;"><i class="bi bi-facebook"></i></a>
+                                <a href="#" style="margin-left: 10px; color: #667eea; font-size: 20px;"><i class="bi bi-twitter"></i></a>
+                                <a href="#" style="margin-left: 10px; color: #667eea; font-size: 20px;"><i class="bi bi-linkedin"></i></a>
+                                <a href="#" style="margin-left: 10px; color: #667eea; font-size: 20px;"><i class="bi bi-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comments Section -->
+                    <div class="comments-section" style="margin-top: 60px;">
+                        <h3 style="margin-bottom: 30px;">Comments (2)</h3>
+
+                        <!-- Comment 1 -->
+                        <div class="comment-item" style="margin-bottom: 30px; padding: 25px; background: #f9f9f9; border-radius: 12px;">
+                            <div style="display: flex; gap: 20px;">
+                                <div style="width: 60px; height: 60px; border-radius: 50%; background: #667eea; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: 700; flex-shrink: 0;">JD</div>
+                                <div style="flex: 1;">
+                                    <h5 style="margin-bottom: 5px; font-size: 18px; font-weight: 600;">John Doe</h5>
+                                    <small style="color: #999;">June 16, 2024</small>
+                                    <p style="margin-top: 15px; margin-bottom: 10px; color: #495057;">Great article! I've been to Maldives and it was absolutely stunning. The underwater world is incredible and the beaches are pristine. Highly recommend it for honeymoons!</p>
+                                    <a href="#" style="font-size: 14px; color: #667eea; text-decoration: none; font-weight: 600;">Reply</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Comment 2 -->
+                        <div class="comment-item" style="margin-bottom: 30px; padding: 25px; background: #f9f9f9; border-radius: 12px;">
+                            <div style="display: flex; gap: 20px;">
+                                <div style="width: 60px; height: 60px; border-radius: 50%; background: #764ba2; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: 700; flex-shrink: 0;">MS</div>
+                                <div style="flex: 1;">
+                                    <h5 style="margin-bottom: 5px; font-size: 18px; font-weight: 600;">Maria Smith</h5>
+                                    <small style="color: #999;">June 17, 2024</small>
+                                    <p style="margin-top: 15px; margin-bottom: 10px; color: #495057;">Thanks for sharing! Planning to visit Phuket this summer. Can't wait to explore the beaches and try some Thai cuisine. Any restaurant recommendations?</p>
+                                    <a href="#" style="font-size: 14px; color: #667eea; text-decoration: none; font-weight: 600;">Reply</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comment Form -->
+                    <div class="comment-form" style="margin-top: 50px;">
+                        <h3 style="margin-bottom: 25px;">Leave a Comment</h3>
+                        <form>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" placeholder="Your Name*" style="margin-bottom: 20px; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="email" class="form-control" placeholder="Your Email*" style="margin-bottom: 20px; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
+                                </div>
+                                <div class="col-12">
+                                    <textarea class="form-control" rows="6" placeholder="Your Message*" style="margin-bottom: 20px; padding: 15px; border-radius: 8px; border: 1px solid #ddd;"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary" style="padding: 15px 40px; border-radius: 8px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; font-weight: 600; font-size: 16px;">Post Comment</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN - Sidebar (col-lg-4) -->
+                <div class="col-lg-4">
+                    <!-- Categories Widget -->
+                    <div class="sidebar-widget" style="padding: 25px; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 30px;">
+                        <h4 style="margin-bottom: 20px; border-bottom: 2px solid #667eea; padding-bottom: 15px;">Categories</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="margin-bottom: 12px;"><a href="#" style="display: flex; justify-content: space-between; color: #495057; text-decoration: none; font-size: 15px;">Adventure Tours <span style="color: #999;">(10)</span></a></li>
+                            <li style="margin-bottom: 12px;"><a href="#" style="display: flex; justify-content: space-between; color: #495057; text-decoration: none; font-size: 15px;">Beach Holidays <span style="color: #999;">(15)</span></a></li>
+                            <li style="margin-bottom: 12px;"><a href="#" style="display: flex; justify-content: space-between; color: #495057; text-decoration: none; font-size: 15px;">Cultural Tours <span style="color: #999;">(8)</span></a></li>
+                            <li style="margin-bottom: 12px;"><a href="#" style="display: flex; justify-content: space-between; color: #495057; text-decoration: none; font-size: 15px;">Family Vacations <span style="color: #999;">(12)</span></a></li>
+                            <li style="margin-bottom: 12px;"><a href="#" style="display: flex; justify-content: space-between; color: #495057; text-decoration: none; font-size: 15px;">Cruises <span style="color: #999;">(6)</span></a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Recent Posts Widget -->
+                    <div class="sidebar-widget" style="padding: 25px; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 30px;">
+                        <h4 style="margin-bottom: 20px; border-bottom: 2px solid #667eea; padding-bottom: 15px;">Recent Posts</h4>
+                        <!-- Recent Post 1 -->
+                        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                            <img src="assets/img/home3/blog-img1.jpg" alt="Blog" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+                            <div>
+                                <a href="#" style="font-size: 14px; font-weight: 600; color: #212529; text-decoration: none; display: block; margin-bottom: 5px; line-height: 1.4;">Best Time to Visit Europe</a>
+                                <div style="font-size: 12px; color: #999; margin-top: 5px;">June 10, 2024</div>
+                            </div>
+                        </div>
+                        <!-- Recent Post 2 -->
+                        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                            <img src="assets/img/home3/blog-img2.jpg" alt="Blog" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+                            <div>
+                                <a href="#" style="font-size: 14px; font-weight: 600; color: #212529; text-decoration: none; display: block; margin-bottom: 5px; line-height: 1.4;">Travel Tips for Asia</a>
+                                <div style="font-size: 12px; color: #999; margin-top: 5px;">June 8, 2024</div>
+                            </div>
+                        </div>
+                        <!-- Recent Post 3 -->
+                        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                            <img src="assets/img/home3/blog-img3.jpg" alt="Blog" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+                            <div>
+                                <a href="#" style="font-size: 14px; font-weight: 600; color: #212529; text-decoration: none; display: block; margin-bottom: 5px; line-height: 1.4;">Hidden Gems in Africa</a>
+                                <div style="font-size: 12px; color: #999; margin-top: 5px;">June 5, 2024</div>
+                            </div>
+                        </div>
+                        <!-- Recent Post 4 -->
+                        <div style="display: flex; gap: 15px;">
+                            <img src="assets/img/home3/blog-img1.jpg" alt="Blog" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+                            <div>
+                                <a href="#" style="font-size: 14px; font-weight: 600; color: #212529; text-decoration: none; display: block; margin-bottom: 5px; line-height: 1.4;">Beach Safety Guidelines</a>
+                                <div style="font-size: 12px; color: #999; margin-top: 5px;">June 1, 2024</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tags Widget -->
+                    <div class="sidebar-widget" style="padding: 25px; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 30px;">
+                        <h4 style="margin-bottom: 20px; border-bottom: 2px solid #667eea; padding-bottom: 15px;">Popular Tags</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                            <span style="padding: 8px 18px; background: #f0f0f0; border-radius: 20px; font-size: 13px; color: #495057;">Adventure</span>
+                            <span style="padding: 8px 18px; background: #f0f0f0; border-radius: 20px; font-size: 13px; color: #495057;">Family Travel</span>
+                            <span style="padding: 8px 18px; background: #f0f0f0; border-radius: 20px; font-size: 13px; color: #495057;">Activities</span>
+                            <span style="padding: 8px 18px; background: #f0f0f0; border-radius: 20px; font-size: 13px; color: #495057;">Wildlife</span>
+                            <span style="padding: 8px 18px; background: #f0f0f0; border-radius: 20px; font-size: 13px; color: #495057;">Historical</span>
+                            <span style="padding: 8px 18px; background: #f0f0f0; border-radius: 20px; font-size: 13px; color: #495057;">Cruises</span>
+                            <span style="padding: 8px 18px; background: #f0f0f0; border-radius: 20px; font-size: 13px; color: #495057;">Cultural</span>
+                            <span style="padding: 8px 18px; background: #f0f0f0; border-radius: 20px; font-size: 13px; color: #495057;">Beach & Island</span>
+                        </div>
+                    </div>
+
+                    <!-- Contact Widget -->
+                    <div class="sidebar-widget" style="padding: 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white;">
+                        <h4 style="margin-bottom: 20px; color: white;">Need Help?</h4>
+                        <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                            <i class="bi bi-whatsapp" style="font-size: 20px;"></i>
+                            <span>+91 345 533 865</span>
+                        </div>
+                        <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                            <i class="bi bi-envelope" style="font-size: 20px;"></i>
+                            <span>info@travelbliss.uz</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="bi bi-telephone" style="font-size: 20px;"></i>
+                            <span>+998 99 123 45 67</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Posts Section -->
+    <div class="related-posts-section" style="padding: 60px 0; background: #f9f9f9;">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 50px; font-weight: 700; font-size: 32px;">You May Also Like</h2>
+            <div class="row">
+                <!-- Post 1 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-card" style="background: white; border-radius: 12px; overflow: hidden; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+                        <img src="assets/img/home3/blog-img1.jpg" alt="Blog" style="width: 100%; height: 250px; object-fit: cover;">
+                        <div style="padding: 25px;">
+                            <div style="font-size: 13px; color: #667eea; margin-bottom: 10px; font-weight: 600;">June 18, 2024</div>
+                            <h5 style="margin-bottom: 15px; font-weight: 700;">Best Destinations for Summer 2024</h5>
+                            <p style="font-size: 14px; color: #666; margin-bottom: 15px; line-height: 1.6;">Discover the top destinations to visit this summer season with our comprehensive travel guide...</p>
+                            <a href="#" style="font-size: 14px; color: #667eea; font-weight: 600; text-decoration: none;">Read More →</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Post 2 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-card" style="background: white; border-radius: 12px; overflow: hidden; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+                        <img src="assets/img/home3/blog-img2.jpg" alt="Blog" style="width: 100%; height: 250px; object-fit: cover;">
+                        <div style="padding: 25px;">
+                            <div style="font-size: 13px; color: #667eea; margin-bottom: 10px; font-weight: 600;">June 12, 2024</div>
+                            <h5 style="margin-bottom: 15px; font-weight: 700;">Travel Photography Tips</h5>
+                            <p style="font-size: 14px; color: #666; margin-bottom: 15px; line-height: 1.6;">Learn how to capture stunning travel photos with these professional tips and techniques...</p>
+                            <a href="#" style="font-size: 14px; color: #667eea; font-weight: 600; text-decoration: none;">Read More →</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Post 3 -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="blog-card" style="background: white; border-radius: 12px; overflow: hidden; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+                        <img src="assets/img/home3/blog-img3.jpg" alt="Blog" style="width: 100%; height: 250px; object-fit: cover;">
+                        <div style="padding: 25px;">
+                            <div style="font-size: 13px; color: #667eea; margin-bottom: 10px; font-weight: 600;">June 5, 2024</div>
+                            <h5 style="margin-bottom: 15px; font-weight: 700;">Budget Travel Guide</h5>
+                            <p style="font-size: 14px; color: #666; margin-bottom: 15px; line-height: 1.6;">Travel on a budget without compromising experience with our money-saving tips...</p>
+                            <a href="#" style="font-size: 14px; color: #667eea; font-weight: 600; text-decoration: none;">Read More →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer-section">
+        <div class="container">
+            <div class="footer-contact-wrap">
+                <div class="inquiry-area">
+                    <svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+                        <g>
+                            <path
+                                d="M35.8703 28.2548L33.7795 22.1697C34.7873 20.1094 35.3199 17.8181 35.3235 15.5126C35.3297 11.5039 33.7788 7.71355 30.9563 4.83988C28.1332 1.96565 24.3714 0.347686 20.3636 0.284193C16.2077 0.218522 12.3015 1.79929 9.36472 4.73596C6.53295 7.56766 4.96231 11.3008 4.9126 15.29C2.12162 17.3914 0.474267 20.6676 0.479681 24.167C0.482282 25.8045 0.850861 27.4323 1.54927 28.9043L0.109064 33.0955C-0.138507 33.816 0.0423371 34.5983 0.581071 35.1371C0.960196 35.5162 1.46005 35.7181 1.9741 35.7181C2.19038 35.7181 2.4092 35.6824 2.62259 35.6091L6.81385 34.1688C8.28584 34.8673 9.91365 35.2358 11.5512 35.2384H11.5687C15.1201 35.2383 18.4213 33.5485 20.515 30.6891C22.6938 30.6317 24.8495 30.1043 26.7983 29.1509L32.8835 31.2419C33.1314 31.3274 33.3918 31.3712 33.654 31.3715C34.2649 31.3715 34.8589 31.1316 35.3095 30.6809C35.9497 30.0407 36.1645 29.1111 35.8703 28.2548ZM11.5685 33.0956H11.5545C10.1051 33.0934 8.66574 32.7361 7.39231 32.0624C7.2628 31.9939 7.12062 31.9526 6.97456 31.9412C6.82849 31.9299 6.68164 31.9485 6.54308 31.9961L2.24537 33.4729L3.72214 29.1753C3.76974 29.0367 3.78843 28.8898 3.77703 28.7438C3.76564 28.5977 3.72442 28.4555 3.65591 28.326C2.98217 27.0525 2.62484 25.6132 2.62259 24.1637C2.61901 21.8322 3.52597 19.6224 5.11201 17.9676C5.63007 21.1258 7.13525 24.036 9.46836 26.3277C11.7842 28.6023 14.6953 30.0506 17.8363 30.5241C16.1778 32.1588 13.9421 33.0956 11.5685 33.0956ZM33.7942 29.1656C33.7332 29.2266 33.6609 29.2432 33.5796 29.2152L27.0653 26.9767C26.9268 26.9291 26.7799 26.9104 26.6339 26.9218C26.4878 26.9332 26.3456 26.9744 26.2162 27.043C24.3562 28.0269 22.2544 28.5488 20.1379 28.552H20.1176C13.0257 28.552 7.16774 22.791 7.05538 15.7008C6.99877 12.13 8.35707 8.77401 10.88 6.25112C13.4028 3.72824 16.7593 2.37044 20.3297 2.42669C27.4267 2.53926 33.1917 8.40803 33.1807 15.5092C33.1774 17.6258 32.6556 19.7276 31.6717 21.5875C31.6032 21.717 31.562 21.8592 31.5506 22.0052C31.5392 22.1513 31.5579 22.2981 31.6055 22.4367L33.8439 28.951C33.8718 29.0326 33.8551 29.1048 33.7942 29.1656Z"/>
+                            <path
+                                d="M26.5002 9.80957H13.7343C13.1426 9.80957 12.6629 10.2893 12.6629 10.881C12.6629 11.4727 13.1426 11.9524 13.7343 11.9524H26.5002C27.092 11.9524 27.5717 11.4727 27.5717 10.881C27.5717 10.2893 27.092 9.80957 26.5002 9.80957ZM26.5002 14.2161H13.7343C13.1426 14.2161 12.6629 14.6959 12.6629 15.2875C12.6629 15.8792 13.1426 16.359 13.7343 16.359H26.5002C27.092 16.359 27.5717 15.8792 27.5717 15.2875C27.5717 14.6959 27.092 14.2161 26.5002 14.2161ZM21.5862 18.6225H13.7342C13.1425 18.6225 12.6628 19.1023 12.6628 19.694C12.6628 20.2857 13.1426 20.7654 13.7342 20.7654H21.5862C22.1779 20.7654 22.6576 20.2856 22.6576 19.694C22.6576 19.1023 22.178 18.6225 21.5862 18.6225Z"/>
+                        </g>
+                    </svg>
+                    <div class="content">
+                        <h6>To More Inquiry</h6>
+                        <span>Don't hesitate Call to Travel Bliss.</span>
+                    </div>
+                </div>
+                <ul class="contact-area">
+                    <li class="single-contact">
+                        <div class="icon">
+                            <img src="assets/img/home1/icon/whatsapp-icon2.svg" alt="">
+                        </div>
+                        <div class="content">
+                            <span>WhatsApp</span>
+                            <a href="https://wa.me/998901234567">+998 90 123 45 67</a>
+                        </div>
+                    </li>
+                    <li class="single-contact">
+                        <div class="icon">
+                            <img src="assets/img/home1/icon/mail-icon2.svg" alt="">
+                        </div>
+                        <div class="content">
+                            <span>Mail Us</span>
+                            <a href="mailto:info@travelbliss.uz">info@travelbliss.uz</a>
+                        </div>
+                    </li>
+                    <li class="single-contact">
+                        <div class="icon">
+                            <img src="assets/img/home1/icon/call-icon.svg" alt="">
+                        </div>
+                        <div class="content">
+                            <span>Call Us</span>
+                            <a href="tel:+998901234567">+998 90 123 45 67</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <svg class="divider" width="1320" height="6" viewBox="0 0 1320 6" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M5 2.5L0 0.113249V5.88675L5 3.5V2.5ZM1315 3.5L1320 5.88675V0.113249L1315 2.5V3.5ZM4.5 3.5H1315.5V2.5H4.5V3.5Z"/>
+            </svg>
+            <div class="footer-menu-wrap">
+                <div class="row gy-md-4 gy-5">
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="footer-logo-and-addition-info">
+                            <a href="travel-agency-03.html" class="footer-logo">
+                                <img src="assets/img/travel-bliss-logo.png" alt="Travel Bliss" style="height: 80px; width: auto; max-width: 280px; object-fit: contain;">
+                            </a>
+                            <div class="address-area">
+                                <span>Travel Bliss Uzbekistan</span>
+                                <a href="#">Amir Temur Street, Tashkent 100000, Uzbekistan</a>
+                            </div>
+                            <ul class="social-list">
+                                <li><a href="https://www.facebook.com/"><i class="bx bxl-facebook"></i></a></li>
+                                <li><a href="https://www.linkedin.com/"><i class="bx bxl-linkedin"></i></a></li>
+                                <li><a href="https://www.youtube.com/"><i class="bx bxl-youtube"></i></a></li>
+                                <li><a href="https://www.instagram.com/"><i class="bx bxl-instagram-alt"></i></a></li>
+                            </ul>
+                            <div class="language-area">
+                                <div class="language-btn">
+                                    <div class="icon-and-content">
+                                        <svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+                                            <g>
+                                                <path
+                                                    d="M7 14C5.13023 14 3.37239 13.2719 2.05023 11.9498C0.728137 10.6276 0 8.86977 0 7C0 5.13023 0.728137 3.37239 2.05023 2.05023C3.37239 0.728137 5.13023 0 7 0C8.86977 0 10.6276 0.728137 11.9498 2.05023C13.2719 3.37239 14 5.13023 14 7C14 8.86977 13.2719 10.6276 11.9498 11.9498C10.6276 13.2719 8.86977 14 7 14ZM7 0.583324C3.46183 0.583324 0.583324 3.46183 0.583324 7C0.583324 10.5382 3.46183 13.4166 7 13.4166C10.5382 13.4166 13.4166 10.5382 13.4166 7C13.4166 3.46183 10.5382 0.583324 7 0.583324Z"/>
+                                                <path
+                                                    d="M7 14C5.90297 14 4.8854 13.2486 4.13468 11.8841C3.41431 10.5747 3.01758 8.84018 3.01758 7C3.01758 5.15982 3.41431 3.42527 4.13468 2.11589C4.8854 0.751433 5.90297 0 7 0C8.09704 0 9.11461 0.751433 9.8653 2.11589C10.5857 3.42527 10.9824 5.15982 10.9824 7C10.9824 8.84018 10.5857 10.5747 9.8653 11.8841C9.11461 13.2486 8.09704 14 7 14ZM7 0.583324C6.12536 0.583324 5.2893 1.22746 4.64579 2.39709C3.97198 3.62179 3.6009 5.25645 3.6009 7C3.6009 8.74355 3.97198 10.3782 4.64576 11.6029C5.28927 12.7725 6.12533 13.4166 6.99998 13.4166C7.87462 13.4166 8.71068 12.7725 9.35419 11.6029C10.028 10.3782 10.3991 8.74355 10.3991 7C10.3991 5.25645 10.028 3.62179 9.35419 2.39709C8.71071 1.22746 7.87462 0.583324 7 0.583324Z"/>
+                                                <path
+                                                    d="M6.99968 13.9573C6.8386 13.9573 6.70801 13.8267 6.70801 13.6657V0.334156C6.70801 0.173074 6.83857 0.0424805 6.99968 0.0424805C7.16077 0.0424805 7.29136 0.173074 7.29136 0.334156V13.6657C7.29136 13.8267 7.16077 13.9573 6.99968 13.9573Z"/>
+                                                <path
+                                                    d="M13.6661 7.29147H0.334644C0.173562 7.29147 0.0429688 7.16088 0.0429688 6.99979C0.0429688 6.83871 0.173562 6.70812 0.334644 6.70812H13.6661C13.8272 6.70812 13.9578 6.83868 13.9578 6.99979C13.9578 7.16088 13.8272 7.29147 13.6661 7.29147ZM12.7022 3.81187H1.29862C1.13754 3.81187 1.00695 3.6813 1.00695 3.52019C1.00695 3.35908 1.13751 3.22852 1.29862 3.22852H12.7022C12.8633 3.22852 12.9939 3.35908 12.9939 3.52019C12.9939 3.6813 12.8632 3.81187 12.7022 3.81187ZM12.7022 10.771H1.29862C1.13754 10.771 1.00695 10.6404 1.00695 10.4794C1.00695 10.3183 1.13751 10.1877 1.29862 10.1877H12.7022C12.8633 10.1877 12.9939 10.3183 12.9939 10.4794C12.9939 10.6404 12.8632 10.771 12.7022 10.771Z"/>
+                                            </g>
+                                        </svg>
+                                        <span>EN</span>
+                                    </div>
+                                    <i class="bi bi-caret-down-fill"></i>
+                                </div>
+                                <ul class="language-list">
+                                    <li><a href="#"><img src="assets/img/home1/england-flag.png" alt="">English</a></li>
+                                    <li><a href="#"><img src="assets/img/home1/netherlands-flag.png" alt="">Dutch</a></li>
+                                    <li><a href="#"><img src="assets/img/home1/japan-flag.png" alt="">Japanese</a></li>
+                                    <li><a href="#"><img src="assets/img/home1/korea-flag.png" alt="">Korean</a></li>
+                                    <li><a href="#"><img src="assets/img/home1/china-flag.png" alt="">Chinese</a></li>
+                                </ul>
+                            </div>
+                            <a href="#"><img src="assets/img/home1/icon/google-play.svg" alt=""></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-md-end">
+                        <div class="footer-widget">
+                            <div class="widget-title">
+                                <h5>Top Destination</h5>
+                            </div>
+                            <ul class="widget-list">
+                                <li><a href="travel-package-01.html">Maldives Tour</a></li>
+                                <li><a href="travel-package-01.html">Bali, Indonesia Tour</a></li>
+                                <li><a href="travel-package-01.html">Thailand Tour</a></li>
+                                <li><a href="travel-package-01.html">Philippines Tour</a></li>
+                                <li><a href="travel-package-01.html">Hawaii, USA Tour</a></li>
+                                <li><a href="travel-package-01.html">Switzerland Tour</a></li>
+                                <li><a href="travel-package-01.html">New Zealand Tour </a></li>
+                                <li><a href="travel-package-01.html">Costa Rica Tour</a></li>
+                                <li><a href="travel-package-01.html">Peru (Machu Picchu)</a></li>
+                                <li><a href="travel-package-01.html">Paris, France Tour</a></li>
+                                <li><a href="travel-package-01.html">Rome, Italy Tour</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-md-end">
+                        <div class="footer-widget">
+                            <div class="widget-title">
+                                <h5>Popular Search</h5>
+                            </div>
+                            <ul class="widget-list">
+                                <li><a href="travel-package-02.html">Adventure</a></li>
+                                <li><a href="travel-package-02.html">Hiking & Stiking</a></li>
+                                <li><a href="travel-package-02.html">Holiday Packages</a></li>
+                                <li><a href="travel-package-02.html">Flights And Hotels</a></li>
+                                <li><a href="travel-package-02.html">Honeymoon Trip</a></li>
+                                <li><a href="travel-package-02.html">Bali Vacation Package</a></li>
+                                <li><a href="travel-package-02.html">Desert Safari</a></li>
+                                <li><a href="travel-package-02.html">Last-Minute Deals</a></li>
+                                <li><a href="travel-package-02.html">Summer Vacation</a></li>
+                                <li><a href="travel-package-02.html">Wildlife Safari</a></li>
+                                <li><a href="travel-package-02.html">Dubai Luxury Tours</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 d-flex justify-content-lg-end">
+                        <div class="footer-widget">
+                            <div class="widget-title">
+                                <h5>Resources</h5>
+                            </div>
+                            <ul class="widget-list">
+                                <li><a href="about.html">About Travel Bliss</a></li>
+                                <li><a href="#">Health & Safety Measure</a></li>
+                                <li><a href="visa.html">Visa Processing</a></li>
+                                <li><a href="contact.html">Customize Tour</a></li>
+                                <li><a href="travel-inspiration-01.html">Travel Inspirations</a></li>
+                                <li><a href="#">Traveler Reviews</a></li>
+                                <li><a href="#">Terms & Condition</a></li>
+                                <li><a href="https://www.google.com/maps">Sitemap</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="copyright-and-payment-method-area">
+                    <p>Copyright 2025 <a href="https://www.egenslab.com/">Egens Lab</a> | All Right Reserved.</p>
+                    <div class="payment-method-area">
+                        <span>Accepted Payment Methods :</span>
+                        <ul>
+                            <li><img src="assets/img/home1/icon/mastar-card-icon.svg" alt=""></li>
+                            <li><img src="assets/img/home1/icon/visa-icon.svg" alt=""></li>
+                            <li><img src="assets/img/home1/icon/paypal-icon.svg" alt=""></li>
+                            <li><img src="assets/img/home1/icon/gpay-icon.svg" alt=""></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!--  Main jQuery  -->
+    <script src="assets/js/jquery-3.7.1.min.js"></script>
+    <script src="assets/js/jquery-ui.js"></script>
+    <script src="assets/js/moment.min.js"></script>
+    <script src="assets/js/daterangepicker.min.js"></script>
+
+    <!-- Popper and Bootstrap JS -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <!-- Swiper slider JS -->
+    <script src="assets/js/swiper-bundle.min.js"></script>
+    <script src="assets/js/slick.js"></script>
+    <!-- Waypoints JS -->
+    <script src="assets/js/waypoints.min.js"></script>
+    <!-- Counterup JS -->
+    <script src="assets/js/jquery.counterup.min.js"></script>
+    <!-- Wow JS -->
+    <script src="assets/js/wow.min.js"></script>
+    <!-- Gsap  JS -->
+    <script src="assets/js/gsap.min.js"></script>
+    <script src="assets/js/ScrollTrigger.min.js"></script>
+    <script src="assets/js/jquery.fancybox.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/select-dropdown.js"></script>
+    <script src="assets/js/custom.js"></script>
+
+    <!-- Blog Details Loading Script -->
+    <script>
+        // Load blog details from API
+        async function loadBlogDetails() {
+            try {
+                // Get blog ID from URL parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                const blogId = urlParams.get('id');
+
+                if (!blogId) {
+                    console.error('No blog ID found in URL');
+                    return;
+                }
+
+                const response = await fetch(`/api/admin/blogs/${blogId}`);
+
+                if (!response.ok) {
+                    throw new Error('Failed to load blog details');
+                }
+
+                const result = await response.json();
+                const blog = result.data || result;
+
+                // Update page title
+                document.title = blog.title + ' - Travel Bliss';
+
+                // Update blog title
+                document.getElementById('blogTitle').textContent = blog.title;
+
+                // Update blog meta
+                const author = blog.author?.name || blog.author || 'Admin';
+                document.getElementById('blogAuthor').textContent = author;
+
+                const publishedDate = blog.publishedAt || blog.createdAt;
+                const date = new Date(publishedDate);
+                const formattedDate = date.toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+                document.getElementById('blogDate').textContent = formattedDate;
+
+                const comments = blog.commentsCount || blog.comments?.length || 0;
+                document.getElementById('blogComments').textContent = comments;
+
+                // Update featured image
+                const image = blog.image || blog.featuredImage || 'assets/img/home3/blog-img1.jpg';
+                const blogImageEl = document.getElementById('blogImage');
+                blogImageEl.src = image;
+                blogImageEl.alt = blog.title;
+                blogImageEl.onerror = function() {
+                    this.src = 'assets/img/home3/blog-img1.jpg';
+                };
+
+                // Update blog content
+                const contentContainer = document.getElementById('blogContentContainer');
+                if (blog.content) {
+                    // Convert line breaks to paragraphs
+                    const paragraphs = blog.content.split('\n\n').filter(p => p.trim());
+                    contentContainer.innerHTML = paragraphs.map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+                } else {
+                    contentContainer.innerHTML = '<p>No content available.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading blog details:', error);
+                document.getElementById('blogContentContainer').innerHTML = '<p>Unable to load blog content. Please try again later.</p>';
+            }
+        }
+
+        // Load blog when page loads
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadBlogDetails);
+        } else {
+            loadBlogDetails();
+        }
+    </script>
+
+    <script>
+    // Language Selector Desktop
+    document.querySelector('.language-btn').addEventListener('click', function() {
+        const dropdown = document.querySelector('.language-dropdown');
+        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    });
+
+    document.querySelectorAll('.lang-option').forEach(option => {
+        option.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('currentLang').textContent = this.getAttribute('data-lang');
+            document.querySelector('.language-dropdown').style.display = 'none';
+        });
+    });
+
+    // Language Selector Mobile
+    document.querySelector('.language-btn-mobile').addEventListener('click', function() {
+        const dropdown = document.querySelector('.language-dropdown-mobile');
+        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    });
+
+    document.querySelectorAll('.lang-option-mobile').forEach(option => {
+        option.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('currentLangMobile').textContent = this.getAttribute('data-lang');
+            document.querySelector('.language-dropdown-mobile').style.display = 'none';
+        });
+    });
+
+    // Mobile Menu
+    document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+        document.querySelector('.main-menu').classList.add('active');
+    });
+
+    document.querySelector('.menu-close-btn').addEventListener('click', function() {
+        document.querySelector('.main-menu').classList.remove('active');
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.language-selector')) {
+            document.querySelector('.language-dropdown').style.display = 'none';
+        }
+        if (!e.target.closest('.language-selector-mobile')) {
+            document.querySelector('.language-dropdown-mobile').style.display = 'none';
+        }
+    });
+    </script>
+
+</body>
+
+</html>
