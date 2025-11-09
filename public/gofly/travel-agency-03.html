@@ -3327,20 +3327,27 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 function displayTours(tours) {
     const container = document.getElementById('toursContainer');
-    
-    const toursHTML = tours.map(tour => `
+
+    const toursHTML = tours.map(tour => {
+        // Backend'dan kelgan ma'lumotlarni to'g'ri olish
+        const tourId = tour.id || tour._id;
+        const tourTitle = tour.title || tour.name;
+        const tourLocation = tour.destination || tour.location;
+        const tourDescription = tour.description || tour.summary || '';
+
+        return `
         <div class="col-lg-4 col-md-6">
             <div class="package-card two" style="border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.3s;">
                 <div class="package-img" style="height: 250px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
                     <div style="text-align: center; color: white;">
-                        <h3 style="font-size: 48px; margin: 0;">${tour.location}</h3>
+                        <h3 style="font-size: 48px; margin: 0;">${tourLocation}</h3>
                         <p style="font-size: 18px; margin: 5px 0 0 0;">${getCategoryName(tour.category)}</p>
                     </div>
                 </div>
                 <div class="package-content" style="padding: 20px;">
                     <div class="card-content" style="margin-bottom: 15px;">
-                        <h4 style="font-size: 20px; font-weight: 600; margin-bottom: 10px; color: #212529;">${tour.name}</h4>
-                        <p style="font-size: 14px; color: #6c757d; margin-bottom: 15px; line-height: 1.6;">${tour.description.substring(0, 100)}...</p>
+                        <h4 style="font-size: 20px; font-weight: 600; margin-bottom: 10px; color: #212529;">${tourTitle}</h4>
+                        <p style="font-size: 14px; color: #6c757d; margin-bottom: 15px; line-height: 1.6;">${tourDescription.substring(0, 100)}...</p>
                     </div>
                     <div class="card-bottom" style="display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid #e5e7eb;">
                         <div>
@@ -3353,15 +3360,16 @@ function displayTours(tours) {
                         </div>
                     </div>
                     <div style="margin-top: 15px;">
-                        <a href="#" onclick="bookTour('${tour._id}', '${tour.name}'); return false;" style="display: block; width: 100%; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;">
-                            Book Now
+                        <a href="tour-details.html?id=${tourId}" style="display: block; width: 100%; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s;">
+                            View Details
                         </a>
                     </div>
                 </div>
             </div>
         </div>
-    `).join('');
-    
+        `;
+    }).join('');
+
     container.innerHTML = toursHTML;
 }
 
