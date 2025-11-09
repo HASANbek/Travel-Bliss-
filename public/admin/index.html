@@ -1470,13 +1470,21 @@
         // Load dashboard statistics
         async function loadDashboardStats() {
             try {
-                const response = await fetch(`${API_URL}/tours`);
-                const data = await response.json();
+                // Load tours stats
+                const toursResponse = await fetch(`${API_URL}/tours`);
+                const toursData = await toursResponse.json();
 
-                if (data.success) {
-                    const tours = data.data.tours;
+                if (toursData.success) {
+                    const tours = toursData.data.tours;
                     document.getElementById('totalTours').textContent = tours.length;
                     document.getElementById('activeTours').textContent = tours.filter(t => t.isActive).length;
+                }
+
+                // Load blogs stats
+                const blogsResponse = await fetch(`${API_URL}/admin/blogs`);
+                if (blogsResponse.ok) {
+                    const blogs = await blogsResponse.json();
+                    document.getElementById('totalBlogs').textContent = blogs.length;
                 }
             } catch (error) {
                 console.error('Error loading stats:', error);
