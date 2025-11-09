@@ -17,6 +17,26 @@ async function loadToursFromBackend() {
     }
 }
 
+// Helper function to get correct image path
+function getImagePath(image) {
+    if (!image) {
+        return 'assets/img/home1/tour-package-img1.jpg'; // Default image
+    }
+
+    // If image starts with /uploads, it's an uploaded image - use it directly
+    if (image.startsWith('/uploads/')) {
+        return image;
+    }
+
+    // If image starts with http:// or https://, it's an external URL
+    if (image.startsWith('http://') || image.startsWith('https://')) {
+        return image;
+    }
+
+    // Otherwise, it's a legacy local asset
+    return `assets/img/home1/${image}`;
+}
+
 // Display tours in package cards
 function displayTours(tours) {
     const container = document.getElementById('tours-container');
@@ -27,7 +47,7 @@ function displayTours(tours) {
             <div class="package-card">
                 <div class="package-img-wrap">
                     <a href="tour-details.html?id=${tour.id}" class="package-img">
-                        <img src="assets/img/home1/${tour.imageCover || 'tour-package-img1.jpg'}" alt="${tour.title}">
+                        <img src="${getImagePath(tour.imageCover || tour.image)}" alt="${tour.title}" onerror="this.src='assets/img/home1/tour-package-img1.jpg'">
                     </a>
                     ${tour.hotSale ? '<div class="batch"><span>Hot Sale!</span></div>' : ''}
                 </div>

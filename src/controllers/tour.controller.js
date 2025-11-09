@@ -19,60 +19,60 @@ let demoTours = [
     groupSizeMin: 5,
     difficulty: 'easy',
     category: 'cultural',
-    imageCover: 'samarkand.jpg',
+    imageCover: 'tour-package-img1.jpg',
     accommodation: '5 Star Hotel',
     meals: 'Breakfast & Dinner',
     transportation: 'Taxi, Car',
-    languages: ['English', 'Spanish'],
-    animal: 'Cat, Pet only',
-    ageRange: { min: 18, max: 45 },
-    season: 'Winter Season',
+    languages: ['English', 'Russian', 'Uzbek'],
+    animal: 'No pets allowed',
+    ageRange: { min: 18, max: 65 },
+    season: 'All Seasons',
     highlights: [
-      'Eiffel Tower – Skip-the-line access & breathtaking views from the summit',
-      'Louvre Museum – See the Mona Lisa and world-renowned masterpieces',
-      'Opera Garnier – Visit the stunning opera house that inspired "The Phantom of the Opera"'
+      'Registan Square – Explore the heart of Samarkand with three magnificent madrasahs',
+      'Gur-e-Amir Mausoleum – Visit the tomb of Amir Timur (Tamerlane)',
+      'Ulugbek Observatory – Discover the medieval astronomical observatory built in the 1420s'
     ],
     locations: [
-      { name: 'Southern France', image: 'location1.jpg', days: '01 Days' },
-      { name: 'Louvre Museum', image: 'location2.jpg', days: '03 Days' }
+      { name: 'Registan Square', image: 'registan.jpg', days: '01 Days' },
+      { name: 'Shah-i-Zinda Necropolis', image: 'shah-i-zinda.jpg', days: '02 Days' }
     ],
-    freeCancellation: 'Some tours offer free cancellation up to a certain period (e.g., 24-48 hours before departure)',
-    healthSafety: 'COVID-19 regulations, vaccinations, or travel restrictions',
+    freeCancellation: 'Free cancellation up to 48 hours before departure',
+    healthSafety: 'All COVID-19 safety measures are followed. Vaccination recommended but not required.',
     faq: [
-      { question: 'What are the must-visit places in France?', answer: 'Top destinations include Paris (Eiffel Tower, Louvre), Nice (French Riviera), Bordeaux (wine tours), Provence (lavender fields), and Normandy (Mont Saint-Michel).' },
-      { question: 'Do tour packages include entrance fees?', answer: 'Most packages include entrance fees to major attractions, but it\'s best to confirm with your tour operator.' }
+      { question: 'What are the must-visit places in Samarkand?', answer: 'Top destinations include Registan Square, Gur-e-Amir Mausoleum, Shah-i-Zinda Necropolis, Ulugbek Observatory, and Bibi-Khanym Mosque.' },
+      { question: 'Do tour packages include entrance fees?', answer: 'Yes, all entrance fees to historical monuments and museums are included in the package price.' }
     ],
     itinerary: [
       {
         day: 1,
-        title: 'Eiffel Tower – The symbol of France',
-        description: 'The Eiffel Tower is the heart of Paris and offers a variety of exciting activities for visitors. As like, climb the Eiffel Tower, take the elevator to the summit, sunset & night view, picnic at champ de mars & bike tour around the Eiffel Tower.',
-        activities: ['Climb the Eiffel Tower', 'Sunset & night view', 'Bike tour'],
-        meals: 'Breakfast, Lunch, Snacks',
-        accommodation: 'Rajonikanto Hotel',
-        transport: ['Car', 'Flight', 'Boat']
+        title: 'Registan Square – The Heart of Samarkand',
+        description: 'Registan Square is the jewel of Samarkand, featuring three grand madrasahs: Ulugbek, Sher-Dor, and Tilya-Kori. Experience the stunning Islamic architecture, intricate tilework, and learn about the Silk Road history.',
+        activities: ['Guided tour of Registan Square', 'Photography session', 'Evening light show'],
+        meals: 'Breakfast, Lunch',
+        accommodation: 'Registan Plaza Hotel',
+        transport: ['Car']
       },
       {
         day: 2,
-        title: 'Louvre Museum – Home of the Mona Lisa',
-        description: 'Explore the world-famous Louvre Museum and see the Mona Lisa and other masterpieces.',
-        activities: ['Museum tour', 'Art appreciation'],
+        title: 'Gur-e-Amir & Shah-i-Zinda',
+        description: 'Visit the magnificent tomb of Amir Timur and explore the stunning Shah-i-Zinda necropolis with its collection of mausoleums featuring brilliant blue tilework.',
+        activities: ['Gur-e-Amir guided tour', 'Shah-i-Zinda exploration', 'Local bazaar visit'],
         meals: 'Breakfast, Dinner',
-        accommodation: 'Paris Grand Hotel',
+        accommodation: 'Registan Plaza Hotel',
         transport: ['Car', 'Walking']
       },
       {
         day: 3,
-        title: 'Notre-Dame – Iconic Gothic Cathedral',
-        description: 'Visit the stunning Notre-Dame Cathedral and explore the historic Latin Quarter.',
-        activities: ['Cathedral visit', 'Latin Quarter walking tour'],
+        title: 'Ulugbek Observatory & Bibi-Khanym Mosque',
+        description: 'Discover the medieval astronomical observatory and visit the grand Bibi-Khanym Mosque, one of the largest mosques in Central Asia.',
+        activities: ['Observatory tour', 'Bibi-Khanym Mosque visit', 'Siab Bazaar shopping'],
         meals: 'Breakfast',
-        accommodation: 'Paris Grand Hotel',
+        accommodation: 'Registan Plaza Hotel',
         transport: ['Car']
       }
     ],
-    included: ['Accommodation', 'Transportation', 'Guide services'],
-    excluded: ['Meals', 'Personal expenses'],
+    included: ['Accommodation', 'Transportation', 'Guide services', 'All entrance fees'],
+    excluded: ['International flights', 'Personal expenses', 'Tips'],
     rating: 4.8,
     ratingsCount: 125,
     isActive: true,
@@ -83,16 +83,61 @@ let demoTours = [
   {
     id: '2',
     title: 'Bukhara Historical Safari',
-    description: 'Discover architectural monuments: Ark Fortress, Po-i-Kalyan Complex',
+    description: 'Discover architectural monuments: Ark Fortress, Po-i-Kalyan Complex, and the ancient trading domes',
     destination: 'Bukhara',
     price: 450,
     duration: 2,
+    nights: 1,
+    destinationsCount: 5,
     maxGroupSize: 20,
+    groupSizeMin: 4,
     difficulty: 'easy',
     category: 'cultural',
     imageCover: 'bukhara.jpg',
+    accommodation: '4 Star Boutique Hotel',
+    meals: 'Breakfast',
+    transportation: 'Car',
+    languages: ['English', 'Russian', 'Uzbek'],
+    animal: 'No pets allowed',
+    ageRange: { min: 12, max: 70 },
+    season: 'Spring & Autumn',
+    highlights: [
+      'Ark Fortress – Explore the ancient citadel of Bukhara emirs',
+      'Po-i-Kalyan Complex – See the iconic Kalyan Minaret and mosque',
+      'Trading Domes – Visit the historic covered bazaars of Bukhara'
+    ],
+    locations: [
+      { name: 'Lyabi-Hauz', image: 'lyabi-hauz.jpg', days: '01 Days' },
+      { name: 'Ark Fortress', image: 'ark-fortress.jpg', days: '01 Days' }
+    ],
+    freeCancellation: 'Free cancellation up to 24 hours before departure',
+    healthSafety: 'Standard health and safety protocols followed',
+    faq: [
+      { question: 'What makes Bukhara special?', answer: 'Bukhara is one of the most ancient cities on the Silk Road, with over 2,500 years of history and 140 architectural monuments.' },
+      { question: 'Is Bukhara safe for tourists?', answer: 'Yes, Bukhara is very safe and welcoming for tourists. The local community is friendly and helpful.' }
+    ],
+    itinerary: [
+      {
+        day: 1,
+        title: 'Ark Fortress & Po-i-Kalyan Complex',
+        description: 'Begin your journey at the Ark Fortress, the ancient residence of Bukhara rulers. Continue to the Po-i-Kalyan Complex featuring the magnificent Kalyan Minaret, Kalyan Mosque, and Mir-i-Arab Madrasah.',
+        activities: ['Ark Fortress tour', 'Po-i-Kalyan Complex visit', 'Sunset photography'],
+        meals: 'Breakfast, Lunch',
+        accommodation: 'Zargaron Plaza Hotel',
+        transport: ['Car', 'Walking']
+      },
+      {
+        day: 2,
+        title: 'Trading Domes & Lyabi-Hauz',
+        description: 'Explore the historic trading domes (Toki Sarrofon, Toki Telpak Furushon, Toki Zargaron) and relax at the beautiful Lyabi-Hauz complex surrounded by madrasahs.',
+        activities: ['Trading domes shopping', 'Lyabi-Hauz exploration', 'Traditional craft demonstrations'],
+        meals: 'Breakfast',
+        accommodation: 'Zargaron Plaza Hotel',
+        transport: ['Walking']
+      }
+    ],
     included: ['Accommodation', 'Transportation', 'Guide services', 'Museum entries'],
-    excluded: ['Meals'],
+    excluded: ['Lunch & Dinner', 'Personal expenses', 'Tips'],
     rating: 4.9,
     ratingsCount: 98,
     isActive: true,
@@ -103,16 +148,52 @@ let demoTours = [
   {
     id: '3',
     title: 'Chimgan Mountains Adventure',
-    description: 'Hiking in the mountains and connecting with nature',
+    description: 'Hiking in the mountains, cable car rides, and connecting with nature in Uzbekistan\'s premier mountain resort',
     destination: 'Chimgan',
     price: 300,
     duration: 1,
+    nights: 0,
+    destinationsCount: 2,
     maxGroupSize: 10,
+    groupSizeMin: 2,
     difficulty: 'challenging',
     category: 'adventure',
     imageCover: 'chimgan.jpg',
-    included: ['Transportation', 'Guide', 'Equipment'],
-    excluded: ['Accommodation', 'Meals'],
+    accommodation: 'N/A (Day Trip)',
+    meals: 'Lunch',
+    transportation: 'Car',
+    languages: ['English', 'Russian', 'Uzbek'],
+    animal: 'Pets allowed',
+    ageRange: { min: 15, max: 55 },
+    season: 'Summer & Autumn',
+    highlights: [
+      'Chimgan Peak – Hike to breathtaking viewpoints',
+      'Cable Car Ride – Panoramic views of the Tian Shan mountains',
+      'Charvak Lake – Swimming and relaxation by the turquoise waters'
+    ],
+    locations: [
+      { name: 'Chimgan Peak', image: 'chimgan-peak.jpg', days: '01 Days' },
+      { name: 'Charvak Lake', image: 'charvak.jpg', days: '01 Days' }
+    ],
+    freeCancellation: 'Free cancellation up to 72 hours before departure',
+    healthSafety: 'Good physical fitness required. First aid kit provided.',
+    faq: [
+      { question: 'What should I bring for the mountain hike?', answer: 'Comfortable hiking shoes, warm jacket, sunscreen, hat, and water bottle. We provide hiking poles and safety equipment.' },
+      { question: 'Is this tour suitable for beginners?', answer: 'The tour is moderate to challenging. Basic hiking experience is recommended. We adjust routes based on group fitness levels.' }
+    ],
+    itinerary: [
+      {
+        day: 1,
+        title: 'Chimgan Mountains & Charvak Lake',
+        description: 'Start with a scenic drive to Chimgan (90km from Tashkent). Take the cable car to Big Chimgan peak, enjoy hiking trails with spectacular mountain views. Descend and visit beautiful Charvak Lake for swimming and relaxation before returning to Tashkent.',
+        activities: ['Cable car ride', 'Mountain hiking', 'Charvak Lake swimming', 'Photography'],
+        meals: 'Lunch',
+        accommodation: 'N/A',
+        transport: ['Car', 'Cable Car']
+      }
+    ],
+    included: ['Transportation', 'Guide', 'Equipment', 'Cable car tickets', 'Lunch'],
+    excluded: ['Accommodation', 'Personal expenses', 'Tips'],
     rating: 4.5,
     ratingsCount: 67,
     isActive: true,

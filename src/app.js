@@ -52,12 +52,16 @@ const demoRoutes = require('./routes/demo.routes');
 const authRoutes = require('./routes/auth.routes');
 const adminRoutes = require('./routes/admin.routes');
 const tourRoutes = require('./routes/tour.routes');
+const uploadRoutes = require('./routes/upload.routes');
+const geocodingRoutes = require('./routes/geocoding.routes');
 
 // Use routes
 app.use('/api/demo', demoRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/tours', tourRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/geocoding', geocodingRoutes);
 
 // Static files (uploads)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
