@@ -1440,17 +1440,23 @@
                 'destinations': { id: 'destinationsPage', title: 'Destinations', breadcrumb: 'Destinations' },
                 'media': { id: 'mediaPage', title: 'Media Library', breadcrumb: 'Media' },
                 'reviews': { id: 'reviewsPage', title: 'Reviews', breadcrumb: 'Reviews' },
+                'blog': { id: 'blogPage', title: 'Blog Management', breadcrumb: 'Blog' },
                 'settings': { id: 'settingsPage', title: 'General Settings', breadcrumb: 'Settings' },
                 'seo': { id: 'seoPage', title: 'SEO Settings', breadcrumb: 'SEO' }
             };
 
             const page = pageMap[pageName];
+            if (!page) {
+                console.error('Page not found:', pageName);
+                return;
+            }
+
             document.getElementById(page.id).classList.add('active');
             document.getElementById('pageTitle').textContent = page.title;
             document.getElementById('pageBreadcrumb').textContent = page.breadcrumb;
 
             // Set active menu item
-            document.querySelector(`[data-page="${pageName}"]`).classList.add('active');
+            document.querySelector(`[data-page="${pageName}"]`)?.classList.add('active');
 
             // Load page specific data
             if (pageName === 'tours') {
