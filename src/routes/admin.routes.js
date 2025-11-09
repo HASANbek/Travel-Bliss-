@@ -13,7 +13,12 @@ const {
   toggleTourStatus,
   getAllBookings,
   updateBookingStatus,
-  getStatistics
+  getStatistics,
+  getAllBlogs,
+  getBlogById,
+  createBlog,
+  updateBlog,
+  deleteBlog
 } = require('../controllers/admin.controller');
 
 // Middleware
@@ -89,5 +94,32 @@ router.get('/bookings', getAllBookings);
 // @desc    Buyurtma statusini yangilash
 // @access  Private/Admin
 router.put('/bookings/:id/status', updateBookingStatus);
+
+// ========== BLOG MANAGEMENT ==========
+
+// @route   GET /api/admin/blogs
+// @desc    Barcha blog postlarni olish
+// @access  Private/Admin
+router.get('/blogs', getAllBlogs);
+
+// @route   GET /api/admin/blogs/:id
+// @desc    Blog postni ID bo'yicha olish
+// @access  Private/Admin
+router.get('/blogs/:id', getBlogById);
+
+// @route   POST /api/admin/blogs
+// @desc    Yangi blog post yaratish
+// @access  Private/Admin
+router.post('/blogs', createBlog);
+
+// @route   PUT /api/admin/blogs/:id
+// @desc    Blog postni yangilash
+// @access  Private/Admin
+router.put('/blogs/:id', updateBlog);
+
+// @route   DELETE /api/admin/blogs/:id
+// @desc    Blog postni o'chirish
+// @access  Private/Admin
+router.delete('/blogs/:id', deleteBlog);
 
 module.exports = router;

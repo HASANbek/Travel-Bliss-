@@ -291,6 +291,7 @@
         .info-box.green .info-box-header { background: #28a745; }
         .info-box.yellow .info-box-header { background: #ffc107; }
         .info-box.red .info-box-header { background: #dc3545; }
+        .info-box.purple .info-box-header { background: #6f42c1; }
 
         /* Tours Section */
         .add-tour-btn {
@@ -794,6 +795,10 @@
                     <i>⭐</i>
                     <span>Reviews</span>
                 </a>
+                <a class="menu-item" data-page="blog">
+                    <i>📝</i>
+                    <span>Blog</span>
+                </a>
             </div>
 
             <div class="menu-section">
@@ -894,6 +899,19 @@
                             </a>
                         </div>
                     </div>
+
+                    <div class="info-box purple">
+                        <div class="info-box-header">
+                            <h3>Blog Posts</h3>
+                            <div class="number" id="totalBlogs">0</div>
+                        </div>
+                        <div class="info-box-content">
+                            <a href="#" onclick="showPage('blog'); return false;">
+                                <span>More info</span>
+                                <span>→</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -936,6 +954,34 @@
             <!-- Reviews Page -->
             <div class="page-section" id="reviewsPage">
                 <h3>Reviews management coming soon...</h3>
+            </div>
+
+            <!-- Blog Page -->
+            <div class="page-section" id="blogPage">
+                <button class="add-tour-btn" onclick="openBlogModal()">+ Add New Blog Post</button>
+
+                <div class="tours-table">
+                    <div id="blogTableContainer">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Author</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="blogTableBody">
+                                <tr>
+                                    <td colspan="7" class="loading">Loading blog posts...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <!-- Settings Page -->
@@ -2216,6 +2262,251 @@
                 document.getElementById('itineraryDays').appendChild(dayCard);
             });
         }
+
+        // ============================================
+        // BLOG MANAGEMENT FUNCTIONS
+        // ============================================
+
+        let currentBlogId = null;
+
+        function openBlogModal(blogId = null) {
+            currentBlogId = blogId;
+            const modal = document.getElementById('blogModal');
+            const title = document.getElementById('blogModalTitle');
+
+            if (blogId) {
+                title.textContent = 'Edit Blog Post';
+                // Load blog data here
+                loadBlogData(blogId);
+            } else {
+                title.textContent = 'Add New Blog Post';
+                document.getElementById('blogForm').reset();
+            }
+
+            modal.style.display = 'block';
+        }
+
+        function closeBlogModal() {
+            document.getElementById('blogModal').style.display = 'none';
+            currentBlogId = null;
+            document.getElementById('blogForm').reset();
+        }
+
+        function loadBlogData(blogId) {
+            // TODO: Load blog data from API
+            console.log('Loading blog:', blogId);
+        }
+
+        async function saveBlog() {
+            const formData = {
+                title: document.getElementById('blogTitle').value,
+                category: document.getElementById('blogCategory').value,
+                author: document.getElementById('blogAuthor').value,
+                image: document.getElementById('blogImage').value,
+                excerpt: document.getElementById('blogExcerpt').value,
+                content: document.getElementById('blogContent').value,
+                tags: document.getElementById('blogTags').value,
+                status: document.getElementById('blogStatus').value
+            };
+
+            // Validation
+            if (!formData.title || !formData.category || !formData.content) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            try {
+                const url = currentBlogId
+                    ? `/api/admin/blogs/${currentBlogId}`
+                    : '/api/admin/blogs';
+                const method = currentBlogId ? 'PUT' : 'POST';
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    alert(currentBlogId ? 'Blog updated successfully!' : 'Blog created successfully!');
+                    closeBlogModal();
+                    loadBlogs();
+                } else {
+                    alert('Error saving blog');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error saving blog');
+            }
+        }
+
+        async function loadBlogs() {
+            try {
+                const response = await fetch('/api/admin/blogs', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    }
+                });
+
+                if (response.ok) {
+                    const blogs = await response.json();
+                    displayBlogs(blogs);
+                    updateBlogStats(blogs);
+                } else {
+                    document.getElementById('blogTableBody').innerHTML =
+                        '<tr><td colspan="7">Error loading blogs</td></tr>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('blogTableBody').innerHTML =
+                    '<tr><td colspan="7">Error loading blogs</td></tr>';
+            }
+        }
+
+        function displayBlogs(blogs) {
+            const tbody = document.getElementById('blogTableBody');
+
+            if (blogs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">No blog posts yet. Create your first one!</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = blogs.map(blog => `
+                <tr>
+                    <td>
+                        <img src="${blog.image || 'https://via.placeholder.com/60x40'}"
+                             alt="${blog.title}"
+                             style="width: 60px; height: 40px; object-fit: cover; border-radius: 4px;">
+                    </td>
+                    <td><strong>${blog.title}</strong></td>
+                    <td>${blog.category}</td>
+                    <td>${blog.author || 'Admin'}</td>
+                    <td>${new Date(blog.createdAt).toLocaleDateString()}</td>
+                    <td>
+                        <span class="status-badge ${blog.status === 'published' ? 'status-active' : 'status-inactive'}">
+                            ${blog.status === 'published' ? 'Published' : 'Draft'}
+                        </span>
+                    </td>
+                    <td>
+                        <button onclick="openBlogModal('${blog._id}')" class="action-btn edit-btn">✏️ Edit</button>
+                        <button onclick="deleteBlog('${blog._id}')" class="action-btn delete-btn">🗑️ Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateBlogStats(blogs) {
+            const totalBlogs = blogs.length;
+            document.getElementById('totalBlogs').textContent = totalBlogs;
+        }
+
+        async function deleteBlog(blogId) {
+            if (!confirm('Are you sure you want to delete this blog post?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/admin/blogs/${blogId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    }
+                });
+
+                if (response.ok) {
+                    alert('Blog deleted successfully!');
+                    loadBlogs();
+                } else {
+                    alert('Error deleting blog');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error deleting blog');
+            }
+        }
+
+        // Load blogs when blog page is shown
+        const originalShowPage = window.showPage;
+        window.showPage = function(page) {
+            originalShowPage(page);
+            if (page === 'blog') {
+                loadBlogs();
+            }
+        };
     </script>
+
+    <!-- Blog Modal -->
+    <div class="modal" id="blogModal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2 id="blogModalTitle">Add New Blog Post</h2>
+                <button class="close-btn" onclick="closeBlogModal()">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="blogForm" onsubmit="event.preventDefault(); saveBlog();">
+                    <div class="form-group">
+                        <label>Title *</label>
+                        <input type="text" id="blogTitle" placeholder="Enter blog post title" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Category *</label>
+                            <select id="blogCategory" required>
+                                <option value="">Select category</option>
+                                <option value="Travel Tips">Travel Tips</option>
+                                <option value="Destinations">Destinations</option>
+                                <option value="Culture">Culture</option>
+                                <option value="Adventure">Adventure</option>
+                                <option value="Food & Cuisine">Food & Cuisine</option>
+                                <option value="Travel Stories">Travel Stories</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Author</label>
+                            <input type="text" id="blogAuthor" placeholder="Author name" value="Admin">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Featured Image URL</label>
+                        <input type="url" id="blogImage" placeholder="https://example.com/image.jpg">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Excerpt</label>
+                        <textarea id="blogExcerpt" rows="2" placeholder="Brief summary of the blog post (1-2 sentences)"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Content *</label>
+                        <textarea id="blogContent" rows="10" placeholder="Write your blog post content here..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tags (comma separated)</label>
+                        <input type="text" id="blogTags" placeholder="uzbekistan, travel, culture">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Status *</label>
+                        <select id="blogStatus" required>
+                            <option value="draft">Draft</option>
+                            <option value="published">Published</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="cancel-btn" onclick="closeBlogModal()">Cancel</button>
+                        <button type="submit" class="submit-btn">Save Blog Post</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -401,3 +401,138 @@ exports.getStatistics = asyncHandler(async (req, res) => {
     }, 'Batafsil statistika')
   );
 });
+
+// ========== BLOG MANAGEMENT ==========
+
+// Demo Blog Posts
+let demoBlogs = [
+  {
+    _id: '1',
+    title: 'Nature, Culture & Thrill: Travel Stories That Inspire',
+    category: 'Travel Stories',
+    author: 'Admin',
+    image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600',
+    excerpt: 'Discover the hidden gems of Uzbekistan through our carefully curated travel experiences.',
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    tags: 'uzbekistan, travel, culture',
+    status: 'published',
+    createdAt: new Date('2024-02-20'),
+    updatedAt: new Date('2024-02-20')
+  },
+  {
+    _id: '2',
+    title: 'Dream. Explore. Discover. Where Will You Go Next?',
+    category: 'Destinations',
+    author: 'Admin',
+    image: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600',
+    excerpt: 'Explore the ancient Silk Road cities and experience the rich cultural heritage.',
+    content: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    tags: 'destinations, adventure, history',
+    status: 'published',
+    createdAt: new Date('2024-02-18'),
+    updatedAt: new Date('2024-02-18')
+  },
+  {
+    _id: '3',
+    title: 'Top 10 Travel Tips for First-Time Visitors to Uzbekistan',
+    category: 'Travel Tips',
+    author: 'Admin',
+    image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600',
+    excerpt: 'Essential tips and tricks for making your first trip to Uzbekistan unforgettable.',
+    content: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
+    tags: 'tips, guide, uzbekistan',
+    status: 'draft',
+    createdAt: new Date('2024-02-15'),
+    updatedAt: new Date('2024-02-15')
+  }
+];
+
+// Get all blogs
+exports.getAllBlogs = asyncHandler(async (req, res) => {
+  res.status(200).json(demoBlogs);
+});
+
+// Get blog by ID
+exports.getBlogById = asyncHandler(async (req, res) => {
+  const blog = demoBlogs.find(b => b._id === req.params.id);
+
+  if (!blog) {
+    throw new ApiError(404, 'Blog post not found');
+  }
+
+  res.status(200).json(
+    new ApiResponse(200, blog, 'Blog post retrieved successfully')
+  );
+});
+
+// Create new blog
+exports.createBlog = asyncHandler(async (req, res) => {
+  const { title, category, author, image, excerpt, content, tags, status } = req.body;
+
+  if (!title || !category || !content) {
+    throw new ApiError(400, 'Title, category, and content are required');
+  }
+
+  const newBlog = {
+    _id: String(demoBlogs.length + 1),
+    title,
+    category,
+    author: author || 'Admin',
+    image,
+    excerpt,
+    content,
+    tags,
+    status: status || 'draft',
+    createdAt: new Date(),
+    updatedAt: new Date()
+  };
+
+  demoBlogs.unshift(newBlog);
+
+  res.status(201).json(
+    new ApiResponse(201, newBlog, 'Blog post created successfully')
+  );
+});
+
+// Update blog
+exports.updateBlog = asyncHandler(async (req, res) => {
+  const blogIndex = demoBlogs.findIndex(b => b._id === req.params.id);
+
+  if (blogIndex === -1) {
+    throw new ApiError(404, 'Blog post not found');
+  }
+
+  const { title, category, author, image, excerpt, content, tags, status } = req.body;
+
+  demoBlogs[blogIndex] = {
+    ...demoBlogs[blogIndex],
+    title: title || demoBlogs[blogIndex].title,
+    category: category || demoBlogs[blogIndex].category,
+    author: author || demoBlogs[blogIndex].author,
+    image: image || demoBlogs[blogIndex].image,
+    excerpt: excerpt || demoBlogs[blogIndex].excerpt,
+    content: content || demoBlogs[blogIndex].content,
+    tags: tags || demoBlogs[blogIndex].tags,
+    status: status || demoBlogs[blogIndex].status,
+    updatedAt: new Date()
+  };
+
+  res.status(200).json(
+    new ApiResponse(200, demoBlogs[blogIndex], 'Blog post updated successfully')
+  );
+});
+
+// Delete blog
+exports.deleteBlog = asyncHandler(async (req, res) => {
+  const blogIndex = demoBlogs.findIndex(b => b._id === req.params.id);
+
+  if (blogIndex === -1) {
+    throw new ApiError(404, 'Blog post not found');
+  }
+
+  demoBlogs.splice(blogIndex, 1);
+
+  res.status(200).json(
+    new ApiResponse(200, null, 'Blog post deleted successfully')
+  );
+});
