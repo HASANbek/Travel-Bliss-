@@ -2022,11 +2022,15 @@
 
         function openModal() {
             document.getElementById('tourForm').reset();
-            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('imageGallery').innerHTML = '';
             document.getElementById('modalTitle').textContent = 'Add New Tour';
             document.getElementById('tourActive').checked = true;
             document.getElementById('tourHotSale').checked = false;
             document.getElementById('tourFeatured').checked = false;
+
+            // Reset images
+            uploadedImages = [];
+            coverImageIndex = 0;
 
             // Reset checkboxes
             document.querySelectorAll('.transport-checkbox').forEach(cb => cb.checked = false);
