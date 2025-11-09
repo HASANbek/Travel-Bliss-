@@ -3033,7 +3033,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row g-4 mb-40">
+            <div class="row g-4 mb-40" id="blogsContainer">
                 <div class="col-lg-4 col-md-6 wow animate fadeInDown" data-wow-delay="200ms" data-wow-duration="1500ms">
                     <div class="blog-card2 two">
                         <div class="blog-img-wrap">
@@ -3612,6 +3612,85 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+</script>
+
+<script>
+// Load blogs from API
+async function loadHomeBlogs() {
+    try {
+        const response = await fetch('/api/admin/blogs');
+        if (!response.ok) {
+            console.error('Failed to load blogs');
+            return;
+        }
+
+        const blogs = await response.json();
+
+        // Filter published blogs and get the latest 3
+        const publishedBlogs = blogs
+            .filter(blog => blog.status === 'published')
+            .slice(0, 3);
+
+        if (publishedBlogs.length > 0) {
+            displayHomeBlogs(publishedBlogs);
+        }
+    } catch (error) {
+        console.error('Error loading blogs:', error);
+    }
+}
+
+function displayHomeBlogs(blogs) {
+    const container = document.getElementById('blogsContainer');
+    if (!container) return;
+
+    let html = '';
+    const delays = ['200ms', '400ms', '600ms'];
+    const locationIconSvg = `<svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6.83615 0C3.77766 0 1.28891 2.48879 1.28891 5.54892C1.28891 7.93837 4.6241 11.8351 6.05811 13.3994C6.25669 13.6175 6.54154 13.7411 6.83615 13.7411C7.13076 13.7411 7.41561 13.6175 7.6142 13.3994C9.04821 11.8351 12.3834 7.93833 12.3834 5.54892C12.3834 2.48879 9.89464 0 6.83615 0ZM7.31469 13.1243C7.18936 13.2594 7.02008 13.3342 6.83615 13.3342C6.65222 13.3342 6.48295 13.2594 6.35761 13.1243C4.95614 11.5959 1.69584 7.79515 1.69584 5.54896C1.69584 2.7134 4.00067 0.406933 6.83615 0.406933C9.67164 0.406933 11.9765 2.7134 11.9765 5.54896C11.9765 7.79515 8.71617 11.5959 7.31469 13.1243Z"/>
+        <path d="M6.83618 8.54529C8.4624 8.54529 9.7807 7.22698 9.7807 5.60077C9.7807 3.97456 8.4624 2.65625 6.83618 2.65625C5.20997 2.65625 3.89166 3.97456 3.89166 5.60077C3.89166 7.22698 5.20997 8.54529 6.83618 8.54529Z"/>
+    </svg>`;
+
+    blogs.forEach((blog, index) => {
+        const imageUrl = blog.image || 'assets/img/home3/blog-img1.jpg';
+        const excerpt = blog.excerpt || blog.content?.substring(0, 100) + '...' || 'Read more about this amazing destination...';
+        const formattedDate = new Date(blog.createdAt).toLocaleDateString('en-US', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        });
+        const category = blog.category ? blog.category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Travel Destination';
+
+        html += `
+            <div class="col-lg-4 col-md-6 wow animate fadeInDown" data-wow-delay="${delays[index % 3]}" data-wow-duration="1500ms">
+                <div class="blog-card2 two">
+                    <div class="blog-img-wrap">
+                        <a href="travel-inspiration-details.html?id=${blog._id}" class="blog-img">
+                            <img src="${imageUrl}" alt="${blog.title}">
+                        </a>
+                        <a href="travel-inspiration-details.html?id=${blog._id}" class="location">
+                            ${locationIconSvg}
+                            ${category}
+                        </a>
+                    </div>
+                    <div class="blog-content">
+                        <a href="travel-inspiration-details.html?id=${blog._id}" class="blog-date">${formattedDate}</a>
+                        <h4><a href="travel-inspiration-details.html?id=${blog._id}">${blog.title}</a></h4>
+                        <p>${excerpt}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+// Load blogs when page loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadHomeBlogs);
+} else {
+    loadHomeBlogs();
+}
 </script>
 
 </body>
