@@ -8,7 +8,7 @@
 
     <!-- CSS Files -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="assets/css/boxicons.min.css">
     <link rel="stylesheet" href="assets/css/swiper-bundle.min.css">
     <link rel="stylesheet" href="assets/css/slick.css">
@@ -17,11 +17,93 @@
     <link rel="stylesheet" href="assets/css/daterangepicker.css">
     <link rel="stylesheet" href="assets/css/jquery-ui.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <!-- Animated Map Route Styles -->
+    <style>
+        /* Animated dashed route */
+        .animated-route {
+            stroke-dasharray: 10, 15;
+            animation: dashMove 30s linear infinite;
+        }
+
+        @keyframes dashMove {
+            to {
+                stroke-dashoffset: -1000;
+            }
+        }
+
+        /* Route arrow styling */
+        .route-arrow {
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.1);
+            }
+        }
+
+        /* Waypoint marker animation */
+        .waypoint-marker {
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Map controls styling */
+        .leaflet-control-zoom a {
+            background: white !important;
+            color: #3b82f6 !important;
+            border: 2px solid #3b82f6 !important;
+            border-radius: 8px !important;
+            transition: all 0.3s !important;
+        }
+
+        .leaflet-control-zoom a:hover {
+            background: #3b82f6 !important;
+            color: white !important;
+        }
+
+        /* Enhanced popup styling */
+        .leaflet-popup-content-wrapper {
+            border-radius: 12px !important;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2) !important;
+            border: 2px solid #3b82f6 !important;
+            padding: 0 !important;
+        }
+
+        .leaflet-popup-content {
+            margin: 0 !important;
+        }
+
+        .leaflet-popup-tip {
+            border-top-color: #3b82f6 !important;
+        }
+
+        /* Custom marker styling */
+        .custom-marker {
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+    </style>
 
     <style>
         .tour-details-banner {
-            height: 500px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 550px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -37,8 +119,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,149.3C960,160,1056,160,1152,138.7C1248,117,1344,75,1392,53.3L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') bottom;
-            background-size: cover;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%);
+            z-index: 1;
         }
 
         .tour-details-content {
@@ -118,18 +200,25 @@
         }
 
         .expand-icon {
-            transition: transform 0.3s;
-            color: #6366f1;
-            font-size: 20px;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
         }
 
         .expand-icon.rotated {
             transform: rotate(180deg);
         }
 
+        #expandAllIcon.rotated {
+            transform: rotate(180deg);
+        }
+
         #expandAllBtn:hover {
             background: #6366f1;
             color: white;
+        }
+
+        #expandAllBtn:hover svg {
+            stroke: white;
         }
 
         .day-number {
@@ -149,26 +238,248 @@
         .included-list, .excluded-list {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
 
         .included-list li, .excluded-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid #e5e7eb;
+            padding: 12px 0;
             display: flex;
-            align-items: center;
-            gap: 10px;
+            align-items: flex-start;
+            gap: 12px;
+            color: #4b5563;
+            line-height: 1.6;
         }
 
         .included-list li:before {
-            content: '✅';
-            font-size: 20px;
+            content: '';
+            width: 20px;
+            height: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='10' fill='%233b82f6'/%3E%3Cpath d='M8 12l2 2 4-4' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-size: contain;
             flex-shrink: 0;
+            margin-top: 2px;
         }
 
         .excluded-list li:before {
-            content: '❌';
-            font-size: 20px;
+            content: '';
+            width: 20px;
+            height: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23ef4444'/%3E%3Cpath d='M9 9l6 6M15 9l-6 6' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-size: contain;
             flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        #tourMap {
+            background: #f9fafb;
+        }
+
+        .custom-marker {
+            background: transparent;
+            border: none;
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .leaflet-popup-tip {
+            background: white;
+        }
+
+        .brochure-download-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .brochure-download-btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+        }
+
+        .brochure-download-btn:active {
+            transform: translateY(0);
+        }
+
+        .brochure-download-btn-compact:hover {
+            background: #2563eb !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.6) !important;
+        }
+
+        .brochure-download-btn-compact:active {
+            transform: translateY(0) !important;
+        }
+
+        @media (max-width: 768px) {
+            .tour-details-banner {
+                height: 400px;
+            }
+
+            .tour-details-banner h1 {
+                font-size: 32px !important;
+            }
+
+            .tour-details-banner .tour-meta {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .tour-details-banner .tour-meta-item span {
+                font-size: 14px;
+            }
+
+            .tour-details-banner div[style*="padding: 8px 20px"] {
+                padding: 6px 15px !important;
+            }
+
+            .tour-details-banner div[style*="padding: 8px 20px"] span:nth-child(1) {
+                font-size: 14px !important;
+            }
+
+            .tour-details-banner div[style*="padding: 8px 20px"] span:nth-child(2) {
+                font-size: 22px !important;
+            }
+
+            .tour-details-banner div[style*="padding: 8px 20px"] span:nth-child(3) {
+                font-size: 14px !important;
+            }
+
+            .brochure-banner {
+                height: auto !important;
+                padding: 30px 20px !important;
+            }
+
+            .brochure-banner > div:last-child {
+                flex-direction: column !important;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .brochure-banner h3 {
+                font-size: 24px !important;
+            }
+
+            .brochure-banner p {
+                font-size: 28px !important;
+            }
+
+            .brochure-banner-compact {
+                padding: 15px 20px !important;
+            }
+
+            .brochure-banner-compact > div:last-child {
+                flex-direction: column !important;
+                gap: 15px !important;
+                text-align: center;
+            }
+
+            .brochure-banner-compact h3 {
+                font-size: 16px !important;
+            }
+
+            .brochure-banner-compact p {
+                font-size: 12px !important;
+            }
+
+            .brochure-download-btn-compact {
+                width: 100%;
+                justify-content: center !important;
+            }
+
+            .location-nav-btn {
+                display: none !important;
+            }
+
+            .location-card {
+                min-width: 250px;
+            }
+
+            #reviewsSection .col-lg-8 {
+                padding-left: 15px !important;
+                margin-top: 20px;
+            }
+        }
+
+        #locationsContainer::-webkit-scrollbar {
+            display: none;
+        }
+
+        .location-card {
+            min-width: 280px;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .location-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .location-card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .location-card-content {
+            padding: 20px;
+            background: white;
+            text-align: center;
+        }
+
+        .location-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0 0 8px 0;
+        }
+
+        .location-card-duration {
+            font-size: 14px;
+            color: #6b7280;
+            margin: 0;
+        }
+
+        .location-nav-btn:hover {
+            background: #f3f4f6 !important;
+            transform: translateY(-50%) scale(1.1) !important;
+        }
+
+        .review-btn {
+            background: transparent;
+            border: 2px solid #3b82f6;
+            color: #3b82f6;
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 15px;
+        }
+
+        .review-btn:hover {
+            background: #3b82f6;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         .booking-box {
@@ -208,10 +519,20 @@
 
         .highlight-card {
             background: #f9fafb;
-            border-left: 4px solid #667eea;
-            padding: 20px;
-            margin-bottom: 15px;
+            border-left: 4px solid #3b82f6;
+            padding: 18px 20px;
+            margin-bottom: 12px;
             border-radius: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            line-height: 1.6;
+            transition: all 0.2s;
+        }
+
+        .highlight-card:hover {
+            background: #f3f4f6;
+            border-left-color: #2563eb;
         }
 
         /* Modern Menu Styling - Consistent Background Color */
@@ -456,24 +777,100 @@
     </header>
 
     <!-- Tour Details Banner -->
-    <div class="tour-details-banner" id="tourBanner">
+    <div class="tour-details-banner" id="tourBanner" style="background-image: url('https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=1600'); background-size: cover; background-position: center;">
         <div class="tour-details-content">
-            <div class="tour-badge" id="tourCategory">Loading...</div>
-            <h1 id="tourTitle" style="font-size: 48px; margin: 0;">Loading Tour...</h1>
-            <p id="tourLocation" style="font-size: 24px; opacity: 0.9; margin-top: 10px;"></p>
-            <div class="tour-price" id="tourPrice">$0</div>
-            <div class="tour-meta">
+            <div style="display: inline-block; padding: 8px 20px; background: rgba(255,255,255,0.25); border-radius: 25px; margin-bottom: 20px; backdrop-filter: blur(10px);">
+                <span style="font-size: 16px; font-weight: 600;">Starting From</span>
+                <span style="font-size: 28px; font-weight: 700; margin-left: 10px;" id="tourPriceBanner">$0</span>
+                <span style="font-size: 16px; font-weight: 500;">/per person</span>
+            </div>
+            <h1 id="tourTitle" style="font-size: 56px; margin: 0; font-weight: 800; text-shadow: 0 4px 12px rgba(0,0,0,0.3);">Loading Tour...</h1>
+            <div class="tour-meta" style="margin-top: 25px;">
                 <div class="tour-meta-item">
-                    <i class="bi bi-calendar3" style="font-size: 24px;"></i>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
                     <span id="tourDuration">0 Days</span>
                 </div>
                 <div class="tour-meta-item">
-                    <i class="bi bi-people" style="font-size: 24px;"></i>
-                    <span id="tourGroupSize">Max 0 People</span>
+                    <span style="font-weight: 700;">|</span>
                 </div>
                 <div class="tour-meta-item">
-                    <i class="bi bi-star-fill" style="font-size: 24px; color: #fbbf24;"></i>
-                    <span id="tourRating">0.0</span>
+                    <span id="tourNights">0 Nights</span>
+                </div>
+                <div class="tour-meta-item">
+                    <span style="font-weight: 700;">|</span>
+                </div>
+                <div class="tour-meta-item">
+                    <span id="tourDestinations">3 Destinations</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Bar -->
+    <div style="background: #f9fafb; border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; padding: 20px 0;">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span style="color: #1f2937; font-weight: 500;">No Booking Fee</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span style="color: #1f2937; font-weight: 500;">Best Price Ever</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <!-- TripAdvisor Logo -->
+                    <svg width="80" height="20" viewBox="0 0 200 50" fill="none">
+                        <text x="0" y="35" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#00AA6C">Tripadvisor</text>
+                    </svg>
+                    <div style="display: flex; gap: 2px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#10b981"><circle cx="12" cy="12" r="10"/></svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#10b981"><circle cx="12" cy="12" r="10"/></svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#10b981"><circle cx="12" cy="12" r="10"/></svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#10b981"><circle cx="12" cy="12" r="10"/></svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#d1d5db"><circle cx="12" cy="12" r="10"/></svg>
+                    </div>
+                    <span style="color: #1f2937; font-weight: 600;" id="infoBarRating">(4.5/5)</span>
+                    <span style="color: #6b7280;">based on <span id="infoBarReviews">138</span> reviews</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
+                    </svg>
+                    <span style="color: #1f2937; font-weight: 500;">100% Carbon Neutral</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <a href="#" onclick="shareOnFacebook(event)" style="color: #6b7280; transition: color 0.3s;" onmouseover="this.style.color='#1877f2'" onmouseout="this.style.color='#6b7280'">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                    </a>
+                    <a href="#" onclick="shareOnLinkedIn(event)" style="color: #6b7280; transition: color 0.3s;" onmouseover="this.style.color='#0077b5'" onmouseout="this.style.color='#6b7280'">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                    <a href="#" onclick="shareOnYouTube(event)" style="color: #6b7280; transition: color 0.3s;" onmouseover="this.style.color='#ff0000'" onmouseout="this.style.color='#6b7280'">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </a>
+                    <a href="#" onclick="shareOnInstagram(event)" style="color: #6b7280; transition: color 0.3s;" onmouseover="this.style.color='#e4405f'" onmouseout="this.style.color='#6b7280'">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
+                        </svg>
+                    </a>
                 </div>
             </div>
         </div>
@@ -498,32 +895,92 @@
                     <div id="highlightsList"></div>
                 </div>
 
-                <!-- Itinerary -->
-                <div class="mb-5" id="itinerarySection">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                        <h2 class="section-title" style="margin-bottom: 0;">Day by Day Itinerary</h2>
+                <!-- Tour Itinerary Summary -->
+                <div class="mb-5" id="tourItinerarySummary">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 class="section-title" style="margin-bottom: 0;">Tour Itinerary</h2>
                         <button id="expandAllBtn" onclick="toggleExpandAll()" style="background: transparent; border: 2px solid #6366f1; color: #6366f1; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px;">
                             <span id="expandAllText">Expand All</span>
-                            <i class="bi bi-chevron-down" id="expandAllIcon"></i>
+                            <svg id="expandAllIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.3s;">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
                         </button>
                     </div>
+                    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 30px;">
+                        <!-- Main Destination -->
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px;">
+                            <div style="width: 48px; height: 48px; border-radius: 50%; background: #3b82f6; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 style="font-size: 20px; font-weight: 700; margin: 0 0 5px 0; color: #1f2937;" id="itineraryDestination">Loading...</h3>
+                                <p style="margin: 0; color: #6b7280; font-size: 14px;" id="itineraryDepartureTime">( Departure: <span id="departureTime">TBD</span> )</p>
+                            </div>
+                        </div>
+
+                        <!-- Days List -->
+                        <div id="itineraryDaysList" style="display: flex; flex-direction: column; gap: 15px;">
+                            <!-- Days will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Itinerary -->
+                <div class="mb-5" id="itinerarySection" style="display: none;">
                     <div id="itineraryList"></div>
                 </div>
 
-                <!-- Included/Excluded -->
+                <!-- Package Features List -->
                 <div class="mb-5">
+                    <h2 class="section-title">Package Features List</h2>
                     <div class="row">
-                        <div class="col-md-6">
-                            <h3 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">
-                                <i class="bi bi-check-circle-fill" style="color: #10b981;"></i> What's Included
-                            </h3>
+                        <div class="col-md-6 mb-4">
+                            <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 25px;">Include Features</h3>
                             <ul class="included-list" id="includedList"></ul>
                         </div>
-                        <div class="col-md-6">
-                            <h3 style="font-size: 24px; font-weight: 600; margin-bottom: 20px;">
-                                <i class="bi bi-x-circle-fill" style="color: #ef4444;"></i> What's Excluded
-                            </h3>
+                        <div class="col-md-6 mb-4">
+                            <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 25px;">Exclude Features</h3>
                             <ul class="excluded-list" id="excludedList"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Download Brochure - Compact -->
+                <div class="mb-4">
+                    <div class="brochure-banner-compact" style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); border-radius: 12px; overflow: hidden; position: relative; display: flex; align-items: center; padding: 20px 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <!-- Background Image Overlay -->
+                        <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 50%; background-image: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600'); background-size: cover; background-position: center; opacity: 0.2;"></div>
+
+                        <!-- Content -->
+                        <div style="position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 20px;">
+                            <!-- Left: Text and Image -->
+                            <div style="display: flex; align-items: center; gap: 20px; flex: 1;">
+                                <div style="width: 70px; height: 70px; border-radius: 50%; overflow: hidden; border: 3px solid white; box-shadow: 0 2px 10px rgba(0,0,0,0.2); flex-shrink: 0;">
+                                    <img id="brochureImage" src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=200" alt="Tour" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div>
+                                    <h3 style="color: white; font-size: 20px; font-weight: 700; margin: 0; line-height: 1.2;">
+                                        Download Tour <span style="font-style: italic; font-weight: 300;">Brochure!</span>
+                                    </h3>
+                                    <p style="color: rgba(255,255,255,0.8); font-size: 13px; margin: 5px 0 0 0;">
+                                        Get complete tour details in PDF format
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Right: Download Button -->
+                            <div style="flex-shrink: 0;">
+                                <button onclick="downloadBrochure()" class="brochure-download-btn-compact" style="background: #3b82f6; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(59, 130, 246, 0.4);">
+                                    Download
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -531,22 +988,435 @@
                 <!-- Additional Info -->
                 <div class="mb-5" id="additionalInfoSection">
                     <h2 class="section-title">Additional Information</h2>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <strong>Difficulty Level:</strong>
-                            <span id="tourDifficulty" class="ms-2"></span>
+                    <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 35px;">
+                        <div class="row g-4">
+                            <!-- Accommodation -->
+                            <div class="col-md-4">
+                                <div style="display: flex; gap: 15px; align-items: flex-start;">
+                                    <div style="flex-shrink: 0;">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="1.5">
+                                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 14px; color: #6b7280; margin-bottom: 5px;">Accommodation</div>
+                                        <div style="font-size: 16px; font-weight: 600; color: #1f2937;" id="tourAccommodation">3-4 Star Hotel</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Meals -->
+                            <div class="col-md-4">
+                                <div style="display: flex; gap: 15px; align-items: flex-start;">
+                                    <div style="flex-shrink: 0;">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="1.5">
+                                            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                                            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                                            <line x1="6" y1="1" x2="6" y2="4"></line>
+                                            <line x1="10" y1="1" x2="10" y2="4"></line>
+                                            <line x1="14" y1="1" x2="14" y2="4"></line>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 14px; color: #6b7280; margin-bottom: 5px;">Meals</div>
+                                        <div style="font-size: 16px; font-weight: 600; color: #1f2937;" id="tourMeals">Breakfast & Dinner</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Transportation -->
+                            <div class="col-md-4">
+                                <div style="display: flex; gap: 15px; align-items: flex-start;">
+                                    <div style="flex-shrink: 0;">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="1.5">
+                                            <rect x="1" y="3" width="15" height="13"></rect>
+                                            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 14px; color: #6b7280; margin-bottom: 5px;">Transportation</div>
+                                        <div style="font-size: 16px; font-weight: 600; color: #1f2937;" id="tourTransport">Car, Bus</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Group Size -->
+                            <div class="col-md-4">
+                                <div style="display: flex; gap: 15px; align-items: flex-start;">
+                                    <div style="flex-shrink: 0;">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="1.5">
+                                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="9" cy="7" r="4"></circle>
+                                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 14px; color: #6b7280; margin-bottom: 5px;">Group Size</div>
+                                        <div style="font-size: 16px; font-weight: 600; color: #1f2937;" id="tourGroupSizeInfo">2-15 People</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Language -->
+                            <div class="col-md-4">
+                                <div style="display: flex; gap: 15px; align-items: flex-start;">
+                                    <div style="flex-shrink: 0;">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="1.5">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 14px; color: #6b7280; margin-bottom: 5px;">Language</div>
+                                        <div style="font-size: 16px; font-weight: 600; color: #1f2937;" id="tourLanguage">English, Russian</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Age Range -->
+                            <div class="col-md-4">
+                                <div style="display: flex; gap: 15px; align-items: flex-start;">
+                                    <div style="flex-shrink: 0;">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="1.5">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 14px; color: #6b7280; margin-bottom: 5px;">Age Range</div>
+                                        <div style="font-size: 16px; font-weight: 600; color: #1f2937;" id="tourAgeRange">12-70 Years</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Season -->
+                            <div class="col-md-4">
+                                <div style="display: flex; gap: 15px; align-items: flex-start;">
+                                    <div style="flex-shrink: 0;">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="1.5">
+                                            <circle cx="12" cy="12" r="5"></circle>
+                                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 14px; color: #6b7280; margin-bottom: 5px;">Season</div>
+                                        <div style="font-size: 16px; font-weight: 600; color: #1f2937;" id="tourSeason">All Year Round</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Difficulty Level -->
+                            <div class="col-md-4">
+                                <div style="display: flex; gap: 15px; align-items: flex-start;">
+                                    <div style="flex-shrink: 0;">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="1.5">
+                                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 14px; color: #6b7280; margin-bottom: 5px;">Difficulty Level</div>
+                                        <div style="font-size: 16px; font-weight: 600; color: #1f2937;" id="tourDifficulty">Moderate</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Category -->
+                            <div class="col-md-4">
+                                <div style="display: flex; gap: 15px; align-items: flex-start;">
+                                    <div style="flex-shrink: 0;">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="1.5">
+                                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 14px; color: #6b7280; margin-bottom: 5px;">Category</div>
+                                        <div style="font-size: 16px; font-weight: 600; color: #1f2937;" id="tourCategoryInfo">Cultural Tour</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <strong>Accommodation:</strong>
-                            <span id="tourAccommodation" class="ms-2"></span>
+                    </div>
+                </div>
+
+                <!-- Additional Info with Checkmarks -->
+                <div class="mb-5">
+                    <h2 class="section-title">Additional Info</h2>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="display: flex; align-items: flex-start; gap: 12px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0; margin-top: 2px;">
+                                <circle cx="12" cy="12" r="10" fill="#3b82f6"/>
+                                <path d="M8 12l2 2 4-4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <div>
+                                <strong style="color: #1f2937;">Free Cancellation</strong>
+                                <span style="color: #6b7280;"> – Some tours offer free cancellation up to a certain period (e.g., 24-48 hours before departure).</span>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <strong>Meals:</strong>
-                            <span id="tourMeals" class="ms-2"></span>
+                        <div style="display: flex; align-items: flex-start; gap: 12px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0; margin-top: 2px;">
+                                <circle cx="12" cy="12" r="10" fill="#3b82f6"/>
+                                <path d="M8 12l2 2 4-4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <div>
+                                <strong style="color: #1f2937;">Health & Safety Guidelines</strong>
+                                <span style="color: #6b7280;"> – COVID-19 regulations, vaccinations, or travel restrictions.</span>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <strong>Transportation:</strong>
-                            <span id="tourTransport" class="ms-2"></span>
+                    </div>
+                </div>
+
+                <!-- Explore Locations -->
+                <div class="mb-5" id="exploreLocationsSection">
+                    <h2 class="section-title">Explore Locations</h2>
+                    <div class="position-relative">
+                        <!-- Navigation Arrows -->
+                        <button class="location-nav-btn location-nav-prev" onclick="scrollLocations('prev')" style="position: absolute; left: -20px; top: 50%; transform: translateY(-50%); z-index: 10; width: 40px; height: 40px; border-radius: 50%; border: none; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.15); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1f2937" stroke-width="2">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+                        <button class="location-nav-btn location-nav-next" onclick="scrollLocations('next')" style="position: absolute; right: -20px; top: 50%; transform: translateY(-50%); z-index: 10; width: 40px; height: 40px; border-radius: 50%; border: none; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.15); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1f2937" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+
+                        <!-- Locations Container -->
+                        <div id="locationsContainer" style="display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth; padding: 10px 0; scrollbar-width: none; -ms-overflow-style: none;">
+                            <!-- Location cards will be inserted here by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Section -->
+                <div class="mb-5" id="faqSection">
+                    <h2 class="section-title">Frequently Asked Questions</h2>
+                    <div class="accordion" id="faqAccordion"></div>
+                </div>
+
+                <!-- Reviews Section -->
+                <div class="mb-5" id="reviewsSection">
+                    <h2 class="section-title">Customer Review & Rating</h2>
+
+                    <!-- Rating Summary Box -->
+                    <div class="mb-4" style="background: white; border: 1px solid #e5e7eb; padding: 35px; border-radius: 12px;">
+                        <div class="row">
+                            <!-- Left: Overall Rating -->
+                            <div class="col-lg-4">
+                                <div class="text-center">
+                                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto;">
+                                        <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                        </svg>
+                                    </div>
+                                    <h3 style="font-size: 22px; font-weight: 700; margin: 0 0 10px 0; color: #1f2937;">Excellent!</h3>
+                                    <div class="mb-2" style="display: flex; justify-content: center; gap: 3px;">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                        </svg>
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                        </svg>
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                        </svg>
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                        </svg>
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#fbbf24">
+                                            <defs>
+                                                <linearGradient id="halfStar">
+                                                    <stop offset="50%" stop-color="#fbbf24"/>
+                                                    <stop offset="50%" stop-color="#e5e7eb"/>
+                                                </linearGradient>
+                                            </defs>
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#halfStar)"/>
+                                        </svg>
+                                    </div>
+                                    <p style="margin: 0 0 20px 0;"><span style="font-size: 24px; font-weight: 700; color: #1f2937;" id="overallRating">4.5</span> <span style="color: #6b7280; font-size: 14px;">based on <span id="reviewCount">3,545</span> reviews</span></p>
+                                    <button onclick="alert('Review submission feature coming soon!')" style="background: #3b82f6; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 15px; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);">
+                                        Write a Review
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Right: Rating Bars -->
+                            <div class="col-lg-8" style="padding-left: 40px;">
+                                <div style="display: flex; flex-direction: column; gap: 20px;">
+                                    <!-- Overall -->
+                                    <div>
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                            <span style="color: #4b5563; font-weight: 500;">Overall</span>
+                                            <span style="color: #1f2937; font-weight: 600;">90%</span>
+                                        </div>
+                                        <div style="background: #e5e7eb; height: 8px; border-radius: 10px; overflow: hidden;">
+                                            <div style="background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%); width: 90%; height: 100%; border-radius: 10px;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Transport -->
+                                    <div>
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                            <span style="color: #4b5563; font-weight: 500;">Transport</span>
+                                            <span style="color: #1f2937; font-weight: 600;">95%</span>
+                                        </div>
+                                        <div style="background: #e5e7eb; height: 8px; border-radius: 10px; overflow: hidden;">
+                                            <div style="background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%); width: 95%; height: 100%; border-radius: 10px;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Food -->
+                                    <div>
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                            <span style="color: #4b5563; font-weight: 500;">Food</span>
+                                            <span style="color: #1f2937; font-weight: 600;">80%</span>
+                                        </div>
+                                        <div style="background: #e5e7eb; height: 8px; border-radius: 10px; overflow: hidden;">
+                                            <div style="background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%); width: 80%; height: 100%; border-radius: 10px;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Accommodation -->
+                                    <div>
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                            <span style="color: #4b5563; font-weight: 500;">Accommodation</span>
+                                            <span style="color: #1f2937; font-weight: 600;">98%</span>
+                                        </div>
+                                        <div style="background: #e5e7eb; height: 8px; border-radius: 10px; overflow: hidden;">
+                                            <div style="background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%); width: 98%; height: 100%; border-radius: 10px;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Tour Guide -->
+                                    <div>
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                            <span style="color: #4b5563; font-weight: 500;">Tour Guide</span>
+                                            <span style="color: #1f2937; font-weight: 600;">80%</span>
+                                        </div>
+                                        <div style="background: #e5e7eb; height: 8px; border-radius: 10px; overflow: hidden;">
+                                            <div style="background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%); width: 80%; height: 100%; border-radius: 10px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Individual Reviews -->
+                    <div id="reviewsList">
+                        <!-- Review 1 -->
+                        <div style="background: white; border: 1px solid #e5e7eb; padding: 30px; border-radius: 12px; margin-bottom: 20px;">
+                            <div style="display: flex; gap: 20px;">
+                                <img src="https://ui-avatars.com/api/?name=Bowmik+Haldar&background=3b82f6&color=fff&size=60" alt="User" style="width: 60px; height: 60px; border-radius: 50%; flex-shrink: 0;">
+                                <div style="flex: 1;">
+                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                        <div>
+                                            <h4 style="margin: 0; font-size: 18px; font-weight: 700; color: #1f2937;">Mr. Bowmik Haldar</h4>
+                                            <p style="margin: 5px 0 0 0; color: #6b7280; font-size: 14px;">05 June, 2024</p>
+                                        </div>
+                                    </div>
+                                    <p style="color: #4b5563; line-height: 1.6; margin-bottom: 15px;">Organization decides to seek consulting services to address a particular issue or to achieve specific objectives.</p>
+
+                                    <!-- Category Ratings -->
+                                    <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 15px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="color: #6b7280; font-size: 14px; font-weight: 500;">Overall</span>
+                                            <div style="display: flex; gap: 2px;">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#e5e7eb"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="color: #6b7280; font-size: 14px; font-weight: 500;">Transport</span>
+                                            <div style="display: flex; gap: 2px;">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#e5e7eb"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="color: #6b7280; font-size: 14px; font-weight: 500;">Food</span>
+                                            <div style="display: flex; gap: 2px;">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#e5e7eb"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="color: #6b7280; font-size: 14px; font-weight: 500;">Destination</span>
+                                            <div style="display: flex; gap: 2px;">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#e5e7eb"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="color: #6b7280; font-size: 14px; font-weight: 500;">Hospitality</span>
+                                            <div style="display: flex; gap: 2px;">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#e5e7eb"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button onclick="alert('Reply feature coming soon!')" style="background: transparent; border: none; color: #6b7280; cursor: pointer; font-size: 14px; padding: 0; display: flex; align-items: center; gap: 5px;">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                                        </svg>
+                                        Reply (01)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Review 2 -->
+                        <div style="background: white; border: 1px solid #e5e7eb; padding: 30px; border-radius: 12px; margin-bottom: 20px;">
+                            <div style="display: flex; gap: 20px;">
+                                <img src="https://ui-avatars.com/api/?name=Jacoline+Juie&background=8b5cf6&color=fff&size=60" alt="User" style="width: 60px; height: 60px; border-radius: 50%; flex-shrink: 0;">
+                                <div style="flex: 1;">
+                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                        <div>
+                                            <h4 style="margin: 0; font-size: 18px; font-weight: 700; color: #1f2937;">Jacoline Juie</h4>
+                                            <p style="margin: 5px 0 0 0; color: #6b7280; font-size: 14px;">05 June, 2023</p>
+                                        </div>
+                                    </div>
+                                    <p style="color: #4b5563; line-height: 1.6; margin-bottom: 15px;">However, here are some well-regarded car dealerships known for their customer service, inventory, and overall reputation. It's always a good idea to research and read reviews specific...</p>
+
+                                    <button onclick="alert('Reply feature coming soon!')" style="background: transparent; border: none; color: #6b7280; cursor: pointer; font-size: 14px; padding: 0; display: flex; align-items: center; gap: 5px;">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                                        </svg>
+                                        Reply
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -651,10 +1521,15 @@
     <script src="assets/js/ScrollTrigger.min.js"></script>
     <script src="assets/js/select-dropdown.js"></script>
     <script src="assets/js/custom.js"></script>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <script>
         const API_BASE = 'http://localhost:5000';
         let currentTour = null;
+        let tourMap = null;
 
         // Get tour ID from URL
         const urlParams = new URLSearchParams(window.location.search);
@@ -672,6 +1547,42 @@
             setupPriceCalculator();
             setMinDate();
         });
+
+        // Social Media Sharing Functions
+        function shareOnFacebook(event) {
+            event.preventDefault();
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=600,height=400');
+        }
+
+        function shareOnLinkedIn(event) {
+            event.preventDefault();
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(document.getElementById('tourTitle').textContent);
+            window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${title}`, '_blank', 'width=600,height=400');
+        }
+
+        function shareOnYouTube(event) {
+            event.preventDefault();
+            // YouTube doesn't have direct sharing, so we'll copy the link
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Link copied to clipboard! Share it on YouTube.');
+            }).catch(() => {
+                alert('Please copy this link: ' + url);
+            });
+        }
+
+        function shareOnInstagram(event) {
+            event.preventDefault();
+            // Instagram doesn't have direct sharing from web, so we'll copy the link
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Link copied to clipboard! Share it on Instagram.');
+            }).catch(() => {
+                alert('Please copy this link: ' + url);
+            });
+        }
 
         async function loadTour(id) {
             try {
@@ -699,20 +1610,10 @@
 
             document.getElementById('pageTitle').textContent = `${title} - Travel Bliss`;
             document.getElementById('tourTitle').textContent = title;
-            document.getElementById('tourLocation').textContent = location;
 
-            // Category
-            const categories = {
-                'cultural': '🏛️ Cultural Tour',
-                'adventure': '⛰️ Adventure Tour',
-                'hiking': '🥾 Hiking Tour',
-                'day-trip': '🌅 Day Trip'
-            };
-            document.getElementById('tourCategory').textContent = categories[tour.category] || tour.category;
-
-            // Price
+            // Price in banner
             const price = tour.discountPrice || tour.price;
-            document.getElementById('tourPrice').textContent = `$${price}`;
+            document.getElementById('tourPriceBanner').textContent = `$${price}`;
             document.getElementById('pricePerPerson').textContent = `$${price}`;
 
             // Discount
@@ -722,10 +1623,63 @@
                 document.getElementById('discountSection').style.display = 'none';
             }
 
-            // Meta Info
-            document.getElementById('tourDuration').textContent = `${tour.duration} Days${tour.nights ? ' / ' + tour.nights + ' Nights' : ''}`;
-            document.getElementById('tourGroupSize').textContent = `Max ${tour.maxGroupSize} People`;
-            document.getElementById('tourRating').textContent = (tour.rating || 4.5).toFixed(1);
+            // Meta Info in banner
+            const duration = tour.duration || 3;
+            const nights = tour.nights || (duration - 1);
+            const destinations = tour.destinations || 3;
+
+            document.getElementById('tourDuration').textContent = `${duration} Days`;
+            document.getElementById('tourNights').textContent = `${nights} Nights`;
+            document.getElementById('tourDestinations').textContent = `${destinations} Destinations`;
+
+            // Info bar
+            const rating = (tour.rating || 4.5).toFixed(1);
+            const reviewCount = tour.ratingsCount || tour.reviewCount || 138;
+            document.getElementById('infoBarRating').textContent = `(${rating}/5)`;
+            document.getElementById('infoBarReviews').textContent = reviewCount;
+
+            // Update banner background image
+            const bannerEl = document.getElementById('tourBanner');
+            let bgImage;
+
+            // Helper function to get correct image path
+            function getImagePath(image) {
+                if (!image) return null;
+
+                // If image starts with /uploads, it's an uploaded image - use it directly
+                if (image.startsWith('/uploads/')) {
+                    return image;
+                }
+
+                // If image starts with http:// or https://, it's an external URL
+                if (image.startsWith('http://') || image.startsWith('https://')) {
+                    return image;
+                }
+
+                // Otherwise, it's a legacy local asset
+                return `assets/img/home1/${image}`;
+            }
+
+            // Use uploaded image if available, otherwise use location-based default
+            const tourImage = tour.imageCover || tour.image;
+            if (tourImage) {
+                bgImage = getImagePath(tourImage);
+            } else {
+                // Fallback to location-based defaults
+                bgImage = 'https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=1600'; // Default Samarkand
+
+                if (location.toLowerCase().includes('bukhara')) {
+                    bgImage = 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1600';
+                } else if (location.toLowerCase().includes('chimgan')) {
+                    bgImage = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600';
+                } else if (title.toLowerCase().includes('bukhara')) {
+                    bgImage = 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1600';
+                } else if (title.toLowerCase().includes('chimgan')) {
+                    bgImage = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600';
+                }
+            }
+
+            bannerEl.style.backgroundImage = `url('${bgImage}')`;
 
             // Description
             document.getElementById('tourDescription').textContent = tour.description || tour.summary || 'No description available.';
@@ -735,35 +1689,144 @@
                 const highlightsList = document.getElementById('highlightsList');
                 highlightsList.innerHTML = tour.highlights.map(h =>
                     `<div class="highlight-card">
-                        <i class="bi bi-star-fill" style="color: #fbbf24; margin-right: 10px;"></i>
-                        ${h}
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#fbbf24" stroke="#fbbf24" stroke-width="0.5"/>
+                        </svg>
+                        <span style="color: #4b5563; line-height: 1.6;">${h}</span>
                     </div>`
                 ).join('');
             } else {
                 document.getElementById('highlightsSection').style.display = 'none';
             }
 
+            // Tour Itinerary Summary
+            if (tour.itinerary && tour.itinerary.length > 0) {
+                // Set destination
+                document.getElementById('itineraryDestination').textContent = tour.destination || tour.location || 'Uzbekistan';
+
+                // Set departure time (default if not available)
+                const departureTime = tour.departureTime || '8:00 am - 8:30am';
+                document.getElementById('departureTime').textContent = departureTime;
+
+                // Create days list
+                const itineraryDaysList = document.getElementById('itineraryDaysList');
+                itineraryDaysList.innerHTML = tour.itinerary.map((day, index) => {
+                    const dayTitle = day.title || `Day ${day.day || index + 1}`;
+                    const description = day.description || '';
+                    const activities = day.activities || [];
+
+                    return `
+                        <div class="itinerary-item">
+                            <div class="itinerary-header" onclick="toggleItineraryDay(${index})">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1f2937" stroke-width="2" style="flex-shrink: 0;">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    <div>
+                                        <span style="font-weight: 600; color: #1f2937;">Day-${String(day.day || index + 1).padStart(2, '0')}</span>
+                                        <span style="color: #6b7280; margin-left: 15px;">${dayTitle}</span>
+                                    </div>
+                                </div>
+                                <svg class="expand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="itinerary-content">
+                                ${description ? `<p style="color: #4b5563; line-height: 1.8; margin-bottom: 20px;">${description}</p>` : ''}
+                                ${activities.length > 0 ? `
+                                    <div>
+                                        <h4 style="font-size: 16px; font-weight: 700; color: #1f2937; margin-bottom: 15px;">Activities:</h4>
+                                        <ul style="list-style: none; padding: 0; margin: 0;">
+                                            ${activities.map(activity => `
+                                                <li style="padding: 8px 0; display: flex; align-items: flex-start; gap: 10px;">
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0; margin-top: 2px;">
+                                                        <circle cx="12" cy="12" r="10" fill="#3b82f6"/>
+                                                        <path d="M8 12l2 2 4-4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    <span style="color: #4b5563; line-height: 1.6;">${activity}</span>
+                                                </li>
+                                            `).join('')}
+                                        </ul>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                document.getElementById('tourItinerarySummary').style.display = 'none';
+            }
+
             // Itinerary
             if (tour.itinerary && tour.itinerary.length > 0) {
                 const itineraryList = document.getElementById('itineraryList');
-                itineraryList.innerHTML = tour.itinerary.map((day, index) =>
-                    `<div class="itinerary-item">
+                itineraryList.innerHTML = tour.itinerary.map((day, index) => {
+                    let activitiesHTML = '';
+                    if (day.activities && Array.isArray(day.activities)) {
+                        activitiesHTML = `
+                            <div style="margin-top: 15px;">
+                                <strong style="color: #1f2937;">Activities:</strong>
+                                <ul style="margin: 10px 0; padding-left: 25px; color: #6b7280;">
+                                    ${day.activities.map(act => `<li>${act}</li>`).join('')}
+                                </ul>
+                            </div>`;
+                    }
+
+                    let transportHTML = '';
+                    if (day.transport && Array.isArray(day.transport)) {
+                        transportHTML = `
+                            <div style="display: inline-block; margin-right: 20px; margin-top: 10px;">
+                                <i class="bi bi-car-front-fill" style="color: #667eea;"></i>
+                                <span style="color: #6b7280; margin-left: 5px;">${day.transport.join(', ')}</span>
+                            </div>`;
+                    }
+
+                    let mealsHTML = '';
+                    if (day.meals) {
+                        mealsHTML = `
+                            <div style="display: inline-block; margin-right: 20px; margin-top: 10px;">
+                                <i class="bi bi-cup-hot-fill" style="color: #667eea;"></i>
+                                <span style="color: #6b7280; margin-left: 5px;">${day.meals}</span>
+                            </div>`;
+                    }
+
+                    let accommodationHTML = '';
+                    if (day.accommodation) {
+                        accommodationHTML = `
+                            <div style="display: inline-block; margin-top: 10px;">
+                                <i class="bi bi-house-fill" style="color: #667eea;"></i>
+                                <span style="color: #6b7280; margin-left: 5px;">${day.accommodation}</span>
+                            </div>`;
+                    }
+
+                    return `<div class="itinerary-item">
                         <div class="itinerary-header" onclick="toggleItinerary(${index})">
                             <div style="display: flex; align-items: center; gap: 15px;">
-                                <div class="day-number">${index + 1}</div>
-                                <h4 style="font-size: 18px; font-weight: 600; margin: 0;">
-                                    ${day.title || `Day ${index + 1}`}
-                                </h4>
+                                <div class="day-number">${day.day || index + 1}</div>
+                                <div>
+                                    <h4 style="font-size: 18px; font-weight: 600; margin: 0;">
+                                        ${day.title || `Day ${day.day || index + 1}`}
+                                    </h4>
+                                </div>
                             </div>
-                            <i class="bi bi-chevron-down expand-icon" id="icon-${index}"></i>
+                            <svg class="expand-icon" id="icon-${index}" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
                         </div>
                         <div class="itinerary-content" id="content-${index}">
-                            <p style="color: #6b7280; line-height: 1.8; margin: 0;">
-                                ${day.description || day.activities || 'No description available'}
+                            <p style="color: #6b7280; line-height: 1.8; margin-bottom: 15px;">
+                                ${day.description || 'No description available'}
                             </p>
+                            ${activitiesHTML}
+                            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e7eb;">
+                                ${mealsHTML}
+                                ${transportHTML}
+                                ${accommodationHTML}
+                            </div>
                         </div>
-                    </div>`
-                ).join('');
+                    </div>`;
+                }).join('');
             } else {
                 document.getElementById('itinerarySection').style.display = 'none';
             }
@@ -790,9 +1853,777 @@
 
             // Additional Info
             document.getElementById('tourDifficulty').textContent = tour.difficulty || 'Moderate';
-            document.getElementById('tourAccommodation').textContent = tour.accommodation || 'Not specified';
-            document.getElementById('tourMeals').textContent = tour.meals || 'Not specified';
-            document.getElementById('tourTransport').textContent = tour.transportation || 'Not specified';
+            document.getElementById('tourAccommodation').textContent = tour.accommodation || '3-4 Star Hotel';
+            document.getElementById('tourMeals').textContent = tour.meals || 'Breakfast & Dinner';
+            document.getElementById('tourTransport').textContent = tour.transportation || 'Car, Bus';
+            document.getElementById('tourGroupSizeInfo').textContent = `2-${tour.maxGroupSize} People` || '2-15 People';
+            document.getElementById('tourLanguage').textContent = tour.language || 'English, Russian';
+            document.getElementById('tourAgeRange').textContent = tour.ageRange || '12-70 Years';
+            document.getElementById('tourSeason').textContent = tour.season || 'All Year Round';
+
+            // Category
+            const categoryMap = {
+                'cultural': 'Cultural Tour',
+                'adventure': 'Adventure Tour',
+                'hiking': 'Hiking Tour',
+                'day-trip': 'Day Trip'
+            };
+            document.getElementById('tourCategoryInfo').textContent = categoryMap[tour.category] || 'Cultural Tour';
+
+            // FAQ Section
+            if (tour.faq && tour.faq.length > 0) {
+                const faqAccordion = document.getElementById('faqAccordion');
+                faqAccordion.innerHTML = tour.faq.map((item, index) =>
+                    `<div class="accordion-item" style="border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 10px; overflow: hidden;">
+                        <h2 class="accordion-header" id="faqHeading${index}">
+                            <button class="accordion-button ${index !== 0 ? 'collapsed' : ''}" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse${index}" aria-expanded="${index === 0 ? 'true' : 'false'}" aria-controls="faqCollapse${index}" style="font-weight: 600; padding: 20px;">
+                                ${item.question}
+                            </button>
+                        </h2>
+                        <div id="faqCollapse${index}" class="accordion-collapse collapse ${index === 0 ? 'show' : ''}" aria-labelledby="faqHeading${index}" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body" style="padding: 20px; color: #6b7280; line-height: 1.8;">
+                                ${item.answer}
+                            </div>
+                        </div>
+                    </div>`
+                ).join('');
+            } else {
+                document.getElementById('faqSection').style.display = 'none';
+            }
+
+            // Reviews
+            const tourRating = (tour.rating || 4.5).toFixed(1);
+            document.getElementById('overallRating').textContent = tourRating;
+            document.getElementById('reviewCount').textContent = tour.ratingsCount || tour.reviewCount || '3,545';
+
+            // Update Brochure Image
+            updateBrochureImage(tour);
+
+            // Initialize Map
+            initializeMap(tour);
+
+            // Load Explore Locations
+            loadExploreLocations(tour);
+        }
+
+        function updateBrochureImage(tour) {
+            const brochureImg = document.getElementById('brochureImage');
+
+            // Set tour-specific image based on uploaded image or location
+            const location = (tour.destination || tour.location || '').toLowerCase();
+            const title = (tour.title || tour.name || '').toLowerCase();
+
+            // Helper function to get correct image path
+            function getImagePath(image) {
+                if (!image) return null;
+
+                if (image.startsWith('/uploads/')) {
+                    return image;
+                }
+
+                if (image.startsWith('http://') || image.startsWith('https://')) {
+                    return image;
+                }
+
+                return `assets/img/home1/${image}`;
+            }
+
+            // Use uploaded image if available
+            const tourImage = tour.imageCover || tour.image;
+            if (tourImage) {
+                brochureImg.src = getImagePath(tourImage);
+            } else {
+                // Fallback to location-based defaults
+                if (location.includes('samarkand') || title.includes('samarkand')) {
+                    brochureImg.src = 'https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=300';
+                } else if (location.includes('bukhara') || title.includes('bukhara')) {
+                    brochureImg.src = 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=300';
+                } else if (location.includes('chimgan') || title.includes('chimgan')) {
+                    brochureImg.src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300';
+                } else {
+                    brochureImg.src = 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=300';
+                }
+            }
+        }
+
+        function downloadBrochure() {
+            if (!currentTour) {
+                alert('Tour information not loaded');
+                return;
+            }
+
+            try {
+                generateBrochurePDF();
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('Error generating PDF brochure. Please try again.');
+            }
+        }
+
+        function generateBrochurePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const tour = currentTour;
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const pageHeight = doc.internal.pageSize.getHeight();
+            let yPos = 20;
+
+            // Header - Purple gradient background (simulated)
+            doc.setFillColor(102, 126, 234);
+            doc.rect(0, 0, pageWidth, 50, 'F');
+
+            // Company Name
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(24);
+            doc.setFont('helvetica', 'bold');
+            doc.text('TRAVEL BLISS', pageWidth / 2, 20, { align: 'center' });
+
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Discover Uzbekistan', pageWidth / 2, 30, { align: 'center' });
+
+            // Tour Title
+            yPos = 60;
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(20);
+            doc.setFont('helvetica', 'bold');
+            doc.text(tour.title || tour.name, 20, yPos);
+
+            // Location
+            yPos += 10;
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'italic');
+            doc.setTextColor(107, 114, 128);
+            doc.text(tour.destination || tour.location, 20, yPos);
+
+            // Price Box
+            yPos += 15;
+            doc.setFillColor(249, 250, 251);
+            doc.rect(20, yPos - 5, 60, 20, 'F');
+            doc.setTextColor(102, 126, 234);
+            doc.setFontSize(24);
+            doc.setFont('helvetica', 'bold');
+            doc.text(`$${tour.discountPrice || tour.price}`, 25, yPos + 8);
+            doc.setFontSize(10);
+            doc.setTextColor(107, 114, 128);
+            doc.text('per person', 25, yPos + 15);
+
+            // Duration, Group Size, Rating
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Duration: ${tour.duration} Days`, 100, yPos + 5);
+            doc.text(`Group Size: Max ${tour.maxGroupSize} People`, 100, yPos + 12);
+            doc.text(`Rating: ${(tour.rating || 4.5).toFixed(1)} / 5.0`, 100, yPos + 19);
+
+            // Overview
+            yPos += 35;
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(0, 0, 0);
+            doc.text('Overview', 20, yPos);
+
+            yPos += 7;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(75, 85, 99);
+            const description = tour.description || tour.summary || 'No description available.';
+            const descLines = doc.splitTextToSize(description, pageWidth - 40);
+            doc.text(descLines, 20, yPos);
+            yPos += descLines.length * 5 + 10;
+
+            // Tour Highlights
+            if (tour.highlights && tour.highlights.length > 0) {
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(0, 0, 0);
+                doc.text('Tour Highlights', 20, yPos);
+                yPos += 7;
+
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                tour.highlights.forEach((highlight, index) => {
+                    if (yPos > pageHeight - 30) {
+                        doc.addPage();
+                        yPos = 20;
+                    }
+                    doc.setTextColor(251, 191, 36);
+                    doc.text('★', 20, yPos);
+                    doc.setTextColor(75, 85, 99);
+                    const highlightLines = doc.splitTextToSize(highlight, pageWidth - 50);
+                    doc.text(highlightLines, 27, yPos);
+                    yPos += highlightLines.length * 5 + 3;
+                });
+                yPos += 5;
+            }
+
+            // What's Included
+            if (yPos > pageHeight - 60) {
+                doc.addPage();
+                yPos = 20;
+            }
+
+            const included = tour.includes || tour.included || [];
+            if (included.length > 0) {
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(0, 0, 0);
+                doc.text("What's Included", 20, yPos);
+                yPos += 7;
+
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                included.forEach(item => {
+                    if (yPos > pageHeight - 30) {
+                        doc.addPage();
+                        yPos = 20;
+                    }
+                    doc.setTextColor(16, 185, 129);
+                    doc.text('✓', 20, yPos);
+                    doc.setTextColor(75, 85, 99);
+                    const itemLines = doc.splitTextToSize(item, pageWidth - 50);
+                    doc.text(itemLines, 27, yPos);
+                    yPos += itemLines.length * 5 + 3;
+                });
+                yPos += 5;
+            }
+
+            // What's Excluded
+            const excluded = tour.excludes || tour.excluded || [];
+            if (excluded.length > 0) {
+                if (yPos > pageHeight - 60) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(0, 0, 0);
+                doc.text("What's Excluded", 20, yPos);
+                yPos += 7;
+
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                excluded.forEach(item => {
+                    if (yPos > pageHeight - 30) {
+                        doc.addPage();
+                        yPos = 20;
+                    }
+                    doc.setTextColor(239, 68, 68);
+                    doc.text('✗', 20, yPos);
+                    doc.setTextColor(75, 85, 99);
+                    const itemLines = doc.splitTextToSize(item, pageWidth - 50);
+                    doc.text(itemLines, 27, yPos);
+                    yPos += itemLines.length * 5 + 3;
+                });
+                yPos += 10;
+            }
+
+            // Contact Information - Footer
+            if (yPos > pageHeight - 50) {
+                doc.addPage();
+                yPos = 20;
+            } else {
+                yPos = pageHeight - 40;
+            }
+
+            doc.setFillColor(102, 126, 234);
+            doc.rect(0, yPos - 5, pageWidth, 50, 'F');
+
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Contact Us', 20, yPos + 5);
+
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Phone: +998 90 123 45 67', 20, yPos + 13);
+            doc.text('Email: info@travelbliss.uz', 20, yPos + 20);
+            doc.text('Website: www.travelbliss.uz', 20, yPos + 27);
+
+            doc.setFontSize(8);
+            doc.setTextColor(255, 255, 255);
+            doc.text('© 2025 Travel Bliss. All rights reserved.', pageWidth / 2, yPos + 35, { align: 'center' });
+
+            // Save the PDF
+            const fileName = `${(tour.title || tour.name).replace(/[^a-z0-9]/gi, '_')}_Brochure.pdf`;
+            doc.save(fileName);
+        }
+
+        function loadExploreLocations(tour) {
+            const locationsContainer = document.getElementById('locationsContainer');
+
+            // Define locations based on tour itinerary
+            const locations = [];
+
+            if (tour.itinerary && tour.itinerary.length > 0) {
+                // Create location cards from itinerary
+                tour.itinerary.forEach((day, index) => {
+                    const locationName = day.title || `Day ${day.day || index + 1}`;
+
+                    // Get image based on location
+                    let imageUrl = 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400';
+
+                    if (locationName.toLowerCase().includes('registan')) {
+                        imageUrl = 'https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=400';
+                    } else if (locationName.toLowerCase().includes('gur-e-amir') || locationName.toLowerCase().includes('mausoleum')) {
+                        imageUrl = 'https://images.unsplash.com/photo-1588417659248-df8cbb59e1a5?w=400';
+                    } else if (locationName.toLowerCase().includes('ulugbek') || locationName.toLowerCase().includes('observatory')) {
+                        imageUrl = 'https://images.unsplash.com/photo-1534131707746-25d604851a7f?w=400';
+                    } else if (locationName.toLowerCase().includes('bukhara') || locationName.toLowerCase().includes('ark')) {
+                        imageUrl = 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=400';
+                    } else if (locationName.toLowerCase().includes('chimgan') || locationName.toLowerCase().includes('mountain')) {
+                        imageUrl = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400';
+                    }
+
+                    locations.push({
+                        name: locationName,
+                        duration: `(Day ${day.day || index + 1})`,
+                        image: imageUrl
+                    });
+                });
+            } else {
+                // Fallback: Show popular Uzbekistan destinations
+                locations.push(
+                    {
+                        name: 'Registan Square',
+                        duration: '(Half Day)',
+                        image: 'https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=400'
+                    },
+                    {
+                        name: 'Gur-e-Amir Mausoleum',
+                        duration: '(2 Hours)',
+                        image: 'https://images.unsplash.com/photo-1588417659248-df8cbb59e1a5?w=400'
+                    },
+                    {
+                        name: 'Ark Fortress',
+                        duration: '(3 Hours)',
+                        image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=400'
+                    }
+                );
+            }
+
+            // Generate HTML for location cards
+            locationsContainer.innerHTML = locations.map(location => `
+                <div class="location-card">
+                    <img src="${location.image}" alt="${location.name}" class="location-card-image">
+                    <div class="location-card-content">
+                        <h3 class="location-card-title">${location.name}</h3>
+                        <p class="location-card-duration">${location.duration}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function scrollLocations(direction) {
+            const container = document.getElementById('locationsContainer');
+            const scrollAmount = 300;
+
+            if (direction === 'prev') {
+                container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else {
+                container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        }
+
+        function scrollToDay(index) {
+            const dayElement = document.getElementById(`content-${index}`);
+            if (dayElement) {
+                // Open the day if it's not already open
+                const header = dayElement.previousElementSibling;
+                const icon = document.getElementById(`icon-${index}`);
+
+                if (!dayElement.classList.contains('active')) {
+                    dayElement.classList.add('active');
+                    icon.classList.add('rotated');
+                    header.classList.add('active');
+                }
+
+                // Scroll to the day with offset for sticky header
+                const yOffset = -100;
+                const y = header.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+            }
+        }
+
+        function initializeMap(tour) {
+            // Remove existing map if any
+            if (tourMap) {
+                tourMap.remove();
+            }
+
+            // Default coordinates (Uzbekistan center)
+            let lat = 41.3775;
+            let lng = 64.5853;
+            let zoomLevel = 6;
+
+            // Get coordinates based on tour location/destination
+            const location = (tour.destination || tour.location || '').toLowerCase();
+            const title = (tour.title || tour.name || '').toLowerCase();
+            const highlights = (tour.highlights || []).join(' ').toLowerCase();
+
+            // Location detection keywords
+            const locationKeywords = {
+                samarkand: {
+                    lat: 39.6542,
+                    lng: 66.9597,
+                    zoom: 14,
+                    keywords: ['samarkand', 'registan', 'shah-i-zinda', 'bibi-khanym', 'gur-e-amir', 'ulugbek', 'afrosiyob']
+                },
+                bukhara: {
+                    lat: 39.7747,
+                    lng: 64.4286,
+                    zoom: 14,
+                    keywords: ['bukhara', 'ark fortress', 'lyabi-hauz', 'poi kalyan', 'kalyan minaret', 'bolo hauz', 'chor minor']
+                },
+                chimgan: {
+                    lat: 41.5575,
+                    lng: 70.0106,
+                    zoom: 14,
+                    keywords: ['chimgan', 'charvak', 'beldersay', 'amirsoy', 'ski resort']
+                },
+                tashkent: {
+                    lat: 41.2995,
+                    lng: 69.2401,
+                    zoom: 13,
+                    keywords: ['tashkent', 'chorsu', 'hazrati imam', 'amir timur', 'broadway', 'minor mosque']
+                },
+                khiva: {
+                    lat: 41.3775,
+                    lng: 60.3644,
+                    zoom: 14,
+                    keywords: ['khiva', 'ichan kala', 'kalta minor', 'kunya ark', 'juma mosque', 'tash hauli']
+                },
+                fergana: {
+                    lat: 40.3864,
+                    lng: 71.7864,
+                    zoom: 13,
+                    keywords: ['fergana', 'kokand', 'margilan', 'rishtan', 'silk road']
+                },
+                nukus: {
+                    lat: 42.4531,
+                    lng: 59.6103,
+                    zoom: 13,
+                    keywords: ['nukus', 'savitsky museum', 'karakalpakstan', 'aral sea']
+                },
+                termez: {
+                    lat: 37.2242,
+                    lng: 67.2783,
+                    zoom: 13,
+                    keywords: ['termez', 'fayaz tepe', 'kirk kiz', 'buddhist']
+                }
+            };
+
+            // Check location and title first
+            let locationFound = false;
+            for (const [city, data] of Object.entries(locationKeywords)) {
+                if (location.includes(city) || title.includes(city)) {
+                    lat = data.lat;
+                    lng = data.lng;
+                    zoomLevel = data.zoom;
+                    locationFound = true;
+                    break;
+                }
+            }
+
+            // If not found, check highlights for location keywords
+            if (!locationFound && highlights) {
+                for (const [city, data] of Object.entries(locationKeywords)) {
+                    for (const keyword of data.keywords) {
+                        if (highlights.includes(keyword)) {
+                            lat = data.lat;
+                            lng = data.lng;
+                            zoomLevel = data.zoom;
+                            locationFound = true;
+                            break;
+                        }
+                    }
+                    if (locationFound) break;
+                }
+            }
+
+            // Initialize the map
+            tourMap = L.map('tourMap', {
+                zoomControl: true,
+                attributionControl: true
+            }).setView([lat, lng], zoomLevel);
+
+            // Add Google Maps tiles (clear and high quality)
+            L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+                maxZoom: 20,
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+                attribution: '&copy; <a href="https://maps.google.com">Google Maps</a>'
+            }).addTo(tourMap);
+
+            // Function to automatically fetch coordinates via backend proxy (no CORS issues)
+            async function getAttractionCoordinates(attractionName, cityContext = '') {
+                try {
+                    // Use backend proxy to avoid CORS issues
+                    const url = cityContext
+                        ? `http://localhost:5000/api/geocoding/search?q=${encodeURIComponent(attractionName)}&city=${encodeURIComponent(cityContext)}`
+                        : `http://localhost:5000/api/geocoding/search?q=${encodeURIComponent(attractionName)}`;
+
+                    const response = await fetch(url);
+                    const result = await response.json();
+
+                    if (result.success && result.data) {
+                        return result.data;
+                    }
+                    return null;
+                } catch (error) {
+                    console.error('Error fetching coordinates for:', attractionName, error);
+                    return null;
+                }
+            }
+
+            // Cache for attraction coordinates to avoid repeated API calls
+            const attractionCache = {};
+
+            // Array to store all markers for bounds calculation
+            const markers = [];
+
+            // Create custom icon
+            const customIcon = L.divIcon({
+                className: 'custom-marker',
+                html: `<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                              width: 40px; height: 40px; border-radius: 50% 50% 50% 0;
+                              border: 3px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                              transform: rotate(-45deg); display: flex; align-items: center; justify-content: center;">
+                         <svg width="20" height="20" viewBox="0 0 24 24" fill="white" style="transform: rotate(45deg);">
+                           <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                         </svg>
+                       </div>`,
+                iconSize: [40, 40],
+                iconAnchor: [20, 40],
+                popupAnchor: [0, -40]
+            });
+
+            // Smaller icon for attractions
+            const attractionIcon = L.divIcon({
+                className: 'custom-marker',
+                html: `<div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+                              width: 32px; height: 32px; border-radius: 50% 50% 50% 0;
+                              border: 2px solid white; box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+                              transform: rotate(-45deg); display: flex; align-items: center; justify-content: center;">
+                         <svg width="16" height="16" viewBox="0 0 24 24" fill="white" style="transform: rotate(45deg);">
+                           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                         </svg>
+                       </div>`,
+                iconSize: [32, 32],
+                iconAnchor: [16, 32],
+                popupAnchor: [0, -32]
+            });
+
+            // Add main tour marker
+            const mainMarker = L.marker([lat, lng], { icon: customIcon }).addTo(tourMap);
+            mainMarker.bindPopup(`
+                <div style="text-align: center; padding: 12px; min-width: 220px;">
+                    <h4 style="margin: 0 0 10px 0; color: #667eea; font-size: 16px; font-weight: 600;">
+                        ${tour.title || tour.name}
+                    </h4>
+                    <p style="margin: 0 0 10px 0; color: #6b7280; font-size: 14px;">
+                        ${tour.destination || tour.location}
+                    </p>
+                    <p style="margin: 0 0 12px 0; font-weight: 600; color: #667eea; font-size: 18px;">
+                        $${tour.discountPrice || tour.price}
+                    </p>
+                    <a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 5px;
+                        padding: 8px 16px;
+                        background: #4285f4;
+                        color: white;
+                        text-decoration: none;
+                        border-radius: 6px;
+                        font-size: 13px;
+                        font-weight: 500;
+                        transition: all 0.3s;
+                    " onmouseover="this.style.background='#3367d6'" onmouseout="this.style.background='#4285f4'">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                        Open in Google Maps
+                    </a>
+                </div>
+            `).openPopup();
+            markers.push(mainMarker);
+
+            // Store route coordinates
+            const routeCoordinates = [[lat, lng]];
+
+            // Add markers for highlights - automatically fetch coordinates from OpenStreetMap
+            if (tour.highlights && tour.highlights.length > 0) {
+                // Get city context from location for better search accuracy
+                const cityContext = tour.destination || tour.location || '';
+
+                // Create a loading indicator
+                const loadingEl = document.createElement('div');
+                loadingEl.className = 'text-center text-muted mt-3';
+                loadingEl.innerHTML = '<small>Loading attraction locations...</small>';
+                document.getElementById('tourMap').insertAdjacentElement('beforebegin', loadingEl);
+
+                // Process highlights asynchronously
+                const highlightPromises = tour.highlights.map(async (highlight, index) => {
+                    // Check cache first
+                    const cacheKey = highlight.toLowerCase();
+                    let coords = attractionCache[cacheKey];
+
+                    if (!coords) {
+                        // Add small delay between requests to respect Nominatim usage policy (max 1 request per second)
+                        await new Promise(resolve => setTimeout(resolve, index * 1100));
+                        coords = await getAttractionCoordinates(highlight, cityContext);
+
+                        if (coords) {
+                            attractionCache[cacheKey] = coords; // Cache the result
+                        }
+                    }
+
+                    if (coords) {
+                        const attractionMarker = L.marker([coords.lat, coords.lng], { icon: attractionIcon }).addTo(tourMap);
+                        attractionMarker.bindPopup(`
+                            <div style="text-align: center; padding: 10px; min-width: 180px;">
+                                <h5 style="margin: 0 0 8px 0; color: #3b82f6; font-size: 14px; font-weight: 600;">
+                                    ${coords.name}
+                                </h5>
+                                <p style="margin: 0 0 10px 0; color: #6b7280; font-size: 12px;">
+                                    ${highlight}
+                                </p>
+                                <a href="https://www.google.com/maps?q=${coords.lat},${coords.lng}" target="_blank" style="
+                                    display: inline-flex;
+                                    align-items: center;
+                                    gap: 4px;
+                                    padding: 6px 12px;
+                                    background: #4285f4;
+                                    color: white;
+                                    text-decoration: none;
+                                    border-radius: 5px;
+                                    font-size: 11px;
+                                    font-weight: 500;
+                                    transition: all 0.3s;
+                                " onmouseover="this.style.background='#3367d6'" onmouseout="this.style.background='#4285f4'">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                    </svg>
+                                    View on Google Maps
+                                </a>
+                            </div>
+                        `);
+                        markers.push(attractionMarker);
+                        routeCoordinates.push([coords.lat, coords.lng]);
+                        return coords;
+                    }
+                    return null;
+                });
+
+                // Wait for all highlights to be processed
+                Promise.all(highlightPromises).then(() => {
+                    // Remove loading indicator
+                    loadingEl.remove();
+
+                    // Fit map to show all markers after they're loaded
+                    if (markers.length > 1) {
+                        const group = L.featureGroup(markers);
+                        tourMap.fitBounds(group.getBounds().pad(0.1));
+                    }
+
+                    // Draw the route after all markers are placed
+                    drawRoute();
+                }).catch(error => {
+                    console.error('Error loading attractions:', error);
+                    loadingEl.innerHTML = '<small class="text-danger">Some attractions could not be loaded</small>';
+                });
+            }
+
+            // Function to draw animated route
+            function drawRoute() {
+                // Draw animated route connecting all markers
+                if (routeCoordinates.length > 1) {
+                    // Create the route polyline with dashed animation
+                    const route = L.polyline(routeCoordinates, {
+                        color: '#3b82f6',
+                        weight: 4,
+                        opacity: 0.7,
+                        smoothFactor: 1,
+                        className: 'animated-route',
+                        dashArray: '10, 15',
+                        lineCap: 'round',
+                        lineJoin: 'round'
+                    }).addTo(tourMap);
+
+                    // Add a shadow/outline to the route
+                    L.polyline(routeCoordinates, {
+                        color: '#1e40af',
+                        weight: 6,
+                        opacity: 0.3,
+                        smoothFactor: 1,
+                        dashArray: '10, 15',
+                        lineCap: 'round',
+                        lineJoin: 'round'
+                    }).addTo(tourMap);
+
+                    // Add direction arrows on the route
+                    routeCoordinates.forEach((coord, index) => {
+                        if (index < routeCoordinates.length - 1) {
+                            const nextCoord = routeCoordinates[index + 1];
+                            const midLat = (coord[0] + nextCoord[0]) / 2;
+                            const midLng = (coord[1] + nextCoord[1]) / 2;
+
+                            // Calculate angle for arrow direction
+                            const angle = Math.atan2(nextCoord[0] - coord[0], nextCoord[1] - coord[1]) * 180 / Math.PI;
+
+                            const arrowIcon = L.divIcon({
+                                html: `<div style="
+                                    transform: rotate(${angle}deg);
+                                    font-size: 20px;
+                                    color: #3b82f6;
+                                    text-shadow: 0 0 3px white, 0 0 5px white;
+                                    font-weight: bold;
+                                ">▶</div>`,
+                                className: 'route-arrow',
+                                iconSize: [20, 20],
+                                iconAnchor: [10, 10]
+                            });
+
+                            L.marker([midLat, midLng], {
+                                icon: arrowIcon,
+                                interactive: false
+                            }).addTo(tourMap);
+                        }
+                    });
+
+                    // Add numbered waypoint markers
+                    routeCoordinates.forEach((coord, index) => {
+                        if (index > 0) { // Skip the first one as it's the main marker
+                            const waypointIcon = L.divIcon({
+                                html: `<div style="
+                                    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+                                    width: 28px;
+                                    height: 28px;
+                                    border-radius: 50%;
+                                    border: 2px solid white;
+                                    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    color: white;
+                                    font-weight: bold;
+                                    font-size: 12px;
+                                ">${index}</div>`,
+                                className: 'waypoint-marker',
+                                iconSize: [28, 28],
+                                iconAnchor: [14, 14]
+                            });
+
+                            L.marker(coord, {
+                                icon: waypointIcon,
+                                interactive: false
+                            }).addTo(tourMap);
+                        }
+                    });
+                }
+            }
         }
 
         function setupPriceCalculator() {
@@ -842,6 +2673,20 @@
             const content = document.getElementById(`content-${index}`);
             const icon = document.getElementById(`icon-${index}`);
             const header = content.previousElementSibling;
+
+            content.classList.toggle('active');
+            icon.classList.toggle('rotated');
+            header.classList.toggle('active');
+        }
+
+        function toggleItineraryDay(index) {
+            const items = document.querySelectorAll('#itineraryDaysList .itinerary-item');
+            const item = items[index];
+            if (!item) return;
+
+            const header = item.querySelector('.itinerary-header');
+            const content = item.querySelector('.itinerary-content');
+            const icon = item.querySelector('.expand-icon');
 
             content.classList.toggle('active');
             icon.classList.toggle('rotated');
