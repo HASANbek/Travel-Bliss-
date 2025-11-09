@@ -1670,8 +1670,57 @@
                     document.getElementById('tourAgeMin').value = tour.ageRange?.min || '';
                     document.getElementById('tourAgeMax').value = tour.ageRange?.max || '';
 
-                    // Media
-                    document.getElementById('tourImage').value = tour.image || tour.imageCover || '';
+                    // Media - Load images into gallery
+                    const gallery = document.getElementById('imageGallery');
+                    gallery.innerHTML = '';
+                    uploadedImages = [];
+                    coverImageIndex = 0;
+
+                    // Get images array
+                    const tourImages = tour.images || (tour.image ? [tour.image] : []);
+                    const coverImage = tour.image || tour.imageCover || '';
+
+                    if (tourImages.length > 0) {
+                        tourImages.forEach((imagePath, index) => {
+                            uploadedImages.push(imagePath);
+
+                            // Create preview card
+                            const card = document.createElement('div');
+                            card.style.cssText = `
+                                position: relative;
+                                border: 3px solid ${imagePath === coverImage ? '#6366f1' : '#e0e0e0'};
+                                border-radius: 12px;
+                                overflow: hidden;
+                                cursor: pointer;
+                                transition: all 0.3s;
+                            `;
+                            card.dataset.imageIndex = index;
+
+                            card.innerHTML = `
+                                <img src="${API_URL}${imagePath}" style="width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3;">
+                                <div style="position: absolute; top: 8px; right: 8px; background: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);" onclick="removeImage(${index}, this.parentElement)">
+                                    <span style="color: #dc3545; font-size: 18px; font-weight: bold;">×</span>
+                                </div>
+                                <div class="cover-badge" style="position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: ${imagePath === coverImage ? 'block' : 'none'};">
+                                    COVER
+                                </div>
+                            `;
+
+                            card.onclick = function() {
+                                setCoverImage(index);
+                            };
+
+                            gallery.appendChild(card);
+
+                            // Set cover index
+                            if (imagePath === coverImage) {
+                                coverImageIndex = index;
+                            }
+                        });
+                    }
+
+                    document.getElementById('tourImage').value = coverImage;
+                    document.getElementById('tourImages').value = JSON.stringify(tourImages);
 
                     // Arrays
                     document.getElementById('tourIncludes').value = arrayToTextarea(tour.includes || tour.included);
