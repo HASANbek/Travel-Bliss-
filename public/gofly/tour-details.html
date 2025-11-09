@@ -208,9 +208,11 @@
             display: none !important;
         }
 
-        /* Mobile menu contact area should be visible */
-        .header-area .main-menu .contact-area {
-            display: flex !important;
+        /* Mobile menu contact area should be visible only on mobile */
+        @media (max-width: 1199px) {
+            .header-area .main-menu .contact-area {
+                display: flex !important;
+            }
         }
     </style>
 </head>
