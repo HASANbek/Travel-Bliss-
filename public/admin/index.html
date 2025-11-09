@@ -1676,13 +1676,33 @@
                     uploadedImages = [];
                     coverImageIndex = 0;
 
-                    // Get images array
-                    const tourImages = tour.images || (tour.image ? [tour.image] : []);
+                    // Get images array - handle both uploaded images and legacy asset images
+                    let tourImages = [];
+                    if (tour.images && Array.isArray(tour.images) && tour.images.length > 0) {
+                        tourImages = tour.images;
+                    } else if (tour.imageCover || tour.image) {
+                        // For legacy tours with only imageCover
+                        tourImages = [tour.imageCover || tour.image];
+                    }
+
                     const coverImage = tour.image || tour.imageCover || '';
 
                     if (tourImages.length > 0) {
                         tourImages.forEach((imagePath, index) => {
                             uploadedImages.push(imagePath);
+
+                            // Determine correct image URL
+                            let imageUrl;
+                            if (imagePath.startsWith('/uploads/')) {
+                                // Uploaded image - use API URL
+                                imageUrl = `${API_URL}${imagePath}`;
+                            } else if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+                                // External URL
+                                imageUrl = imagePath;
+                            } else {
+                                // Legacy local asset - use relative path
+                                imageUrl = `../gofly/assets/img/home1/${imagePath}`;
+                            }
 
                             // Create preview card
                             const card = document.createElement('div');
@@ -1697,7 +1717,7 @@
                             card.dataset.imageIndex = index;
 
                             card.innerHTML = `
-                                <img src="${API_URL}${imagePath}" style="width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3;">
+                                <img src="${imageUrl}" style="width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3;" onerror="this.src='../gofly/assets/img/home1/package-card-alpha-1.jpg'">
                                 <div style="position: absolute; top: 8px; right: 8px; background: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);" onclick="removeImage(${index}, this.parentElement)">
                                     <span style="color: #dc3545; font-size: 18px; font-weight: bold;">×</span>
                                 </div>
