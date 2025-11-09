@@ -78,14 +78,58 @@
         .itinerary-item {
             border: 1px solid #e5e7eb;
             border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            overflow: hidden;
             transition: all 0.3s;
         }
 
         .itinerary-item:hover {
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transform: translateY(-2px);
+        }
+
+        .itinerary-header {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f9fafb;
+            transition: all 0.3s;
+        }
+
+        .itinerary-header:hover {
+            background: #f3f4f6;
+        }
+
+        .itinerary-header.active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+        }
+
+        .itinerary-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 25px;
+        }
+
+        .itinerary-content.active {
+            max-height: 1000px;
+            padding: 20px 25px;
+        }
+
+        .expand-icon {
+            transition: transform 0.3s;
+            color: #6366f1;
+            font-size: 20px;
+        }
+
+        .expand-icon.rotated {
+            transform: rotate(180deg);
+        }
+
+        #expandAllBtn:hover {
+            background: #6366f1;
+            color: white;
         }
 
         .day-number {
@@ -458,7 +502,13 @@
 
                 <!-- Itinerary -->
                 <div class="mb-5" id="itinerarySection">
-                    <h2 class="section-title">Day by Day Itinerary</h2>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                        <h2 class="section-title" style="margin-bottom: 0;">Day by Day Itinerary</h2>
+                        <button id="expandAllBtn" onclick="toggleExpandAll()" style="background: transparent; border: 2px solid #6366f1; color: #6366f1; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px;">
+                            <span id="expandAllText">Expand All</span>
+                            <i class="bi bi-chevron-down" id="expandAllIcon"></i>
+                        </button>
+                    </div>
                     <div id="itineraryList"></div>
                 </div>
 
@@ -700,16 +750,19 @@
                 const itineraryList = document.getElementById('itineraryList');
                 itineraryList.innerHTML = tour.itinerary.map((day, index) =>
                     `<div class="itinerary-item">
-                        <div style="display: flex; align-items: start;">
-                            <div class="day-number">${index + 1}</div>
-                            <div style="flex: 1;">
-                                <h4 style="font-size: 20px; font-weight: 600; margin-bottom: 10px;">
+                        <div class="itinerary-header" onclick="toggleItinerary(${index})">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <div class="day-number">${index + 1}</div>
+                                <h4 style="font-size: 18px; font-weight: 600; margin: 0;">
                                     ${day.title || `Day ${index + 1}`}
                                 </h4>
-                                <p style="color: #6b7280; line-height: 1.6; margin: 0;">
-                                    ${day.description || day.activities || ''}
-                                </p>
                             </div>
+                            <i class="bi bi-chevron-down expand-icon" id="icon-${index}"></i>
+                        </div>
+                        <div class="itinerary-content" id="content-${index}">
+                            <p style="color: #6b7280; line-height: 1.8; margin: 0;">
+                                ${day.description || day.activities || 'No description available'}
+                            </p>
                         </div>
                     </div>`
                 ).join('');
@@ -782,6 +835,43 @@
             const message = `Booking Request:\n\nTour: ${currentTour.title || currentTour.name}\nDate: ${date}\nTravelers: ${travelers}\nTotal: ${document.getElementById('totalPrice').textContent}`;
 
             alert(message + '\n\nThank you! We will contact you shortly to confirm your booking.');
+        }
+
+        // Itinerary accordion functions
+        let allExpanded = false;
+
+        function toggleItinerary(index) {
+            const content = document.getElementById(`content-${index}`);
+            const icon = document.getElementById(`icon-${index}`);
+            const header = content.previousElementSibling;
+
+            content.classList.toggle('active');
+            icon.classList.toggle('rotated');
+            header.classList.toggle('active');
+        }
+
+        function toggleExpandAll() {
+            const allContents = document.querySelectorAll('.itinerary-content');
+            const allIcons = document.querySelectorAll('.expand-icon');
+            const allHeaders = document.querySelectorAll('.itinerary-header');
+            const expandAllText = document.getElementById('expandAllText');
+            const expandAllIcon = document.getElementById('expandAllIcon');
+
+            allExpanded = !allExpanded;
+
+            if (allExpanded) {
+                allContents.forEach(content => content.classList.add('active'));
+                allIcons.forEach(icon => icon.classList.add('rotated'));
+                allHeaders.forEach(header => header.classList.add('active'));
+                expandAllText.textContent = 'Collapse All';
+                expandAllIcon.classList.add('rotated');
+            } else {
+                allContents.forEach(content => content.classList.remove('active'));
+                allIcons.forEach(icon => icon.classList.remove('rotated'));
+                allHeaders.forEach(header => header.classList.remove('active'));
+                expandAllText.textContent = 'Expand All';
+                expandAllIcon.classList.remove('rotated');
+            }
         }
 
         // Language selector functionality
