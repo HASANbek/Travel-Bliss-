@@ -3611,7 +3611,75 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.background = 'transparent';
         });
     }
+
+    // ============================================
+    // LOAD POPULAR TOURS FROM BACKEND API
+    // ============================================
+    loadPopularTours();
 });
+
+// API Base URL
+const API_BASE = 'http://localhost:5000/api';
+
+// Load Popular Tours
+async function loadPopularTours() {
+    try {
+        const response = await fetch(`${API_BASE}/tours`);
+        const data = await response.json();
+
+        if (data.success && data.data.tours) {
+            displayTours(data.data.tours);
+        } else {
+            displayError('No tours found');
+        }
+    } catch (error) {
+        console.error('Error loading tours:', error);
+        displayError('Error loading tours');
+    }
+}
+
+// Display Tours in Grid
+function displayTours(tours) {
+    const container = document.getElementById('toursContainer');
+
+    if (!tours || tours.length === 0) {
+        container.innerHTML = '<div class="col-12 text-center"><p>No tours available</p></div>';
+        return;
+    }
+
+    container.innerHTML = tours.map(tour => `
+        <div class="col-lg-4 col-md-6">
+            <div class="package-card-gamma">
+                <div class="package-thumb">
+                    <a href="tour-details.html?id=${tour.id || tour._id}">
+                        <img src="${tour.imageCover || tour.image || 'assets/img/home1/package-card-gamma-1.jpg'}" alt="${tour.title || tour.name}">
+                    </a>
+                    ${tour.hotSale ? '<div class="card-lavel"><span><i class="bi bi-suit-heart"></i> Hot Sale!</span></div>' : ''}
+                </div>
+                <div class="package-card-body">
+                    <h3 class="p-card-title">
+                        <a href="tour-details.html?id=${tour.id || tour._id}">${tour.title || tour.name}</a>
+                    </h3>
+                    <div class="p-card-bottom">
+                        <div class="book-btn">
+                            <a href="tour-details.html?id=${tour.id || tour._id}">Book Now <i class="bx bxs-right-arrow-alt"></i></a>
+                        </div>
+                        <div class="p-card-info">
+                            <span>${tour.destination || tour.location || 'Uzbekistan'}</span>
+                            <h6>$${tour.price || 0} <span>Per Person</span></h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Display Error Message
+function displayError(message) {
+    const container = document.getElementById('toursContainer');
+    container.innerHTML = `<div class="col-12 text-center"><p class="text-danger">${message}</p></div>`;
+}
 </script>
 
 <script>
