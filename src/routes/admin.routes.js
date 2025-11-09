@@ -96,6 +96,7 @@ router.get('/bookings', getAllBookings);
 router.put('/bookings/:id/status', updateBookingStatus);
 
 // ========== BLOG MANAGEMENT ==========
+// Blog post management routes
 
 // @route   GET /api/admin/blogs
 // @desc    Barcha blog postlarni olish

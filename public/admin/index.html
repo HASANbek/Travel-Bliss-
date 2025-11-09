@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin CMS - Travel Bliss</title>
+    <!-- Leaflet CSS for Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         * {
             margin: 0;
@@ -2524,25 +2527,89 @@
 
             if (blogId) {
                 title.textContent = 'Edit Blog Post';
-                // Load blog data here
                 loadBlogData(blogId);
             } else {
                 title.textContent = 'Add New Blog Post';
                 document.getElementById('blogForm').reset();
             }
 
-            modal.style.display = 'block';
+            modal.style.display = 'flex';
+
+            // Initialize map when modal opens
+            setTimeout(() => {
+                initializeLocationMap();
+            }, 300);
         }
 
         function closeBlogModal() {
             document.getElementById('blogModal').style.display = 'none';
             currentBlogId = null;
             document.getElementById('blogForm').reset();
+
+            // Clear location fields
+            document.getElementById('blogLocation').value = '';
+            document.getElementById('blogLatitude').value = '';
+            document.getElementById('blogLongitude').value = '';
+            document.getElementById('coordinatesDisplay').textContent = '';
+
+            // Clear uploaded image
+            removeUploadedImage();
+
+            // Clear map
+            if (blogMap) {
+                if (blogMarker) {
+                    blogMap.removeLayer(blogMarker);
+                    blogMarker = null;
+                }
+                blogMap.remove();
+                blogMap = null;
+            }
         }
 
-        function loadBlogData(blogId) {
-            // TODO: Load blog data from API
-            console.log('Loading blog:', blogId);
+        async function loadBlogData(blogId) {
+            try {
+                const response = await fetch(`/api/admin/blogs/${blogId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    }
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    const blog = result.data || result;
+
+                    // Fill form with blog data
+                    document.getElementById('blogTitle').value = blog.title || '';
+                    document.getElementById('blogCategory').value = blog.category || '';
+                    document.getElementById('blogAuthor').value = blog.author || 'Admin';
+                    document.getElementById('blogImage').value = blog.image || '';
+                    document.getElementById('blogExcerpt').value = blog.excerpt || '';
+                    document.getElementById('blogContent').value = blog.content || '';
+                    document.getElementById('blogTags').value = blog.tags || '';
+                    document.getElementById('blogStatus').value = blog.status || 'draft';
+
+                    // Fill location data if exists
+                    if (blog.location) {
+                        document.getElementById('blogLocation').value = blog.location.name || '';
+                        if (blog.location.coordinates) {
+                            document.getElementById('blogLatitude').value = blog.location.coordinates.latitude || '';
+                            document.getElementById('blogLongitude').value = blog.location.coordinates.longitude || '';
+
+                            // Show map if coordinates exist
+                            if (blog.location.coordinates.latitude && blog.location.coordinates.longitude) {
+                                setTimeout(() => {
+                                    setMapLocation(blog.location.coordinates.latitude, blog.location.coordinates.longitude);
+                                }, 500);
+                            }
+                        }
+                    }
+                } else {
+                    alert('Error loading blog data');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error loading blog data');
+            }
         }
 
         async function saveBlog() {
@@ -2556,6 +2623,21 @@
                 tags: document.getElementById('blogTags').value,
                 status: document.getElementById('blogStatus').value
             };
+
+            // Add location data if provided
+            const location = document.getElementById('blogLocation').value;
+            const latitude = document.getElementById('blogLatitude').value;
+            const longitude = document.getElementById('blogLongitude').value;
+
+            if (location || (latitude && longitude)) {
+                formData.location = {
+                    name: location || '',
+                    coordinates: {
+                        latitude: latitude ? parseFloat(latitude) : null,
+                        longitude: longitude ? parseFloat(longitude) : null
+                    }
+                };
+            }
 
             // Validation
             if (!formData.title || !formData.category || !formData.content) {
@@ -2688,73 +2770,652 @@
 
     <!-- Blog Modal -->
     <div class="modal" id="blogModal">
-        <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-content" style="max-width: 900px;">
             <div class="modal-header">
-                <h2 id="blogModalTitle">Add New Blog Post</h2>
-                <button class="close-btn" onclick="closeBlogModal()">&times;</button>
+                <div>
+                    <h2 id="blogModalTitle">Add New Blog Post</h2>
+                    <p style="font-size: 13px; color: #6c757d; margin-top: 5px;">Fill in all the details below</p>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button type="button" onclick="openAIAssistant()"
+                            style="padding: 10px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);">
+                        <span style="font-size: 16px;">🤖</span> AI Assistant
+                    </button>
+                    <button class="close-btn" onclick="closeBlogModal()">&times;</button>
+                </div>
             </div>
 
             <div class="modal-body">
-                <form id="blogForm" onsubmit="event.preventDefault(); saveBlog();">
-                    <div class="form-group">
-                        <label>Title *</label>
-                        <input type="text" id="blogTitle" placeholder="Enter blog post title" required>
-                    </div>
+                <form id="blogForm">
+                    <!-- Basic Information Section -->
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+                        <h3 style="font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                            📝 Basic Information
+                        </h3>
 
-                    <div class="form-row">
                         <div class="form-group">
-                            <label>Category *</label>
-                            <select id="blogCategory" required>
-                                <option value="">Select category</option>
-                                <option value="Travel Tips">Travel Tips</option>
-                                <option value="Destinations">Destinations</option>
-                                <option value="Culture">Culture</option>
-                                <option value="Adventure">Adventure</option>
-                                <option value="Food & Cuisine">Food & Cuisine</option>
-                                <option value="Travel Stories">Travel Stories</option>
-                            </select>
+                            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #495057; font-size: 14px;">
+                                Title <span style="color: #dc3545;">*</span>
+                            </label>
+                            <input type="text" id="blogTitle" placeholder="Enter blog post title" required
+                                   style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px;">
                         </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #495057; font-size: 14px;">
+                                    Category <span style="color: #dc3545;">*</span>
+                                </label>
+                                <select id="blogCategory" required
+                                        style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px;">
+                                    <option value="">Select category</option>
+                                    <option value="adventure-tours">Adventure Tours</option>
+                                    <option value="beach-holidays">Beach Holidays</option>
+                                    <option value="cultural-tours">Cultural Tours</option>
+                                    <option value="family-vacations">Family Vacations</option>
+                                    <option value="cruises">Cruises</option>
+                                    <option value="travel-tips">Travel Tips</option>
+                                    <option value="destination-guides">Destination Guides</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #495057; font-size: 14px;">
+                                    Author
+                                </label>
+                                <input type="text" id="blogAuthor" placeholder="Author name" value="Admin"
+                                       style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px;">
+                            </div>
+                        </div>
+
                         <div class="form-group">
-                            <label>Author</label>
-                            <input type="text" id="blogAuthor" placeholder="Author name" value="Admin">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #495057; font-size: 14px;">
+                                Excerpt
+                            </label>
+                            <textarea id="blogExcerpt" rows="3" placeholder="Brief summary of the blog post (1-2 sentences)"
+                                      style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px; resize: vertical;"></textarea>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>Featured Image URL</label>
-                        <input type="url" id="blogImage" placeholder="https://example.com/image.jpg">
+                    <!-- Content Section -->
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+                        <h3 style="font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                            ✍️ Content & Media
+                        </h3>
+
+                        <div class="form-group">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #495057; font-size: 14px;">
+                                Upload Featured Image
+                            </label>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <label for="blogImageFile" style="flex: 1; padding: 12px; border: 2px dashed #ced4da; border-radius: 6px; text-align: center; cursor: pointer; background: white; transition: all 0.3s;">
+                                    <input type="file" id="blogImageFile" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                                    <div id="uploadPlaceholder" style="display: flex; align-items: center; justify-content: center; gap: 8px; color: #6c757d;">
+                                        <span style="font-size: 24px;">📤</span>
+                                        <span>Click to upload or drag image here</span>
+                                    </div>
+                                    <div id="imagePreviewContainer" style="display: none;">
+                                        <img id="imagePreview" style="max-width: 100%; max-height: 200px; border-radius: 6px;">
+                                        <div style="margin-top: 8px; font-size: 13px; color: #28a745;" id="imageFileName"></div>
+                                    </div>
+                                </label>
+                                <button type="button" id="removeImageBtn" onclick="removeUploadedImage()" style="display: none; padding: 12px; background: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                                    🗑️
+                                </button>
+                            </div>
+                            <div style="font-size: 12px; color: #6c757d; margin-top: 5px;">Supported formats: JPG, PNG, GIF (Max 5MB)</div>
+                        </div>
+
+                        <div style="text-align: center; color: #6c757d; font-size: 13px; margin: 15px 0; font-weight: 500;">
+                            — OR —
+                        </div>
+
+                        <div class="form-group">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #495057; font-size: 14px;">
+                                Featured Image URL
+                            </label>
+                            <input type="url" id="blogImage" placeholder="https://example.com/image.jpg"
+                                   style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px;">
+                        </div>
+
+                        <div class="form-group">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #495057; font-size: 14px;">
+                                Content <span style="color: #dc3545;">*</span>
+                            </label>
+                            <textarea id="blogContent" rows="8" placeholder="Write your blog post content here..." required
+                                      style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px; resize: vertical;"></textarea>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>Excerpt</label>
-                        <textarea id="blogExcerpt" rows="2" placeholder="Brief summary of the blog post (1-2 sentences)"></textarea>
+                    <!-- Publishing Settings -->
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                        <h3 style="font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                            🚀 Publishing Settings
+                        </h3>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #495057; font-size: 14px;">
+                                    Tags (comma separated)
+                                </label>
+                                <input type="text" id="blogTags" placeholder="uzbekistan, travel, culture"
+                                       style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px;">
+                            </div>
+                            <div class="form-group">
+                                <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #495057; font-size: 14px;">
+                                    Status <span style="color: #dc3545;">*</span>
+                                </label>
+                                <select id="blogStatus" required
+                                        style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px;">
+                                    <option value="draft">Draft</option>
+                                    <option value="published">Published</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>Content *</label>
-                        <textarea id="blogContent" rows="10" placeholder="Write your blog post content here..." required></textarea>
+                    <!-- Location & Map -->
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                        <h3 style="font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                            📍 Location (Optional)
+                        </h3>
+
+                        <div class="form-group">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #495057; font-size: 14px;">
+                                Location Name
+                            </label>
+                            <input type="text" id="blogLocation" list="countriesList" placeholder="e.g., Samarkand, Uzbekistan"
+                                   style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px;">
+                            <datalist id="countriesList">
+                                <option value="Uzbekistan">
+                                <option value="Afghanistan">
+                                <option value="Kazakhstan">
+                                <option value="Kyrgyzstan">
+                                <option value="Tajikistan">
+                                <option value="Turkmenistan">
+                                <option value="China">
+                                <option value="Russia">
+                                <option value="Turkey">
+                                <option value="UAE - Dubai">
+                                <option value="Thailand">
+                                <option value="Maldives">
+                                <option value="Indonesia - Bali">
+                                <option value="Malaysia">
+                                <option value="Singapore">
+                                <option value="Japan">
+                                <option value="South Korea">
+                                <option value="India">
+                                <option value="Egypt">
+                                <option value="Morocco">
+                                <option value="France">
+                                <option value="Italy">
+                                <option value="Spain">
+                                <option value="United Kingdom">
+                                <option value="Germany">
+                                <option value="Switzerland">
+                                <option value="Austria">
+                                <option value="Greece">
+                                <option value="United States">
+                                <option value="Canada">
+                                <option value="Mexico">
+                                <option value="Brazil">
+                                <option value="Argentina">
+                                <option value="Peru">
+                                <option value="Australia">
+                                <option value="New Zealand">
+                                <option value="Samarkand, Uzbekistan">
+                                <option value="Bukhara, Uzbekistan">
+                                <option value="Khiva, Uzbekistan">
+                                <option value="Tashkent, Uzbekistan">
+                                <option value="Paris, France">
+                                <option value="Rome, Italy">
+                                <option value="Barcelona, Spain">
+                                <option value="London, United Kingdom">
+                                <option value="Dubai, UAE">
+                                <option value="Bangkok, Thailand">
+                                <option value="Tokyo, Japan">
+                                <option value="New York, USA">
+                                <option value="Los Angeles, USA">
+                            </datalist>
+                        </div>
+
+                        <!-- Hidden inputs for coordinates -->
+                        <input type="hidden" id="blogLatitude">
+                        <input type="hidden" id="blogLongitude">
+
+                        <div style="margin-top: 15px;">
+                            <div style="font-size: 13px; color: #495057; margin-bottom: 10px; font-weight: 500; display: flex; align-items: center; gap: 8px;">
+                                <span>📍</span>
+                                <span>Click on the map to select location</span>
+                                <span id="coordinatesDisplay" style="margin-left: auto; color: #6c757d; font-size: 12px;"></span>
+                            </div>
+                            <div id="blogMap" style="width: 100%; height: 400px; border-radius: 12px; border: 2px solid #e0e0e0; box-shadow: 0 4px 12px rgba(0,0,0,0.08);"></div>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>Tags (comma separated)</label>
-                        <input type="text" id="blogTags" placeholder="uzbekistan, travel, culture">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Status *</label>
-                        <select id="blogStatus" required>
-                            <option value="draft">Draft</option>
-                            <option value="published">Published</option>
-                        </select>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="cancel-btn" onclick="closeBlogModal()">Cancel</button>
-                        <button type="submit" class="submit-btn">Save Blog Post</button>
+                    <!-- Action Buttons -->
+                    <div class="modal-footer" style="justify-content: space-between; background: white; position: sticky; bottom: 0; padding: 20px; margin: -25px -30px 0; border-top: 2px solid #e9ecef;">
+                        <button type="button" class="cancel-btn" onclick="closeBlogModal()"
+                                style="padding: 12px 24px; background: #6c757d; color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer;">
+                            Cancel
+                        </button>
+                        <button type="button" class="submit-btn" onclick="saveBlog()"
+                                style="padding: 12px 32px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
+                            💾 Save Blog Post
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+    <!-- AI Assistant Modal -->
+    <div class="modal" id="aiAssistantModal" style="z-index: 2100;">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <div>
+                    <h2 style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 24px;">🤖</span> AI Blog Assistant
+                    </h2>
+                    <p style="font-size: 13px; color: #6c757d; margin-top: 5px;">Let AI help you create amazing blog content</p>
+                </div>
+                <button class="close-btn" onclick="closeAIAssistant()">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #667eea30;">
+                    <h3 style="font-size: 15px; font-weight: 600; color: #2c3e50; margin-bottom: 15px;">
+                        What would you like AI to help you with?
+                    </h3>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+                        <button type="button" onclick="selectAITask('title')" class="ai-task-btn"
+                                style="padding: 15px; background: white; border: 2px solid #e9ecef; border-radius: 8px; cursor: pointer; text-align: left; transition: all 0.3s;">
+                            <div style="font-size: 20px; margin-bottom: 5px;">✨</div>
+                            <div style="font-weight: 600; font-size: 14px; color: #2c3e50;">Generate Title</div>
+                            <div style="font-size: 12px; color: #6c757d; margin-top: 3px;">Create catchy blog title</div>
+                        </button>
+
+                        <button type="button" onclick="selectAITask('excerpt')" class="ai-task-btn"
+                                style="padding: 15px; background: white; border: 2px solid #e9ecef; border-radius: 8px; cursor: pointer; text-align: left; transition: all 0.3s;">
+                            <div style="font-size: 20px; margin-bottom: 5px;">📝</div>
+                            <div style="font-weight: 600; font-size: 14px; color: #2c3e50;">Generate Excerpt</div>
+                            <div style="font-size: 12px; color: #6c757d; margin-top: 3px;">Write brief summary</div>
+                        </button>
+
+                        <button type="button" onclick="selectAITask('content')" class="ai-task-btn"
+                                style="padding: 15px; background: white; border: 2px solid #e9ecef; border-radius: 8px; cursor: pointer; text-align: left; transition: all 0.3s;">
+                            <div style="font-size: 20px; margin-bottom: 5px;">✍️</div>
+                            <div style="font-weight: 600; font-size: 14px; color: #2c3e50;">Write Full Content</div>
+                            <div style="font-size: 12px; color: #6c757d; margin-top: 3px;">Create complete article</div>
+                        </button>
+
+                        <button type="button" onclick="selectAITask('improve')" class="ai-task-btn"
+                                style="padding: 15px; background: white; border: 2px solid #e9ecef; border-radius: 8px; cursor: pointer; text-align: left; transition: all 0.3s;">
+                            <div style="font-size: 20px; margin-bottom: 5px;">🚀</div>
+                            <div style="font-weight: 600; font-size: 14px; color: #2c3e50;">Improve Content</div>
+                            <div style="font-size: 12px; color: #6c757d; margin-top: 3px;">Enhance existing text</div>
+                        </button>
+                    </div>
+
+                    <div id="aiPromptSection" style="display: none;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #495057; font-size: 14px;">
+                            Tell AI what you want:
+                        </label>
+                        <textarea id="aiPrompt" rows="4" placeholder="e.g., Write about traveling to Samarkand, its history and attractions..."
+                                  style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px; resize: vertical;"></textarea>
+
+                        <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end;">
+                            <button type="button" onclick="closeAIAssistant()"
+                                    style="padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 6px; font-size: 14px; cursor: pointer;">
+                                Cancel
+                            </button>
+                            <button type="button" onclick="generateWithAI()" id="generateBtn"
+                                    style="padding: 10px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);">
+                                ✨ Generate
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="aiLoadingSection" style="display: none; text-align: center; padding: 30px;">
+                        <div style="font-size: 48px; margin-bottom: 15px; animation: pulse 1.5s infinite;">🤖</div>
+                        <div style="font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 5px;">AI is working...</div>
+                        <div style="font-size: 13px; color: #6c757d;">Generating your content</div>
+                    </div>
+
+                    <div id="aiResultSection" style="display: none;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #495057; font-size: 14px;">
+                            AI Generated Content:
+                        </label>
+                        <div id="aiResult"
+                             style="background: white; padding: 15px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px; max-height: 300px; overflow-y: auto; white-space: pre-wrap; line-height: 1.6;"></div>
+
+                        <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end;">
+                            <button type="button" onclick="regenerateAI()"
+                                    style="padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 6px; font-size: 14px; cursor: pointer;">
+                                🔄 Regenerate
+                            </button>
+                            <button type="button" onclick="useAIContent()"
+                                    style="padding: 10px 24px; background: #28a745; color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer;">
+                                ✓ Use This Content
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .ai-task-btn:hover {
+            border-color: #667eea !important;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        label[for="blogImageFile"]:hover {
+            border-color: #667eea !important;
+            background: #f8f9ff !important;
+        }
+    </style>
+
+    <script>
+        let currentAITask = null;
+
+        function openAIAssistant() {
+            document.getElementById('aiAssistantModal').style.display = 'flex';
+            currentAITask = null;
+            document.getElementById('aiPromptSection').style.display = 'none';
+            document.getElementById('aiResultSection').style.display = 'none';
+            document.getElementById('aiLoadingSection').style.display = 'none';
+        }
+
+        function closeAIAssistant() {
+            document.getElementById('aiAssistantModal').style.display = 'none';
+            currentAITask = null;
+        }
+
+        function selectAITask(task) {
+            currentAITask = task;
+            document.getElementById('aiPromptSection').style.display = 'block';
+            document.getElementById('aiResultSection').style.display = 'none';
+
+            const promptField = document.getElementById('aiPrompt');
+
+            // Set placeholder based on task
+            const placeholders = {
+                'title': 'e.g., Write a title about adventure travel in Uzbekistan...',
+                'excerpt': 'e.g., Create a summary about the best beaches in Maldives...',
+                'content': 'e.g., Write a detailed article about cultural tours in Samarkand...',
+                'improve': 'Paste your existing content here to improve...'
+            };
+
+            promptField.placeholder = placeholders[task] || '';
+            promptField.value = '';
+            promptField.focus();
+        }
+
+        async function generateWithAI() {
+            const prompt = document.getElementById('aiPrompt').value.trim();
+
+            if (!prompt) {
+                alert('Please enter your request for AI');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('aiPromptSection').style.display = 'none';
+            document.getElementById('aiLoadingSection').style.display = 'block';
+
+            try {
+                // Simulate AI generation (replace with actual API call)
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                let generatedContent = '';
+
+                switch(currentAITask) {
+                    case 'title':
+                        generatedContent = generateSampleTitle(prompt);
+                        break;
+                    case 'excerpt':
+                        generatedContent = generateSampleExcerpt(prompt);
+                        break;
+                    case 'content':
+                        generatedContent = generateSampleContent(prompt);
+                        break;
+                    case 'improve':
+                        generatedContent = improveSampleContent(prompt);
+                        break;
+                }
+
+                // Show result
+                document.getElementById('aiLoadingSection').style.display = 'none';
+                document.getElementById('aiResultSection').style.display = 'block';
+                document.getElementById('aiResult').textContent = generatedContent;
+
+            } catch (error) {
+                console.error('AI generation error:', error);
+                alert('Error generating content. Please try again.');
+                document.getElementById('aiLoadingSection').style.display = 'none';
+                document.getElementById('aiPromptSection').style.display = 'block';
+            }
+        }
+
+        function regenerateAI() {
+            generateWithAI();
+        }
+
+        function useAIContent() {
+            const content = document.getElementById('aiResult').textContent;
+
+            switch(currentAITask) {
+                case 'title':
+                    document.getElementById('blogTitle').value = content;
+                    break;
+                case 'excerpt':
+                    document.getElementById('blogExcerpt').value = content;
+                    break;
+                case 'content':
+                case 'improve':
+                    document.getElementById('blogContent').value = content;
+                    break;
+            }
+
+            closeAIAssistant();
+            alert('Content added to form successfully!');
+        }
+
+        // Sample generators (replace with actual AI API)
+        function generateSampleTitle(prompt) {
+            const titles = [
+                "Discover the Hidden Gems of " + prompt,
+                "Ultimate Guide to " + prompt + ": Everything You Need to Know",
+                "Top 10 Reasons to Visit " + prompt + " This Year",
+                "Exploring " + prompt + ": A Journey of a Lifetime"
+            ];
+            return titles[Math.floor(Math.random() * titles.length)];
+        }
+
+        function generateSampleExcerpt(prompt) {
+            return `Discover the beauty and wonder of ${prompt}. From stunning landscapes to rich cultural experiences, this destination offers unforgettable memories for every traveler. Join us as we explore everything this amazing place has to offer.`;
+        }
+
+        function generateSampleContent(prompt) {
+            return `# Exploring ${prompt}\n\nWelcome to an incredible journey through one of the world's most fascinating destinations. ${prompt} offers a unique blend of natural beauty, rich history, and vibrant culture that captivates visitors from around the globe.\n\n## What Makes It Special\n\nFrom the moment you arrive, you'll be greeted by breathtaking scenery and warm hospitality. The local culture is rich with traditions that have been preserved for centuries, offering visitors a glimpse into a way of life that's both ancient and vibrant.\n\n## Top Attractions\n\n1. Historic landmarks that tell stories of the past\n2. Natural wonders that showcase stunning landscapes\n3. Cultural experiences that immerse you in local traditions\n4. Culinary delights that tantalize your taste buds\n\n## Planning Your Visit\n\nThe best time to visit is during the pleasant seasons when the weather is ideal for exploration. Make sure to pack appropriately and plan your itinerary to make the most of your time.\n\n## Conclusion\n\nWhether you're seeking adventure, relaxation, or cultural enrichment, this destination has something for everyone. Start planning your journey today and create memories that will last a lifetime.`;
+        }
+
+        function improveSampleContent(content) {
+            return content + "\n\n[Enhanced version with improved flow and additional details]\n\nThis content has been refined for better readability and engagement. The structure is more organized, and key points are emphasized to capture reader attention effectively.";
+        }
+
+        // ============================================
+        // LOCATION & MAP FUNCTIONS
+        // ============================================
+
+        let blogMap = null;
+        let blogMarker = null;
+
+        function initializeLocationMap() {
+            // Initialize map if not already initialized
+            if (!blogMap) {
+                // Default to Uzbekistan center
+                const defaultLat = parseFloat(document.getElementById('blogLatitude').value) || 41.3775;
+                const defaultLng = parseFloat(document.getElementById('blogLongitude').value) || 64.5853;
+
+                blogMap = L.map('blogMap').setView([defaultLat, defaultLng], 6);
+
+                // Add OpenStreetMap tiles
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap',
+                    maxZoom: 18
+                }).addTo(blogMap);
+
+                // Add click event to set location
+                blogMap.on('click', function(e) {
+                    setMapLocation(e.latlng.lat, e.latlng.lng);
+                });
+
+                // Add marker if coordinates exist
+                if (defaultLat !== 41.3775 || defaultLng !== 64.5853) {
+                    blogMarker = L.marker([defaultLat, defaultLng]).addTo(blogMap);
+                    updateCoordinatesDisplay(defaultLat, defaultLng);
+                }
+            }
+
+            // Refresh map size
+            setTimeout(() => {
+                blogMap.invalidateSize();
+            }, 100);
+        }
+
+        function setMapLocation(lat, lng) {
+            // Update hidden fields
+            document.getElementById('blogLatitude').value = lat.toFixed(6);
+            document.getElementById('blogLongitude').value = lng.toFixed(6);
+
+            // Update coordinates display
+            updateCoordinatesDisplay(lat, lng);
+
+            // Remove old marker if exists
+            if (blogMarker) {
+                blogMap.removeLayer(blogMarker);
+            }
+
+            // Add new marker with custom icon
+            blogMarker = L.marker([lat, lng], {
+                icon: L.divIcon({
+                    className: 'custom-marker',
+                    html: '<div style="background: #667eea; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);"></div>',
+                    iconSize: [24, 24],
+                    iconAnchor: [12, 12]
+                })
+            }).addTo(blogMap);
+            blogMap.setView([lat, lng], 12);
+
+            // Try to get location name using reverse geocoding
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.display_name && !document.getElementById('blogLocation').value) {
+                        document.getElementById('blogLocation').value = data.display_name;
+                    }
+                })
+                .catch(error => console.error('Geocoding error:', error));
+        }
+
+        function updateCoordinatesDisplay(lat, lng) {
+            const display = document.getElementById('coordinatesDisplay');
+            if (display) {
+                display.textContent = `📌 ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+            }
+        }
+
+        // ============================================
+        // IMAGE UPLOAD FUNCTIONS
+        // ============================================
+
+        let uploadedImageData = null;
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+
+            if (!file) return;
+
+            // Validate file type
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+            if (!validTypes.includes(file.type)) {
+                alert('Please upload a valid image file (JPG, PNG, GIF, WebP)');
+                return;
+            }
+
+            // Validate file size (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Image size must be less than 5MB');
+                return;
+            }
+
+            // Read and preview image
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedImageData = e.target.result;
+
+                // Show preview
+                document.getElementById('uploadPlaceholder').style.display = 'none';
+                document.getElementById('imagePreviewContainer').style.display = 'block';
+                document.getElementById('imagePreview').src = e.target.result;
+                document.getElementById('imageFileName').textContent = '✓ ' + file.name;
+                document.getElementById('removeImageBtn').style.display = 'block';
+
+                // Set the image URL field with the data URL
+                document.getElementById('blogImage').value = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeUploadedImage() {
+            uploadedImageData = null;
+            document.getElementById('blogImageFile').value = '';
+            document.getElementById('uploadPlaceholder').style.display = 'flex';
+            document.getElementById('imagePreviewContainer').style.display = 'none';
+            document.getElementById('imagePreview').src = '';
+            document.getElementById('imageFileName').textContent = '';
+            document.getElementById('removeImageBtn').style.display = 'none';
+            document.getElementById('blogImage').value = '';
+        }
+
+        // Drag and drop support
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadLabel = document.querySelector('label[for="blogImageFile"]');
+            if (uploadLabel) {
+                uploadLabel.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.style.borderColor = '#667eea';
+                    this.style.background = '#f0f2ff';
+                });
+
+                uploadLabel.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    this.style.borderColor = '#ced4da';
+                    this.style.background = 'white';
+                });
+
+                uploadLabel.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.style.borderColor = '#ced4da';
+                    this.style.background = 'white';
+
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        document.getElementById('blogImageFile').files = files;
+                        handleImageUpload({ target: { files: files } });
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
