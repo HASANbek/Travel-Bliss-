@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Travel Bliss</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .about-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .about-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 40px;
+            text-align: center;
+        }
+
+        .about-header h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .about-header p {
+            font-size: 20px;
+            opacity: 0.95;
+        }
+
+        .about-content {
+            padding: 60px 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: #f9fafb;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 20px;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .feature-desc {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px;
+            border-radius: 15px;
+            margin: 40px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .cta-section {
+            background: #f9fafb;
+            padding: 50px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .cta-text {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .about-header h1 {
+                font-size: 36px;
+            }
+
+            .about-content {
+                padding: 40px 20px;
+            }
+
+            .stats-section {
+                padding: 40px 20px;
+            }
+
+            .cta-section {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="travel-agency-03.html" class="back-btn">
+            ← Orqaga qaytish
+        </a>
+
+        <div class="about-card">
+            <div class="about-header">
+                <h1>Travel Bliss</h1>
+                <p>O'zbekiston bo'ylab eng yaxshi sayohatlaringiz</p>
+            </div>
+
+            <div class="about-content">
+                <div class="section">
+                    <h2 class="section-title">🌍 Biz Haqimizda</h2>
+                    <p class="section-text">
+                        Travel Bliss - bu O'zbekiston bo'ylab professional sayohat xizmatlari ko'rsatuvchi yetakchi kompaniya. Biz 2020-yildan boshlab minglab turistlarga unutilmas sayohatlar uyushtirish orqali xizmat qilib kelamiz.
+                    </p>
+                    <p class="section-text">
+                        Bizning maqsadimiz - har bir mehmonimizga O'zbekistonning boy madaniy merosi, tarixiy yodgorliklari va go'zal tabiati bilan tanishish imkoniyatini yaratish. Biz professional gidlar jamoasi, qulay transport va sifatli xizmatlar bilan sizga eng yaxshi sayohat tajribasini taklif qilamiz.
+                    </p>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">✨ Nima Uchun Bizni Tanlashadi?</h2>
+
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">👥</div>
+                            <div class="feature-title">Professional Gidlar</div>
+                            <div class="feature-desc">Tajribali va bilimli gidlarimiz sizga eng yaxshi sayohat tajribasini taqdim etadi</div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-icon">🚗</div>
+                            <div class="feature-title">Qulay Transport</div>
+                            <div class="feature-desc">Zamonaviy va shinam transport vositalari orqali sayohat qiling</div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-icon">💰</div>
+                            <div class="feature-title">Arzon Narxlar</div>
+                            <div class="feature-desc">Yuqori sifatli xizmatlarni eng mos narxlarda taklif qilamiz</div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-icon">🏨</div>
+                            <div class="feature-title">Sifatli Mehmonxonalar</div>
+                            <div class="feature-desc">Eng yaxshi va qulay mehmonxonalarda turar joy ta'minlaymiz</div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-icon">🎯</div>
+                            <div class="feature-title">Individual Yondashuv</div>
+                            <div class="feature-desc">Har bir mijozning istaklarini hisobga olgan holda sayohat rejalashtiramiz</div>
+                        </div>
+
+                        <div class="feature-card">
+                            <div class="feature-icon">⭐</div>
+                            <div class="feature-title">Yuqori Sifat</div>
+                            <div class="feature-desc">Barcha xizmatlarimiz yuqori sifat standartlariga javob beradi</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-section">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">5000+</div>
+                            <div class="stat-label">Baxtli Turistlar</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">50+</div>
+                            <div class="stat-label">Sayohat Marshrutlari</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">4.9</div>
+                            <div class="stat-label">O'rtacha Reyting</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">12</div>
+                            <div class="stat-label">Shaharlar</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">🎯 Bizning Xizmatlar</h2>
+                    <p class="section-text">
+                        Biz turli xildagi sayohat paketlarini taklif qilamiz:
+                    </p>
+                    <ul style="font-size: 16px; line-height: 2; color: #555; margin-left: 40px;">
+                        <li>1 kunlik shahar turlari</li>
+                        <li>Ko'p kunlik madaniy sayohatlar</li>
+                        <li>Tog'larda sarguzasht turlari</li>
+                        <li>Maxsus guruh va individual turlar</li>
+                        <li>Transport va mehmonxona bronlash</li>
+                        <li>Professional fotografiya xizmati</li>
+                    </ul>
+                </div>
+
+                <div class="cta-section">
+                    <h2 class="cta-title">Sayohatingizni Bugun Boshlang! 🚀</h2>
+                    <p class="cta-text">
+                        Bizning professional jamoamiz sizga eng yaxshi sayohat tajribasini taqdim etishga tayyor
+                    </p>
+                    <a href="travel-agency-03.html" class="cta-btn">📦 Turlarni Ko'rish</a>
+                    <a href="contact.html" class="cta-btn" style="margin-left: 15px;">📞 Bog'lanish</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

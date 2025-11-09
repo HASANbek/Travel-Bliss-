@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destination Details - Travel Bliss</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .destination-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .destination-header {
+            position: relative;
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .destination-icon {
+            font-size: 120px;
+            opacity: 0.9;
+        }
+
+        .destination-content {
+            padding: 40px;
+        }
+
+        .destination-title {
+            font-size: 42px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .destination-subtitle {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .destination-description {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 40px;
+        }
+
+        .highlights-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .highlight-item {
+            background: #f9fafb;
+            padding: 25px;
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .highlight-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .highlight-icon {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .highlight-title {
+            font-size: 18px;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .highlight-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .tours-section {
+            background: #f9fafb;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .tours-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .tours-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .destination-title {
+                font-size: 32px;
+            }
+
+            .destination-content {
+                padding: 30px 20px;
+            }
+
+            .tours-section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="travel-agency-03.html" class="back-btn">
+            ← Orqaga qaytish
+        </a>
+
+        <div class="destination-card">
+            <div class="destination-header">
+                <div class="destination-icon">🏛️</div>
+            </div>
+
+            <div class="destination-content">
+                <h1 class="destination-title">O'zbekiston Sayohatlari</h1>
+                <p class="destination-subtitle">Ipak Yo'lining Marvarid Shaharlari</p>
+
+                <div class="destination-description">
+                    <p>O'zbekiston - bu Markaziy Osiyodagi eng qadimgi va go'zal mamlakat. Bu yerda ajoyib arxitektura, boy tarix va iliq mehmondo'stlik sizni kutadi. Samarqand, Buxoro, Xiva kabi shaharlarda siz ming yillik tarixga ega bo'lgan yodgorliklarni ko'rishingiz mumkin.</p>
+                </div>
+
+                <div class="highlights-section">
+                    <h2 class="section-title">🌟 Asosiy Diqqatga Sazovor Joylar</h2>
+
+                    <div class="highlights-grid">
+                        <div class="highlight-item">
+                            <div class="highlight-icon">🕌</div>
+                            <div class="highlight-title">Samarqand</div>
+                            <div class="highlight-desc">Registon maydoni, Ulugbek rasadxonasi va Gur-Amir maqbarasi</div>
+                        </div>
+
+                        <div class="highlight-item">
+                            <div class="highlight-icon">🏰</div>
+                            <div class="highlight-title">Buxoro</div>
+                            <div class="highlight-desc">Ark qalasi, Poi-Kalyan majmuasi va tarixiy madrasalar</div>
+                        </div>
+
+                        <div class="highlight-item">
+                            <div class="highlight-icon">🏛️</div>
+                            <div class="highlight-title">Xiva</div>
+                            <div class="highlight-desc">Ichan Qal'a - ochiq osmon ostidagi muzey shahar</div>
+                        </div>
+
+                        <div class="highlight-item">
+                            <div class="highlight-icon">🏙️</div>
+                            <div class="highlight-title">Toshkent</div>
+                            <div class="highlight-desc">Zamonaviy paytaxt - Hazrati Imom majmuasi va Chorsu bozori</div>
+                        </div>
+
+                        <div class="highlight-item">
+                            <div class="highlight-icon">⛰️</div>
+                            <div class="highlight-title">Tog'lar</div>
+                            <div class="highlight-desc">Chimyon, Zarafshon va Tyan-Shan tog' tizmalari</div>
+                        </div>
+
+                        <div class="highlight-item">
+                            <div class="highlight-icon">🍜</div>
+                            <div class="highlight-title">Milliy Taomlar</div>
+                            <div class="highlight-desc">O'zbek oshi, somsa, lag'mon va milliy taomlarni tatib ko'ring</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlights-section">
+                    <h2 class="section-title">📅 Eng Yaxshi Sayohat Mavsumi</h2>
+
+                    <div class="highlights-grid">
+                        <div class="highlight-item">
+                            <div class="highlight-icon">🌸</div>
+                            <div class="highlight-title">Bahor (Mart-May)</div>
+                            <div class="highlight-desc">Ob-havo iliq, tabiat gullab-yashnar, sayohat uchun ideal</div>
+                        </div>
+
+                        <div class="highlight-item">
+                            <div class="highlight-icon">🍂</div>
+                            <div class="highlight-title">Kuz (Sentyabr-Noyabr)</div>
+                            <div class="highlight-desc">Issiqlik qochadi, meva mavsumi, go'zal landshaftlar</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tours-section">
+                    <h2 class="section-title" style="justify-content: center;">🎯 Sayohatlarga Qo'shiling</h2>
+                    <p style="font-size: 16px; color: #666; margin-bottom: 20px;">Bizning maxsus sayohat paketlarimizni ko'rib chiqing va O'zbekiston sayohatiga chiqing!</p>
+                    <a href="travel-agency-03.html" class="tours-btn">📦 Barcha Turlarni Ko'rish</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

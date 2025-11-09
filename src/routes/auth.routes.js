@@ -1,0 +1,62 @@
+const express = require('express');
+const router = express.Router();
+
+// Controllers
+const {
+  register,
+  login,
+  logout,
+  getMe,
+  updatePassword,
+  updateProfile
+} = require('../controllers/auth.controller');
+
+// Middleware
+const { protect } = require('../middlewares/auth.middleware');
+const {
+  registerValidation,
+  loginValidation,
+  updatePasswordValidation,
+  updateProfileValidation,
+  validate
+} = require('../middlewares/validation.middleware');
+
+/**
+ * PUBLIC ROUTES
+ */
+
+// @route   POST /api/auth/register
+// @desc    Ro'yxatdan o'tish
+// @access  Public
+router.post('/register', registerValidation, validate, register);
+
+// @route   POST /api/auth/login
+// @desc    Tizimga kirish
+// @access  Public
+router.post('/login', loginValidation, validate, login);
+
+/**
+ * PROTECTED ROUTES (Autentifikatsiya talab qilinadi)
+ */
+
+// @route   POST /api/auth/logout
+// @desc    Tizimdan chiqish
+// @access  Private
+router.post('/logout', protect, logout);
+
+// @route   GET /api/auth/me
+// @desc    Joriy foydalanuvchi ma'lumotlarini olish
+// @access  Private
+router.get('/me', protect, getMe);
+
+// @route   PUT /api/auth/update-password
+// @desc    Parolni yangilash
+// @access  Private
+router.put('/update-password', protect, updatePasswordValidation, validate, updatePassword);
+
+// @route   PUT /api/auth/update-profile
+// @desc    Profil ma'lumotlarini yangilash
+// @access  Private
+router.put('/update-profile', protect, updateProfileValidation, validate, updateProfile);
+
+module.exports = router;

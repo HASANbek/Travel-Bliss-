@@ -1,0 +1,2221 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin CMS - Travel Bliss</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6f9;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #343a40;
+            color: white;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: #2c3136;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-header .logo {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #343a40;
+            font-size: 18px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .user-panel {
+            padding: 15px 20px;
+            border-bottom: 1px solid #4b545c;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-panel .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+        }
+
+        .user-panel .user-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            padding: 10px 0;
+        }
+
+        .menu-section-title {
+            padding: 10px 20px;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #8a939b;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #c2c7d0;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background: #3f474e;
+            color: white;
+        }
+
+        .menu-item.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .menu-item i {
+            width: 20px;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        .top-header {
+            background: white;
+            border-bottom: 1px solid #dee2e6;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 57px;
+        }
+
+        .top-nav {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        .top-nav a {
+            color: #495057;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 18px 0;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .top-nav a:hover,
+        .top-nav a.active {
+            color: #007bff;
+            border-bottom-color: #007bff;
+        }
+
+        .top-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        .user-name-top {
+            font-size: 14px;
+            color: #495057;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        /* Content Header */
+        .content-header {
+            padding: 15px 20px;
+            background: white;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .content-header h1 {
+            font-size: 24px;
+            color: #212529;
+            margin-bottom: 5px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        .breadcrumb a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 20px;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .info-boxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-box {
+            background: white;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+            transition: all 0.3s;
+        }
+
+        .info-box:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,.15);
+            transform: translateY(-2px);
+        }
+
+        .info-box-header {
+            padding: 15px 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .info-box-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .info-box-header .number {
+            font-size: 32px;
+            font-weight: 700;
+            background: rgba(255,255,255,0.3);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-box-content {
+            padding: 15px 20px;
+            background: white;
+        }
+
+        .info-box-content a {
+            color: #495057;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .info-box.cyan .info-box-header { background: #17a2b8; }
+        .info-box.green .info-box-header { background: #28a745; }
+        .info-box.yellow .info-box-header { background: #ffc107; }
+        .info-box.red .info-box-header { background: #dc3545; }
+
+        /* Tours Section */
+        .add-tour-btn {
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .add-tour-btn:hover {
+            background: #218838;
+        }
+
+        .tours-table {
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #dee2e6;
+            color: #212529;
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        .edit-btn {
+            background: #007bff;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 98%;
+            max-width: 1400px;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        .modal-body {
+            padding: 25px 30px;
+        }
+
+        /* Step Indicator */
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            gap: 0;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            flex: 0 0 auto;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e9ecef;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .step.completed .step-number {
+            background: #28a745;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 13px;
+            color: #6c757d;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .step.active .step-label {
+            color: #495057;
+            font-weight: 600;
+        }
+
+        .step-line {
+            width: 80px;
+            height: 2px;
+            background: #dee2e6;
+            margin: 0 -5px;
+            margin-bottom: 28px;
+        }
+
+        .step.active ~ .step-line {
+            background: #dee2e6;
+        }
+
+        .step.completed ~ .step-line {
+            background: #28a745;
+        }
+
+        /* Form Steps */
+        .form-step {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        /* Form Row */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .itinerary-day-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .itinerary-day-card .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .itinerary-day-card .day-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .itinerary-day-card .remove-day-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .itinerary-day-card .remove-day-btn:hover {
+            background: #c82333;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Checkbox Labels */
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            background: white;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-label:hover {
+            background: #f8f9fa;
+            border-color: #667eea;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        /* Toggle Options */
+        .toggle-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toggle-option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-option:has(input:checked) {
+            background: #e8f5e9;
+            border-color: #28a745;
+        }
+
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .toggle-label input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .toggle-text {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .toggle-text strong {
+            color: #495057;
+            font-size: 14px;
+        }
+
+        .toggle-text small {
+            color: #6c757d;
+            font-size: 12px;
+        }
+
+        /* Add Day Button */
+        .btn-add-day {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-add-day:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">A</div>
+            <h2>Admin CMS</h2>
+        </div>
+
+        <div class="user-panel">
+            <div class="user-avatar">👤</div>
+            <div class="user-info">
+                <div class="user-name">Admin</div>
+            </div>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="menu-section">
+                <div class="menu-section-title">MAIN</div>
+                <a class="menu-item active" data-page="dashboard">
+                    <i>🏠</i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="menu-item" data-page="tours">
+                    <i>🎯</i>
+                    <span>Tours</span>
+                </a>
+                <a class="menu-item" data-page="bookings">
+                    <i>📋</i>
+                    <span>Bookings</span>
+                </a>
+                <a class="menu-item" data-page="users">
+                    <i>👥</i>
+                    <span>Users</span>
+                </a>
+                <a class="menu-item" data-page="pages">
+                    <i>📄</i>
+                    <span>Pages</span>
+                </a>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-section-title">CONTENT</div>
+                <a class="menu-item" data-page="destinations">
+                    <i>🌍</i>
+                    <span>Destinations</span>
+                </a>
+                <a class="menu-item" data-page="media">
+                    <i>🖼️</i>
+                    <span>Media Library</span>
+                </a>
+                <a class="menu-item" data-page="reviews">
+                    <i>⭐</i>
+                    <span>Reviews</span>
+                </a>
+            </div>
+
+            <div class="menu-section">
+                <div class="menu-section-title">SETTINGS</div>
+                <a class="menu-item" data-page="settings">
+                    <i>⚙️</i>
+                    <span>General Settings</span>
+                </a>
+                <a class="menu-item" data-page="seo">
+                    <i>🔍</i>
+                    <span>SEO Settings</span>
+                </a>
+                <a class="menu-item" onclick="logout()">
+                    <i>🚪</i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="top-header">
+            <div class="top-nav">
+                <a href="#" class="active">Dashboard</a>
+                <a href="/gofly/travel-agency-03.html" target="_blank">View Website</a>
+            </div>
+            <div class="top-right">
+                <span class="user-name-top">Admin</span>
+                <button class="logout-btn" onclick="logout()">
+                    <span>🚪</span>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="content-header">
+            <h1 id="pageTitle">Dashboard</h1>
+            <div class="breadcrumb">
+                <a href="#">Home</a>
+                <span>/</span>
+                <span id="pageBreadcrumb">Dashboard</span>
+            </div>
+        </div>
+
+        <div class="dashboard-content">
+            <!-- Dashboard Page -->
+            <div class="page-section active" id="dashboardPage">
+                <div class="info-boxes">
+                    <div class="info-box cyan">
+                        <div class="info-box-header">
+                            <h3>Total Tours</h3>
+                            <div class="number" id="totalTours">0</div>
+                        </div>
+                        <div class="info-box-content">
+                            <a href="#" onclick="showPage('tours'); return false;">
+                                <span>More info</span>
+                                <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="info-box green">
+                        <div class="info-box-header">
+                            <h3>Active Tours</h3>
+                            <div class="number" id="activeTours">0</div>
+                        </div>
+                        <div class="info-box-content">
+                            <a href="#" onclick="showPage('tours'); return false;">
+                                <span>More info</span>
+                                <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="info-box yellow">
+                        <div class="info-box-header">
+                            <h3>Total Bookings</h3>
+                            <div class="number">0</div>
+                        </div>
+                        <div class="info-box-content">
+                            <a href="#" onclick="showPage('bookings'); return false;">
+                                <span>More info</span>
+                                <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="info-box red">
+                        <div class="info-box-header">
+                            <h3>Today's Bookings</h3>
+                            <div class="number">0</div>
+                        </div>
+                        <div class="info-box-content">
+                            <a href="#" onclick="showPage('bookings'); return false;">
+                                <span>More info</span>
+                                <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tours Page -->
+            <div class="page-section" id="toursPage">
+                <button class="add-tour-btn" onclick="openModal()">+ Add New Tour</button>
+
+                <div class="tours-table">
+                    <div id="toursTableContainer">
+                        <div class="loading">Loading...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bookings Page -->
+            <div class="page-section" id="bookingsPage">
+                <h3>Bookings management coming soon...</h3>
+            </div>
+
+            <!-- Users Page -->
+            <div class="page-section" id="usersPage">
+                <h3>Users management coming soon...</h3>
+            </div>
+
+            <!-- Pages Page -->
+            <div class="page-section" id="pagesPage">
+                <h3>Pages management coming soon...</h3>
+            </div>
+
+            <!-- Destinations Page -->
+            <div class="page-section" id="destinationsPage">
+                <h3>Destinations management coming soon...</h3>
+            </div>
+
+            <!-- Media Page -->
+            <div class="page-section" id="mediaPage">
+                <h3>Media library coming soon...</h3>
+            </div>
+
+            <!-- Reviews Page -->
+            <div class="page-section" id="reviewsPage">
+                <h3>Reviews management coming soon...</h3>
+            </div>
+
+            <!-- Settings Page -->
+            <div class="page-section" id="settingsPage">
+                <h3>General settings coming soon...</h3>
+            </div>
+
+            <!-- SEO Page -->
+            <div class="page-section" id="seoPage">
+                <h3>SEO settings coming soon...</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Assistant Modal -->
+    <div class="modal" id="aiModal" style="z-index: 10001;">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2>✨ AI Tour Assistant</h2>
+                <button class="close-btn" onclick="closeAIModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="background: linear-gradient(135deg, #e7f3ff 0%, #f0f7ff 100%); border-left: 4px solid #2196F3; padding: 15px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(33, 150, 243, 0.1);">
+                    <p style="color: #1976D2; margin: 0; font-size: 14px; line-height: 1.6;">
+                        <strong style="font-size: 15px;">✨ AI Yordamchisi</strong><br>
+                        Quyidagi asosiy ma'lumotlarni kiriting, AI avtomatik ravishda:<br>
+                        • To'liq tur tavsifini<br>
+                        • Kunlik dasturni (itinerary)<br>
+                        • Nima kiradi/kirmaydi ro'yxatlarini<br>
+                        • Tur diqqatga sazovor joylari (highlights)ni yaratadi!
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label>Tour Type *</label>
+                    <select id="aiCategory">
+                        <option value="">Select tour type</option>
+                        <option value="cultural">🏛️ Cultural Tour</option>
+                        <option value="adventure">🏔️ Adventure Tour</option>
+                        <option value="hiking">🥾 Hiking Tour</option>
+                        <option value="day-trip">🌅 Day Trip</option>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Duration (Days) *</label>
+                        <input type="number" id="aiDuration" min="1" placeholder="5">
+                    </div>
+                    <div class="form-group">
+                        <label>Nights</label>
+                        <input type="number" id="aiNights" min="0" placeholder="4">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Destination *</label>
+                    <input type="text" id="aiDestination" placeholder="Samarkand, Bukhara, Khiva">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Price (USD) *</label>
+                        <input type="number" id="aiPrice" min="0" placeholder="500">
+                    </div>
+                    <div class="form-group">
+                        <label>Max Group Size *</label>
+                        <input type="number" id="aiMaxGroupSize" min="1" placeholder="15">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Difficulty Level</label>
+                    <select id="aiDifficulty">
+                        <option value="easy">Easy</option>
+                        <option value="moderate" selected>Moderate</option>
+                        <option value="challenging">Challenging</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Accommodation Type</label>
+                    <select id="aiAccommodation">
+                        <option value="">Not specified</option>
+                        <option value="5 Star Hotel">5 Star Hotel</option>
+                        <option value="4 Star Hotel">4 Star Hotel</option>
+                        <option value="3 Star Hotel" selected>3 Star Hotel</option>
+                        <option value="Boutique Hotel">Boutique Hotel</option>
+                        <option value="Guesthouse">Guesthouse</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Additional Description (Optional)</label>
+                    <textarea id="aiPrompt" rows="3" placeholder="Add any specific details or requirements..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAIModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="generateTourWithAI()">✨ Generate Tour</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tour Modal -->
+    <div class="modal" id="tourModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h2 id="modalTitle">Add New Tour</h2>
+                    <p style="font-size: 13px; color: #6c757d; margin-top: 5px;">Complete the form step by step</p>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button type="button" onclick="openAIAssistant()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 6px;">
+                        ✨ AI Assistant
+                    </button>
+                    <button class="close-btn" onclick="closeModal()">&times;</button>
+                </div>
+            </div>
+
+            <!-- Progress Steps -->
+            <div class="step-indicator">
+                <div class="step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Basic Info</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Details</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Itinerary</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Media & Finish</div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <form id="tourForm">
+                    <!-- STEP 1: Basic Information -->
+                    <div class="form-step active" data-step="1">
+                        <h3 class="step-title">📝 Basic Information</h3>
+
+                        <div class="form-group">
+                            <label>Tour Name *</label>
+                            <input type="text" id="tourName" placeholder="E.g.: Samarkand and Bukhara Safari">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Summary</label>
+                            <textarea id="tourSummary" rows="2" placeholder="Brief summary about the tour in 1-2 sentences"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Full Description *</label>
+                            <textarea id="tourDescription" rows="4" placeholder="Detailed tour description"></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Price (USD) *</label>
+                                <input type="number" id="tourPrice" min="0" placeholder="500">
+                            </div>
+                            <div class="form-group">
+                                <label>Discount Price (USD)</label>
+                                <input type="number" id="tourDiscountPrice" min="0" placeholder="450">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Duration (days) *</label>
+                                <input type="number" id="tourDuration" min="1" placeholder="7">
+                            </div>
+                            <div class="form-group">
+                                <label>Nights</label>
+                                <input type="number" id="tourNights" min="0" placeholder="6">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: Location & Details -->
+                    <div class="form-step" data-step="2">
+                        <h3 class="step-title">🌍 Location & Package Details</h3>
+
+                        <div class="form-group">
+                            <label>Location *</label>
+                            <input type="text" id="tourLocation" placeholder="Samarkand, Bukhara, Khiva">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Category *</label>
+                                <select id="tourCategory">
+                                    <option value="">Select category</option>
+                                    <option value="cultural">Cultural Tours</option>
+                                    <option value="adventure">Adventure Tours</option>
+                                    <option value="hiking">Homestays & Hiking</option>
+                                    <option value="day-trip">Day Trips</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Difficulty Level</label>
+                                <select id="tourDifficulty">
+                                    <option value="easy">Easy</option>
+                                    <option value="moderate" selected>Moderate</option>
+                                    <option value="challenging">Challenging</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Min Group Size</label>
+                                <input type="number" id="tourGroupSizeMin" min="1" placeholder="5">
+                            </div>
+                            <div class="form-group">
+                                <label>Max Group Size *</label>
+                                <input type="number" id="tourMaxGroupSize" min="1" placeholder="15">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Destinations Count</label>
+                            <input type="number" id="tourDestinationsCount" min="1" placeholder="3">
+                        </div>
+
+                        <h4 style="margin: 20px 0 15px; color: #495057; font-size: 15px;">Package Includes</h4>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Accommodation Type</label>
+                                <select id="tourAccommodation">
+                                    <option value="">Not specified</option>
+                                    <option value="5 Star Hotel">5 Star Hotel</option>
+                                    <option value="4 Star Hotel">4 Star Hotel</option>
+                                    <option value="3 Star Hotel">3 Star Hotel</option>
+                                    <option value="Boutique Hotel">Boutique Hotel</option>
+                                    <option value="Guesthouse">Guesthouse</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Meals Included</label>
+                                <select id="tourMeals">
+                                    <option value="">Not specified</option>
+                                    <option value="Breakfast & Dinner">Breakfast & Dinner</option>
+                                    <option value="Breakfast Only">Breakfast Only</option>
+                                    <option value="All Meals">All Meals</option>
+                                    <option value="No Meals">No Meals</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Transportation</label>
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="transport-checkbox" value="Car"> 🚗 Car
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="transport-checkbox" value="Bus"> 🚌 Bus
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="transport-checkbox" value="Flight"> ✈️ Flight
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Guide Languages</label>
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="language-checkbox" value="English"> 🇬🇧 English
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="language-checkbox" value="Russian"> 🇷🇺 Russian
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="language-checkbox" value="Spanish"> 🇪🇸 Spanish
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Best Season (Optional)</label>
+                                <select id="tourSeason">
+                                    <option value="">Any Season</option>
+                                    <option value="Spring">Spring</option>
+                                    <option value="Summer">Summer</option>
+                                    <option value="Fall">Fall</option>
+                                    <option value="Winter">Winter</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Rating (1-5)</label>
+                                <input type="number" id="tourRating" min="1" max="5" step="0.1" value="4.5">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3: Itinerary & Details -->
+                    <div class="form-step" data-step="3">
+                        <h3 class="step-title">📅 Itinerary & Tour Details</h3>
+
+                        <div class="form-group">
+                            <label>What's Included (one item per line)</label>
+                            <textarea id="tourIncludes" rows="4" placeholder="Accommodation&#10;All meals&#10;Transportation&#10;Professional guide"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>What's Not Included</label>
+                            <textarea id="tourExcludes" rows="3" placeholder="International flights&#10;Personal expenses&#10;Visa fees"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Highlights of the Tour (one item per line)</label>
+                            <textarea id="tourHighlights" rows="4" placeholder="Eiffel Tower – Skip-the-line access & breathtaking views&#10;Louvre Museum – See the Mona Lisa and masterpieces"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>Day-by-Day Itinerary (Optional)</span>
+                                <button type="button" onclick="addItineraryDay()" class="btn-add-day">
+                                    + Add Day
+                                </button>
+                            </label>
+                            <div id="itineraryDays" style="margin-top: 15px;">
+                                <!-- Dynamic itinerary days will be added here -->
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Health & Safety Guidelines (Optional)</label>
+                            <textarea id="tourHealthSafety" rows="2" placeholder="COVID-19 regulations, vaccinations, or travel restrictions"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Free Cancellation Policy (Optional)</label>
+                            <textarea id="tourFreeCancellation" rows="2" placeholder="Some tours offer free cancellation up to a certain period (e.g., 24-48 hours before departure)"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- STEP 4: Media & Final Settings -->
+                    <div class="form-step" data-step="4">
+                        <h3 class="step-title">🖼️ Media & Final Settings</h3>
+
+                        <div class="form-group">
+                            <label>Cover Image *</label>
+                            <input type="file" id="tourImageFile" accept="image/*" style="padding: 10px; border: 2px dashed #dee2e6; border-radius: 8px; width: 100%;">
+                            <input type="hidden" id="tourImage">
+                            <div id="imagePreview" style="margin-top: 15px; max-width: 300px; display: none;">
+                                <img id="previewImg" style="width: 100%; border-radius: 8px; border: 2px solid #e0e0e0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tags (comma separated)</label>
+                            <input type="text" id="tourTags" placeholder="silk road, cultural heritage, history, architecture">
+                            <small style="color: #6c757d; display: block; margin-top: 5px;">Enter keywords for better search visibility</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Explore Locations (JSON format - Optional)</label>
+                            <textarea id="tourLocations" rows="3" placeholder='[{"name": "Southern France", "image": "location1.jpg", "days": "01 Days"}]'></textarea>
+                            <small style="color: #6c757d;">Format: [{"name": "Location Name", "image": "image.jpg", "days": "02 Days"}]</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>FAQ (JSON format - Optional)</label>
+                            <textarea id="tourFAQ" rows="3" placeholder='[{"question": "What are the must-visit places?", "answer": "Top destinations include..."}]'></textarea>
+                            <small style="color: #6c757d;">Format: [{"question": "Question here?", "answer": "Answer here"}]</small>
+                        </div>
+
+                        <h4 style="margin: 25px 0 15px; color: #495057; font-size: 15px; padding-top: 20px; border-top: 1px solid #e9ecef;">Tour Status & Visibility</h4>
+
+                        <div class="toggle-options">
+                            <div class="toggle-option">
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="tourActive" checked>
+                                    <span class="toggle-text">
+                                        <strong>✓ Active Tour</strong>
+                                        <small>Make tour visible on website</small>
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="toggle-option">
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="tourFeatured">
+                                    <span class="toggle-text">
+                                        <strong>⭐ Featured Tour</strong>
+                                        <small>Show in featured section on homepage</small>
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="toggle-option">
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="tourHotSale">
+                                    <span class="toggle-text">
+                                        <strong>🔥 Hot Sale</strong>
+                                        <small>Display special "Hot Sale!" badge</small>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Hidden advanced fields for compatibility -->
+                        <input type="hidden" id="tourAgeMin">
+                        <input type="hidden" id="tourAgeMax">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button type="button" class="btn btn-secondary" id="prevBtn" onclick="previousStep()" style="display: none;">← Previous</button>
+                <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextStep()">Next →</button>
+                <button type="button" class="btn btn-primary" id="saveBtn" onclick="saveTour()" style="display: none;">💾 Save Tour</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let currentEditId = null;
+
+        // Load dashboard data on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            loadDashboardStats();
+        });
+
+        // Page Navigation
+        function showPage(pageName) {
+            // Hide all pages
+            document.querySelectorAll('.page-section').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Remove active from all menu items
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Show selected page
+            const pageMap = {
+                'dashboard': { id: 'dashboardPage', title: 'Dashboard', breadcrumb: 'Dashboard' },
+                'tours': { id: 'toursPage', title: 'Tours Management', breadcrumb: 'Tours' },
+                'bookings': { id: 'bookingsPage', title: 'Bookings', breadcrumb: 'Bookings' },
+                'users': { id: 'usersPage', title: 'Users Management', breadcrumb: 'Users' },
+                'pages': { id: 'pagesPage', title: 'Pages Management', breadcrumb: 'Pages' },
+                'destinations': { id: 'destinationsPage', title: 'Destinations', breadcrumb: 'Destinations' },
+                'media': { id: 'mediaPage', title: 'Media Library', breadcrumb: 'Media' },
+                'reviews': { id: 'reviewsPage', title: 'Reviews', breadcrumb: 'Reviews' },
+                'settings': { id: 'settingsPage', title: 'General Settings', breadcrumb: 'Settings' },
+                'seo': { id: 'seoPage', title: 'SEO Settings', breadcrumb: 'SEO' }
+            };
+
+            const page = pageMap[pageName];
+            document.getElementById(page.id).classList.add('active');
+            document.getElementById('pageTitle').textContent = page.title;
+            document.getElementById('pageBreadcrumb').textContent = page.breadcrumb;
+
+            // Set active menu item
+            document.querySelector(`[data-page="${pageName}"]`).classList.add('active');
+
+            // Load page specific data
+            if (pageName === 'tours') {
+                loadTours();
+            }
+        }
+
+        // Menu click handlers
+        document.querySelectorAll('.menu-item[data-page]').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const page = this.getAttribute('data-page');
+                showPage(page);
+            });
+        });
+
+        // Load dashboard statistics
+        async function loadDashboardStats() {
+            try {
+                const response = await fetch(`${API_URL}/tours`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const tours = data.data.tours;
+                    document.getElementById('totalTours').textContent = tours.length;
+                    document.getElementById('activeTours').textContent = tours.filter(t => t.isActive).length;
+                }
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // Load tours
+        async function loadTours() {
+            try {
+                const response = await fetch(`${API_URL}/tours`);
+                const data = await response.json();
+
+                if (data.success) {
+                    displayTours(data.data.tours);
+                }
+            } catch (error) {
+                console.error('Error loading tours:', error);
+            }
+        }
+
+        function displayTours(tours) {
+            const container = document.getElementById('toursTableContainer');
+
+            if (!tours || tours.length === 0) {
+                container.innerHTML = '<div class="loading">No tours found</div>';
+                return;
+            }
+
+            const tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Price</th>
+                            <th>Duration</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tours.map(tour => `
+                            <tr>
+                                <td><strong>${tour.title || tour.name || 'No title'}</strong></td>
+                                <td>${tour.destination || tour.location || '-'}</td>
+                                <td>$${tour.price || 0}</td>
+                                <td>${tour.duration || 0} days</td>
+                                <td>${getCategoryName(tour.category)}</td>
+                                <td>
+                                    <span class="badge ${tour.isActive ? 'badge-success' : 'badge-danger'}">
+                                        ${tour.isActive ? 'Active' : 'Inactive'}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="action-btn edit-btn" onclick="editTour('${tour._id || tour.id}')">✏️ Edit</button>
+                                    <button class="action-btn delete-btn" onclick="deleteTour('${tour._id || tour.id}')">🗑️ Delete</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            container.innerHTML = tableHTML;
+        }
+
+        function getCategoryName(category) {
+            const categories = {
+                'cultural': 'Cultural Tours',
+                'adventure': 'Adventure',
+                'hiking': 'Hiking',
+                'day-trip': 'Day Trip'
+            };
+            return categories[category] || category;
+        }
+
+        function openAddModal() {
+            currentEditId = null;
+            document.getElementById('modalTitle').textContent = 'Add New Tour';
+            document.getElementById('tourForm').reset();
+            document.getElementById('tourModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('tourModal').classList.remove('active');
+            currentEditId = null;
+        }
+
+        async function editTour(id) {
+            try {
+                const response = await fetch(`${API_URL}/tours/${id}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const tour = data.data.tour;
+                    currentEditId = id;
+
+                    // Helper function to convert array to textarea lines
+                    const arrayToTextarea = (arr) => {
+                        return arr && arr.length > 0 ? arr.join('\n') : '';
+                    };
+
+                    // Helper function to convert array to comma-separated string
+                    const arrayToCommaSeparated = (arr) => {
+                        return arr && arr.length > 0 ? arr.join(', ') : '';
+                    };
+
+                    document.getElementById('modalTitle').textContent = 'Edit Tour';
+                    document.getElementById('tourName').value = tour.name || tour.title || '';
+                    document.getElementById('tourSummary').value = tour.summary || '';
+                    document.getElementById('tourDescription').value = tour.description || '';
+                    document.getElementById('tourPrice').value = tour.price || '';
+                    document.getElementById('tourDiscountPrice').value = tour.discountPrice || '';
+                    document.getElementById('tourDuration').value = tour.duration || '';
+                    document.getElementById('tourNights').value = tour.nights || '';
+                    document.getElementById('tourDestinationsCount').value = tour.destinationsCount || '';
+                    document.getElementById('tourGroupSizeMin').value = tour.groupSizeMin || '';
+                    document.getElementById('tourMaxGroupSize').value = tour.maxGroupSize || '';
+                    document.getElementById('tourLocation').value = tour.location || tour.destination || '';
+                    document.getElementById('tourCategory').value = tour.category || '';
+                    document.getElementById('tourDifficulty').value = tour.difficulty || 'moderate';
+
+                    // Package Details
+                    document.getElementById('tourAccommodation').value = tour.accommodation || '';
+                    document.getElementById('tourMeals').value = tour.meals || '';
+
+                    // Set transport checkboxes
+                    document.querySelectorAll('.transport-checkbox').forEach(cb => cb.checked = false);
+                    if (tour.transportation) {
+                        const transportList = tour.transportation.split(',').map(t => t.trim());
+                        document.querySelectorAll('.transport-checkbox').forEach(cb => {
+                            if (transportList.includes(cb.value)) cb.checked = true;
+                        });
+                    }
+
+                    // Set language checkboxes
+                    document.querySelectorAll('.language-checkbox').forEach(cb => cb.checked = false);
+                    if (tour.languages && Array.isArray(tour.languages)) {
+                        document.querySelectorAll('.language-checkbox').forEach(cb => {
+                            if (tour.languages.includes(cb.value)) cb.checked = true;
+                        });
+                    }
+
+                    document.getElementById('tourSeason').value = tour.season || '';
+                    document.getElementById('tourAgeMin').value = tour.ageRange?.min || '';
+                    document.getElementById('tourAgeMax').value = tour.ageRange?.max || '';
+
+                    // Media
+                    document.getElementById('tourImage').value = tour.image || tour.imageCover || '';
+
+                    // Arrays
+                    document.getElementById('tourIncludes').value = arrayToTextarea(tour.includes || tour.included);
+                    document.getElementById('tourExcludes').value = arrayToTextarea(tour.excludes || tour.excluded);
+                    loadItineraryData(tour.itinerary);
+                    document.getElementById('tourHighlights').value = arrayToTextarea(tour.highlights);
+                    document.getElementById('tourLocations').value = tour.locations ? JSON.stringify(tour.locations, null, 2) : '';
+                    document.getElementById('tourFreeCancellation').value = tour.freeCancellation || '';
+                    document.getElementById('tourHealthSafety').value = tour.healthSafety || '';
+                    document.getElementById('tourFAQ').value = tour.faq ? JSON.stringify(tour.faq, null, 2) : '';
+                    document.getElementById('tourTags').value = arrayToCommaSeparated(tour.tags);
+                    document.getElementById('tourRating').value = tour.rating || 4.5;
+
+                    // Checkboxes
+                    document.getElementById('tourHotSale').checked = tour.hotSale || false;
+                    document.getElementById('tourFeatured').checked = tour.isFeatured || false;
+                    document.getElementById('tourActive').checked = tour.isActive !== undefined ? tour.isActive : true;
+
+                    // Reset to step 1 when editing
+                    currentStep = 1;
+                    updateStepIndicator();
+                    document.getElementById('tourModal').classList.add('active');
+                }
+            } catch (error) {
+                alert('Error loading tour');
+            }
+        }
+
+        async function deleteTour(id) {
+            if (!confirm('Are you sure you want to delete this tour?')) return;
+
+            try {
+                const response = await fetch(`${API_URL}/tours/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    alert('Tour deleted successfully!');
+                    loadTours();
+                    loadDashboardStats();
+                }
+            } catch (error) {
+                alert('Error occurred');
+            }
+        }
+
+        async function saveTour() {
+            // Custom validation before saving
+            const tourName = document.getElementById('tourName').value.trim();
+            const tourDescription = document.getElementById('tourDescription').value.trim();
+            const tourLocation = document.getElementById('tourLocation').value.trim();
+            const tourPrice = document.getElementById('tourPrice').value;
+            const tourDuration = document.getElementById('tourDuration').value;
+            const tourMaxGroupSize = document.getElementById('tourMaxGroupSize').value;
+            const tourCategory = document.getElementById('tourCategory').value;
+
+            const errors = [];
+            if (!tourName || tourName.length < 3) {
+                errors.push('• Tur nomi kamida 3 ta belgidan iborat bo\'lishi kerak');
+            }
+            if (!tourDescription || tourDescription.length < 10) {
+                errors.push('• Tur tavsifi kamida 10 ta belgidan iborat bo\'lishi kerak');
+            }
+            if (!tourLocation) {
+                errors.push('• Manzilni kiriting');
+            }
+            if (!tourPrice || parseFloat(tourPrice) <= 0) {
+                errors.push('• Narxni to\'g\'ri kiriting');
+            }
+            if (!tourDuration || parseInt(tourDuration) <= 0) {
+                errors.push('• Davomiyligini to\'g\'ri kiriting');
+            }
+            if (!tourMaxGroupSize || parseInt(tourMaxGroupSize) <= 0) {
+                errors.push('• Maksimal guruh hajmini to\'g\'ri kiriting');
+            }
+            if (!tourCategory) {
+                errors.push('• Kategoriyani tanlang');
+            }
+
+            if (errors.length > 0) {
+                alert('❌ Quyidagi xatolarni tuzating:\n\n' + errors.join('\n'));
+                return;
+            }
+
+            // Helper function to convert textarea lines to array
+            const textareaToArray = (value) => {
+                if (!value || value.trim() === '') return [];
+                return value.split('\n').map(item => item.trim()).filter(item => item !== '');
+            };
+
+            // Helper function to convert comma-separated string to array
+            const commaSeparatedToArray = (value) => {
+                if (!value || value.trim() === '') return [];
+                return value.split(',').map(item => item.trim()).filter(item => item !== '');
+            };
+
+            // Helper function to parse JSON or return empty array/object
+            const parseJSONField = (value) => {
+                if (!value || value.trim() === '') return undefined;
+                try {
+                    return JSON.parse(value);
+                } catch (e) {
+                    return undefined;
+                }
+            };
+
+            const tourData = {
+                name: tourName,
+                summary: document.getElementById('tourSummary').value || undefined,
+                description: document.getElementById('tourDescription').value,
+                price: parseFloat(document.getElementById('tourPrice').value),
+                discountPrice: document.getElementById('tourDiscountPrice').value ? parseFloat(document.getElementById('tourDiscountPrice').value) : undefined,
+                duration: parseInt(document.getElementById('tourDuration').value),
+                nights: document.getElementById('tourNights').value ? parseInt(document.getElementById('tourNights').value) : undefined,
+                destinationsCount: document.getElementById('tourDestinationsCount').value ? parseInt(document.getElementById('tourDestinationsCount').value) : undefined,
+                groupSizeMin: document.getElementById('tourGroupSizeMin').value ? parseInt(document.getElementById('tourGroupSizeMin').value) : undefined,
+                maxGroupSize: parseInt(document.getElementById('tourMaxGroupSize').value),
+                location: document.getElementById('tourLocation').value,
+                category: document.getElementById('tourCategory').value,
+                difficulty: document.getElementById('tourDifficulty').value,
+                accommodation: document.getElementById('tourAccommodation').value || undefined,
+                meals: document.getElementById('tourMeals').value || undefined,
+                transportation: Array.from(document.querySelectorAll('.transport-checkbox:checked')).map(cb => cb.value).join(', ') || undefined,
+                languages: Array.from(document.querySelectorAll('.language-checkbox:checked')).map(cb => cb.value),
+                ageRange: (document.getElementById('tourAgeMin').value || document.getElementById('tourAgeMax').value) ? {
+                    min: parseInt(document.getElementById('tourAgeMin').value) || 0,
+                    max: parseInt(document.getElementById('tourAgeMax').value) || 99
+                } : undefined,
+                season: document.getElementById('tourSeason').value || undefined,
+                image: document.getElementById('tourImage').value || undefined,
+                includes: textareaToArray(document.getElementById('tourIncludes').value),
+                excludes: textareaToArray(document.getElementById('tourExcludes').value),
+                itinerary: getItineraryData(),
+                highlights: textareaToArray(document.getElementById('tourHighlights').value),
+                locations: parseJSONField(document.getElementById('tourLocations').value),
+                freeCancellation: document.getElementById('tourFreeCancellation').value || undefined,
+                healthSafety: document.getElementById('tourHealthSafety').value || undefined,
+                faq: parseJSONField(document.getElementById('tourFAQ').value),
+                tags: commaSeparatedToArray(document.getElementById('tourTags').value),
+                rating: parseFloat(document.getElementById('tourRating').value) || 4.5,
+                hotSale: document.getElementById('tourHotSale').checked,
+                isFeatured: document.getElementById('tourFeatured').checked,
+                isActive: document.getElementById('tourActive').checked
+            };
+
+            try {
+                const url = currentEditId
+                    ? `${API_URL}/tours/${currentEditId}`
+                    : `${API_URL}/tours`;
+
+                const method = currentEditId ? 'PUT' : 'POST';
+
+                console.log('Saving tour:', tourData);
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(tourData)
+                });
+
+                const data = await response.json();
+
+                console.log('Response:', data);
+
+                if (data.success) {
+                    alert(currentEditId ? 'Tour updated successfully!' : 'New tour added successfully!');
+                    closeModal();
+                    loadTours();
+                    loadDashboardStats();
+                } else {
+                    alert('Error: ' + (data.message || 'Failed to save tour'));
+                }
+            } catch (error) {
+                console.error('Error saving tour:', error);
+                alert('Error occurred: ' + error.message);
+            }
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = '/gofly/travel-agency-03.html';
+            }
+        }
+
+        // Image preview functionality
+        document.getElementById('tourImageFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const previewDiv = document.getElementById('imagePreview');
+                    const previewImg = document.getElementById('previewImg');
+                    previewImg.src = event.target.result;
+                    previewDiv.style.display = 'block';
+
+                    // Set the filename in the URL field
+                    document.getElementById('tourImage').value = file.name;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Close modal and reset form
+        function closeModal() {
+            document.getElementById('tourModal').classList.remove('active');
+            document.getElementById('tourForm').reset();
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('itineraryDays').innerHTML = '';
+            document.getElementById('modalTitle').textContent = 'Add New Tour';
+            currentEditId = null;
+        }
+
+        // Open modal for new tour
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        function openModal() {
+            document.getElementById('tourForm').reset();
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('modalTitle').textContent = 'Add New Tour';
+            document.getElementById('tourActive').checked = true;
+            document.getElementById('tourHotSale').checked = false;
+            document.getElementById('tourFeatured').checked = false;
+
+            // Reset checkboxes
+            document.querySelectorAll('.transport-checkbox').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.language-checkbox').forEach(cb => cb.checked = false);
+
+            currentEditId = null;
+            currentStep = 1;
+            document.getElementById('itineraryDays').innerHTML = ''; // Clear itinerary days
+            updateStepIndicator();
+            document.getElementById('tourModal').classList.add('active');
+        }
+
+        function updateStepIndicator() {
+            // Update step indicators
+            document.querySelectorAll('.step').forEach((step, index) => {
+                const stepNum = index + 1;
+                if (stepNum < currentStep) {
+                    step.classList.add('completed');
+                    step.classList.remove('active');
+                } else if (stepNum === currentStep) {
+                    step.classList.add('active');
+                    step.classList.remove('completed');
+                } else {
+                    step.classList.remove('active', 'completed');
+                }
+            });
+
+            // Update form steps
+            document.querySelectorAll('.form-step').forEach((step, index) => {
+                if (index + 1 === currentStep) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+
+            // Update buttons
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const saveBtn = document.getElementById('saveBtn');
+
+            if (currentStep === 1) {
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'inline-block';
+                saveBtn.style.display = 'none';
+            } else if (currentStep === totalSteps) {
+                prevBtn.style.display = 'inline-block';
+                nextBtn.style.display = 'none';
+                saveBtn.style.display = 'inline-block';
+            } else {
+                prevBtn.style.display = 'inline-block';
+                nextBtn.style.display = 'inline-block';
+                saveBtn.style.display = 'none';
+            }
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateStepIndicator();
+                // Scroll to top of modal
+                document.querySelector('.modal-body').scrollTop = 0;
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepIndicator();
+                // Scroll to top of modal
+                document.querySelector('.modal-body').scrollTop = 0;
+            }
+        }
+
+        // AI Assistant Functions
+        function openAIAssistant() {
+            // Pre-fill AI modal with data from main form if available
+            const tourName = document.getElementById('tourName').value;
+            const tourLocation = document.getElementById('tourLocation').value;
+            const tourPrice = document.getElementById('tourPrice').value;
+            const tourDuration = document.getElementById('tourDuration').value;
+            const tourCategory = document.getElementById('tourCategory').value;
+            const tourMaxGroupSize = document.getElementById('tourMaxGroupSize').value;
+            const tourDifficulty = document.getElementById('tourDifficulty').value;
+
+            // Fill AI modal fields if main form has data
+            if (tourLocation) document.getElementById('aiDestination').value = tourLocation;
+            if (tourPrice) document.getElementById('aiPrice').value = tourPrice;
+            if (tourDuration) document.getElementById('aiDuration').value = tourDuration;
+            if (tourCategory) document.getElementById('aiCategory').value = tourCategory;
+            if (tourMaxGroupSize) document.getElementById('aiMaxGroupSize').value = tourMaxGroupSize;
+            if (tourDifficulty) document.getElementById('aiDifficulty').value = tourDifficulty;
+
+            // Set additional prompt from tour name
+            if (tourName) {
+                document.getElementById('aiPrompt').value = `Create a tour called "${tourName}"`;
+            }
+
+            document.getElementById('aiModal').classList.add('active');
+        }
+
+        function closeAIModal() {
+            document.getElementById('aiModal').classList.remove('active');
+            document.getElementById('aiCategory').value = '';
+            document.getElementById('aiDuration').value = '';
+            document.getElementById('aiNights').value = '';
+            document.getElementById('aiDestination').value = '';
+            document.getElementById('aiPrice').value = '';
+            document.getElementById('aiMaxGroupSize').value = '';
+            document.getElementById('aiDifficulty').value = 'moderate';
+            document.getElementById('aiAccommodation').value = '';
+            document.getElementById('aiPrompt').value = '';
+        }
+
+        function generateTourWithAI() {
+            // Validate required fields
+            const category = document.getElementById('aiCategory').value;
+            const durationValue = document.getElementById('aiDuration').value;
+            const destination = document.getElementById('aiDestination').value.trim();
+            const priceValue = document.getElementById('aiPrice').value;
+            const maxGroupSizeValue = document.getElementById('aiMaxGroupSize').value;
+
+            // Check which fields are missing
+            const errors = [];
+            if (!category) errors.push('Tur turi (Tour Type)');
+            if (!durationValue || isNaN(parseInt(durationValue))) errors.push('Davomiyligi (Duration)');
+            if (!destination) errors.push('Manzil (Destination)');
+            if (!priceValue || isNaN(parseInt(priceValue))) errors.push('Narxi (Price)');
+            if (!maxGroupSizeValue || isNaN(parseInt(maxGroupSizeValue))) errors.push('Maksimal guruh hajmi (Max Group Size)');
+
+            if (errors.length > 0) {
+                alert('❌ Iltimos, quyidagi majburiy maydonlarni to\'ldiring:\n\n' + errors.map(e => '• ' + e).join('\n') + '\n\nBu maydonlar AI tur yaratish uchun zarur!');
+                return;
+            }
+
+            const duration = parseInt(durationValue);
+            const price = parseInt(priceValue);
+            const maxGroupSize = parseInt(maxGroupSizeValue);
+
+            // Get optional fields
+            const nights = parseInt(document.getElementById('aiNights').value) || Math.max(duration - 1, 0);
+            const difficulty = document.getElementById('aiDifficulty').value;
+            const accommodation = document.getElementById('aiAccommodation').value;
+            const additionalDesc = document.getElementById('aiPrompt').value.trim();
+
+            // Generate tour name
+            const categoryNames = {
+                'cultural': 'Cultural Tour',
+                'adventure': 'Adventure Tour',
+                'hiking': 'Hiking Tour',
+                'day-trip': 'Day Trip'
+            };
+            const tourName = `${duration}-Day ${categoryNames[category]} to ${destination}`;
+
+            // Generate summary
+            const summary = `Discover ${destination} with our ${duration}-day ${categoryNames[category].toLowerCase()}. Experience the best attractions and authentic local culture.`;
+
+            // Generate description
+            let description = `Join us for an unforgettable ${duration}-day journey through ${destination}. `;
+            if (category === 'cultural') {
+                description += 'Explore historical monuments, ancient architecture, and rich cultural heritage. Visit iconic landmarks and learn about the fascinating history of the region.';
+            } else if (category === 'adventure') {
+                description += 'Experience thrilling adventures, outdoor activities, and breathtaking natural landscapes. Perfect for adventure seekers and nature lovers.';
+            } else if (category === 'hiking') {
+                description += 'Embark on scenic hiking trails, discover pristine nature, and connect with local communities. A perfect blend of outdoor activity and cultural immersion.';
+            } else if (category === 'day-trip') {
+                description += 'Make the most of your day with our carefully curated itinerary covering the must-see attractions and hidden gems.';
+            }
+            if (additionalDesc) {
+                description += ' ' + additionalDesc;
+            }
+
+            // Determine meals based on accommodation
+            let meals = 'Breakfast Only';
+            if (accommodation && accommodation.includes('5 Star')) {
+                meals = 'All Meals';
+            } else if (accommodation && (accommodation.includes('4 Star') || accommodation.includes('3 Star'))) {
+                meals = 'Breakfast & Dinner';
+            }
+
+            // Fill the main form
+            console.log('Filling form with AI data:', { tourName, destination, category, difficulty });
+
+            document.getElementById('tourName').value = tourName;
+            document.getElementById('tourSummary').value = summary;
+            document.getElementById('tourDescription').value = description;
+            document.getElementById('tourPrice').value = price;
+            document.getElementById('tourDuration').value = duration;
+            document.getElementById('tourNights').value = nights;
+            document.getElementById('tourMaxGroupSize').value = maxGroupSize;
+            document.getElementById('tourLocation').value = destination;
+            document.getElementById('tourCategory').value = category;
+            document.getElementById('tourDifficulty').value = difficulty;
+            document.getElementById('tourAccommodation').value = accommodation || '';
+            document.getElementById('tourMeals').value = meals;
+
+            console.log('Form filled. Verification:', {
+                name: document.getElementById('tourName').value,
+                location: document.getElementById('tourLocation').value,
+                category: document.getElementById('tourCategory').value,
+                difficulty: document.getElementById('tourDifficulty').value
+            });
+
+            // Set default languages - English
+            document.querySelectorAll('.language-checkbox').forEach(cb => cb.checked = false);
+            const englishCheckbox = Array.from(document.querySelectorAll('.language-checkbox')).find(cb => cb.value === 'English');
+            if (englishCheckbox) englishCheckbox.checked = true;
+
+            // Set default transport based on tour type
+            document.querySelectorAll('.transport-checkbox').forEach(cb => cb.checked = false);
+            if (category === 'cultural' || category === 'adventure') {
+                const carCheckbox = Array.from(document.querySelectorAll('.transport-checkbox')).find(cb => cb.value === 'Car');
+                if (carCheckbox) carCheckbox.checked = true;
+            } else if (category === 'day-trip') {
+                const busCheckbox = Array.from(document.querySelectorAll('.transport-checkbox')).find(cb => cb.value === 'Bus');
+                if (busCheckbox) busCheckbox.checked = true;
+            }
+
+            // Generate itinerary days
+            document.getElementById('itineraryDays').innerHTML = '';
+            for (let i = 1; i <= duration; i++) {
+                addItineraryDay();
+                const cards = document.querySelectorAll('.itinerary-day-card');
+                const currentCard = cards[cards.length - 1];
+
+                let dayTitle, dayDescription, dayActivities;
+
+                if (i === 1) {
+                    dayTitle = `Day ${i} - Arrival & City Orientation`;
+                    dayDescription = `Arrive in ${destination}. Transfer to hotel and check-in. Evening orientation walk and welcome dinner.`;
+                    dayActivities = 'Airport Transfer, Hotel Check-in, City Walk, Welcome Dinner';
+                } else if (i === duration) {
+                    dayTitle = `Day ${i} - Departure`;
+                    dayDescription = `Final breakfast and hotel check-out. Transfer to airport for departure. End of tour.`;
+                    dayActivities = 'Breakfast, Check-out, Airport Transfer';
+                } else {
+                    dayTitle = `Day ${i} - ${destination} Exploration`;
+                    if (category === 'cultural') {
+                        dayDescription = `Full day exploring historical sites, monuments, and cultural landmarks. Visit local markets and experience traditional cuisine.`;
+                        dayActivities = 'Sightseeing, Historical Sites, Local Market, Cultural Activities';
+                    } else if (category === 'adventure') {
+                        dayDescription = `Adventure activities including outdoor sports, nature exploration, and scenic viewpoints.`;
+                        dayActivities = 'Outdoor Activities, Nature Exploration, Adventure Sports';
+                    } else if (category === 'hiking') {
+                        dayDescription = `Hiking through scenic trails, visiting local villages, and enjoying natural landscapes.`;
+                        dayActivities = 'Hiking, Nature Walk, Village Visit, Photography';
+                    } else {
+                        dayDescription = `Explore the main attractions and experience local culture and cuisine.`;
+                        dayActivities = 'Sightseeing, Local Experiences, Free Time';
+                    }
+                }
+
+                currentCard.querySelector('.day-title').value = dayTitle;
+                currentCard.querySelector('.day-description').value = dayDescription;
+                currentCard.querySelector('.day-activities').value = dayActivities;
+            }
+
+            closeAIModal();
+            alert('✨ AI generated tour details! Please review and adjust as needed.');
+        }
+
+        // Itinerary management
+        let itineraryDayCounter = 0;
+
+        function addItineraryDay() {
+            itineraryDayCounter++;
+            const dayNumber = document.querySelectorAll('.itinerary-day-card').length + 1;
+
+            const dayCard = document.createElement('div');
+            dayCard.className = 'itinerary-day-card';
+            dayCard.dataset.dayIndex = itineraryDayCounter;
+
+            dayCard.innerHTML = `
+                <div class="day-header">
+                    <div class="day-number">📅 Day ${dayNumber}</div>
+                    <button type="button" class="remove-day-btn" onclick="removeItineraryDay(${itineraryDayCounter})">🗑️ Remove</button>
+                </div>
+
+                <div class="form-group">
+                    <label>Title *</label>
+                    <input type="text" class="day-title" placeholder="E.g.: Eiffel Tower – The symbol of France" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Description *</label>
+                    <textarea class="day-description" rows="3" placeholder="Describe the day's activities and experiences..." required></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Activities (comma separated)</label>
+                        <input type="text" class="day-activities" placeholder="Climb tower, Sunset view, Bike tour">
+                    </div>
+                    <div class="form-group">
+                        <label>Meals</label>
+                        <input type="text" class="day-meals" placeholder="Breakfast, Lunch, Snacks">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Accommodation</label>
+                        <input type="text" class="day-accommodation" placeholder="Hotel Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Transport (comma separated)</label>
+                        <input type="text" class="day-transport" placeholder="Car, Flight, Boat">
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('itineraryDays').appendChild(dayCard);
+        }
+
+        function removeItineraryDay(index) {
+            const dayCard = document.querySelector(`[data-day-index="${index}"]`);
+            if (dayCard) {
+                dayCard.remove();
+                updateDayNumbers();
+            }
+        }
+
+        function updateDayNumbers() {
+            const dayCards = document.querySelectorAll('.itinerary-day-card');
+            dayCards.forEach((card, index) => {
+                card.querySelector('.day-number').textContent = `📅 Day ${index + 1}`;
+            });
+        }
+
+        function getItineraryData() {
+            const dayCards = document.querySelectorAll('.itinerary-day-card');
+            const itinerary = [];
+
+            dayCards.forEach((card, index) => {
+                const title = card.querySelector('.day-title').value;
+                const description = card.querySelector('.day-description').value;
+                const activities = card.querySelector('.day-activities').value;
+                const meals = card.querySelector('.day-meals').value;
+                const accommodation = card.querySelector('.day-accommodation').value;
+                const transport = card.querySelector('.day-transport').value;
+
+                if (title && description) {
+                    itinerary.push({
+                        day: index + 1,
+                        title: title,
+                        description: description,
+                        activities: activities ? activities.split(',').map(a => a.trim()) : [],
+                        meals: meals || undefined,
+                        accommodation: accommodation || undefined,
+                        transport: transport ? transport.split(',').map(t => t.trim()) : []
+                    });
+                }
+            });
+
+            return itinerary.length > 0 ? itinerary : undefined;
+        }
+
+        function loadItineraryData(itineraryData) {
+            document.getElementById('itineraryDays').innerHTML = '';
+
+            if (!itineraryData || !Array.isArray(itineraryData)) return;
+
+            itineraryData.forEach((day) => {
+                itineraryDayCounter++;
+                const dayCard = document.createElement('div');
+                dayCard.className = 'itinerary-day-card';
+                dayCard.dataset.dayIndex = itineraryDayCounter;
+
+                dayCard.innerHTML = `
+                    <div class="day-header">
+                        <div class="day-number">📅 Day ${day.day}</div>
+                        <button type="button" class="remove-day-btn" onclick="removeItineraryDay(${itineraryDayCounter})">🗑️ Remove</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Title *</label>
+                        <input type="text" class="day-title" value="${day.title || ''}" placeholder="E.g.: Eiffel Tower – The symbol of France" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description *</label>
+                        <textarea class="day-description" rows="3" placeholder="Describe the day's activities..." required>${day.description || ''}</textarea>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Activities (comma separated)</label>
+                            <input type="text" class="day-activities" value="${day.activities ? day.activities.join(', ') : ''}" placeholder="Climb tower, Sunset view">
+                        </div>
+                        <div class="form-group">
+                            <label>Meals</label>
+                            <input type="text" class="day-meals" value="${day.meals || ''}" placeholder="Breakfast, Lunch, Snacks">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Accommodation</label>
+                            <input type="text" class="day-accommodation" value="${day.accommodation || ''}" placeholder="Hotel Name">
+                        </div>
+                        <div class="form-group">
+                            <label>Transport (comma separated)</label>
+                            <input type="text" class="day-transport" value="${day.transport ? day.transport.join(', ') : ''}" placeholder="Car, Flight, Boat">
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('itineraryDays').appendChild(dayCard);
+            });
+        }
+    </script>
+</body>
+</html>

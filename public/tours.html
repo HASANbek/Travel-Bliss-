@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Bliss - Tours Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 8px 20px;
+            background: #10b981;
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-info {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .tours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .tour-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .tour-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .tour-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+        }
+
+        .tour-header h3 {
+            margin-bottom: 5px;
+        }
+
+        .tour-destination {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .tour-body {
+            padding: 20px;
+        }
+
+        .tour-description {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .tour-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .badge-easy {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .badge-medium {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .badge-hard {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .badge-cultural {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .badge-adventure {
+            background: #fce7f3;
+            color: #be185d;
+        }
+
+        .badge-nature {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .tour-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .tour-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tour-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #667eea;
+        }
+
+        .close-btn {
+            cursor: pointer;
+            font-size: 24px;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .featured-badge {
+            background: #fbbf24;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: white;
+            font-size: 18px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 15px;
+        }
+
+        .empty-state h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏖️ Travel Bliss - Tour Management</h1>
+            <p style="color: #666; margin: 10px 0;">Sayohat Paketlarini Boshqarish</p>
+            <span class="status" id="serverStatus">Yuklanmoqda...</span>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="openCreateModal()">➕ Yangi Tur Yaratish</button>
+            <button class="btn btn-info" onclick="loadFeaturedTours()">⭐ Featured Turlar</button>
+            <button class="btn btn-success" onclick="loadStats()">📊 Statistika</button>
+            <button class="btn btn-primary" onclick="loadAllTours()">🔄 Hammasini Ko'rsatish</button>
+        </div>
+
+        <div id="statsContainer" class="stats-grid" style="display: none;"></div>
+
+        <div id="toursContainer" class="tours-grid">
+            <div class="loading">Turlar yuklanmoqda...</div>
+        </div>
+    </div>
+
+    <!-- Create/Edit Modal -->
+    <div id="tourModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Yangi Tur Yaratish</h2>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
+            <form id="tourForm" onsubmit="saveTour(event)">
+                <div class="form-group">
+                    <label>Tur Nomi *</label>
+                    <input type="text" id="title" required placeholder="Masalan: Samarqand Sayohati">
+                </div>
+
+                <div class="form-group">
+                    <label>Tavsif *</label>
+                    <textarea id="description" required placeholder="Tur haqida batafsil ma'lumot..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Manzil *</label>
+                        <input type="text" id="destination" required placeholder="Samarqand">
+                    </div>
+                    <div class="form-group">
+                        <label>Kategoriya *</label>
+                        <select id="category" required>
+                            <option value="">Tanlang</option>
+                            <option value="cultural">Madaniy</option>
+                            <option value="adventure">Sarguzasht</option>
+                            <option value="nature">Tabiat</option>
+                            <option value="city">Shahar</option>
+                            <option value="beach">Plyaj</option>
+                            <option value="mountain">Tog'</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Narx (UZS) *</label>
+                        <input type="number" id="price" required placeholder="500000" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Davomiyligi (kunlar) *</label>
+                        <input type="number" id="duration" required placeholder="3" min="1">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Guruh Hajmi *</label>
+                        <input type="number" id="maxGroupSize" required placeholder="15" min="1" max="50">
+                    </div>
+                    <div class="form-group">
+                        <label>Qiyinlik *</label>
+                        <select id="difficulty" required>
+                            <option value="">Tanlang</option>
+                            <option value="easy">Oson</option>
+                            <option value="medium">O'rtacha</option>
+                            <option value="hard">Qiyin</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Nima Kiritilgan (vergul bilan ajrating)</label>
+                    <input type="text" id="included" placeholder="Mehmonxona, Transport, Gid">
+                </div>
+
+                <div class="form-group">
+                    <label>Nima Kiritilmagan (vergul bilan ajrating)</label>
+                    <input type="text" id="excluded" placeholder="Ovqat, Shaxsiy xarajatlar">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Saqlash</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000';
+        let currentEditId = null;
+
+        // Auto-load tours on page load
+        window.onload = () => {
+            loadAllTours();
+        };
+
+        async function loadAllTours() {
+            document.getElementById('statsContainer').style.display = 'none';
+            const container = document.getElementById('toursContainer');
+            container.innerHTML = '<div class="loading">Turlar yuklanmoqda...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/tours`);
+                const data = await response.json();
+
+                if (data.success && data.data.tours.length > 0) {
+                    displayTours(data.data.tours);
+                    updateStatus(`${data.data.count} ta tur topildi`);
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <h3>Hali turlar yo'q</h3>
+                            <p>Yangi tur yaratish uchun yuqoridagi tugmani bosing</p>
+                        </div>
+                    `;
+                    updateStatus('Turlar yo\'q');
+                }
+            } catch (error) {
+                container.innerHTML = `<div class="loading" style="color: red;">❌ Xato: ${error.message}</div>`;
+                updateStatus('Xato!', 'error');
+            }
+        }
+
+        async function loadFeaturedTours() {
+            document.getElementById('statsContainer').style.display = 'none';
+            const container = document.getElementById('toursContainer');
+            container.innerHTML = '<div class="loading">Featured turlar yuklanmoqda...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/tours/featured`);
+                const data = await response.json();
+
+                if (data.success && data.data.tours.length > 0) {
+                    displayTours(data.data.tours);
+                    updateStatus(`${data.data.count} ta featured tur`);
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <h3>Featured turlar yo'q</h3>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                container.innerHTML = `<div class="loading" style="color: red;">❌ Xato: ${error.message}</div>`;
+            }
+        }
+
+        async function loadStats() {
+            const statsContainer = document.getElementById('statsContainer');
+            const toursContainer = document.getElementById('toursContainer');
+
+            statsContainer.innerHTML = '<div class="loading">Statistika yuklanmoqda...</div>';
+            statsContainer.style.display = 'grid';
+            toursContainer.innerHTML = '';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/tours/stats`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const stats = data.data;
+                    statsContainer.innerHTML = `
+                        <div class="stat-card">
+                            <div class="stat-value">${stats.totalTours || 0}</div>
+                            <div class="stat-label">Jami Turlar</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${formatPrice(stats.avgPrice || 0)}</div>
+                            <div class="stat-label">O'rtacha Narx</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${stats.avgRating?.toFixed(1) || 0}</div>
+                            <div class="stat-label">O'rtacha Rating</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${stats.categories?.cultural || 0}</div>
+                            <div class="stat-label">Madaniy Turlar</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${stats.categories?.adventure || 0}</div>
+                            <div class="stat-label">Sarguzasht Turlar</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${stats.categories?.nature || 0}</div>
+                            <div class="stat-label">Tabiat Turlar</div>
+                        </div>
+                    `;
+                    updateStatus('Statistika ko\'rsatilmoqda');
+                }
+            } catch (error) {
+                statsContainer.innerHTML = `<div class="loading" style="color: red;">❌ Xato: ${error.message}</div>`;
+            }
+        }
+
+        function displayTours(tours) {
+            const container = document.getElementById('toursContainer');
+            container.innerHTML = tours.map(tour => `
+                <div class="tour-card">
+                    <div class="tour-header">
+                        ${tour.isFeatured ? '<div class="featured-badge">⭐ Featured</div>' : ''}
+                        <h3>${tour.title}</h3>
+                        <div class="tour-destination">📍 ${tour.destination}</div>
+                    </div>
+                    <div class="tour-body">
+                        <div class="tour-description">${tour.description}</div>
+
+                        <div class="tour-info">
+                            <div class="info-item">⏱️ ${tour.duration} kun</div>
+                            <div class="info-item">👥 ${tour.maxGroupSize} kishi</div>
+                            <div class="info-item">⭐ ${tour.rating} (${tour.ratingsCount})</div>
+                            <div class="info-item">
+                                <span class="badge badge-${tour.difficulty}">${getDifficultyText(tour.difficulty)}</span>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 15px;">
+                            <span class="badge badge-${tour.category}">${getCategoryText(tour.category)}</span>
+                        </div>
+
+                        <div class="tour-price">${formatPrice(tour.price)} UZS</div>
+
+                        <div class="tour-actions">
+                            <button class="btn-edit" onclick="editTour('${tour.id}')">✏️ Tahrirlash</button>
+                            <button class="btn-delete" onclick="deleteTour('${tour.id}')">🗑️ O'chirish</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openCreateModal() {
+            currentEditId = null;
+            document.getElementById('modalTitle').textContent = 'Yangi Tur Yaratish';
+            document.getElementById('tourForm').reset();
+            document.getElementById('tourModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('tourModal').style.display = 'none';
+        }
+
+        async function saveTour(event) {
+            event.preventDefault();
+
+            const tourData = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                destination: document.getElementById('destination').value,
+                price: Number(document.getElementById('price').value),
+                duration: Number(document.getElementById('duration').value),
+                maxGroupSize: Number(document.getElementById('maxGroupSize').value),
+                difficulty: document.getElementById('difficulty').value,
+                category: document.getElementById('category').value,
+                included: document.getElementById('included').value.split(',').map(s => s.trim()).filter(Boolean),
+                excluded: document.getElementById('excluded').value.split(',').map(s => s.trim()).filter(Boolean)
+            };
+
+            try {
+                const url = currentEditId
+                    ? `${API_BASE}/api/tours/${currentEditId}`
+                    : `${API_BASE}/api/tours`;
+
+                const method = currentEditId ? 'PUT' : 'POST';
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(tourData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(currentEditId ? 'Tur yangilandi!' : 'Tur yaratildi!');
+                    closeModal();
+                    loadAllTours();
+                } else {
+                    alert('Xato: ' + data.message);
+                }
+            } catch (error) {
+                alert('Xato: ' + error.message);
+            }
+        }
+
+        async function editTour(id) {
+            try {
+                const response = await fetch(`${API_BASE}/api/tours/${id}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const tour = data.data.tour;
+                    currentEditId = id;
+
+                    document.getElementById('modalTitle').textContent = 'Turni Tahrirlash';
+                    document.getElementById('title').value = tour.title;
+                    document.getElementById('description').value = tour.description;
+                    document.getElementById('destination').value = tour.destination;
+                    document.getElementById('price').value = tour.price;
+                    document.getElementById('duration').value = tour.duration;
+                    document.getElementById('maxGroupSize').value = tour.maxGroupSize;
+                    document.getElementById('difficulty').value = tour.difficulty;
+                    document.getElementById('category').value = tour.category;
+                    document.getElementById('included').value = tour.included?.join(', ') || '';
+                    document.getElementById('excluded').value = tour.excluded?.join(', ') || '';
+
+                    document.getElementById('tourModal').style.display = 'flex';
+                }
+            } catch (error) {
+                alert('Xato: ' + error.message);
+            }
+        }
+
+        async function deleteTour(id) {
+            if (!confirm('Turni o\'chirmoqchimisiz?')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/tours/${id}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Tur o\'chirildi!');
+                    loadAllTours();
+                } else {
+                    alert('Xato: ' + data.message);
+                }
+            } catch (error) {
+                alert('Xato: ' + error.message);
+            }
+        }
+
+        function getDifficultyText(difficulty) {
+            const map = {
+                'easy': 'Oson',
+                'medium': 'O\'rtacha',
+                'hard': 'Qiyin'
+            };
+            return map[difficulty] || difficulty;
+        }
+
+        function getCategoryText(category) {
+            const map = {
+                'cultural': 'Madaniy',
+                'adventure': 'Sarguzasht',
+                'nature': 'Tabiat',
+                'city': 'Shahar',
+                'beach': 'Plyaj',
+                'mountain': 'Tog\''
+            };
+            return map[category] || category;
+        }
+
+        function formatPrice(price) {
+            return new Intl.NumberFormat('uz-UZ').format(price);
+        }
+
+        function updateStatus(message, type = 'success') {
+            const statusEl = document.getElementById('serverStatus');
+            statusEl.textContent = message;
+            statusEl.style.background = type === 'error' ? '#ef4444' : '#10b981';
+        }
+    </script>
+</body>
+</html>
