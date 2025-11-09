@@ -171,6 +171,30 @@
             margin-bottom: 15px;
             border-radius: 8px;
         }
+
+        /* Modern Menu Styling - Consistent Background Color */
+        .header-area .main-menu .menu-list > li > a {
+            background: transparent !important;
+            color: #1f2937 !important;
+            padding: 8px 18px !important;
+            border-radius: 8px !important;
+            transition: all 0.3s ease !important;
+            font-weight: 500 !important;
+        }
+
+        .header-area .main-menu .menu-list > li > a:hover,
+        .header-area .main-menu .menu-list > li.active > a {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Active menu item */
+        .header-area .main-menu .menu-list > li:first-child > a {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+            color: white !important;
+        }
     </style>
 </head>
 <body>
