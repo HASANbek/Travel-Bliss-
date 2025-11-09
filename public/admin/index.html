@@ -1574,6 +1574,7 @@
                                     </span>
                                 </td>
                                 <td>
+                                    <button class="action-btn view-btn" onclick="viewTour('${tour._id || tour.id}')" style="background: #17a2b8; color: white;">👁️ View</button>
                                     <button class="action-btn edit-btn" onclick="editTour('${tour._id || tour.id}')">✏️ Edit</button>
                                     <button class="action-btn delete-btn" onclick="deleteTour('${tour._id || tour.id}')">🗑️ Delete</button>
                                 </td>
@@ -1695,6 +1696,11 @@
             } catch (error) {
                 alert('Error loading tour');
             }
+        }
+
+        function viewTour(id) {
+            // Open tour details page in new tab
+            window.open(`/gofly/tour-details.html?id=${id}`, '_blank');
         }
 
         async function deleteTour(id) {
