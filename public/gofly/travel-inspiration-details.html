@@ -434,20 +434,45 @@
                         </div>
                         <div class="language-selector" style="position: relative;">
                             <button class="language-btn" style="background: transparent; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 600; color: #1f2937; padding: 5px 10px; border-radius: 6px; transition: all 0.3s;">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="2" y1="12" x2="22" y2="12"></line>
-                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                                </svg>
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 30'%3E%3Cdefs%3E%3CclipPath id='a'%3E%3Crect width='50' height='30'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23a)'%3E%3Crect width='50' height='30' fill='%23012169'/%3E%3Cpath d='M0,0 L50,30 M50,0 L0,30' stroke='%23FFF' stroke-width='6'/%3E%3Cpath d='M0,0 L50,30 M50,0 L0,30' stroke='%23C8102E' stroke-width='4' clip-path='url(%23a)'/%3E%3Cpath d='M25,0 V30 M0,15 H50' stroke='%23FFF' stroke-width='10'/%3E%3Cpath d='M25,0 V30 M0,15 H50' stroke='%23C8102E' stroke-width='6'/%3E%3C/g%3E%3C/svg%3E" alt="UK Flag" width="24" height="16" style="border-radius: 2px; border: 1px solid rgba(0,0,0,0.1);">
                                 <span id="currentLang">EN</span>
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="6 9 12 15 18 9"></polyline>
                                 </svg>
                             </button>
-                            <div class="language-dropdown" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-top: 5px; min-width: 120px; z-index: 1000;">
-                                <a href="#" class="lang-option" data-lang="EN" style="display: block; padding: 10px 15px; color: #1f2937; text-decoration: none; transition: all 0.2s;">English</a>
-                                <a href="#" class="lang-option" data-lang="UZ" style="display: block; padding: 10px 15px; color: #1f2937; text-decoration: none; transition: all 0.2s;">O'zbekcha</a>
-                                <a href="#" class="lang-option" data-lang="RU" style="display: block; padding: 10px 15px; color: #1f2937; text-decoration: none; transition: all 0.2s;">Русский</a>
+                            <div class="language-dropdown" style="display: none; position: absolute; top: 100%; right: 0; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-top: 5px; width: max-content; z-index: 1000;">
+                                <a href="#" class="lang-option" data-lang="EN" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #1f2937; text-decoration: none; transition: all 0.2s;">
+                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 30'%3E%3Cdefs%3E%3CclipPath id='a'%3E%3Crect width='50' height='30'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23a)'%3E%3Crect width='50' height='30' fill='%23012169'/%3E%3Cpath d='M0,0 L50,30 M50,0 L0,30' stroke='%23FFF' stroke-width='6'/%3E%3Cpath d='M0,0 L50,30 M50,0 L0,30' stroke='%23C8102E' stroke-width='4' clip-path='url(%23a)'/%3E%3Cpath d='M25,0 V30 M0,15 H50' stroke='%23FFF' stroke-width='10'/%3E%3Cpath d='M25,0 V30 M0,15 H50' stroke='%23C8102E' stroke-width='6'/%3E%3C/g%3E%3C/svg%3E" alt="UK" width="24" height="16" style="border-radius: 2px; border: 1px solid rgba(0,0,0,0.1);">
+                                    <span>English</span>
+                                </a>
+                                <a href="#" class="lang-option" data-lang="IT" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #1f2937; text-decoration: none; transition: all 0.2s;">
+                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect width='1' height='2' fill='%23009246'/%3E%3Crect x='1' width='1' height='2' fill='%23fff'/%3E%3Crect x='2' width='1' height='2' fill='%23ce2b37'/%3E%3C/svg%3E" alt="Italy" width="24" height="16" style="border-radius: 2px;">
+                                    <span>Italiano</span>
+                                </a>
+                                <a href="#" class="lang-option" data-lang="FR" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #1f2937; text-decoration: none; transition: all 0.2s;">
+                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect width='1' height='2' fill='%23002395'/%3E%3Crect x='1' width='1' height='2' fill='%23fff'/%3E%3Crect x='2' width='1' height='2' fill='%23ED2939'/%3E%3C/svg%3E" alt="France" width="24" height="16" style="border-radius: 2px;">
+                                    <span>Français</span>
+                                </a>
+                                <a href="#" class="lang-option" data-lang="DE" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #1f2937; text-decoration: none; transition: all 0.2s;">
+                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 3'%3E%3Crect width='5' height='1' fill='%23000'/%3E%3Crect y='1' width='5' height='1' fill='%23D00'/%3E%3Crect y='2' width='5' height='1' fill='%23FFCE00'/%3E%3C/svg%3E" alt="Germany" width="24" height="16" style="border-radius: 2px;">
+                                    <span>Deutsch</span>
+                                </a>
+                                <a href="#" class="lang-option" data-lang="ES" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #1f2937; text-decoration: none; transition: all 0.2s;">
+                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect width='3' height='2' fill='%23c60b1e'/%3E%3Crect y='0.5' width='3' height='1' fill='%23ffc400'/%3E%3C/svg%3E" alt="Spain" width="24" height="16" style="border-radius: 2px;">
+                                    <span>Español</span>
+                                </a>
+                                <a href="#" class="lang-option" data-lang="JP" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #1f2937; text-decoration: none; transition: all 0.2s;">
+                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect width='3' height='2' fill='%23fff'/%3E%3Ccircle cx='1.5' cy='1' r='0.6' fill='%23bc002d'/%3E%3C/svg%3E" alt="Japan" width="24" height="16" style="border-radius: 2px;">
+                                    <span>日本語</span>
+                                </a>
+                                <a href="#" class="lang-option" data-lang="RU" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #1f2937; text-decoration: none; transition: all 0.2s;">
+                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 6'%3E%3Crect width='9' height='2' fill='%23fff'/%3E%3Crect y='2' width='9' height='2' fill='%230039a6'/%3E%3Crect y='4' width='9' height='2' fill='%23d52b1e'/%3E%3C/svg%3E" alt="Russia" width="24" height="16" style="border-radius: 2px;">
+                                    <span>Русский</span>
+                                </a>
+                                <a href="#" class="lang-option" data-lang="UZ" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; color: #1f2937; text-decoration: none; transition: all 0.2s;">
+                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 250'%3E%3Crect width='500' height='80' fill='%231EB53A'/%3E%3Crect y='80' width='500' height='3' fill='%23FF0000'/%3E%3Crect y='83' width='500' height='84' fill='%23FFFFFF'/%3E%3Crect y='167' width='500' height='3' fill='%23FF0000'/%3E%3Crect y='170' width='500' height='80' fill='%230099B5'/%3E%3Ccircle cx='100' cy='40' r='25' fill='%23FFFFFF'/%3E%3Ccircle cx='110' cy='40' r='20' fill='%231EB53A'/%3E%3Cpolygon points='150,25 153,34 162,34 155,40 158,49 150,43 142,49 145,40 138,34 147,34' fill='%23FFFFFF'/%3E%3Cpolygon points='180,25 183,34 192,34 185,40 188,49 180,43 172,49 175,40 168,34 177,34' fill='%23FFFFFF'/%3E%3Cpolygon points='210,25 213,34 222,34 215,40 218,49 210,43 202,49 205,40 198,34 207,34' fill='%23FFFFFF'/%3E%3Cpolygon points='165,50 168,59 177,59 170,65 173,74 165,68 157,74 160,65 153,59 162,59' fill='%23FFFFFF'/%3E%3Cpolygon points='195,50 198,59 207,59 200,65 203,74 195,68 187,74 190,65 183,59 192,59' fill='%23FFFFFF'/%3E%3C/svg%3E" alt="Uzbekistan" width="24" height="16" style="border-radius: 2px;">
+                                    <span>Uzbek</span>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -1031,6 +1056,10 @@
     document.querySelectorAll('.lang-option').forEach(option => {
         option.addEventListener('click', function(e) {
             e.preventDefault();
+            const flagImg = this.querySelector('img').cloneNode(true);
+            const btn = document.querySelector('.language-btn');
+            const oldFlag = btn.querySelector('img');
+            btn.replaceChild(flagImg, oldFlag);
             document.getElementById('currentLang').textContent = this.getAttribute('data-lang');
             document.querySelector('.language-dropdown').style.display = 'none';
         });

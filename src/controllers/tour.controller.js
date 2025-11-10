@@ -95,9 +95,9 @@ let demoTours = [
     groupSizeMin: 4,
     difficulty: 'easy',
     category: 'cultural',
-    imageCover: 'package-card-alpha-1.jpg',
-    image: 'package-card-alpha-1.jpg',
-    images: ['package-card-alpha-1.jpg'],
+    imageCover: 'tour-package-img2.jpg',
+    image: 'tour-package-img2.jpg',
+    images: ['tour-package-img2.jpg'],
     accommodation: '4 Star Boutique Hotel',
     meals: 'Breakfast',
     transportation: 'Car',
@@ -162,9 +162,9 @@ let demoTours = [
     groupSizeMin: 2,
     difficulty: 'challenging',
     category: 'adventure',
-    imageCover: 'package-card-gamma-1.jpg',
-    image: 'package-card-gamma-1.jpg',
-    images: ['package-card-gamma-1.jpg'],
+    imageCover: 'tour-package-img3.jpg',
+    image: 'tour-package-img3.jpg',
+    images: ['tour-package-img3.jpg'],
     accommodation: 'N/A (Day Trip)',
     meals: 'Lunch',
     transportation: 'Car',
@@ -215,10 +215,27 @@ let demoTours = [
 exports.getAllTours = asyncHandler(async (req, res) => {
   // MongoDB ulanmagan bo'lsa demo data qaytarish
   if (mongoose.connection.readyState !== 1) {
+    const { category, difficulty, minPrice, maxPrice } = req.query;
+    let filteredTours = [...demoTours];
+
+    // Apply filters to demo data
+    if (category) {
+      filteredTours = filteredTours.filter(tour => tour.category === category);
+    }
+    if (difficulty) {
+      filteredTours = filteredTours.filter(tour => tour.difficulty === difficulty);
+    }
+    if (minPrice) {
+      filteredTours = filteredTours.filter(tour => tour.price >= parseFloat(minPrice));
+    }
+    if (maxPrice) {
+      filteredTours = filteredTours.filter(tour => tour.price <= parseFloat(maxPrice));
+    }
+
     return res.status(200).json(
       new ApiResponse(200, {
-        tours: demoTours,
-        count: demoTours.length,
+        tours: filteredTours,
+        count: filteredTours.length,
         mode: 'DEMO'
       }, 'Demo turlar ro\'yxati')
     );

@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Destination Details - Travel Bliss</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         * {
             margin: 0;
@@ -12,256 +16,629 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #1f2937;
+            background: #f9fafb;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border-radius: 50px;
-            text-decoration: none;
-            margin-bottom: 20px;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
-        }
-
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateX(-5px);
-        }
-
-        .destination-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-
-        .destination-header {
+        /* Hero Section */
+        .hero-section {
             position: relative;
-            height: 400px;
+            height: 500px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
+            overflow: hidden;
         }
 
-        .destination-icon {
-            font-size: 120px;
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
             opacity: 0.9;
         }
 
-        .destination-content {
-            padding: 40px;
-        }
-
-        .destination-title {
-            font-size: 42px;
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .destination-subtitle {
-            font-size: 20px;
-            color: #666;
-            margin-bottom: 30px;
-        }
-
-        .destination-description {
-            font-size: 16px;
-            line-height: 1.8;
-            color: #555;
-            margin-bottom: 40px;
-        }
-
-        .highlights-section {
-            margin-bottom: 40px;
-        }
-
-        .section-title {
-            font-size: 28px;
-            color: #333;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .highlights-grid {
+        /* Info Cards */
+        .info-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
+            margin-top: -50px;
+            margin-bottom: 60px;
+            position: relative;
+            z-index: 10;
         }
 
-        .highlight-item {
-            background: #f9fafb;
+        .info-card {
+            background: white;
             padding: 25px;
-            border-radius: 15px;
-            transition: all 0.3s;
-        }
-
-        .highlight-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-
-        .highlight-icon {
-            font-size: 36px;
-            margin-bottom: 15px;
-        }
-
-        .highlight-title {
-            font-size: 18px;
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .highlight-desc {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .tours-section {
-            background: #f9fafb;
-            padding: 40px;
-            border-radius: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             text-align: center;
         }
 
-        .tours-btn {
-            display: inline-block;
-            padding: 15px 40px;
+        .info-card-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .info-card-label {
+            font-size: 13px;
+            color: #6b7280;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .info-card-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #1f2937;
+        }
+
+        /* Description */
+        .destination-description {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #4b5563;
+            margin-bottom: 50px;
+        }
+
+        /* Popular Places */
+        .place-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+        }
+
+        .place-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .place-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .place-content {
+            padding: 20px;
+        }
+
+        .place-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1f2937;
+        }
+
+        .place-description {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 15px;
+        }
+
+        .map-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .map-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Why Choose Us */
+        .feature-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 20px;
+            padding: 30px;
+            border-radius: 12px;
+            height: 100%;
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .feature-description {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Seasonal Guide */
+        .season-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .season-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .season-icon {
+            font-size: 42px;
+        }
+
+        .season-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .season-weather {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+
+        .season-description {
+            font-size: 15px;
+            color: #4b5563;
+        }
+
+        /* FAQ */
+        .faq-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .faq-question {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .faq-answer {
+            font-size: 15px;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        /* Tour Cards */
+        .tour-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .tour-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tour-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .tour-content {
+            padding: 20px;
+        }
+
+        .tour-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1f2937;
+        }
+
+        .tour-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .tour-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tour-price {
+            font-size: 28px;
+            font-weight: 800;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .book-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        .tours-btn:hover {
+        .book-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
-        @media (max-width: 768px) {
-            .destination-title {
-                font-size: 32px;
-            }
+        /* Container */
+        .content-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-            .destination-content {
-                padding: 30px 20px;
-            }
-
-            .tours-section {
-                padding: 30px 20px;
-            }
+        .section-spacing {
+            margin-bottom: 80px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="travel-agency-03.html" class="back-btn">
-            ← Orqaga qaytish
-        </a>
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title" id="destinationName">Samarkand, Uzbekistan</h1>
+            <p class="hero-subtitle" id="destinationTagline">The Heart of the Silk Road</p>
+        </div>
+    </div>
 
-        <div class="destination-card">
-            <div class="destination-header">
-                <div class="destination-icon">🏛️</div>
+    <div class="content-container">
+        <!-- Info Cards -->
+        <div class="info-cards">
+            <div class="info-card">
+                <div class="info-card-icon">🏛️</div>
+                <div class="info-card-label">Capital</div>
+                <div class="info-card-value" id="capitalInfo">Tashkent</div>
+            </div>
+            <div class="info-card">
+                <div class="info-card-icon">💰</div>
+                <div class="info-card-label">Currency</div>
+                <div class="info-card-value" id="currencyInfo">UZS (Som)</div>
+            </div>
+            <div class="info-card">
+                <div class="info-card-icon">🗣️</div>
+                <div class="info-card-label">Language</div>
+                <div class="info-card-value" id="languageInfo">Uzbek, Russian</div>
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="section-spacing">
+            <p class="destination-description" id="destinationDescription">
+                Samarkand, one of the oldest continuously inhabited cities in Central Asia, is a jewel of the ancient Silk Road.
+                Known for its stunning Islamic architecture, vibrant bazaars, and rich cultural heritage, Samarkand offers visitors
+                a glimpse into the grandeur of the Timurid Empire. The city's iconic Registan Square, with its three magnificent
+                madrasahs, stands as a testament to the architectural genius of the 15th century. From the breathtaking Gur-e-Amir
+                Mausoleum to the astronomical wonders of Ulugh Beg Observatory, Samarkand is a must-visit destination for history
+                enthusiasts and cultural explorers.
+            </p>
+        </div>
+
+        <!-- Popular Tourist Places -->
+        <div class="section-spacing">
+            <h2 class="section-title">Popular Tourist Places</h2>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="place-card">
+                        <img src="https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=400" alt="Registan Square" class="place-image">
+                        <div class="place-content">
+                            <h3 class="place-title">Registan Square</h3>
+                            <p class="place-description">The heart of ancient Samarkand with three stunning madrasahs</p>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Registan+Square+Samarkand" target="_blank" class="map-link">
+                                📍 View on Map
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="place-card">
+                        <img src="https://images.unsplash.com/photo-1588417659248-df8cbb59e1a5?w=400" alt="Gur-e-Amir" class="place-image">
+                        <div class="place-content">
+                            <h3 class="place-title">Gur-e-Amir Mausoleum</h3>
+                            <p class="place-description">Tomb of the great conqueror Timur (Tamerlane)</p>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Gur-e-Amir+Mausoleum+Samarkand" target="_blank" class="map-link">
+                                📍 View on Map
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="place-card">
+                        <img src="https://images.unsplash.com/photo-1534131707746-25d604851a7f?w=400" alt="Ulugh Beg Observatory" class="place-image">
+                        <div class="place-content">
+                            <h3 class="place-title">Ulugh Beg Observatory</h3>
+                            <p class="place-description">15th-century astronomical observatory</p>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Ulugh+Beg+Observatory+Samarkand" target="_blank" class="map-link">
+                                📍 View on Map
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="place-card">
+                        <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400" alt="Shah-i-Zinda" class="place-image">
+                        <div class="place-content">
+                            <h3 class="place-title">Shah-i-Zinda</h3>
+                            <p class="place-description">Stunning necropolis with blue-tiled mausoleums</p>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Shah-i-Zinda+Samarkand" target="_blank" class="map-link">
+                                📍 View on Map
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Why Choose Us -->
+        <div class="section-spacing">
+            <h2 class="section-title">Why Choose Us</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3 class="feature-title">Local Expertise</h3>
+                        <p class="feature-description">Our local guides provide authentic insights and hidden gems you won't find in guidebooks</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">💎</div>
+                        <h3 class="feature-title">Best Prices</h3>
+                        <p class="feature-description">Transparent pricing with no hidden fees. We guarantee the best value for your money</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">🌟</div>
+                        <h3 class="feature-title">24/7 Support</h3>
+                        <p class="feature-description">Round-the-clock customer support to ensure your trip goes smoothly</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seasonal Guide -->
+        <div class="section-spacing">
+            <h2 class="section-title">Best Time to Visit</h2>
+
+            <div class="season-card">
+                <div class="season-header">
+                    <div class="season-icon">🌸</div>
+                    <div>
+                        <div class="season-title">Spring (March - May)</div>
+                        <div class="season-weather">Temperature: 15°C - 25°C</div>
+                    </div>
+                </div>
+                <p class="season-description">
+                    Spring is one of the best times to visit Samarkand. The weather is pleasant with blooming flowers throughout the city.
+                    Perfect for sightseeing and outdoor activities. Ideal for photographers and history enthusiasts.
+                </p>
             </div>
 
-            <div class="destination-content">
-                <h1 class="destination-title">O'zbekiston Sayohatlari</h1>
-                <p class="destination-subtitle">Ipak Yo'lining Marvarid Shaharlari</p>
-
-                <div class="destination-description">
-                    <p>O'zbekiston - bu Markaziy Osiyodagi eng qadimgi va go'zal mamlakat. Bu yerda ajoyib arxitektura, boy tarix va iliq mehmondo'stlik sizni kutadi. Samarqand, Buxoro, Xiva kabi shaharlarda siz ming yillik tarixga ega bo'lgan yodgorliklarni ko'rishingiz mumkin.</p>
+            <div class="season-card">
+                <div class="season-header">
+                    <div class="season-icon">☀️</div>
+                    <div>
+                        <div class="season-title">Summer (June - August)</div>
+                        <div class="season-weather">Temperature: 30°C - 40°C</div>
+                    </div>
                 </div>
+                <p class="season-description">
+                    Summer can be quite hot in Samarkand, but early mornings and evenings are pleasant for exploring.
+                    Great for experiencing local festivals and bazaars. Recommended for those who enjoy warm weather.
+                </p>
+            </div>
 
-                <div class="highlights-section">
-                    <h2 class="section-title">🌟 Asosiy Diqqatga Sazovor Joylar</h2>
+            <div class="season-card">
+                <div class="season-header">
+                    <div class="season-icon">🍂</div>
+                    <div>
+                        <div class="season-title">Autumn (September - November)</div>
+                        <div class="season-weather">Temperature: 15°C - 28°C</div>
+                    </div>
+                </div>
+                <p class="season-description">
+                    Autumn is another excellent time to visit with comfortable temperatures and beautiful fall colors.
+                    Perfect for long walks through historical sites. Ideal for cultural tours and photography.
+                </p>
+            </div>
 
-                    <div class="highlights-grid">
-                        <div class="highlight-item">
-                            <div class="highlight-icon">🕌</div>
-                            <div class="highlight-title">Samarqand</div>
-                            <div class="highlight-desc">Registon maydoni, Ulugbek rasadxonasi va Gur-Amir maqbarasi</div>
-                        </div>
+            <div class="season-card">
+                <div class="season-header">
+                    <div class="season-icon">❄️</div>
+                    <div>
+                        <div class="season-title">Winter (December - February)</div>
+                        <div class="season-weather">Temperature: 0°C - 10°C</div>
+                    </div>
+                </div>
+                <p class="season-description">
+                    Winter is cold but offers a unique perspective with fewer tourists and snow-covered monuments.
+                    Budget-friendly season with lower prices. Best for travelers seeking authentic local experiences.
+                </p>
+            </div>
+        </div>
 
-                        <div class="highlight-item">
-                            <div class="highlight-icon">🏰</div>
-                            <div class="highlight-title">Buxoro</div>
-                            <div class="highlight-desc">Ark qalasi, Poi-Kalyan majmuasi va tarixiy madrasalar</div>
-                        </div>
+        <!-- FAQ Section -->
+        <div class="section-spacing">
+            <h2 class="section-title">Frequently Asked Questions</h2>
 
-                        <div class="highlight-item">
-                            <div class="highlight-icon">🏛️</div>
-                            <div class="highlight-title">Xiva</div>
-                            <div class="highlight-desc">Ichan Qal'a - ochiq osmon ostidagi muzey shahar</div>
-                        </div>
+            <div class="faq-item">
+                <div class="faq-question">What services does Travel Bliss offer?</div>
+                <div class="faq-answer">
+                    We provide comprehensive travel services including guided tours, accommodation booking,
+                    transportation, visa assistance, and customized itineraries tailored to your preferences.
+                </div>
+            </div>
 
-                        <div class="highlight-item">
-                            <div class="highlight-icon">🏙️</div>
-                            <div class="highlight-title">Toshkent</div>
-                            <div class="highlight-desc">Zamonaviy paytaxt - Hazrati Imom majmuasi va Chorsu bozori</div>
-                        </div>
+            <div class="faq-item">
+                <div class="faq-question">Can I customize my tour package?</div>
+                <div class="faq-answer">
+                    Absolutely! We specialize in creating personalized travel experiences. Contact our team to
+                    discuss your interests, budget, and schedule, and we'll craft the perfect itinerary for you.
+                </div>
+            </div>
 
-                        <div class="highlight-item">
-                            <div class="highlight-icon">⛰️</div>
-                            <div class="highlight-title">Tog'lar</div>
-                            <div class="highlight-desc">Chimyon, Zarafshon va Tyan-Shan tog' tizmalari</div>
-                        </div>
+            <div class="faq-item">
+                <div class="faq-question">What payment methods do you accept?</div>
+                <div class="faq-answer">
+                    We accept various payment methods including credit cards (Visa, Mastercard), bank transfers,
+                    and popular digital payment platforms. Payment plans are available for larger bookings.
+                </div>
+            </div>
 
-                        <div class="highlight-item">
-                            <div class="highlight-icon">🍜</div>
-                            <div class="highlight-title">Milliy Taomlar</div>
-                            <div class="highlight-desc">O'zbek oshi, somsa, lag'mon va milliy taomlarni tatib ko'ring</div>
+            <div class="faq-item">
+                <div class="faq-question">Is travel insurance included?</div>
+                <div class="faq-answer">
+                    Travel insurance can be added to your package. We recommend it for peace of mind and
+                    will help you choose the right coverage for your trip.
+                </div>
+            </div>
+        </div>
+
+        <!-- Available Tours -->
+        <div class="section-spacing">
+            <h2 class="section-title">Available Tours in Samarkand</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="tour-card">
+                        <img src="https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=400" alt="Tour" class="tour-image">
+                        <div class="tour-content">
+                            <h3 class="tour-title">Samarkand City Tour</h3>
+                            <div class="tour-meta">
+                                <div class="tour-meta-item">⏱️ 2 Days</div>
+                                <div class="tour-meta-item">👥 5-10</div>
+                            </div>
+                            <div class="tour-price">$359</div>
+                            <button class="book-btn" onclick="window.location.href='travel-agency-03.html'">Book Now</button>
                         </div>
                     </div>
                 </div>
-
-                <div class="highlights-section">
-                    <h2 class="section-title">📅 Eng Yaxshi Sayohat Mavsumi</h2>
-
-                    <div class="highlights-grid">
-                        <div class="highlight-item">
-                            <div class="highlight-icon">🌸</div>
-                            <div class="highlight-title">Bahor (Mart-May)</div>
-                            <div class="highlight-desc">Ob-havo iliq, tabiat gullab-yashnar, sayohat uchun ideal</div>
-                        </div>
-
-                        <div class="highlight-item">
-                            <div class="highlight-icon">🍂</div>
-                            <div class="highlight-title">Kuz (Sentyabr-Noyabr)</div>
-                            <div class="highlight-desc">Issiqlik qochadi, meva mavsumi, go'zal landshaftlar</div>
+                <div class="col-md-4">
+                    <div class="tour-card">
+                        <img src="https://images.unsplash.com/photo-1588417659248-df8cbb59e1a5?w=400" alt="Tour" class="tour-image">
+                        <div class="tour-content">
+                            <h3 class="tour-title">Silk Road Heritage</h3>
+                            <div class="tour-meta">
+                                <div class="tour-meta-item">⏱️ 5 Days</div>
+                                <div class="tour-meta-item">👥 4-8</div>
+                            </div>
+                            <div class="tour-price">$599</div>
+                            <button class="book-btn" onclick="window.location.href='travel-agency-03.html'">Book Now</button>
                         </div>
                     </div>
                 </div>
-
-                <div class="tours-section">
-                    <h2 class="section-title" style="justify-content: center;">🎯 Sayohatlarga Qo'shiling</h2>
-                    <p style="font-size: 16px; color: #666; margin-bottom: 20px;">Bizning maxsus sayohat paketlarimizni ko'rib chiqing va O'zbekiston sayohatiga chiqing!</p>
-                    <a href="travel-agency-03.html" class="tours-btn">📦 Barcha Turlarni Ko'rish</a>
+                <div class="col-md-4">
+                    <div class="tour-card">
+                        <img src="https://images.unsplash.com/photo-1534131707746-25d604851a7f?w=400" alt="Tour" class="tour-image">
+                        <div class="tour-content">
+                            <h3 class="tour-title">Cultural Discovery</h3>
+                            <div class="tour-meta">
+                                <div class="tour-meta-item">⏱️ 3 Days</div>
+                                <div class="tour-meta-item">👥 6-12</div>
+                            </div>
+                            <div class="tour-price">$449</div>
+                            <button class="book-btn" onclick="window.location.href='travel-agency-03.html'">Book Now</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Footer Spacing -->
+    <div style="height: 80px;"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Dynamic Data Loading -->
+    <script>
+        // Get destination ID or slug from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const destinationId = urlParams.get('id') || urlParams.get('slug') || 'samarkand-uzbekistan';
+
+        async function loadDestination() {
+            try {
+                const response = await fetch(`/api/destinations/${destinationId}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    displayDestination(data.data.destination);
+                } else {
+                    console.error('Error loading destination:', data.message);
+                    // Show default content or error message
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                // Show default content on error
+            }
+        }
+
+        function displayDestination(dest) {
+            // Update Hero Section
+            document.getElementById('destinationName').textContent = dest.name;
+            document.getElementById('destinationTagline').textContent = dest.tagline;
+
+            // Update Info Cards
+            document.getElementById('capitalInfo').textContent = dest.capital;
+            document.getElementById('currencyInfo').textContent = dest.currency;
+            document.getElementById('languageInfo').textContent = dest.language;
+
+            // Update Description
+            document.getElementById('destinationDescription').textContent = dest.description;
+
+            // The rest (Popular Places, Features, Seasons, FAQ) would be updated here
+            // For now we keep static content as fallback
+        }
+
+        // Load destination data when page loads
+        window.addEventListener('DOMContentLoaded', loadDestination);
+    </script>
 </body>
 </html>

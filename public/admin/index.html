@@ -742,6 +742,254 @@
             padding: 40px;
             color: #6c757d;
         }
+
+        /* Drag & Drop Styles */
+        .drop-zone {
+            border: 3px dashed #dee2e6;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .drop-zone:hover {
+            border-color: #6366f1;
+            background: #f0f2ff;
+        }
+
+        .drop-zone.drag-over {
+            border-color: #6366f1;
+            background: #e8ebff;
+            transform: scale(1.02);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2);
+        }
+
+        .drop-zone-content svg {
+            color: #6366f1;
+            margin-bottom: 15px;
+        }
+
+        .drop-zone-content h4 {
+            font-size: 18px;
+            color: #495057;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .drop-zone-content p {
+            color: #6c757d;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .drop-zone-content small {
+            color: #adb5bd;
+            font-size: 12px;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .btn-browse {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-browse:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-browse:active {
+            transform: translateY(0);
+        }
+
+        /* Real-time Validation Styles */
+        .form-group {
+            position: relative;
+        }
+
+        .form-group input:not([type="file"]):not([type="checkbox"]),
+        .form-group textarea,
+        .form-group select {
+            padding-right: 40px;
+        }
+
+        .form-group .validation-icon {
+            position: absolute;
+            right: 12px;
+            top: 38px;
+            font-size: 18px;
+            display: none;
+            pointer-events: none;
+        }
+
+        .form-group.valid .validation-icon.valid-icon {
+            display: block;
+            color: #10b981;
+        }
+
+        .form-group.invalid .validation-icon.invalid-icon {
+            display: block;
+            color: #ef4444;
+        }
+
+        .form-group input.valid:not([type="file"]):not([type="checkbox"]),
+        .form-group textarea.valid,
+        .form-group select.valid {
+            border-color: #10b981;
+            background-color: #f0fdf4;
+        }
+
+        .form-group input.invalid:not([type="file"]):not([type="checkbox"]),
+        .form-group textarea.invalid,
+        .form-group select.invalid {
+            border-color: #ef4444;
+            background-color: #fef2f2;
+        }
+
+        .validation-message {
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .validation-message.error {
+            color: #ef4444;
+            display: block;
+        }
+
+        .validation-message.success {
+            color: #10b981;
+            display: block;
+        }
+
+        .required-badge {
+            color: #ef4444;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Image Reordering Styles */
+        .image-card {
+            position: relative;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: move;
+            transition: all 0.3s;
+        }
+
+        .image-card:hover {
+            border-color: #6366f1;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        .image-card.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        .image-card.drag-over {
+            border-color: #8b5cf6;
+            border-style: dashed;
+            background: #f0f2ff;
+        }
+
+        .image-card .drag-handle {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #6c757d;
+            cursor: move;
+            display: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+
+        .image-card:hover .drag-handle {
+            display: block;
+        }
+
+        /* Image Preview Modal */
+        .image-preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-preview-modal.active {
+            display: flex;
+        }
+
+        .image-preview-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .image-preview-content img {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .image-preview-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            z-index: 10001;
+        }
+
+        .image-preview-close:hover {
+            background: #f8f9fa;
+        }
     </style>
 </head>
 <body>
@@ -786,6 +1034,10 @@
 
             <div class="menu-section">
                 <div class="menu-section-title">CONTENT</div>
+                <a class="menu-item" data-page="categories">
+                    <i>🗂️</i>
+                    <span>Categories</span>
+                </a>
                 <a class="menu-item" data-page="destinations">
                     <i>🌍</i>
                     <span>Destinations</span>
@@ -944,9 +1196,43 @@
                 <h3>Pages management coming soon...</h3>
             </div>
 
+            <!-- Categories Page -->
+            <div class="page-section" id="categoriesPage">
+                <button class="add-tour-btn" onclick="openCategoryModal()">+ Add New Category</button>
+
+                <div class="tours-table-wrapper">
+                    <table class="tours-table">
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Icon</th>
+                                <th>Name</th>
+                                <th>Slug</th>
+                                <th>Color</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoriesTableBody">
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 40px; color: #6c757d;">
+                                    Loading categories...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- Destinations Page -->
             <div class="page-section" id="destinationsPage">
-                <h3>Destinations management coming soon...</h3>
+                <button class="add-tour-btn" onclick="openDestinationModal()">+ Add New Destination</button>
+
+                <div class="tours-table">
+                    <div id="destinationsTableContainer">
+                        <div class="loading">Loading...</div>
+                    </div>
+                </div>
             </div>
 
             <!-- Media Page -->
@@ -1098,7 +1384,7 @@
                     <p style="font-size: 13px; color: #6c757d; margin-top: 5px;">Complete the form step by step</p>
                 </div>
                 <div style="display: flex; gap: 10px; align-items: center;">
-                    <button type="button" onclick="openAIAssistant()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 6px;">
+                    <button type="button" onclick="openTourAIAssistant()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 6px;">
                         ✨ AI Assistant
                     </button>
                     <button class="close-btn" onclick="closeModal()">&times;</button>
@@ -1134,9 +1420,12 @@
                     <div class="form-step active" data-step="1">
                         <h3 class="step-title">📝 Basic Information</h3>
 
-                        <div class="form-group">
+                        <div class="form-group" id="tourNameGroup">
                             <label>Tour Name *</label>
-                            <input type="text" id="tourName" placeholder="E.g.: Samarkand and Bukhara Safari">
+                            <input type="text" id="tourName" placeholder="E.g.: Samarkand and Bukhara Safari" data-required="true" data-min-length="5">
+                            <span class="validation-icon valid-icon">✓</span>
+                            <span class="validation-icon invalid-icon">✗</span>
+                            <div class="validation-message" id="tourNameError"></div>
                         </div>
 
                         <div class="form-group">
@@ -1144,26 +1433,38 @@
                             <textarea id="tourSummary" rows="2" placeholder="Brief summary about the tour in 1-2 sentences"></textarea>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" id="tourDescriptionGroup">
                             <label>Full Description *</label>
-                            <textarea id="tourDescription" rows="4" placeholder="Detailed tour description"></textarea>
+                            <textarea id="tourDescription" rows="4" placeholder="Detailed tour description" data-required="true" data-min-length="50"></textarea>
+                            <span class="validation-icon valid-icon">✓</span>
+                            <span class="validation-icon invalid-icon">✗</span>
+                            <div class="validation-message" id="tourDescriptionError"></div>
                         </div>
 
                         <div class="form-row">
-                            <div class="form-group">
+                            <div class="form-group" id="tourPriceGroup">
                                 <label>Price (USD) *</label>
-                                <input type="number" id="tourPrice" min="0" placeholder="500">
+                                <input type="number" id="tourPrice" min="0" placeholder="500" data-required="true" data-min="1">
+                                <span class="validation-icon valid-icon">✓</span>
+                                <span class="validation-icon invalid-icon">✗</span>
+                                <div class="validation-message" id="tourPriceError"></div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" id="tourDiscountPriceGroup">
                                 <label>Discount Price (USD)</label>
-                                <input type="number" id="tourDiscountPrice" min="0" placeholder="450">
+                                <input type="number" id="tourDiscountPrice" min="0" placeholder="450" data-compare-less="tourPrice">
+                                <span class="validation-icon valid-icon">✓</span>
+                                <span class="validation-icon invalid-icon">✗</span>
+                                <div class="validation-message" id="tourDiscountPriceError"></div>
                             </div>
                         </div>
 
                         <div class="form-row">
-                            <div class="form-group">
+                            <div class="form-group" id="tourDurationGroup">
                                 <label>Duration (days) *</label>
-                                <input type="number" id="tourDuration" min="1" placeholder="7">
+                                <input type="number" id="tourDuration" min="1" placeholder="7" data-required="true" data-min="1">
+                                <span class="validation-icon valid-icon">✓</span>
+                                <span class="validation-icon invalid-icon">✗</span>
+                                <div class="validation-message" id="tourDurationError"></div>
                             </div>
                             <div class="form-group">
                                 <label>Nights</label>
@@ -1182,21 +1483,27 @@
                     <div class="form-step" data-step="2">
                         <h3 class="step-title">🌍 Location & Package Details</h3>
 
-                        <div class="form-group">
+                        <div class="form-group" id="tourLocationGroup">
                             <label>Location *</label>
-                            <input type="text" id="tourLocation" placeholder="Samarkand, Bukhara, Khiva">
+                            <input type="text" id="tourLocation" placeholder="Samarkand, Bukhara, Khiva" data-required="true" data-min-length="3">
+                            <span class="validation-icon valid-icon">✓</span>
+                            <span class="validation-icon invalid-icon">✗</span>
+                            <div class="validation-message" id="tourLocationError"></div>
                         </div>
 
                         <div class="form-row">
-                            <div class="form-group">
+                            <div class="form-group" id="tourCategoryGroup">
                                 <label>Category *</label>
-                                <select id="tourCategory">
+                                <select id="tourCategory" data-required="true">
                                     <option value="">Select category</option>
                                     <option value="cultural">Cultural Tours</option>
                                     <option value="adventure">Adventure Tours</option>
                                     <option value="hiking">Homestays & Hiking</option>
                                     <option value="day-trip">Day Trips</option>
                                 </select>
+                                <span class="validation-icon valid-icon">✓</span>
+                                <span class="validation-icon invalid-icon">✗</span>
+                                <div class="validation-message" id="tourCategoryError"></div>
                             </div>
                             <div class="form-group">
                                 <label>Difficulty Level</label>
@@ -1209,13 +1516,19 @@
                         </div>
 
                         <div class="form-row">
-                            <div class="form-group">
+                            <div class="form-group" id="tourGroupSizeMinGroup">
                                 <label>Min Group Size</label>
-                                <input type="number" id="tourGroupSizeMin" min="1" placeholder="5">
+                                <input type="number" id="tourGroupSizeMin" min="1" placeholder="5" data-min="1">
+                                <span class="validation-icon valid-icon">✓</span>
+                                <span class="validation-icon invalid-icon">✗</span>
+                                <div class="validation-message" id="tourGroupSizeMinError"></div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" id="tourMaxGroupSizeGroup">
                                 <label>Max Group Size *</label>
-                                <input type="number" id="tourMaxGroupSize" min="1" placeholder="15">
+                                <input type="number" id="tourMaxGroupSize" min="1" placeholder="15" data-required="true" data-min="1" data-compare-greater="tourGroupSizeMin">
+                                <span class="validation-icon valid-icon">✓</span>
+                                <span class="validation-icon invalid-icon">✗</span>
+                                <div class="validation-message" id="tourMaxGroupSizeError"></div>
                             </div>
                         </div>
 
@@ -1370,10 +1683,24 @@
 
                         <div class="form-group">
                             <label>Tour Images *</label>
-                            <input type="file" id="tourImageFile" accept="image/*" multiple style="padding: 10px; border: 2px dashed #dee2e6; border-radius: 8px; width: 100%;">
-                            <small style="color: #6c757d; display: block; margin-top: 5px;">You can select multiple images. Click on an image to set it as cover.</small>
 
-                            <div id="imageGallery" style="margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;"></div>
+                            <!-- Drag & Drop Zone -->
+                            <div id="dropZone" class="drop-zone">
+                                <div class="drop-zone-content">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="17 8 12 3 7 8"></polyline>
+                                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                                    </svg>
+                                    <h4>Drag & Drop rasmlarni bu yerga</h4>
+                                    <p>yoki</p>
+                                    <button type="button" class="btn-browse" onclick="document.getElementById('tourImageFile').click()">Rasmlarni tanlang</button>
+                                    <small>PNG, JPG, WEBP (Max: 5MB har biri)</small>
+                                </div>
+                                <input type="file" id="tourImageFile" accept="image/*" multiple style="display: none;">
+                            </div>
+
+                            <div id="imageGallery" style="margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px;"></div>
 
                             <input type="hidden" id="tourImage">
                             <input type="hidden" id="tourImages">
@@ -1470,6 +1797,7 @@
                 'bookings': { id: 'bookingsPage', title: 'Bookings', breadcrumb: 'Bookings' },
                 'users': { id: 'usersPage', title: 'Users Management', breadcrumb: 'Users' },
                 'pages': { id: 'pagesPage', title: 'Pages Management', breadcrumb: 'Pages' },
+                'categories': { id: 'categoriesPage', title: 'Categories Management', breadcrumb: 'Categories' },
                 'destinations': { id: 'destinationsPage', title: 'Destinations', breadcrumb: 'Destinations' },
                 'media': { id: 'mediaPage', title: 'Media Library', breadcrumb: 'Media' },
                 'reviews': { id: 'reviewsPage', title: 'Reviews', breadcrumb: 'Reviews' },
@@ -1494,6 +1822,10 @@
             // Load page specific data
             if (pageName === 'tours') {
                 loadTours();
+            } else if (pageName === 'destinations') {
+                loadDestinations();
+            } else if (pageName === 'blog') {
+                loadBlogs();
             }
         }
 
@@ -1606,7 +1938,13 @@
             currentEditId = null;
             document.getElementById('modalTitle').textContent = 'Add New Tour';
             document.getElementById('tourForm').reset();
+            document.getElementById('imageGallery').innerHTML = '';
+            uploadedImages = [];
+            coverImageIndex = 0;
             document.getElementById('tourModal').classList.add('active');
+
+            // Setup image upload
+            setTimeout(setupImageUpload, 100);
         }
 
         function closeModal() {
@@ -1691,14 +2029,26 @@
                     const coverImage = tour.image || tour.imageCover || '';
 
                     if (tourImages.length > 0) {
-                        tourImages.forEach((imagePath, index) => {
-                            uploadedImages.push(imagePath);
+                        tourImages.forEach((imageData, index) => {
+                            // Handle both old format (string) and new format (object)
+                            let imagePath, imageName, imageLocation;
+                            if (typeof imageData === 'string') {
+                                imagePath = imageData;
+                                imageName = '';
+                                imageLocation = '';
+                            } else {
+                                imagePath = imageData.url;
+                                imageName = imageData.name || '';
+                                imageLocation = imageData.location || '';
+                            }
+
+                            uploadedImages.push({ url: imagePath, name: imageName, location: imageLocation });
 
                             // Determine correct image URL
                             let imageUrl;
                             if (imagePath.startsWith('/uploads/')) {
-                                // Uploaded image - use API URL
-                                imageUrl = `${API_URL}${imagePath}`;
+                                // Uploaded image - Fix: Remove /api from URL
+                                imageUrl = `http://localhost:5000${imagePath}`;
                             } else if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
                                 // External URL
                                 imageUrl = imagePath;
@@ -1720,17 +2070,26 @@
                             card.dataset.imageIndex = index;
 
                             card.innerHTML = `
-                                <img src="${imageUrl}" style="width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3;" onerror="this.src='../gofly/assets/img/home1/package-card-alpha-1.jpg'">
-                                <div style="position: absolute; top: 8px; right: 8px; background: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);" onclick="removeImage(${index}, this.parentElement)">
-                                    <span style="color: #dc3545; font-size: 18px; font-weight: bold;">×</span>
+                                <div style="position: relative;">
+                                    <img src="${imageUrl}" style="width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3;" onerror="this.src='../gofly/assets/img/home1/package-card-alpha-1.jpg'">
+                                    <div style="position: absolute; top: 8px; right: 8px; background: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);" onclick="removeImage(${index}, this.parentElement.parentElement)">
+                                        <span style="color: #dc3545; font-size: 18px; font-weight: bold;">×</span>
+                                    </div>
+                                    <div class="cover-badge" style="position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: ${imagePath === coverImage ? 'block' : 'none'};">
+                                        COVER
+                                    </div>
                                 </div>
-                                <div class="cover-badge" style="position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: ${imagePath === coverImage ? 'block' : 'none'};">
-                                    COVER
+                                <div style="padding: 8px;">
+                                    <input type="text" placeholder="Location name..." style="width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 6px; margin-bottom: 6px; font-size: 12px;" onchange="updateImageName(${index}, this.value)" value="${imageName}">
+                                    <input type="text" placeholder="Address (e.g., Samarkand, Uzbekistan)..." style="width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 12px;" onchange="updateImageLocation(${index}, this.value)" value="${imageLocation}">
                                 </div>
                             `;
 
-                            card.onclick = function() {
-                                setCoverImage(index);
+                            card.onclick = function(e) {
+                                // Don't trigger setCoverImage if clicking on input
+                                if (e.target.tagName !== 'INPUT') {
+                                    setCoverImage(index);
+                                }
                             };
 
                             gallery.appendChild(card);
@@ -1742,8 +2101,8 @@
                         });
                     }
 
-                    document.getElementById('tourImage').value = coverImage;
-                    document.getElementById('tourImages').value = JSON.stringify(tourImages);
+                    // Update hidden inputs with object array format
+                    updateHiddenInputs();
 
                     // Arrays
                     document.getElementById('tourIncludes').value = arrayToTextarea(tour.includes || tour.included);
@@ -1766,6 +2125,9 @@
                     currentStep = 1;
                     updateStepIndicator();
                     document.getElementById('tourModal').classList.add('active');
+
+                    // Setup image upload for editing
+                    setTimeout(setupImageUpload, 100);
                 }
             } catch (error) {
                 alert('Error loading tour');
@@ -1880,6 +2242,8 @@
                 season: document.getElementById('tourSeason').value || undefined,
                 animal: document.getElementById('tourAnimal').value || undefined,
                 image: document.getElementById('tourImage').value || undefined,
+                imageCover: document.getElementById('tourImage').value || undefined,
+                images: parseJSONField(document.getElementById('tourImages').value) || [],
                 includes: textareaToArray(document.getElementById('tourIncludes').value),
                 excludes: textareaToArray(document.getElementById('tourExcludes').value),
                 itinerary: getItineraryData(),
@@ -1937,93 +2301,436 @@
         }
 
         // Multiple images upload functionality
+        // Format: [{url: '/uploads/...', name: 'Location Name'}, ...]
         let uploadedImages = [];
         let coverImageIndex = 0;
 
-        document.getElementById('tourImageFile').addEventListener('change', async function(e) {
-            const files = Array.from(e.target.files);
-            if (files.length === 0) return;
+        // Attach event listener using event delegation on document
+        function setupImageUpload() {
+            const tourImageFile = document.getElementById('tourImageFile');
+            const dropZone = document.getElementById('dropZone');
 
-            const gallery = document.getElementById('imageGallery');
+            if (!tourImageFile || !dropZone) {
+                return;
+            }
 
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
+            // Remove any existing listeners by cloning the element
+            const newFileInput = tourImageFile.cloneNode(true);
+            tourImageFile.parentNode.replaceChild(newFileInput, tourImageFile);
 
-                // Create preview card
-                const card = document.createElement('div');
-                card.style.cssText = `
-                    position: relative;
-                    border: 3px solid #e0e0e0;
-                    border-radius: 12px;
-                    overflow: hidden;
-                    cursor: pointer;
-                    transition: all 0.3s;
-                `;
+            // Drag & Drop Event Handlers
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+            });
 
-                // Show loading
-                card.innerHTML = `
-                    <div style="aspect-ratio: 4/3; background: #f8f9fa; display: flex; align-items: center; justify-content: center;">
-                        <span style="color: #6c757d;">Yuklanmoqda...</span>
-                    </div>
-                `;
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
 
-                gallery.appendChild(card);
+            // Highlight drop zone when item is dragged over it
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, function() {
+                    dropZone.classList.add('drag-over');
+                }, false);
+            });
 
-                // Upload file
-                try {
-                    const formData = new FormData();
-                    formData.append('image', file);
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, function() {
+                    dropZone.classList.remove('drag-over');
+                }, false);
+            });
 
-                    const response = await fetch(`${API_URL}/upload`, {
-                        method: 'POST',
-                        body: formData
-                    });
+            // Handle dropped files
+            dropZone.addEventListener('drop', function(e) {
+                const dt = e.dataTransfer;
+                const files = Array.from(dt.files);
+                handleFiles(files);
+            }, false);
 
-                    const data = await response.json();
+            // Attach the event listener to the new element
+            newFileInput.addEventListener('change', async function(e) {
+                const files = Array.from(e.target.files);
+                handleFiles(files);
+                e.target.value = ''; // Clear file input
+            });
 
-                    if (data.success) {
-                        const imagePath = data.data.filePath;
-                        uploadedImages.push(imagePath);
-                        const imageIndex = uploadedImages.length - 1;
+            // Extract file handling logic into reusable function
+            async function handleFiles(files) {
+                if (files.length === 0) {
+                    return;
+                }
 
-                        // Update preview card
-                        card.innerHTML = `
-                            <img src="${API_URL}${imagePath}" style="width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3;">
-                            <div style="position: absolute; top: 8px; right: 8px; background: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);" onclick="removeImage(${imageIndex}, this.parentElement)">
-                                <span style="color: #dc3545; font-size: 18px; font-weight: bold;">×</span>
-                            </div>
-                            <div class="cover-badge" style="position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: ${imageIndex === coverImageIndex ? 'block' : 'none'};">
-                                COVER
-                            </div>
-                        `;
+                const gallery = document.getElementById('imageGallery');
 
-                        card.onclick = function() {
-                            setCoverImage(imageIndex);
-                        };
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
 
-                        card.dataset.imageIndex = imageIndex;
-
-                        // Set as cover if it's the first image
-                        if (imageIndex === 0) {
-                            setCoverImage(0);
-                        }
-
-                        // Update hidden inputs
-                        updateHiddenInputs();
-                    } else {
-                        card.remove();
-                        alert('Rasmni yuklashda xatolik: ' + data.message);
+                    // Validate file type
+                    if (!file.type.startsWith('image/')) {
+                        alert(`${file.name} rasm fayli emas!`);
+                        continue;
                     }
-                } catch (error) {
-                    console.error('Error uploading image:', error);
-                    card.remove();
-                    alert('Rasmni yuklashda xatolik: ' + error.message);
+
+                    // Validate file size (5MB max)
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert(`${file.name} juda katta (Max: 5MB)`);
+                        continue;
+                    }
+
+                    // Create preview card
+                    const card = document.createElement('div');
+                    card.className = 'image-card';
+                    card.draggable = true;
+
+                    // Show loading
+                    card.innerHTML = `
+                        <div style="aspect-ratio: 4/3; background: #f8f9fa; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: #6c757d;">Yuklanmoqda...</span>
+                        </div>
+                    `;
+
+                    gallery.appendChild(card);
+
+                    // Upload file
+                    try {
+                        const formData = new FormData();
+                        formData.append('image', file);
+
+                        const response = await fetch(`${API_URL}/upload`, {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const data = await response.json();
+
+                        console.log('Upload response:', data);
+
+                        if (data.success) {
+                            const imagePath = data.data.filePath;
+                            console.log('Image path:', imagePath);
+
+                            // Store as object with url, name, and location
+                            uploadedImages.push({ url: imagePath, name: '', location: '' });
+                            const imageIndex = uploadedImages.length - 1;
+
+                            // Fix: Remove /api from URL for uploads
+                            const imageUrl = `http://localhost:5000${imagePath}`;
+                            console.log('Final image URL:', imageUrl);
+
+                            // Update preview card with location name and address inputs
+                            card.innerHTML = `
+                                <div class="drag-handle">⋮⋮ Tortib oching</div>
+                                <div style="position: relative;">
+                                    <img src="${imageUrl}" class="card-image" style="width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/3; cursor: pointer;" onerror="console.error('Failed to load image:', this.src); this.style.background='#f8d7da'; this.alt='Failed to load'" onclick="openImagePreview('${imageUrl}', event)">
+                                    <div style="position: absolute; top: 8px; right: 8px; background: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 20;" onclick="removeImage(${imageIndex}, this.parentElement.parentElement)">
+                                        <span style="color: #dc3545; font-size: 18px; font-weight: bold;">×</span>
+                                    </div>
+                                    <div class="cover-badge" style="position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: ${imageIndex === coverImageIndex ? 'block' : 'none'};">
+                                        COVER
+                                    </div>
+                                </div>
+                                <div style="padding: 8px;">
+                                    <input type="text" placeholder="Location name..." style="width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 6px; margin-bottom: 6px; font-size: 12px;" onchange="updateImageName(${imageIndex}, this.value)" value="">
+                                    <input type="text" placeholder="Address (e.g., Samarkand, Uzbekistan)..." style="width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 12px;" onchange="updateImageLocation(${imageIndex}, this.value)" value="">
+                                </div>
+                            `;
+
+                            card.onclick = function(e) {
+                                // Don't trigger setCoverImage if clicking on input
+                                if (e.target.tagName !== 'INPUT') {
+                                    setCoverImage(imageIndex);
+                                }
+                            };
+
+                            card.dataset.imageIndex = imageIndex;
+
+                            // Set as cover if it's the first image
+                            if (imageIndex === 0) {
+                                setCoverImage(0);
+                            }
+
+                            // Update hidden inputs
+                            updateHiddenInputs();
+                        } else {
+                            card.remove();
+                            alert('Rasmni yuklashda xatolik: ' + data.message);
+                        }
+                    } catch (error) {
+                        console.error('Error uploading image:', error);
+                        card.remove();
+                        alert('Rasmni yuklashda xatolik: ' + error.message);
+                    }
+                }
+            }
+        }
+
+        // Call setup on page load
+        window.addEventListener('DOMContentLoaded', setupImageUpload);
+
+        // Real-time Validation Functions
+        function validateField(field) {
+            const value = field.value.trim();
+            const fieldId = field.id;
+            const groupId = fieldId + 'Group';
+            const errorId = fieldId + 'Error';
+            const group = document.getElementById(groupId);
+            const errorMsg = document.getElementById(errorId);
+
+            if (!group || !errorMsg) return true;
+
+            let isValid = true;
+            let message = '';
+
+            // Required field validation
+            if (field.dataset.required === 'true') {
+                if (value === '') {
+                    isValid = false;
+                    message = 'Bu maydon to\'ldirilishi shart';
                 }
             }
 
-            // Clear file input
-            e.target.value = '';
+            // Min length validation
+            if (isValid && field.dataset.minLength && value !== '') {
+                const minLength = parseInt(field.dataset.minLength);
+                if (value.length < minLength) {
+                    isValid = false;
+                    message = `Kamida ${minLength} ta belgi kiriting`;
+                }
+            }
+
+            // Min value validation for numbers
+            if (isValid && field.dataset.min && value !== '') {
+                const min = parseFloat(field.dataset.min);
+                const numValue = parseFloat(value);
+                if (numValue < min) {
+                    isValid = false;
+                    message = `Qiymat ${min} dan kam bo'lmasligi kerak`;
+                }
+            }
+
+            // Compare less than validation (for discount price)
+            if (isValid && field.dataset.compareLess && value !== '') {
+                const compareField = document.getElementById(field.dataset.compareLess);
+                if (compareField && compareField.value !== '') {
+                    const compareValue = parseFloat(compareField.value);
+                    const currentValue = parseFloat(value);
+                    if (currentValue >= compareValue) {
+                        isValid = false;
+                        message = 'Chegirma narxi asosiy narxdan kam bo\'lishi kerak';
+                    }
+                }
+            }
+
+            // Compare greater than validation (for max group size)
+            if (isValid && field.dataset.compareGreater && value !== '') {
+                const compareField = document.getElementById(field.dataset.compareGreater);
+                if (compareField && compareField.value !== '') {
+                    const compareValue = parseFloat(compareField.value);
+                    const currentValue = parseFloat(value);
+                    if (currentValue <= compareValue) {
+                        isValid = false;
+                        message = 'Maksimal o\'lcham minimal o\'lchamdan katta bo\'lishi kerak';
+                    }
+                }
+            }
+
+            // Update UI
+            if (value === '' && field.dataset.required !== 'true') {
+                // Empty optional field - remove validation state
+                group.classList.remove('valid', 'invalid');
+                field.classList.remove('valid', 'invalid');
+                errorMsg.textContent = '';
+                errorMsg.classList.remove('error', 'success');
+            } else if (isValid) {
+                group.classList.remove('invalid');
+                group.classList.add('valid');
+                field.classList.remove('invalid');
+                field.classList.add('valid');
+                errorMsg.textContent = '';
+                errorMsg.classList.remove('error');
+            } else {
+                group.classList.remove('valid');
+                group.classList.add('invalid');
+                field.classList.remove('valid');
+                field.classList.add('invalid');
+                errorMsg.textContent = message;
+                errorMsg.classList.add('error');
+                errorMsg.classList.remove('success');
+            }
+
+            return isValid;
+        }
+
+        // Setup validation for all fields
+        function setupRealTimeValidation() {
+            const fieldsToValidate = [
+                'tourName',
+                'tourDescription',
+                'tourPrice',
+                'tourDiscountPrice',
+                'tourDuration',
+                'tourLocation',
+                'tourCategory',
+                'tourGroupSizeMin',
+                'tourMaxGroupSize'
+            ];
+
+            fieldsToValidate.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    // Validate on input (as user types)
+                    field.addEventListener('input', function() {
+                        validateField(this);
+
+                        // Re-validate related fields
+                        if (fieldId === 'tourPrice') {
+                            const discountField = document.getElementById('tourDiscountPrice');
+                            if (discountField && discountField.value !== '') {
+                                validateField(discountField);
+                            }
+                        }
+                        if (fieldId === 'tourGroupSizeMin') {
+                            const maxField = document.getElementById('tourMaxGroupSize');
+                            if (maxField && maxField.value !== '') {
+                                validateField(maxField);
+                            }
+                        }
+                    });
+
+                    // Validate on blur (when user leaves field)
+                    field.addEventListener('blur', function() {
+                        validateField(this);
+                    });
+                }
+            });
+        }
+
+        // Call validation setup on page load
+        window.addEventListener('DOMContentLoaded', setupRealTimeValidation);
+
+        // Image Preview Functions
+        function openImagePreview(imageUrl, event) {
+            event.stopPropagation();
+            const modal = document.getElementById('imagePreviewModal');
+            const img = document.getElementById('imagePreviewImg');
+            img.src = imageUrl;
+            modal.classList.add('active');
+        }
+
+        function closeImagePreview() {
+            const modal = document.getElementById('imagePreviewModal');
+            modal.classList.remove('active');
+        }
+
+        // Close modal on background click
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('imagePreviewModal');
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeImagePreview();
+                }
+            });
         });
+
+        // Image Reordering with Drag & Drop
+        let draggedCard = null;
+
+        function setupImageReordering() {
+            const gallery = document.getElementById('imageGallery');
+
+            gallery.addEventListener('dragstart', function(e) {
+                if (e.target.classList.contains('image-card')) {
+                    draggedCard = e.target;
+                    e.target.classList.add('dragging');
+                }
+            });
+
+            gallery.addEventListener('dragend', function(e) {
+                if (e.target.classList.contains('image-card')) {
+                    e.target.classList.remove('dragging');
+                    draggedCard = null;
+                }
+            });
+
+            gallery.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                const afterElement = getDragAfterElement(gallery, e.clientX, e.clientY);
+                if (afterElement == null) {
+                    gallery.appendChild(draggedCard);
+                } else {
+                    gallery.insertBefore(draggedCard, afterElement);
+                }
+            });
+
+            gallery.addEventListener('drop', function(e) {
+                e.preventDefault();
+                // Reorder uploadedImages array based on new card order
+                reorderImagesArray();
+            });
+
+            // Add dragover effect to cards
+            gallery.addEventListener('dragenter', function(e) {
+                if (e.target.classList.contains('image-card') && e.target !== draggedCard) {
+                    e.target.classList.add('drag-over');
+                }
+            });
+
+            gallery.addEventListener('dragleave', function(e) {
+                if (e.target.classList.contains('image-card')) {
+                    e.target.classList.remove('drag-over');
+                }
+            });
+        }
+
+        function getDragAfterElement(container, x, y) {
+            const draggableElements = [...container.querySelectorAll('.image-card:not(.dragging)')];
+
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offsetX = x - box.left - box.width / 2;
+                const offsetY = y - box.top - box.height / 2;
+                const offset = Math.sqrt(offsetX * offsetX + offsetY * offsetY);
+
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        function reorderImagesArray() {
+            const gallery = document.getElementById('imageGallery');
+            const cards = gallery.querySelectorAll('.image-card');
+            const newOrder = [];
+
+            cards.forEach(card => {
+                const index = parseInt(card.dataset.imageIndex);
+                if (uploadedImages[index]) {
+                    newOrder.push(uploadedImages[index]);
+                }
+            });
+
+            // Update uploadedImages with new order
+            uploadedImages = newOrder;
+
+            // Update dataset indices
+            cards.forEach((card, newIndex) => {
+                card.dataset.imageIndex = newIndex;
+            });
+
+            // Update cover image index if needed
+            if (coverImageIndex >= uploadedImages.length) {
+                coverImageIndex = 0;
+            }
+
+            updateHiddenInputs();
+            console.log('Images reordered:', uploadedImages);
+        }
+
+        // Call setup on page load
+        window.addEventListener('DOMContentLoaded', setupImageReordering);
 
         function setCoverImage(index) {
             coverImageIndex = index;
@@ -2071,7 +2778,33 @@
             const validImages = uploadedImages.filter(img => img !== null);
 
             document.getElementById('tourImages').value = JSON.stringify(validImages);
-            document.getElementById('tourImage').value = validImages[coverImageIndex] || validImages[0] || '';
+
+            // Get cover image directly from uploadedImages using coverImageIndex
+            const coverImageData = uploadedImages[coverImageIndex];
+            if (coverImageData && coverImageData !== null) {
+                document.getElementById('tourImage').value = coverImageData.url;
+            } else if (validImages.length > 0) {
+                // Fallback: use first valid image as cover
+                document.getElementById('tourImage').value = validImages[0].url;
+                // Update coverImageIndex to first valid image's index
+                coverImageIndex = uploadedImages.findIndex(img => img !== null);
+            } else {
+                document.getElementById('tourImage').value = '';
+            }
+        }
+
+        function updateImageName(index, name) {
+            if (uploadedImages[index]) {
+                uploadedImages[index].name = name;
+                updateHiddenInputs();
+            }
+        }
+
+        function updateImageLocation(index, location) {
+            if (uploadedImages[index]) {
+                uploadedImages[index].location = location;
+                updateHiddenInputs();
+            }
         }
 
         // Close modal and reset form
@@ -2103,6 +2836,9 @@
             // Reset images
             uploadedImages = [];
             coverImageIndex = 0;
+
+            // Re-setup image upload
+            setTimeout(setupImageUpload, 100);
 
             // Reset checkboxes
             document.querySelectorAll('.transport-checkbox').forEach(cb => cb.checked = false);
@@ -2178,7 +2914,7 @@
         }
 
         // AI Assistant Functions
-        function openAIAssistant() {
+        function openTourAIAssistant() {
             // Pre-fill AI modal with data from main form if available
             const tourName = document.getElementById('tourName').value;
             const tourLocation = document.getElementById('tourLocation').value;
@@ -2766,6 +3502,210 @@
                 loadBlogs();
             }
         };
+
+        // ========== DESTINATIONS MANAGEMENT ==========
+
+        let currentDestinationId = null;
+
+        function openDestinationModal() {
+            currentDestinationId = null;
+            document.getElementById('destinationModalTitle').textContent = 'Add New Destination';
+            document.getElementById('destinationForm').reset();
+            document.getElementById('destinationModal').style.display = 'flex';
+        }
+
+        function closeDestinationModal() {
+            document.getElementById('destinationModal').style.display = 'none';
+            currentDestinationId = null;
+        }
+
+        async function loadDestinations() {
+            try {
+                const response = await fetch('/api/destinations');
+                const data = await response.json();
+
+                if (data.success) {
+                    displayDestinations(data.data.destinations);
+                } else {
+                    console.error('Error loading destinations:', data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('destinationsTableContainer').innerHTML =
+                    '<div class="error-message">Error loading destinations</div>';
+            }
+        }
+
+        function displayDestinations(destinations) {
+            const container = document.getElementById('destinationsTableContainer');
+
+            if (!destinations || destinations.length === 0) {
+                container.innerHTML = '<div class="no-data">No destinations found. Click "Add New Destination" to create one.</div>';
+                return;
+            }
+
+            let tableHTML = `
+                <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <thead style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                        <tr>
+                            <th style="padding: 15px; text-align: left;">Name</th>
+                            <th style="padding: 15px; text-align: left;">Country</th>
+                            <th style="padding: 15px; text-align: left;">Capital</th>
+                            <th style="padding: 15px; text-align: left;">Currency</th>
+                            <th style="padding: 15px; text-align: center;">Status</th>
+                            <th style="padding: 15px; text-align: center;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            destinations.forEach((dest, index) => {
+                tableHTML += `
+                    <tr style="border-bottom: 1px solid #e9ecef; ${index % 2 === 0 ? 'background: #f8f9fa;' : ''}">
+                        <td style="padding: 15px;">
+                            <div style="font-weight: 600; color: #2c3e50;">${dest.name}</div>
+                            <div style="font-size: 12px; color: #6c757d; margin-top: 4px;">${dest.tagline}</div>
+                        </td>
+                        <td style="padding: 15px; color: #495057;">${dest.country}</td>
+                        <td style="padding: 15px; color: #495057;">${dest.capital}</td>
+                        <td style="padding: 15px; color: #495057;">${dest.currency}</td>
+                        <td style="padding: 15px; text-align: center;">
+                            <span style="padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600;
+                                         background: ${dest.isActive ? '#d4edda' : '#f8d7da'};
+                                         color: ${dest.isActive ? '#155724' : '#721c24'};">
+                                ${dest.isActive ? 'Active' : 'Inactive'}
+                            </span>
+                        </td>
+                        <td style="padding: 15px; text-align: center;">
+                            <button onclick="editDestination('${dest._id}')"
+                                    style="padding: 6px 12px; margin-right: 5px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                                Edit
+                            </button>
+                            <button onclick="deleteDestination('${dest._id}')"
+                                    style="padding: 6px 12px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            container.innerHTML = tableHTML;
+        }
+
+        // Form submission
+        document.getElementById('destinationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const destinationData = {
+                name: document.getElementById('destName').value,
+                tagline: document.getElementById('destTagline').value,
+                description: document.getElementById('destDescription').value,
+                country: document.getElementById('destCountry').value,
+                capital: document.getElementById('destCapital').value,
+                currency: document.getElementById('destCurrency').value,
+                language: document.getElementById('destLanguage').value,
+                popularPlaces: [],
+                features: [],
+                seasons: [],
+                faq: []
+            };
+
+            try {
+                const url = currentDestinationId
+                    ? `/api/destinations/${currentDestinationId}`
+                    : '/api/destinations';
+
+                const method = currentDestinationId ? 'PUT' : 'POST';
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(destinationData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(currentDestinationId ? 'Destination updated successfully!' : 'Destination created successfully!');
+                    closeDestinationModal();
+                    loadDestinations();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error saving destination');
+            }
+        });
+
+        async function editDestination(destId) {
+            try {
+                const response = await fetch(`/api/destinations/${destId}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const dest = data.data.destination;
+                    currentDestinationId = destId;
+
+                    document.getElementById('destinationModalTitle').textContent = 'Edit Destination';
+                    document.getElementById('destName').value = dest.name;
+                    document.getElementById('destTagline').value = dest.tagline;
+                    document.getElementById('destDescription').value = dest.description;
+                    document.getElementById('destCountry').value = dest.country;
+                    document.getElementById('destCapital').value = dest.capital;
+                    document.getElementById('destCurrency').value = dest.currency;
+                    document.getElementById('destLanguage').value = dest.language;
+
+                    document.getElementById('destinationModal').style.display = 'flex';
+                } else {
+                    alert('Error loading destination');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error loading destination');
+            }
+        }
+
+        async function deleteDestination(destId) {
+            if (!confirm('Are you sure you want to delete this destination?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/destinations/${destId}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Destination deleted successfully!');
+                    loadDestinations();
+                } else {
+                    alert('Error deleting destination');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error deleting destination');
+            }
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('destinationModal');
+            if (event.target === modal) {
+                closeDestinationModal();
+            }
+        });
+
     </script>
 
     <!-- Blog Modal -->
@@ -3001,6 +3941,84 @@
                         <button type="button" class="submit-btn" onclick="saveBlog()"
                                 style="padding: 12px 32px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
                             💾 Save Blog Post
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Destination Modal -->
+    <div class="modal" id="destinationModal">
+        <div class="modal-content" style="max-width: 1000px;">
+            <div class="modal-header">
+                <div>
+                    <h2 id="destinationModalTitle">Add New Destination</h2>
+                    <p style="font-size: 13px; color: #6c757d; margin-top: 5px;">Fill in destination details</p>
+                </div>
+                <button class="close-btn" onclick="closeDestinationModal()">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="destinationForm">
+                    <!-- Basic Information -->
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                        <h3 style="font-size: 16px; font-weight: 600; color: #2c3e50; margin-bottom: 15px;">📍 Basic Information</h3>
+
+                        <div class="form-group">
+                            <label>Name <span style="color: #dc3545;">*</span></label>
+                            <input type="text" id="destName" placeholder="e.g., Samarkand, Uzbekistan" required
+                                   style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px;">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tagline <span style="color: #dc3545;">*</span></label>
+                            <input type="text" id="destTagline" placeholder="e.g., The Heart of the Silk Road" required
+                                   style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px;">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Description <span style="color: #dc3545;">*</span></label>
+                            <textarea id="destDescription" rows="4" placeholder="Describe the destination..." required
+                                      style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; resize: vertical;"></textarea>
+                        </div>
+
+                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label>Country <span style="color: #dc3545;">*</span></label>
+                                <input type="text" id="destCountry" placeholder="e.g., Uzbekistan" required
+                                       style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px;">
+                            </div>
+                            <div class="form-group">
+                                <label>Capital <span style="color: #dc3545;">*</span></label>
+                                <input type="text" id="destCapital" placeholder="e.g., Tashkent" required
+                                       style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px;">
+                            </div>
+                        </div>
+
+                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label>Currency <span style="color: #dc3545;">*</span></label>
+                                <input type="text" id="destCurrency" placeholder="e.g., UZS (Som)" required
+                                       style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px;">
+                            </div>
+                            <div class="form-group">
+                                <label>Language <span style="color: #dc3545;">*</span></label>
+                                <input type="text" id="destLanguage" placeholder="e.g., Uzbek, Russian" required
+                                       style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Buttons -->
+                    <div class="form-row" style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 25px;">
+                        <button type="button" onclick="closeDestinationModal()"
+                                style="padding: 12px 30px; background: #6c757d; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                style="padding: 12px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; cursor: pointer;">
+                            Save Destination
                         </button>
                     </div>
                 </form>
@@ -3416,6 +4434,367 @@
                 });
             }
         });
+
+        // ========== CATEGORIES MANAGEMENT ==========
+
+        // Load all categories
+        async function loadCategories() {
+            try {
+                const response = await fetch(`${API_URL}/categories`);
+                const result = await response.json();
+
+                if (result.success) {
+                    const categories = result.data.categories;
+                    const tbody = document.getElementById('categoriesTableBody');
+
+                    if (categories.length === 0) {
+                        tbody.innerHTML = `
+                            <tr>
+                                <td colspan="7" style="text-align: center; padding: 40px; color: #6c757d;">
+                                    No categories found. Click "+ Add New Category" to create one.
+                                </td>
+                            </tr>
+                        `;
+                        return;
+                    }
+
+                    tbody.innerHTML = categories.map(category => `
+                        <tr>
+                            <td>${category.order}</td>
+                            <td style="font-size: 24px;">${category.icon}</td>
+                            <td>${category.name}</td>
+                            <td><code>${category.slug}</code></td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="width: 20px; height: 20px; border-radius: 4px; background: ${category.color};"></div>
+                                    <span>${category.color}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge ${category.isActive ? 'badge-success' : 'badge-danger'}">
+                                    ${category.isActive ? 'Active' : 'Inactive'}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="action-btn edit-btn" onclick="editCategory('${category.id}')" title="Edit">
+                                    ✏️
+                                </button>
+                                <button class="action-btn delete-btn" onclick="deleteCategory('${category.id}')" title="Delete">
+                                    🗑️
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading categories:', error);
+                alert('Failed to load categories');
+            }
+        }
+
+        // Open category modal for adding new category
+        function openCategoryModal() {
+            document.getElementById('categoryModalTitle').textContent = 'Add New Category';
+            document.getElementById('categoryForm').reset();
+            document.getElementById('categoryId').value = '';
+            document.getElementById('categoryModal').style.display = 'flex';
+        }
+
+        // Close category modal
+        function closeCategoryModal() {
+            document.getElementById('categoryModal').style.display = 'none';
+            document.getElementById('categoryForm').reset();
+        }
+
+        // Edit category
+        async function editCategory(id) {
+            try {
+                const response = await fetch(`${API_URL}/categories/${id}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    const category = result.data.category;
+
+                    document.getElementById('categoryModalTitle').textContent = 'Edit Category';
+                    document.getElementById('categoryId').value = category.id;
+                    document.getElementById('categoryName').value = category.name;
+                    document.getElementById('categoryDescription').value = category.description || '';
+                    document.getElementById('categoryIcon').value = category.icon;
+                    document.getElementById('categoryColor').value = category.color;
+                    document.getElementById('categoryOrder').value = category.order;
+                    document.getElementById('categoryIsActive').checked = category.isActive;
+
+                    document.getElementById('categoryModal').style.display = 'flex';
+                }
+            } catch (error) {
+                console.error('Error loading category:', error);
+                alert('Failed to load category details');
+            }
+        }
+
+        // Delete category
+        async function deleteCategory(id) {
+            if (!confirm('Are you sure you want to delete this category?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/categories/${id}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Category deleted successfully!');
+                    loadCategories();
+                } else {
+                    alert(result.message || 'Failed to delete category');
+                }
+            } catch (error) {
+                console.error('Error deleting category:', error);
+                alert('Failed to delete category');
+            }
+        }
+
+        // Handle category form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryForm = document.getElementById('categoryForm');
+
+            if (categoryForm) {
+                categoryForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+
+                    const categoryId = document.getElementById('categoryId').value;
+                    const categoryData = {
+                        name: document.getElementById('categoryName').value,
+                        description: document.getElementById('categoryDescription').value,
+                        icon: document.getElementById('categoryIcon').value || '🎯',
+                        color: document.getElementById('categoryColor').value,
+                        order: parseInt(document.getElementById('categoryOrder').value) || 0,
+                        isActive: document.getElementById('categoryIsActive').checked
+                    };
+
+                    try {
+                        const url = categoryId
+                            ? `${API_URL}/categories/${categoryId}`
+                            : `${API_URL}/categories`;
+
+                        const response = await fetch(url, {
+                            method: categoryId ? 'PUT' : 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(categoryData)
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            alert(categoryId ? 'Category updated successfully!' : 'Category created successfully!');
+                            closeCategoryModal();
+                            loadCategories();
+                        } else {
+                            alert(result.message || 'Failed to save category');
+                        }
+                    } catch (error) {
+                        console.error('Error saving category:', error);
+                        alert('Failed to save category');
+                    }
+                });
+            }
+        });
+
+        // Load categories when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load categories if on categories page
+            const categoriesPage = document.getElementById('categoriesPage');
+            if (categoriesPage) {
+                loadCategories();
+            }
+        });
+
+        // ========== AI ASSISTANT FUNCTIONS ==========
+
+        async function generateTourWithAI(event) {
+            // Get values from AI modal
+            const category = document.getElementById('aiCategory').value;
+            const duration = document.getElementById('aiDuration').value;
+            const nights = document.getElementById('aiNights').value;
+            const destination = document.getElementById('aiDestination').value;
+            const price = document.getElementById('aiPrice').value;
+            const maxGroupSize = document.getElementById('aiMaxGroupSize').value;
+            const difficulty = document.getElementById('aiDifficulty').value;
+            const accommodation = document.getElementById('aiAccommodation').value;
+            const additionalPrompt = document.getElementById('aiPrompt').value;
+
+            // Validation
+            if (!category || !duration || !destination || !price || !maxGroupSize) {
+                showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+
+            // Build AI prompt
+            const prompt = `Create a complete tour package with the following details:
+- Type: ${category}
+- Duration: ${duration} days${nights ? ` / ${nights} nights` : ''}
+- Destination: ${destination}
+- Price: $${price} per person
+- Max Group Size: ${maxGroupSize} people
+- Difficulty: ${difficulty}
+- Accommodation: ${accommodation || 'Standard hotels'}
+${additionalPrompt ? `\nAdditional requirements: ${additionalPrompt}` : ''}
+
+Please provide:
+1. An engaging tour title
+2. A brief summary (2-3 sentences)
+3. A detailed tour description (3-4 paragraphs highlighting culture, history, and experiences)
+4. Day-by-day itinerary for ${duration} days
+5. 5-7 tour highlights (one per line)
+6. What's included in the tour (accommodation, meals, transport, guide, etc.)
+7. What's NOT included (flights, visa, personal expenses, etc.)
+
+Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique cultural experiences.`;
+
+            // Show loading state
+            const generateBtn = event.target;
+            const originalText = generateBtn.innerHTML;
+            generateBtn.innerHTML = '<span>⏳ Generating...</span>';
+            generateBtn.disabled = true;
+
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch('/api/ai/tour-assistant', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        prompt: prompt,
+                        currentData: {
+                            category, duration, nights, destination, price, maxGroupSize, difficulty, accommodation
+                        }
+                    })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.message || 'AI service error');
+                }
+
+                // Parse AI response and fill form
+                const aiData = result.data;
+
+                // Fill main tour form with AI generated content
+                if (aiData.title) {
+                    document.getElementById('tourName').value = aiData.title;
+                }
+                if (aiData.summary) {
+                    document.getElementById('tourSummary').value = aiData.summary;
+                }
+                if (aiData.description) {
+                    document.getElementById('tourDescription').value = aiData.description;
+                }
+                if (aiData.highlights) {
+                    const highlightsText = Array.isArray(aiData.highlights)
+                        ? aiData.highlights.join('\n')
+                        : aiData.highlights;
+                    document.getElementById('tourHighlights').value = highlightsText;
+                }
+
+                // Fill basic info from AI modal
+                document.getElementById('tourCategory').value = category;
+                document.getElementById('tourDuration').value = duration;
+                document.getElementById('tourLocation').value = destination;
+                document.getElementById('tourPrice').value = price;
+                document.getElementById('tourMaxGroupSize').value = maxGroupSize;
+                document.getElementById('tourDifficulty').value = difficulty;
+
+                // Fill accommodation if available
+                if (accommodation && document.getElementById('tourAccommodation')) {
+                    document.getElementById('tourAccommodation').value = accommodation;
+                }
+
+                // Close AI modal and show success
+                closeAIModal();
+                showNotification('✨ Tour content generated successfully! Please review and adjust as needed.', 'success');
+
+                // Show the main tour modal if not open
+                if (!document.getElementById('tourModal').classList.contains('active')) {
+                    openModal();
+                }
+
+            } catch (error) {
+                console.error('AI Error:', error);
+                showNotification(error.message || 'Failed to generate tour content', 'error');
+            } finally {
+                generateBtn.innerHTML = originalText;
+                generateBtn.disabled = false;
+            }
+        }
     </script>
+
+    <!-- Image Preview Modal -->
+    <div id="imagePreviewModal" class="image-preview-modal">
+        <button class="image-preview-close" onclick="closeImagePreview()">×</button>
+        <div class="image-preview-content">
+            <img id="imagePreviewImg" src="" alt="Preview">
+        </div>
+    </div>
+
+    <!-- Category Modal -->
+    <div id="categoryModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2 id="categoryModalTitle">Add New Category</h2>
+                <button class="close-modal" onclick="closeCategoryModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="categoryForm">
+                    <input type="hidden" id="categoryId">
+
+                    <div class="form-group">
+                        <label>Category Name *</label>
+                        <input type="text" id="categoryName" placeholder="E.g.: Adventure Tours" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="categoryDescription" rows="3" placeholder="Brief description about this category"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Icon (Emoji)</label>
+                            <input type="text" id="categoryIcon" placeholder="🎯" maxlength="2">
+                        </div>
+                        <div class="form-group">
+                            <label>Color (Hex)</label>
+                            <input type="color" id="categoryColor" value="#667eea">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Order</label>
+                        <input type="number" id="categoryOrder" min="0" placeholder="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="categoryIsActive" checked>
+                            Active
+                        </label>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="cancel-btn" onclick="closeCategoryModal()">Cancel</button>
+                        <button type="submit" class="submit-btn">Save Category</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

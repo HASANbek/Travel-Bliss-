@@ -126,6 +126,49 @@ function getDifficultyText(difficulty) {
     return map[difficulty] || difficulty;
 }
 
+// Load tours with category filter
+async function loadToursWithCategory(categorySlug) {
+    try {
+        // Map category slugs to backend category values
+        const categoryMap = {
+            'cultural-tours': 'cultural',
+            'adventure-tours': 'adventure',
+            'homestays-hiking': 'hiking',
+            'day-trips': 'day-trip'
+        };
+
+        const category = categoryMap[categorySlug];
+        if (!category) {
+            console.error('Unknown category:', categorySlug);
+            return;
+        }
+
+        const response = await fetch(`${API_BASE}/api/tours?category=${category}`);
+        const data = await response.json();
+
+        if (data.success && data.data.tours.length > 0) {
+            displayTours(data.data.tours);
+        } else {
+            const container = document.getElementById('tours-container');
+            if (container) {
+                container.innerHTML = `
+                    <div class="col-12">
+                        <div class="text-center py-5">
+                            <h3>No tours found in this category</h3>
+                            <p>Please check back later or try another category.</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+    } catch (error) {
+        console.error('Error loading tours by category:', error);
+    }
+}
+
+// Make function globally accessible
+window.loadToursWithCategory = loadToursWithCategory;
+
 // Auto-load on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadToursFromBackend();
