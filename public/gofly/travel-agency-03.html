@@ -3232,7 +3232,8 @@ function displayHomeBlogs(blogs) {
     </svg>`;
 
     blogs.forEach((blog, index) => {
-        const imageUrl = blog.image || 'assets/img/home3/blog-img1.jpg';
+        // Support both image and featuredImage fields
+        const imageUrl = blog.image || blog.featuredImage || 'assets/img/home3/blog-img1.jpg';
         const excerpt = blog.excerpt || blog.content?.substring(0, 100) + '...' || 'Read more about this amazing destination...';
         const formattedDate = new Date(blog.createdAt).toLocaleDateString('en-US', {
             day: '2-digit',

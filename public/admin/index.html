@@ -3291,6 +3291,12 @@
             // Clear uploaded image
             removeUploadedImage();
 
+            // Clear image preview
+            uploadedImageData = null;
+            document.getElementById('imagePreview').src = '';
+            document.getElementById('uploadPlaceholder').style.display = 'block';
+            document.getElementById('imagePreviewContainer').style.display = 'none';
+
             // Clear map
             if (blogMap) {
                 if (blogMarker) {
@@ -3318,11 +3324,24 @@
                     document.getElementById('blogTitle').value = blog.title || '';
                     document.getElementById('blogCategory').value = blog.category || '';
                     document.getElementById('blogAuthor').value = blog.author || 'Admin';
-                    document.getElementById('blogImage').value = blog.image || '';
+
+                    // Support both image and featuredImage fields
+                    const imageUrl = blog.featuredImage || blog.image || '';
+                    document.getElementById('blogImage').value = imageUrl;
+
+                    // Show image preview if exists
+                    if (imageUrl) {
+                        uploadedImageData = imageUrl;
+                        document.getElementById('imagePreview').src = imageUrl;
+                        document.getElementById('uploadPlaceholder').style.display = 'none';
+                        document.getElementById('imagePreviewContainer').style.display = 'block';
+                    }
+
                     document.getElementById('blogExcerpt').value = blog.excerpt || '';
                     document.getElementById('blogContent').value = blog.content || '';
                     document.getElementById('blogTags').value = blog.tags || '';
                     document.getElementById('blogStatus').value = blog.status || 'draft';
+                    document.getElementById('blogTitle2').value = blog.title2 || '';
 
                     // Fill location data if exists
                     if (blog.location) {
@@ -3349,15 +3368,19 @@
         }
 
         async function saveBlog() {
+            const imageValue = document.getElementById('blogImage').value;
+
             const formData = {
                 title: document.getElementById('blogTitle').value,
                 category: document.getElementById('blogCategory').value,
                 author: document.getElementById('blogAuthor').value,
-                image: document.getElementById('blogImage').value,
+                image: imageValue,
+                featuredImage: imageValue,  // Add featuredImage field
                 excerpt: document.getElementById('blogExcerpt').value,
                 content: document.getElementById('blogContent').value,
                 tags: document.getElementById('blogTags').value,
-                status: document.getElementById('blogStatus').value
+                status: document.getElementById('blogStatus').value,
+                title2: document.getElementById('blogTitle2').value
             };
 
             // Add location data if provided
@@ -3387,6 +3410,8 @@
                     : '/api/admin/blogs';
                 const method = currentBlogId ? 'PUT' : 'POST';
 
+                console.log('Saving blog with data:', formData);
+
                 const response = await fetch(url, {
                     method: method,
                     headers: {
@@ -3396,16 +3421,20 @@
                     body: JSON.stringify(formData)
                 });
 
+                const result = await response.json();
+                console.log('Server response:', result);
+
                 if (response.ok) {
                     alert(currentBlogId ? 'Blog updated successfully!' : 'Blog created successfully!');
                     closeBlogModal();
                     loadBlogs();
                 } else {
-                    alert('Error saving blog');
+                    console.error('Error response:', result);
+                    alert('Error saving blog: ' + (result.message || 'Unknown error'));
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error saving blog');
+                alert('Error saving blog: ' + error.message);
             }
         }
 
@@ -3440,12 +3469,20 @@
                 return;
             }
 
-            tbody.innerHTML = blogs.map(blog => `
+            // Default placeholder SVG
+            const placeholderSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjZTBlMGUwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI4IiBmaWxsPSIjOTk5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+Tm8gSW1hZ2U8L3RleHQ+PC9zdmc+';
+
+            tbody.innerHTML = blogs.map(blog => {
+                // Support both image and featuredImage fields
+                const imageUrl = blog.image || blog.featuredImage || placeholderSvg;
+
+                return `
                 <tr>
                     <td>
-                        <img src="${blog.image || 'https://via.placeholder.com/60x40'}"
+                        <img src="${imageUrl}"
                              alt="${blog.title}"
-                             style="width: 60px; height: 40px; object-fit: cover; border-radius: 4px;">
+                             style="width: 60px; height: 40px; object-fit: cover; border-radius: 4px; background: #e0e0e0;"
+                             onerror="this.src='${placeholderSvg}'">
                     </td>
                     <td><strong>${blog.title}</strong></td>
                     <td>${blog.category}</td>
@@ -3457,16 +3494,23 @@
                         </span>
                     </td>
                     <td>
+                        <button onclick="viewBlog('${blog._id}')" class="action-btn" style="background: #17a2b8; color: white;">👁️ View</button>
                         <button onclick="openBlogModal('${blog._id}')" class="action-btn edit-btn">✏️ Edit</button>
                         <button onclick="deleteBlog('${blog._id}')" class="action-btn delete-btn">🗑️ Delete</button>
                     </td>
                 </tr>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function updateBlogStats(blogs) {
             const totalBlogs = blogs.length;
             document.getElementById('totalBlogs').textContent = totalBlogs;
+        }
+
+        function viewBlog(blogId) {
+            // Open blog detail page in new tab
+            window.open(`/gofly/travel-inspiration-details.html?id=${blogId}`, '_blank');
         }
 
         async function deleteBlog(blogId) {
@@ -3717,10 +3761,6 @@
                     <p style="font-size: 13px; color: #6c757d; margin-top: 5px;">Fill in all the details below</p>
                 </div>
                 <div style="display: flex; gap: 10px; align-items: center;">
-                    <button type="button" onclick="openAIAssistant()"
-                            style="padding: 10px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);">
-                        <span style="font-size: 16px;">🤖</span> AI Assistant
-                    </button>
                     <button class="close-btn" onclick="closeBlogModal()">&times;</button>
                 </div>
             </div>
@@ -3739,6 +3779,17 @@
                             </label>
                             <input type="text" id="blogTitle" placeholder="Enter blog post title" required
                                    style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px;">
+                        </div>
+
+                        <div class="form-group">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #495057; font-size: 14px;">
+                                Title 2
+                            </label>
+                            <input type="text" id="blogTitle2" placeholder="Enter secondary heading (optional)"
+                                   style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px;">
+                            <small style="color: #6c757d; font-size: 12px; margin-top: 5px; display: block;">
+                                This will appear below the main title on the blog detail page
+                            </small>
                         </div>
 
                         <div class="form-row">
@@ -3802,7 +3853,9 @@
                                     🗑️
                                 </button>
                             </div>
-                            <div style="font-size: 12px; color: #6c757d; margin-top: 5px;">Supported formats: JPG, PNG, GIF (Max 5MB)</div>
+                            <div style="font-size: 12px; color: #6c757d; margin-top: 5px;">
+                                <strong>Supported:</strong> JPG, PNG, GIF, WebP (Max 10MB)
+                            </div>
                         </div>
 
                         <div style="text-align: center; color: #6c757d; font-size: 13px; margin: 15px 0; font-weight: 500;">
@@ -4370,9 +4423,10 @@
                 return;
             }
 
-            // Validate file size (5MB)
-            if (file.size > 5 * 1024 * 1024) {
-                alert('Image size must be less than 5MB');
+            // Validate file size (10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('Image size must be less than 10MB. Please use a smaller image.');
+                document.getElementById('blogImageFile').value = '';
                 return;
             }
 
