@@ -485,15 +485,17 @@
     </header>
 
     <!-- Breadcrumb Section -->
-    <div class="breadcrumb-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 80px 0;">
-        <div class="container">
+    <div class="breadcrumb-section" id="breadcrumbSection" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 80px 0; background-size: cover; background-position: center; position: relative;">
+        <!-- Dark Overlay -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5);"></div>
+        <div class="container" style="position: relative; z-index: 1;">
             <div class="row">
                 <div class="col-12">
-                    <h1 id="blogTitle" style="color: white; font-size: 36px; margin-bottom: 15px;">Top 10 Beaches to Visit This Summer Season</h1>
+                    <h1 id="blogTitle" style="color: white; font-size: 36px; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Top 10 Beaches to Visit This Summer Season</h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html" style="color: white;">Home</a></li>
-                            <li class="breadcrumb-item active" style="color: white;">Travel Inspiration</li>
+                            <li class="breadcrumb-item"><a href="index.html" style="color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Home</a></li>
+                            <li class="breadcrumb-item active" style="color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Travel Inspiration</li>
                         </ol>
                     </nav>
                 </div>
@@ -507,11 +509,15 @@
             <div class="row">
                 <!-- LEFT COLUMN - Main Content (col-lg-8) -->
                 <div class="col-lg-8">
-                    <!-- Blog Meta -->
-                    <div class="blog-meta" id="blogMeta" style="margin-bottom: 25px;">
-                        <span style="margin-right: 20px;"><i class="bi bi-person"></i> <span id="blogAuthor">Sarah Johnson</span></span>
-                        <span style="margin-right: 20px;"><i class="bi bi-calendar"></i> <span id="blogDate">June 15, 2024</span></span>
-                        <span><i class="bi bi-chat"></i> <span id="blogComments">24</span> Comments</span>
+                    <!-- Blog Title 2 -->
+                    <h2 id="blogTitle2" style="font-size: 32px; font-weight: 600; color: #495057; margin-bottom: 25px; line-height: 1.4; display: none;">
+                    </h2>
+
+                    <!-- Blog Excerpt -->
+                    <div id="blogExcerpt" style="background: #f8f9fa; padding: 25px; border-radius: 12px; margin-bottom: 30px; border-left: 4px solid #667eea;">
+                        <p style="font-size: 18px; line-height: 1.8; color: #495057; margin: 0; font-style: italic;">
+                            Loading excerpt...
+                        </p>
                     </div>
 
                     <!-- Featured Image -->
@@ -650,37 +656,8 @@
                     <!-- Recent Posts Widget -->
                     <div class="sidebar-widget" style="padding: 25px; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 30px;">
                         <h4 style="margin-bottom: 20px; border-bottom: 2px solid #667eea; padding-bottom: 15px;">Recent Posts</h4>
-                        <!-- Recent Post 1 -->
-                        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-                            <img src="assets/img/home3/blog-img1.jpg" alt="Blog" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
-                            <div>
-                                <a href="#" style="font-size: 14px; font-weight: 600; color: #212529; text-decoration: none; display: block; margin-bottom: 5px; line-height: 1.4;">Best Time to Visit Europe</a>
-                                <div style="font-size: 12px; color: #999; margin-top: 5px;">June 10, 2024</div>
-                            </div>
-                        </div>
-                        <!-- Recent Post 2 -->
-                        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-                            <img src="assets/img/home3/blog-img2.jpg" alt="Blog" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
-                            <div>
-                                <a href="#" style="font-size: 14px; font-weight: 600; color: #212529; text-decoration: none; display: block; margin-bottom: 5px; line-height: 1.4;">Travel Tips for Asia</a>
-                                <div style="font-size: 12px; color: #999; margin-top: 5px;">June 8, 2024</div>
-                            </div>
-                        </div>
-                        <!-- Recent Post 3 -->
-                        <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-                            <img src="assets/img/home3/blog-img3.jpg" alt="Blog" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
-                            <div>
-                                <a href="#" style="font-size: 14px; font-weight: 600; color: #212529; text-decoration: none; display: block; margin-bottom: 5px; line-height: 1.4;">Hidden Gems in Africa</a>
-                                <div style="font-size: 12px; color: #999; margin-top: 5px;">June 5, 2024</div>
-                            </div>
-                        </div>
-                        <!-- Recent Post 4 -->
-                        <div style="display: flex; gap: 15px;">
-                            <img src="assets/img/home3/blog-img1.jpg" alt="Blog" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
-                            <div>
-                                <a href="#" style="font-size: 14px; font-weight: 600; color: #212529; text-decoration: none; display: block; margin-bottom: 5px; line-height: 1.4;">Beach Safety Guidelines</a>
-                                <div style="font-size: 12px; color: #999; margin-top: 5px;">June 1, 2024</div>
-                            </div>
+                        <div id="recentPostsContainer">
+                            <!-- Recent posts will be loaded here -->
                         </div>
                     </div>
 
@@ -995,24 +972,25 @@
                 // Update page title
                 document.title = blog.title + ' - Travel Bliss';
 
-                // Update blog title
+                // Update blog title (both in breadcrumb and main content)
                 document.getElementById('blogTitle').textContent = blog.title;
 
-                // Update blog meta
-                const author = blog.author?.name || blog.author || 'Admin';
-                document.getElementById('blogAuthor').textContent = author;
+                // Update title2
+                const title2El = document.getElementById('blogTitle2');
+                if (blog.title2) {
+                    title2El.textContent = blog.title2;
+                    title2El.style.display = 'block';
+                } else {
+                    title2El.style.display = 'none';
+                }
 
-                const publishedDate = blog.publishedAt || blog.createdAt;
-                const date = new Date(publishedDate);
-                const formattedDate = date.toLocaleDateString('en-US', {
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric'
-                });
-                document.getElementById('blogDate').textContent = formattedDate;
-
-                const comments = blog.commentsCount || blog.comments?.length || 0;
-                document.getElementById('blogComments').textContent = comments;
+                // Update blog excerpt
+                const excerptContainer = document.getElementById('blogExcerpt');
+                if (blog.excerpt) {
+                    excerptContainer.innerHTML = `<p style="font-size: 18px; line-height: 1.8; color: #495057; margin: 0; font-style: italic;">${blog.excerpt}</p>`;
+                } else {
+                    excerptContainer.style.display = 'none';
+                }
 
                 // Update featured image
                 const image = blog.image || blog.featuredImage || 'assets/img/home3/blog-img1.jpg';
@@ -1022,6 +1000,11 @@
                 blogImageEl.onerror = function() {
                     this.src = 'assets/img/home3/blog-img1.jpg';
                 };
+
+                // Set breadcrumb background image
+                const breadcrumbSection = document.getElementById('breadcrumbSection');
+                breadcrumbSection.style.backgroundImage = `url('${image}')`;
+                breadcrumbSection.style.backgroundBlendMode = 'overlay';
 
                 // Update blog content
                 const contentContainer = document.getElementById('blogContentContainer');
@@ -1038,11 +1021,77 @@
             }
         }
 
-        // Load blog when page loads
+        // Load recent posts
+        async function loadRecentPosts() {
+            try {
+                // Get current blog ID to exclude it
+                const urlParams = new URLSearchParams(window.location.search);
+                const currentBlogId = urlParams.get('id');
+
+                // Try to fetch from API first
+                let recentBlogs = [];
+                try {
+                    const response = await fetch('/api/admin/blogs');
+                    if (response.ok) {
+                        const blogs = await response.json();
+                        recentBlogs = blogs
+                            .filter(blog => blog._id !== currentBlogId && blog.status === 'published')
+                            .slice(0, 4);
+                    }
+                } catch (apiError) {
+                    console.log('API not available, using fallback data');
+                }
+
+                // Use API data directly (no fallback needed)
+
+                const container = document.getElementById('recentPostsContainer');
+
+                if (recentBlogs.length === 0) {
+                    container.innerHTML = '<p style="color: #999; font-size: 14px;">No recent posts available.</p>';
+                    return;
+                }
+
+                container.innerHTML = recentBlogs.map((blog, index) => {
+                    const imageUrl = blog.image || blog.featuredImage || 'assets/img/home3/blog-img1.jpg';
+                    const date = new Date(blog.publishedAt || blog.createdAt);
+                    const formattedDate = date.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
+                    const marginBottom = index < recentBlogs.length - 1 ? 'margin-bottom: 20px;' : '';
+
+                    return `
+                        <div style="display: flex; gap: 15px; ${marginBottom}">
+                            <img src="${imageUrl}"
+                                 alt="${blog.title}"
+                                 style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;"
+                                 onerror="this.src='assets/img/home3/blog-img1.jpg'">
+                            <div>
+                                <a href="travel-inspiration-details.html?id=${blog._id}"
+                                   style="font-size: 14px; font-weight: 600; color: #212529; text-decoration: none; display: block; margin-bottom: 5px; line-height: 1.4;">
+                                    ${blog.title}
+                                </a>
+                                <div style="font-size: 12px; color: #999; margin-top: 5px;">${formattedDate}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading recent posts:', error);
+                document.getElementById('recentPostsContainer').innerHTML = '<p style="color: #999; font-size: 14px;">Unable to load recent posts.</p>';
+            }
+        }
+
+        // Load blog and recent posts when page loads
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', loadBlogDetails);
+            document.addEventListener('DOMContentLoaded', function() {
+                loadBlogDetails();
+                loadRecentPosts();
+            });
         } else {
             loadBlogDetails();
+            loadRecentPosts();
         }
     </script>
 
