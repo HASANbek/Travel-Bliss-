@@ -71,13 +71,24 @@
 .header-area.style-2 {
     background: linear-gradient(to right, #f0f9ff 0%, #e0f2fe 100%);
     box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-    padding: 6px 0;
+    padding: 8px 0;
+}
+
+.header-area.style-2 .container-fluid {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.header-area.style-2 .header-logo {
+    flex-shrink: 0;
+    margin-right: 20px;
 }
 
 .header-area.style-2 .header-logo img {
     width: auto !important;
-    height: 45px !important;
-    max-width: 200px !important;
+    height: 40px !important;
+    max-width: 160px !important;
     transform: none !important;
     margin: 6px 0;
     object-fit: contain !important;
@@ -95,11 +106,12 @@
 
 .header-area.style-2 .menu-list {
     display: flex !important;
-    gap: 35px !important;
+    gap: 25px !important;
     align-items: center !important;
     list-style: none !important;
     margin: 0 !important;
     padding: 0 !important;
+    flex-wrap: nowrap !important;
 }
 
 .header-area.style-2 .menu-list > li {
@@ -110,11 +122,12 @@
 .header-area.style-2 .menu-list > li > a {
     color: #000000 !important;
     font-weight: 600 !important;
-    font-size: 15px !important;
+    font-size: 14px !important;
     text-decoration: none !important;
     transition: color 0.3s !important;
     padding: 10px 0 !important;
     display: inline-block !important;
+    white-space: nowrap !important;
 }
 
 .header-area.style-2 .menu-list > li:hover > a,
@@ -125,13 +138,36 @@
 .header-area.style-2 .logo-and-menu-area {
     display: flex;
     align-items: center;
-    gap: 50px;
+    gap: 40px;
+    flex: 1;
+    min-width: 0;
+}
+
+.header-area.style-2 .main-menu {
+    flex: 1;
+    min-width: 0;
 }
 
 .header-area.style-2 .nav-right {
     display: flex;
     align-items: center;
     gap: 20px;
+    flex-shrink: 0;
+}
+
+.header-area.style-2 .nav-right .phone-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #1f2937;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.header-area.style-2 .nav-right .phone-link:hover {
+    color: #6366f1;
 }
 
 .header-area.style-2 .mobile-menu-btn {
@@ -142,6 +178,16 @@
     padding: 10px 15px;
     border-radius: 6px;
     cursor: pointer;
+}
+
+@media (max-width: 1400px) {
+    .header-area.style-2 .menu-list {
+        gap: 18px !important;
+    }
+
+    .header-area.style-2 .menu-list > li > a {
+        font-size: 13px !important;
+    }
 }
 
 @media (max-width: 1199px) {
@@ -273,6 +319,11 @@
     line-height: 1.8;
     color: #495057;
     margin-bottom: 20px;
+    background: transparent !important;
+}
+
+.blog-content blockquote {
+    background: transparent !important;
 }
 
 .blog-content h3 {
@@ -421,17 +472,12 @@
             <div class="nav-right">
                 <div class="contact-and-search-area">
                     <div class="contact-area d-xl-flex d-none" style="gap: 20px; align-items: center;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <div class="icon">
-                                <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                                    <g>
-                                        <path
-                                            d="M15.5646 11.7424L13.3317 9.50954C12.5343 8.7121 11.1786 9.03111 10.8596 10.0678C10.6204 10.7855 9.82296 11.1842 9.10526 11.0247C7.51037 10.626 5.35726 8.55261 4.95854 6.87797C4.71931 6.16024 5.19778 5.36279 5.91548 5.12359C6.95216 4.80461 7.27113 3.44895 6.47369 2.65151L4.24084 0.418659C3.60288 -0.139553 2.64595 -0.139553 2.08774 0.418659L0.572591 1.93381C-0.942555 3.5287 0.73208 7.75516 4.48007 11.5032C8.22807 15.2512 12.4545 17.0056 14.0494 15.4106L15.5646 13.8955C16.1228 13.2575 16.1228 12.3006 15.5646 11.7424Z"/>
-                                    </g>
-                                </svg>
-                            </div>
-                            <a href="tel:998901234567" style="color: #1f2937; font-weight: 600; text-decoration: none;">+998 90 123 45 67</a>
-                        </div>
+                        <a href="tel:998901234567" class="phone-link">
+                            <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                                <path d="M15.5646 11.7424L13.3317 9.50954C12.5343 8.7121 11.1786 9.03111 10.8596 10.0678C10.6204 10.7855 9.82296 11.1842 9.10526 11.0247C7.51037 10.626 5.35726 8.55261 4.95854 6.87797C4.71931 6.16024 5.19778 5.36279 5.91548 5.12359C6.95216 4.80461 7.27113 3.44895 6.47369 2.65151L4.24084 0.418659C3.60288 -0.139553 2.64595 -0.139553 2.08774 0.418659L0.572591 1.93381C-0.942555 3.5287 0.73208 7.75516 4.48007 11.5032C8.22807 15.2512 12.4545 17.0056 14.0494 15.4106L15.5646 13.8955C16.1228 13.2575 16.1228 12.3006 15.5646 11.7424Z"/>
+                            </svg>
+                            <span>+998 90 123 45 67</span>
+                        </a>
                         <div class="language-selector" style="position: relative;">
                             <button class="language-btn" style="background: transparent; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 600; color: #1f2937; padding: 5px 10px; border-radius: 6px; transition: all 0.3s;">
                                 <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 30'%3E%3Cdefs%3E%3CclipPath id='a'%3E%3Crect width='50' height='30'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23a)'%3E%3Crect width='50' height='30' fill='%23012169'/%3E%3Cpath d='M0,0 L50,30 M50,0 L0,30' stroke='%23FFF' stroke-width='6'/%3E%3Cpath d='M0,0 L50,30 M50,0 L0,30' stroke='%23C8102E' stroke-width='4' clip-path='url(%23a)'/%3E%3Cpath d='M25,0 V30 M0,15 H50' stroke='%23FFF' stroke-width='10'/%3E%3Cpath d='M25,0 V30 M0,15 H50' stroke='%23C8102E' stroke-width='6'/%3E%3C/g%3E%3C/svg%3E" alt="UK Flag" width="24" height="16" style="border-radius: 2px; border: 1px solid rgba(0,0,0,0.1);">
@@ -514,8 +560,8 @@
                     </h2>
 
                     <!-- Blog Excerpt -->
-                    <div id="blogExcerpt" style="background: #f8f9fa; padding: 25px; border-radius: 12px; margin-bottom: 30px; border-left: 4px solid #667eea;">
-                        <p style="font-size: 18px; line-height: 1.8; color: #495057; margin: 0; font-style: italic;">
+                    <div id="blogExcerpt" style="background: transparent; padding: 25px 0; margin-bottom: 30px;">
+                        <p style="font-size: 18px; line-height: 1.8; color: #495057; margin: 0; font-style: italic; background: transparent;">
                             Loading excerpt...
                         </p>
                     </div>
@@ -529,9 +575,9 @@
 
                         <p>From tropical paradises to Mediterranean gems, these beaches offer unforgettable experiences for every type of traveler. Get ready to discover your next dream destination!</p>
 
-                        <blockquote style="border-left: 4px solid #667eea; padding-left: 20px; margin: 30px 0; font-style: italic; color: #666;">
+                        <blockquote style="border-left: 4px solid #667eea; padding-left: 20px; margin: 30px 0; font-style: italic; color: #666; background: transparent;">
                             "Travel is the only thing you buy that makes you richer. It enriches our lives with unforgettable experiences, broadens our perspectives, and creates memories that last a lifetime."
-                            <footer style="margin-top: 10px; font-size: 14px;">- Dr. Samuel Nathan</footer>
+                            <footer style="margin-top: 10px; font-size: 14px; background: transparent;">- Dr. Samuel Nathan</footer>
                         </blockquote>
 
                         <!-- Beach Section 1 -->
@@ -643,15 +689,31 @@
                 <div class="col-lg-4">
                     <!-- Categories Widget -->
                     <div class="sidebar-widget" style="padding: 25px; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 30px;">
-                        <h4 style="margin-bottom: 20px; border-bottom: 2px solid #667eea; padding-bottom: 15px;">Categories</h4>
-                        <ul style="list-style: none; padding: 0;">
-                            <li style="margin-bottom: 12px;"><a href="#" style="display: flex; justify-content: space-between; color: #495057; text-decoration: none; font-size: 15px;">Adventure Tours <span style="color: #999;">(10)</span></a></li>
-                            <li style="margin-bottom: 12px;"><a href="#" style="display: flex; justify-content: space-between; color: #495057; text-decoration: none; font-size: 15px;">Beach Holidays <span style="color: #999;">(15)</span></a></li>
-                            <li style="margin-bottom: 12px;"><a href="#" style="display: flex; justify-content: space-between; color: #495057; text-decoration: none; font-size: 15px;">Cultural Tours <span style="color: #999;">(8)</span></a></li>
-                            <li style="margin-bottom: 12px;"><a href="#" style="display: flex; justify-content: space-between; color: #495057; text-decoration: none; font-size: 15px;">Family Vacations <span style="color: #999;">(12)</span></a></li>
-                            <li style="margin-bottom: 12px;"><a href="#" style="display: flex; justify-content: space-between; color: #495057; text-decoration: none; font-size: 15px;">Cruises <span style="color: #999;">(6)</span></a></li>
+                        <h4 style="margin-bottom: 25px; font-size: 20px; font-weight: 700; color: #2c3e50; display: flex; align-items: center; gap: 10px;">
+                            📂 Categories
+                        </h4>
+                        <ul id="categoriesContainer" style="list-style: none; padding: 0; margin: 0;">
+                            <li style="padding: 20px; text-align: center; color: #6c757d;">
+                                Loading categories...
+                            </li>
                         </ul>
                     </div>
+
+                    <style>
+                        .category-link {
+                            position: relative;
+                        }
+
+                        .category-link:active {
+                            transform: scale(0.98);
+                        }
+
+                        /* Default transitions */
+                        .category-link,
+                        .category-link .category-badge {
+                            transition: all 0.3s ease;
+                        }
+                    </style>
 
                     <!-- Recent Posts Widget -->
                     <div class="sidebar-widget" style="padding: 25px; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 30px;">
@@ -987,7 +1049,7 @@
                 // Update blog excerpt
                 const excerptContainer = document.getElementById('blogExcerpt');
                 if (blog.excerpt) {
-                    excerptContainer.innerHTML = `<p style="font-size: 18px; line-height: 1.8; color: #495057; margin: 0; font-style: italic;">${blog.excerpt}</p>`;
+                    excerptContainer.innerHTML = `<p style="font-size: 18px; line-height: 1.8; color: #495057; margin: 0; font-style: italic; background: transparent;">${blog.excerpt}</p>`;
                 } else {
                     excerptContainer.style.display = 'none';
                 }
@@ -1008,10 +1070,37 @@
 
                 // Update blog content
                 const contentContainer = document.getElementById('blogContentContainer');
-                if (blog.content) {
-                    // Convert line breaks to paragraphs
+
+                // Check if blog has contentSections (new format with multiple images)
+                if (blog.contentSections && blog.contentSections.length > 0) {
+                    // Render multiple sections with images
+                    const sectionsHTML = blog.contentSections.map(section => {
+                        let sectionHTML = '';
+
+                        // Add image if available
+                        if (section.image) {
+                            sectionHTML += `
+                                <div style="margin: 30px 0;">
+                                    <img src="${section.image}" alt="Section image"
+                                         style="width: 100%; max-width: 800px; height: auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                </div>
+                            `;
+                        }
+
+                        // Add content if available
+                        if (section.content && section.content.trim()) {
+                            const paragraphs = section.content.split('\n\n').filter(p => p.trim());
+                            sectionHTML += paragraphs.map(p => `<p style="background: transparent;">${p.replace(/\n/g, '<br>')}</p>`).join('');
+                        }
+
+                        return sectionHTML;
+                    }).join('');
+
+                    contentContainer.innerHTML = sectionsHTML || '<p>No content available.</p>';
+                } else if (blog.content) {
+                    // Old format - single content field
                     const paragraphs = blog.content.split('\n\n').filter(p => p.trim());
-                    contentContainer.innerHTML = paragraphs.map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+                    contentContainer.innerHTML = paragraphs.map(p => `<p style="background: transparent;">${p.replace(/\n/g, '<br>')}</p>`).join('');
                 } else {
                     contentContainer.innerHTML = '<p>No content available.</p>';
                 }
@@ -1083,15 +1172,107 @@
             }
         }
 
-        // Load blog and recent posts when page loads
+        // Load categories
+        async function loadCategories() {
+            try {
+                // Fetch categories
+                const categoriesResponse = await fetch('/api/categories?active=true');
+                if (!categoriesResponse.ok) {
+                    throw new Error('Failed to load categories');
+                }
+                const categoriesResult = await categoriesResponse.json();
+                const categories = categoriesResult.data?.categories || categoriesResult.categories || [];
+
+                // Fetch all blogs to count per category
+                const blogsResponse = await fetch('/api/admin/blogs');
+                let blogCounts = {};
+
+                if (blogsResponse.ok) {
+                    const blogs = await blogsResponse.json();
+                    const blogList = Array.isArray(blogs) ? blogs : (blogs.data || []);
+
+                    // Count blogs per category
+                    blogList.forEach(blog => {
+                        const category = blog.category;
+                        if (category) {
+                            blogCounts[category] = (blogCounts[category] || 0) + 1;
+                        }
+                    });
+                }
+
+                const container = document.getElementById('categoriesContainer');
+
+                if (categories.length === 0) {
+                    container.innerHTML = '<li style="padding: 20px; text-align: center; color: #6c757d;">No categories available</li>';
+                    return;
+                }
+
+                // Generate category HTML with real counts and colors
+                const categoriesHTML = categories.map(category => {
+                    const color = category.color || '#667eea';
+                    const slug = category.slug || '';
+                    const count = blogCounts[slug] || 0;
+
+                    return `
+                        <li style="margin-bottom: 10px;">
+                            <a href="#" class="category-link" data-color="${color}" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f8f9fa; border-radius: 8px; color: #495057; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.3s ease; border-left: 3px solid transparent;">
+                                <span>${category.name}</span>
+                                <span class="category-badge" style="background: ${color}; color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">${count}</span>
+                            </a>
+                        </li>
+                    `;
+                }).join('');
+
+                container.innerHTML = categoriesHTML;
+
+                // Add hover effects with custom colors
+                document.querySelectorAll('.category-link').forEach(link => {
+                    const color = link.getAttribute('data-color');
+                    const badge = link.querySelector('.category-badge');
+
+                    link.addEventListener('mouseenter', function() {
+                        this.style.background = color;
+                        this.style.color = 'white';
+                        this.style.transform = 'translateX(5px)';
+                        this.style.borderLeft = `3px solid ${color}`;
+                        this.style.boxShadow = `0 4px 12px ${color}40`;
+
+                        if (badge) {
+                            badge.style.background = 'white';
+                            badge.style.color = color;
+                        }
+                    });
+
+                    link.addEventListener('mouseleave', function() {
+                        this.style.background = '#f8f9fa';
+                        this.style.color = '#495057';
+                        this.style.transform = 'translateX(0)';
+                        this.style.borderLeft = '3px solid transparent';
+                        this.style.boxShadow = 'none';
+
+                        if (badge) {
+                            badge.style.background = color;
+                            badge.style.color = 'white';
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Error loading categories:', error);
+                document.getElementById('categoriesContainer').innerHTML = '<li style="padding: 20px; text-align: center; color: #dc3545;">Unable to load categories</li>';
+            }
+        }
+
+        // Load blog, recent posts, and categories when page loads
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', function() {
                 loadBlogDetails();
                 loadRecentPosts();
+                loadCategories();
             });
         } else {
             loadBlogDetails();
             loadRecentPosts();
+            loadCategories();
         }
     </script>
 

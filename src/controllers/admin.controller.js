@@ -1,6 +1,7 @@
 const asyncHandler = require('../utils/asyncHandler');
 const ApiResponse = require('../utils/ApiResponse');
 const ApiError = require('../utils/ApiError');
+const { demoBlogs } = require('../data/demoData');
 
 // ========== DEMO MA'LUMOTLAR (MongoDB ulanmaguncha) ==========
 
@@ -403,100 +404,7 @@ exports.getStatistics = asyncHandler(async (req, res) => {
 });
 
 // ========== BLOG MANAGEMENT ==========
-
-// Demo Blog Posts
-let demoBlogs = [
-  {
-    _id: '1',
-    title: 'Nature, Culture & Thrill: Travel Stories That Inspire',
-    title2: 'Experience the Best of Uzbekistan',
-    category: 'Travel Stories',
-    author: 'Admin',
-    image: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600',
-    featuredImage: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600',
-    excerpt: 'Discover the hidden gems of Uzbekistan through our carefully curated travel experiences.',
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-    tags: 'uzbekistan, travel, culture',
-    status: 'published',
-    createdAt: new Date('2024-02-20'),
-    updatedAt: new Date('2024-02-20')
-  },
-  {
-    _id: '2',
-    title: 'Dream. Explore. Discover. Where Will You Go Next?',
-    title2: 'Your Next Adventure Awaits',
-    category: 'Destinations',
-    author: 'Admin',
-    image: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600',
-    featuredImage: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600',
-    excerpt: 'Explore the ancient Silk Road cities and experience the rich cultural heritage.',
-    content: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-    tags: 'destinations, adventure, history',
-    status: 'published',
-    createdAt: new Date('2024-02-18'),
-    updatedAt: new Date('2024-02-18')
-  },
-  {
-    _id: '3',
-    title: 'Top 10 Travel Tips for First-Time Visitors to Uzbekistan',
-    title2: 'Make Your Journey Unforgettable',
-    category: 'Travel Tips',
-    author: 'Admin',
-    image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600',
-    featuredImage: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600',
-    excerpt: 'Essential tips and tricks for making your first trip to Uzbekistan unforgettable.',
-    content: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
-    tags: 'tips, guide, uzbekistan',
-    status: 'draft',
-    createdAt: new Date('2024-02-15'),
-    updatedAt: new Date('2024-02-15')
-  },
-  {
-    _id: '4',
-    title: 'Hidden Gems: Unexplored Destinations in Central Asia',
-    title2: 'Beyond the Tourist Trail',
-    category: 'Destinations',
-    author: 'Admin',
-    image: 'assets/img/home3/blog-img2.jpg',
-    featuredImage: 'assets/img/home3/blog-img2.jpg',
-    excerpt: 'Discover breathtaking locations in Central Asia that most travelers never see.',
-    content: 'Central Asia is full of hidden treasures waiting to be explored. From remote mountain villages to ancient fortresses, these destinations offer authentic experiences away from the crowds.',
-    tags: 'central asia, hidden gems, adventure',
-    status: 'published',
-    createdAt: new Date('2024-02-12'),
-    updatedAt: new Date('2024-02-12')
-  },
-  {
-    _id: '5',
-    title: 'A Foodie\'s Guide to Uzbekistan: Must-Try Dishes',
-    title2: 'Taste the Authentic Flavors',
-    category: 'Food & Culture',
-    author: 'Admin',
-    image: 'assets/img/home3/blog-img3.jpg',
-    featuredImage: 'assets/img/home3/blog-img3.jpg',
-    excerpt: 'Explore the rich culinary traditions of Uzbekistan with our comprehensive food guide.',
-    content: 'Uzbek cuisine is a delightful blend of flavors, influenced by centuries of Silk Road trade. From plov to samsa, discover the dishes that define this Central Asian nation.',
-    tags: 'food, uzbekistan, cuisine, culture',
-    status: 'published',
-    createdAt: new Date('2024-02-10'),
-    updatedAt: new Date('2024-02-10')
-  },
-  {
-    _id: '6',
-    title: 'Best Time to Visit the Silk Road Countries',
-    title2: 'Plan Your Perfect Journey',
-    category: 'Travel Planning',
-    author: 'Admin',
-    image: 'assets/img/home3/blog-img1.jpg',
-    featuredImage: 'assets/img/home3/blog-img1.jpg',
-    excerpt: 'Learn about the ideal seasons to explore the historic Silk Road routes.',
-    content: 'Timing is everything when planning a Silk Road adventure. Discover the best months to visit each country along this legendary trade route.',
-    tags: 'silk road, travel planning, seasons',
-    status: 'published',
-    createdAt: new Date('2024-02-05'),
-    updatedAt: new Date('2024-02-05')
-  }
-];
+// Demo Blog Posts imported from shared data (../data/demoData.js)
 
 // Get all blogs
 exports.getAllBlogs = asyncHandler(async (req, res) => {
@@ -518,24 +426,47 @@ exports.getBlogById = asyncHandler(async (req, res) => {
 
 // Create new blog
 exports.createBlog = asyncHandler(async (req, res) => {
-  const { title, category, author, image, featuredImage, excerpt, content, tags, status, location, title2 } = req.body;
+  const { title, category, author, image, featuredImage, excerpt, content, contentSections, tags, status, location, title2 } = req.body;
 
-  if (!title || !category || !content) {
-    throw new ApiError(400, 'Title, category, and content are required');
+  // Build content from sections if provided, otherwise use content directly
+  let finalContent = content || '';
+  if (contentSections && Array.isArray(contentSections) && contentSections.length > 0) {
+    finalContent = contentSections.map(section => {
+      let sectionText = '';
+      if (section.heading) {
+        sectionText += `\n\n## ${section.heading}\n\n`;
+      }
+      if (section.image) {
+        sectionText += `![${section.heading || 'Image'}](${section.image})\n\n`;
+      }
+      sectionText += section.content || '';
+      return sectionText;
+    }).join('\n');
+  }
+
+  if (!title || !category || !finalContent) {
+    throw new ApiError(400, 'Title, category and content are required');
   }
 
   // Use either image or featuredImage, prefer featuredImage if both exist
   const blogImage = featuredImage || image;
 
+  // Generate unique ID to avoid conflicts
+  const maxId = demoBlogs.reduce((max, blog) => {
+    const id = parseInt(blog._id) || 0;
+    return id > max ? id : max;
+  }, 0);
+
   const newBlog = {
-    _id: String(demoBlogs.length + 1),
+    _id: String(maxId + 1),
     title,
     category,
     author: author || 'Admin',
     image: blogImage,
     featuredImage: blogImage,
     excerpt,
-    content,
+    content: finalContent.trim(),
+    contentSections: contentSections || [],
     tags,
     status: status || 'draft',
     location,
@@ -559,7 +490,23 @@ exports.updateBlog = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Blog post not found');
   }
 
-  const { title, category, author, image, featuredImage, excerpt, content, tags, status, location, title2 } = req.body;
+  const { title, category, author, image, featuredImage, excerpt, content, contentSections, tags, status, location, title2 } = req.body;
+
+  // Build content from sections if provided
+  let finalContent = content || demoBlogs[blogIndex].content;
+  if (contentSections && Array.isArray(contentSections) && contentSections.length > 0) {
+    finalContent = contentSections.map(section => {
+      let sectionText = '';
+      if (section.heading) {
+        sectionText += `\n\n## ${section.heading}\n\n`;
+      }
+      if (section.image) {
+        sectionText += `![${section.heading || 'Image'}](${section.image})\n\n`;
+      }
+      sectionText += section.content || '';
+      return sectionText;
+    }).join('\n');
+  }
 
   // Use either image or featuredImage, prefer featuredImage if both exist
   const blogImage = featuredImage || image || demoBlogs[blogIndex].image || demoBlogs[blogIndex].featuredImage;
@@ -572,7 +519,8 @@ exports.updateBlog = asyncHandler(async (req, res) => {
     image: blogImage,
     featuredImage: blogImage,
     excerpt: excerpt || demoBlogs[blogIndex].excerpt,
-    content: content || demoBlogs[blogIndex].content,
+    content: finalContent.trim(),
+    contentSections: contentSections || demoBlogs[blogIndex].contentSections || [],
     tags: tags || demoBlogs[blogIndex].tags,
     status: status || demoBlogs[blogIndex].status,
     location: location || demoBlogs[blogIndex].location,

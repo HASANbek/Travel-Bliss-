@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Icon Upload Demo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        .form-group {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .emoji-btn:hover {
+            transform: scale(1.1);
+            border-color: #667eea !important;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+        .emoji-btn:active {
+            transform: scale(0.95);
+        }
+        .emoji-btn.selected {
+            border-color: #667eea !important;
+            background: #f0f0ff !important;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        .icon-tab-btn.active {
+            color: #667eea !important;
+            border-bottom-color: #667eea !important;
+        }
+        .icon-tab-btn:hover {
+            color: #667eea;
+        }
+        label[for="customIconImageInput"]:hover {
+            background: #5568d3 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; color: #333; margin-bottom: 30px;">📸 Category Icon Upload Demo</h1>
+
+    <div class="form-group">
+        <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #495057; font-size: 14px;">
+            Icon <span style="color: #dc3545;">*</span>
+        </label>
+
+        <!-- Icon Type Tabs -->
+        <div style="display: flex; gap: 10px; margin-bottom: 15px; border-bottom: 2px solid #e9ecef;">
+            <button type="button" id="emojiTabBtn" class="icon-tab-btn active" data-tab="emoji"
+                    style="padding: 10px 20px; border: none; background: none; cursor: pointer; font-weight: 500; color: #667eea; border-bottom: 3px solid #667eea; transition: all 0.3s;">
+                📱 Emoji Icon
+            </button>
+            <button type="button" id="imageTabBtn" class="icon-tab-btn" data-tab="image"
+                    style="padding: 10px 20px; border: none; background: none; cursor: pointer; font-weight: 500; color: #6c757d; border-bottom: 3px solid transparent; transition: all 0.3s;">
+                🖼️ Custom Image
+            </button>
+        </div>
+
+        <!-- Selected Icon Display -->
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+            <div id="selectedIconDisplay" style="width: 80px; height: 80px; border: 2px solid #ced4da; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 40px; background: #f8f9fa; overflow: hidden;">
+                📁
+            </div>
+            <div style="flex: 1;">
+                <input type="text" id="categoryIcon" value="📁" required readonly
+                       style="width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px; font-size: 20px; text-align: center; background: white; cursor: default;">
+                <input type="hidden" id="categoryIconType" value="emoji">
+                <input type="hidden" id="categoryIconImage" value="">
+                <small id="iconHelpText" style="color: #6c757d; font-size: 12px; margin-top: 5px; display: block;">
+                    Click an emoji below to select
+                </small>
+            </div>
+        </div>
+
+        <!-- Emoji Picker Grid -->
+        <div id="emojiPicker" style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #e0e0e0; display: block;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap: 8px; max-height: 250px; overflow-y: auto; padding: 5px;">
+                <!-- Travel & Places -->
+                <button type="button" class="emoji-btn" data-emoji="✈️" style="width: 50px; height: 50px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; font-size: 28px; cursor: pointer; transition: all 0.2s;" title="Airplane">✈️</button>
+                <button type="button" class="emoji-btn" data-emoji="🗺️" style="width: 50px; height: 50px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; font-size: 28px; cursor: pointer; transition: all 0.2s;" title="World Map">🗺️</button>
+                <button type="button" class="emoji-btn" data-emoji="🌍" style="width: 50px; height: 50px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; font-size: 28px; cursor: pointer; transition: all 0.2s;" title="Globe">🌍</button>
+                <button type="button" class="emoji-btn" data-emoji="🏔️" style="width: 50px; height: 50px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; font-size: 28px; cursor: pointer; transition: all 0.2s;" title="Mountain">🏔️</button>
+                <button type="button" class="emoji-btn" data-emoji="🏖️" style="width: 50px; height: 50px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; font-size: 28px; cursor: pointer; transition: all 0.2s;" title="Beach">🏖️</button>
+                <button type="button" class="emoji-btn" data-emoji="🕌" style="width: 50px; height: 50px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; font-size: 28px; cursor: pointer; transition: all 0.2s;" title="Mosque">🕌</button>
+                <button type="button" class="emoji-btn" data-emoji="🏰" style="width: 50px; height: 50px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; font-size: 28px; cursor: pointer; transition: all 0.2s;" title="Castle">🏰</button>
+                <button type="button" class="emoji-btn" data-emoji="🎭" style="width: 50px; height: 50px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; font-size: 28px; cursor: pointer; transition: all 0.2s;" title="Performing Arts">🎭</button>
+                <button type="button" class="emoji-btn" data-emoji="🎨" style="width: 50px; height: 50px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; font-size: 28px; cursor: pointer; transition: all 0.2s;" title="Art">🎨</button>
+                <button type="button" class="emoji-btn" data-emoji="📸" style="width: 50px; height: 50px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; font-size: 28px; cursor: pointer; transition: all 0.2s;" title="Camera">📸</button>
+                <button type="button" class="emoji-btn" data-emoji="🍽️" style="width: 50px; height: 50px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; font-size: 28px; cursor: pointer; transition: all 0.2s;" title="Restaurant">🍽️</button>
+                <button type="button" class="emoji-btn" data-emoji="🏨" style="width: 50px; height: 50px; border: 2px solid #e0e0e0; border-radius: 8px; background: white; font-size: 28px; cursor: pointer; transition: all 0.2s;" title="Hotel">🏨</button>
+            </div>
+        </div>
+
+        <!-- Custom Image Upload Section -->
+        <div id="imagePicker" style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e0e0e0; display: none;">
+            <div style="text-align: center;">
+                <label for="customIconImageInput" style="display: inline-block; padding: 12px 24px; background: #667eea; color: white; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.3s; margin-bottom: 15px;">
+                    📁 Choose Image File
+                    <input type="file" id="customIconImageInput" accept="image/*" style="display: none;">
+                </label>
+                <p style="color: #6c757d; font-size: 13px; margin: 10px 0;">
+                    Upload PNG, JPG, or SVG (recommended size: 80x80px)
+                </p>
+                <div id="imageUploadPreview" style="margin-top: 15px; padding: 15px; background: white; border-radius: 8px; display: none;">
+                    <p style="color: #28a745; font-size: 14px; margin: 0;">
+                        ✅ Image uploaded successfully
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Display Current Selection -->
+        <div style="margin-top: 20px; padding: 15px; background: #e9ecef; border-radius: 8px;">
+            <p style="margin: 0 0 10px 0; font-weight: 600; color: #495057;">Current Selection:</p>
+            <p style="margin: 5px 0;"><strong>Type:</strong> <span id="displayType">emoji</span></p>
+            <p style="margin: 5px 0;"><strong>Value:</strong> <span id="displayValue">📁</span></p>
+        </div>
+    </div>
+
+    <script>
+        // Emoji selection handler
+        document.querySelectorAll('.emoji-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const emoji = this.getAttribute('data-emoji');
+
+                // Update input and display
+                document.getElementById('categoryIcon').value = emoji;
+                document.getElementById('selectedIconDisplay').textContent = emoji;
+                document.getElementById('categoryIconType').value = 'emoji';
+                document.getElementById('categoryIconImage').value = '';
+
+                // Update display info
+                document.getElementById('displayType').textContent = 'emoji';
+                document.getElementById('displayValue').textContent = emoji;
+
+                // Remove previous selection
+                document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('selected'));
+
+                // Add selection to clicked button
+                this.classList.add('selected');
+            });
+        });
+
+        // Tab switching
+        const emojiTabBtn = document.getElementById('emojiTabBtn');
+        const imageTabBtn = document.getElementById('imageTabBtn');
+        const emojiPicker = document.getElementById('emojiPicker');
+        const imagePicker = document.getElementById('imagePicker');
+        const iconHelpText = document.getElementById('iconHelpText');
+
+        emojiTabBtn.addEventListener('click', function() {
+            // Switch to emoji tab
+            emojiTabBtn.classList.add('active');
+            imageTabBtn.classList.remove('active');
+            emojiTabBtn.style.color = '#667eea';
+            emojiTabBtn.style.borderBottomColor = '#667eea';
+            imageTabBtn.style.color = '#6c757d';
+            imageTabBtn.style.borderBottomColor = 'transparent';
+
+            emojiPicker.style.display = 'block';
+            imagePicker.style.display = 'none';
+            iconHelpText.textContent = 'Click an emoji below to select';
+        });
+
+        imageTabBtn.addEventListener('click', function() {
+            // Switch to image tab
+            imageTabBtn.classList.add('active');
+            emojiTabBtn.classList.remove('active');
+            imageTabBtn.style.color = '#667eea';
+            imageTabBtn.style.borderBottomColor = '#667eea';
+            emojiTabBtn.style.color = '#6c757d';
+            emojiTabBtn.style.borderBottomColor = 'transparent';
+
+            emojiPicker.style.display = 'none';
+            imagePicker.style.display = 'block';
+            iconHelpText.textContent = 'Upload a custom image file';
+        });
+
+        // Custom image upload handler
+        document.getElementById('customIconImageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const imageData = event.target.result;
+
+                    // Update display with image
+                    const displayDiv = document.getElementById('selectedIconDisplay');
+                    displayDiv.innerHTML = '';
+                    const img = document.createElement('img');
+                    img.src = imageData;
+                    img.style.width = '100%';
+                    img.style.height = '100%';
+                    img.style.objectFit = 'cover';
+                    displayDiv.appendChild(img);
+
+                    // Update hidden inputs
+                    document.getElementById('categoryIcon').value = file.name;
+                    document.getElementById('categoryIconType').value = 'image';
+                    document.getElementById('categoryIconImage').value = imageData;
+
+                    // Update display info
+                    document.getElementById('displayType').textContent = 'custom image';
+                    document.getElementById('displayValue').textContent = file.name;
+
+                    // Show success message
+                    document.getElementById('imageUploadPreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
