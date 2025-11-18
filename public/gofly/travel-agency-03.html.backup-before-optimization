@@ -30,31 +30,6 @@
     <link rel="icon" href="assets/img/fav-icon.svg" type="image/gif" sizes="20x20">
 
 <style>
-/* Override primary color to match logo */
-:root {
-    --primary-color1: #6366F1 !important;
-    --primary-color1-opc: 99, 102, 241 !important;
-}
-
-.primary-btn1,
-button.primary-btn1,
-a.primary-btn1 {
-    background-color: #6366F1 !important;
-}
-
-.slider-btn-grp .slider-btn:hover,
-.progress-wrap:hover,
-.primary-btn1::after,
-.primary-btn1.white-bg::after,
-.primary-btn1.black-bg::after,
-.primary-btn1.transparent::after {
-    background-color: #6366F1 !important;
-}
-
-.swiper-pagination-bullet.swiper-pagination-bullet-active {
-    background-color: #6366F1 !important;
-}
-
 /* Custom Header Styling - Nuratau Style */
 .top-info-bar {
     background: #0d8b7a;
@@ -4018,20 +3993,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     console.log('Tours and Package Swipers initialized successfully!');
-});
-
-// Force update button colors to match logo
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Forcing color update...');
-
-    // Update all primary buttons
-    const buttons = document.querySelectorAll('.primary-btn1');
-    buttons.forEach(btn => {
-        btn.style.backgroundColor = '#6366F1';
-        btn.style.setProperty('background-color', '#6366F1', 'important');
-    });
-
-    console.log('Updated', buttons.length, 'buttons to #6366F1');
 });
 </script>
 

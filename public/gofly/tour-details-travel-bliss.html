@@ -1,0 +1,2102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour Details - Travel Bliss | Discover Your Journey</title>
+    <meta name="description" content="Explore amazing destinations with Travel Bliss - Your gateway to unforgettable travel experiences">
+
+    <style>
+        /* ===================================
+           TRAVEL BLISS DESIGN SYSTEM
+        =================================== */
+
+        :root {
+            /* Brand Colors - Uzbekistan Inspired */
+            --primary-blue: #1E88E5;
+            --silk-gold: #FFB300;
+            --desert-sunset: #FF6B35;
+            --oasis-green: #10B981;
+            --ancient-stone: #5D4E37;
+            --sand-beige: #F5F1E8;
+            --deep-navy: #1A365D;
+
+            /* Gradients */
+            --gradient-sunset: linear-gradient(135deg, #FF6B35 0%, #FFB300 100%);
+            --gradient-sky: linear-gradient(135deg, #1E88E5 0%, #10B981 100%);
+            --gradient-silk: linear-gradient(135deg, #FFB300 0%, #FF6B35 50%, #1E88E5 100%);
+
+            /* Neutrals */
+            --white: #FFFFFF;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-600: #4B5563;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+
+            /* Spacing */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --spacing-2xl: 4rem;
+
+            /* Typography */
+            --font-heading: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+            --shadow-glow: 0 0 20px rgba(30, 136, 229, 0.3);
+
+            /* Borders */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-full: 9999px;
+        }
+
+        /* ===================================
+           BASE STYLES
+        =================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--gray-800);
+            background-color: var(--gray-50);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--deep-navy);
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* ===================================
+           UZBEK PATTERN SVG BACKGROUNDS
+        =================================== */
+
+        .pattern-border {
+            position: relative;
+        }
+
+        .pattern-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: var(--gradient-silk);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .geometric-pattern {
+            background-image:
+                repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(30, 136, 229, 0.03) 10px, rgba(30, 136, 229, 0.03) 20px),
+                repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255, 179, 0, 0.03) 10px, rgba(255, 179, 0, 0.03) 20px);
+        }
+
+        /* ===================================
+           HERO SECTION - SILK ROAD JOURNEY
+        =================================== */
+
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            overflow: hidden;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .hero-image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-gradient-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(26, 54, 93, 0.3) 0%,
+                rgba(30, 136, 229, 0.5) 50%,
+                rgba(255, 107, 53, 0.4) 100%
+            );
+        }
+
+        .hero-pattern-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(255, 255, 255, 0.03) 50px, rgba(255, 255, 255, 0.03) 100px),
+                repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(255, 255, 255, 0.03) 50px, rgba(255, 255, 255, 0.03) 100px);
+        }
+
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--white);
+            z-index: 10;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .journey-breadcrumb {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .breadcrumb-item:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .breadcrumb-separator {
+            color: var(--silk-gold);
+            font-size: 1.25rem;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: var(--spacing-md);
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 4px;
+            background: var(--gradient-sunset);
+            border-radius: var(--radius-full);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            margin-top: var(--spacing-lg);
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .floating-info-cards {
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: var(--spacing-md);
+            z-index: 20;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 90%;
+            max-width: 900px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            min-width: 180px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--gradient-sky);
+            color: var(--white);
+            flex-shrink: 0;
+        }
+
+        .info-card-content {
+            flex: 1;
+        }
+
+        .info-card-label {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .info-card-value {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--deep-navy);
+        }
+
+        /* ===================================
+           NAVIGATION TABS - CARAVANSERAI
+        =================================== */
+
+        .nav-tabs-container {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--white);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-xs);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-sm);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .nav-tabs::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .nav-tabs::-webkit-scrollbar-thumb {
+            background: var(--primary-blue);
+            border-radius: var(--radius-full);
+        }
+
+        .nav-tab {
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: transparent;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            transition: all 0.3s ease;
+            position: relative;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: var(--gradient-sunset);
+            border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+            transition: width 0.3s ease;
+        }
+
+        .nav-tab:hover,
+        .nav-tab.active {
+            color: var(--primary-blue);
+            background: var(--sand-beige);
+        }
+
+        .nav-tab.active::before {
+            width: 100%;
+        }
+
+        .nav-tab-icon {
+            font-size: 1.25rem;
+        }
+
+        /* ===================================
+           MAIN LAYOUT
+        =================================== */
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: var(--spacing-xl);
+            margin-top: calc(var(--spacing-2xl) + 60px);
+        }
+
+        .content-column {
+            min-width: 0;
+        }
+
+        .sidebar-column {
+            position: relative;
+        }
+
+        /* ===================================
+           SECTION STYLING
+        =================================== */
+
+        .section {
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-header {
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: var(--spacing-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .section-title-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            background: var(--gradient-sunset);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .section-description {
+            color: var(--gray-600);
+            font-size: 1.125rem;
+            line-height: 1.8;
+        }
+
+        .ornamental-divider {
+            height: 3px;
+            background: var(--gradient-silk);
+            border-radius: var(--radius-full);
+            margin: var(--spacing-xl) 0;
+            position: relative;
+        }
+
+        .ornamental-divider::before,
+        .ornamental-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: var(--silk-gold);
+            border-radius: var(--radius-full);
+        }
+
+        .ornamental-divider::before {
+            left: 0;
+        }
+
+        .ornamental-divider::after {
+            right: 0;
+        }
+
+        /* ===================================
+           JOURNEY TIMELINE - ITINERARY
+        =================================== */
+
+        .journey-timeline {
+            position: relative;
+            padding-left: var(--spacing-xl);
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 24px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary-blue), var(--oasis-green));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: var(--spacing-xl);
+            padding-left: var(--spacing-xl);
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -45px;
+            top: 8px;
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-full);
+            background: var(--white);
+            border: 3px solid var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--primary-blue);
+            box-shadow: var(--shadow-md);
+            z-index: 2;
+        }
+
+        .timeline-card {
+            background: var(--sand-beige);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-lg);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .timeline-card:hover {
+            transform: translateX(10px);
+            border-color: var(--silk-gold);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .timeline-day-title {
+            font-size: 1.5rem;
+            margin-bottom: var(--spacing-sm);
+            color: var(--deep-navy);
+        }
+
+        .timeline-activities {
+            list-style: none;
+            margin-top: var(--spacing-md);
+        }
+
+        .timeline-activity {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+            color: var(--gray-700);
+        }
+
+        .timeline-activity::before {
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--oasis-green);
+            color: var(--white);
+            border-radius: var(--radius-full);
+            flex-shrink: 0;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        /* ===================================
+           TREASURE BOXES - FEATURES GRID
+        =================================== */
+
+        .treasure-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .treasure-box {
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-lg);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .treasure-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--geometric-pattern);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .treasure-box:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-blue);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .treasure-box:hover::before {
+            opacity: 1;
+        }
+
+        .treasure-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: var(--radius-full);
+            background: var(--gradient-sky);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto var(--spacing-md);
+            position: relative;
+            z-index: 1;
+        }
+
+        .treasure-title {
+            font-size: 1.25rem;
+            margin-bottom: var(--spacing-sm);
+            position: relative;
+            z-index: 1;
+        }
+
+        .treasure-description {
+            color: var(--gray-600);
+            font-size: 0.9375rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===================================
+           MEMORY WALL - PHOTO GALLERY
+        =================================== */
+
+        .memory-wall {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .memory-photo {
+            position: relative;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: var(--white);
+            padding: var(--spacing-sm);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .memory-photo:hover {
+            transform: rotate(-2deg) translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .memory-photo:nth-child(even):hover {
+            transform: rotate(2deg) translateY(-5px);
+        }
+
+        .memory-photo img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+        }
+
+        .memory-caption {
+            padding: var(--spacing-sm) 0;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            text-align: center;
+        }
+
+        .view-all-photos-btn {
+            margin-top: var(--spacing-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md) var(--spacing-xl);
+            background: var(--gradient-sunset);
+            color: var(--white);
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            font-size: 1.125rem;
+            transition: all 0.3s ease;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .view-all-photos-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        /* ===================================
+           TRAVELER STORIES - REVIEWS
+        =================================== */
+
+        .stories-grid {
+            display: grid;
+            gap: var(--spacing-lg);
+        }
+
+        .story-card {
+            background: var(--sand-beige);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-lg);
+            position: relative;
+            border-left: 4px solid var(--silk-gold);
+            transition: all 0.3s ease;
+        }
+
+        .story-card:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .story-quote {
+            position: absolute;
+            top: var(--spacing-lg);
+            left: var(--spacing-lg);
+            font-size: 4rem;
+            color: var(--silk-gold);
+            opacity: 0.3;
+            line-height: 1;
+            font-family: Georgia, serif;
+        }
+
+        .story-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            position: relative;
+            z-index: 1;
+        }
+
+        .story-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-full);
+            background: var(--gradient-sky);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border: 3px solid var(--white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .story-author-info {
+            flex: 1;
+        }
+
+        .story-author-name {
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: var(--deep-navy);
+        }
+
+        .story-author-location {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .story-rating {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .story-star {
+            color: var(--silk-gold);
+            font-size: 1.125rem;
+        }
+
+        .story-content {
+            color: var(--gray-700);
+            line-height: 1.8;
+            font-size: 1rem;
+            position: relative;
+            z-index: 1;
+            padding-left: var(--spacing-lg);
+        }
+
+        .story-date {
+            position: absolute;
+            top: var(--spacing-lg);
+            right: var(--spacing-lg);
+            background: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            font-weight: 600;
+        }
+
+        /* ===================================
+           TRAVEL PASSPORT - BOOKING CARD
+        =================================== */
+
+        .travel-passport {
+            position: sticky;
+            top: 100px;
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+            padding: var(--spacing-xl);
+            box-shadow: var(--shadow-xl);
+            border: 3px solid var(--deep-navy);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .passport-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.05;
+            background-image:
+                repeating-linear-gradient(45deg, transparent, transparent 20px, var(--deep-navy) 20px, var(--deep-navy) 40px),
+                repeating-linear-gradient(-45deg, transparent, transparent 20px, var(--silk-gold) 20px, var(--silk-gold) 40px);
+        }
+
+        .passport-header {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+            z-index: 1;
+        }
+
+        .passport-stamp {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: var(--desert-sunset);
+            color: var(--white);
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transform: rotate(-3deg);
+            margin-bottom: var(--spacing-md);
+            box-shadow: var(--shadow-md);
+        }
+
+        .passport-price-ribbon {
+            background: var(--gradient-sunset);
+            color: var(--white);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+            z-index: 1;
+        }
+
+        .price-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .price-amount {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin: 0.5rem 0;
+        }
+
+        .price-note {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .passport-details {
+            position: relative;
+            z-index: 1;
+        }
+
+        .passport-detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md) 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .passport-detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: var(--gray-600);
+            font-size: 0.9375rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .detail-value {
+            font-weight: 700;
+            color: var(--deep-navy);
+            font-size: 1rem;
+        }
+
+        .book-journey-btn {
+            width: 100%;
+            padding: var(--spacing-md);
+            background: var(--gradient-sky);
+            color: var(--white);
+            border-radius: var(--radius-xl);
+            font-weight: 700;
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-lg);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .book-journey-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: var(--radius-full);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .book-journey-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .book-journey-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .trust-badges {
+            display: flex;
+            justify-content: space-around;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-lg);
+            padding-top: var(--spacing-lg);
+            border-top: 2px dashed var(--gray-200);
+            position: relative;
+            z-index: 1;
+        }
+
+        .trust-badge {
+            text-align: center;
+            flex: 1;
+        }
+
+        .trust-badge-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .trust-badge-text {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            font-weight: 600;
+        }
+
+        /* ===================================
+           FAQ ACCORDION
+        =================================== */
+
+        .faq-accordion {
+            display: grid;
+            gap: var(--spacing-md);
+        }
+
+        .faq-item {
+            background: var(--sand-beige);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .faq-item.active {
+            border-color: var(--primary-blue);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: var(--spacing-md) var(--spacing-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--spacing-md);
+            font-weight: 600;
+            font-size: 1.125rem;
+            color: var(--deep-navy);
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .faq-toggle {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-full);
+            background: var(--primary-blue);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding: 0 var(--spacing-lg) var(--spacing-lg);
+        }
+
+        .faq-answer-content {
+            color: var(--gray-700);
+            line-height: 1.8;
+        }
+
+        /* ===================================
+           QUICK FACTS SIDEBAR
+        =================================== */
+
+        .quick-facts {
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+            padding: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+        }
+
+        .quick-facts-title {
+            font-size: 1.25rem;
+            margin-bottom: var(--spacing-md);
+            color: var(--deep-navy);
+        }
+
+        .quick-fact {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm) 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .quick-fact:last-child {
+            border-bottom: none;
+        }
+
+        .quick-fact-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
+            background: var(--gradient-sunset);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .quick-fact-text {
+            flex: 1;
+            font-size: 0.9375rem;
+            color: var(--gray-700);
+        }
+
+        /* ===================================
+           SHARE BUTTONS
+        =================================== */
+
+        .share-section {
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+            padding: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+        }
+
+        .share-title {
+            font-size: 1.25rem;
+            margin-bottom: var(--spacing-md);
+            color: var(--deep-navy);
+        }
+
+        .share-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-sm);
+        }
+
+        .share-btn {
+            padding: var(--spacing-sm);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            transition: all 0.3s ease;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .share-facebook {
+            background: #1877F2;
+            color: var(--white);
+        }
+
+        .share-twitter {
+            background: #1DA1F2;
+            color: var(--white);
+        }
+
+        .share-whatsapp {
+            background: #25D366;
+            color: var(--white);
+        }
+
+        .share-email {
+            background: var(--gray-800);
+            color: var(--white);
+        }
+
+        /* ===================================
+           LOADING STATE
+        =================================== */
+
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            gap: var(--spacing-lg);
+        }
+
+        .loading-spinner {
+            width: 64px;
+            height: 64px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--primary-blue);
+            border-radius: var(--radius-full);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.25rem;
+            color: var(--gray-600);
+            font-weight: 600;
+        }
+
+        /* ===================================
+           ERROR STATE
+        =================================== */
+
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            gap: var(--spacing-lg);
+            text-align: center;
+            padding: var(--spacing-xl);
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            color: var(--desert-sunset);
+        }
+
+        .error-title {
+            font-size: 2rem;
+            color: var(--deep-navy);
+        }
+
+        .error-message {
+            font-size: 1.125rem;
+            color: var(--gray-600);
+            max-width: 500px;
+        }
+
+        /* ===================================
+           RESPONSIVE DESIGN
+        =================================== */
+
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar-column {
+                order: -1;
+            }
+
+            .travel-passport {
+                position: relative;
+                top: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                height: 400px;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .floating-info-cards {
+                bottom: -120px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .info-card {
+                min-width: auto;
+            }
+
+            .main-layout {
+                margin-top: calc(var(--spacing-2xl) + 120px);
+            }
+
+            .section {
+                padding: var(--spacing-lg);
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .treasure-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .memory-wall {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs {
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.5rem;
+            }
+
+            .journey-breadcrumb {
+                flex-direction: column;
+            }
+
+            .breadcrumb-separator {
+                display: none;
+            }
+
+            .section-title-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1.25rem;
+            }
+
+            .price-amount {
+                font-size: 2rem;
+            }
+        }
+
+        /* ===================================
+           UTILITY CLASSES
+        =================================== */
+
+        .text-center {
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .mt-1 { margin-top: var(--spacing-xs); }
+        .mt-2 { margin-top: var(--spacing-sm); }
+        .mt-3 { margin-top: var(--spacing-md); }
+        .mt-4 { margin-top: var(--spacing-lg); }
+
+        .mb-1 { margin-bottom: var(--spacing-xs); }
+        .mb-2 { margin-bottom: var(--spacing-sm); }
+        .mb-3 { margin-bottom: var(--spacing-md); }
+        .mb-4 { margin-bottom: var(--spacing-lg); }
+    </style>
+</head>
+<body>
+
+    <!-- Loading State -->
+    <div id="loadingState" class="loading-container">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Discovering your journey...</div>
+    </div>
+
+    <!-- Error State -->
+    <div id="errorState" class="error-container hidden">
+        <div class="error-icon">⚠️</div>
+        <h1 class="error-title">Oops! Journey Not Found</h1>
+        <p class="error-message">We couldn't load this tour. Please check the URL or try again later.</p>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="hidden">
+
+        <!-- Hero Section - Silk Road Journey -->
+        <section class="hero-section pattern-border">
+            <div class="hero-image-wrapper">
+                <img id="heroImage" class="hero-image" src="" alt="Tour Hero">
+                <div class="hero-gradient-overlay"></div>
+                <div class="hero-pattern-overlay"></div>
+            </div>
+
+            <div class="hero-content">
+                <div class="journey-breadcrumb" id="breadcrumb">
+                    <!-- Dynamic breadcrumb will be inserted here -->
+                </div>
+
+                <h1 class="hero-title" id="heroTitle">Amazing Tour Experience</h1>
+                <p class="hero-subtitle" id="heroSubtitle">Discover the beauty of extraordinary destinations</p>
+            </div>
+
+            <div class="floating-info-cards" id="floatingCards">
+                <!-- Dynamic info cards will be inserted here -->
+            </div>
+        </section>
+
+        <!-- Navigation Tabs - Caravanserai -->
+        <div class="nav-tabs-container">
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-target="journey">
+                    <span class="nav-tab-icon">🗺️</span>
+                    <span>Journey</span>
+                </button>
+                <button class="nav-tab" data-target="itinerary">
+                    <span class="nav-tab-icon">📅</span>
+                    <span>Day by Day</span>
+                </button>
+                <button class="nav-tab" data-target="includes">
+                    <span class="nav-tab-icon">✨</span>
+                    <span>Includes</span>
+                </button>
+                <button class="nav-tab" data-target="stories">
+                    <span class="nav-tab-icon">💬</span>
+                    <span>Stories</span>
+                </button>
+                <button class="nav-tab" data-target="gallery">
+                    <span class="nav-tab-icon">📸</span>
+                    <span>Gallery</span>
+                </button>
+                <button class="nav-tab" data-target="faq">
+                    <span class="nav-tab-icon">❓</span>
+                    <span>Questions</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="container">
+            <div class="main-layout">
+
+                <!-- Content Column -->
+                <div class="content-column">
+
+                    <!-- Journey Overview -->
+                    <section id="journey" class="section geometric-pattern">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <div class="section-title-icon">🌍</div>
+                                <span>Your Journey Overview</span>
+                            </h2>
+                        </div>
+                        <div class="section-description" id="tourDescription">
+                            <!-- Dynamic description -->
+                        </div>
+                    </section>
+
+                    <!-- Day-by-Day Timeline -->
+                    <section id="itinerary" class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <div class="section-title-icon">🗓️</div>
+                                <span>Day-by-Day Journey</span>
+                            </h2>
+                        </div>
+                        <div class="ornamental-divider"></div>
+                        <div class="journey-timeline" id="timelineContent">
+                            <!-- Dynamic timeline will be inserted here -->
+                        </div>
+                    </section>
+
+                    <!-- What's Included - Treasure Boxes -->
+                    <section id="includes" class="section geometric-pattern">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <div class="section-title-icon">🎁</div>
+                                <span>What's Included</span>
+                            </h2>
+                        </div>
+                        <div class="ornamental-divider"></div>
+                        <div class="treasure-grid">
+                            <div class="treasure-box">
+                                <div class="treasure-icon">🏨</div>
+                                <h3 class="treasure-title">Accommodation</h3>
+                                <p class="treasure-description">Comfortable hotels and unique stays throughout your journey</p>
+                            </div>
+                            <div class="treasure-box">
+                                <div class="treasure-icon">🍽️</div>
+                                <h3 class="treasure-title">Meals</h3>
+                                <p class="treasure-description">Authentic local cuisine and dining experiences</p>
+                            </div>
+                            <div class="treasure-box">
+                                <div class="treasure-icon">🚐</div>
+                                <h3 class="treasure-title">Transport</h3>
+                                <p class="treasure-description">All transfers and transportation included</p>
+                            </div>
+                            <div class="treasure-box">
+                                <div class="treasure-icon">👨‍🏫</div>
+                                <h3 class="treasure-title">Expert Guide</h3>
+                                <p class="treasure-description">Knowledgeable local guides throughout</p>
+                            </div>
+                            <div class="treasure-box">
+                                <div class="treasure-icon">🎫</div>
+                                <h3 class="treasure-title">Activities</h3>
+                                <p class="treasure-description">All planned activities and entrance fees</p>
+                            </div>
+                            <div class="treasure-box">
+                                <div class="treasure-icon">🛡️</div>
+                                <h3 class="treasure-title">Insurance</h3>
+                                <p class="treasure-description">Travel insurance and 24/7 support</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Traveler Stories - Reviews -->
+                    <section id="stories" class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <div class="section-title-icon">⭐</div>
+                                <span>Traveler Stories</span>
+                            </h2>
+                        </div>
+                        <div class="ornamental-divider"></div>
+                        <div class="stories-grid" id="storiesContent">
+                            <!-- Dynamic reviews will be inserted here -->
+                        </div>
+                    </section>
+
+                    <!-- Photo Gallery - Memory Wall -->
+                    <section id="gallery" class="section geometric-pattern">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <div class="section-title-icon">📷</div>
+                                <span>Memory Wall</span>
+                            </h2>
+                        </div>
+                        <div class="ornamental-divider"></div>
+                        <div class="memory-wall" id="galleryContent">
+                            <!-- Dynamic gallery will be inserted here -->
+                        </div>
+                        <button class="view-all-photos-btn">
+                            <span>📸</span>
+                            <span>View All Photos</span>
+                        </button>
+                    </section>
+
+                    <!-- FAQ Section -->
+                    <section id="faq" class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <div class="section-title-icon">💡</div>
+                                <span>Frequently Asked Questions</span>
+                            </h2>
+                        </div>
+                        <div class="ornamental-divider"></div>
+                        <div class="faq-accordion">
+                            <div class="faq-item">
+                                <button class="faq-question">
+                                    <span>What's the best time to visit?</span>
+                                    <div class="faq-toggle">▼</div>
+                                </button>
+                                <div class="faq-answer">
+                                    <div class="faq-answer-content">
+                                        The best time depends on your destination, but generally spring (April-May) and autumn (September-October) offer pleasant weather and fewer crowds. Our expert guides can help you choose the perfect season for your journey.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <button class="faq-question">
+                                    <span>What level of fitness is required?</span>
+                                    <div class="faq-toggle">▼</div>
+                                </button>
+                                <div class="faq-answer">
+                                    <div class="faq-answer-content">
+                                        Most of our tours are designed for moderate fitness levels. Some activities may involve walking or light hiking, but we always provide options for different fitness levels. Check the specific tour details for more information.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <button class="faq-question">
+                                    <span>Can I customize the itinerary?</span>
+                                    <div class="faq-toggle">▼</div>
+                                </button>
+                                <div class="faq-answer">
+                                    <div class="faq-answer-content">
+                                        Absolutely! We offer flexible customization options for private tours. Contact our travel specialists to discuss your preferences, and we'll create a personalized journey that matches your interests and schedule.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="faq-item">
+                                <button class="faq-question">
+                                    <span>What's your cancellation policy?</span>
+                                    <div class="faq-toggle">▼</div>
+                                </button>
+                                <div class="faq-answer">
+                                    <div class="faq-answer-content">
+                                        We offer flexible cancellation up to 30 days before departure with a full refund. Cancellations between 15-30 days receive 50% refund. Within 15 days, deposits are non-refundable. Travel insurance is recommended for unforeseen circumstances.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+
+                <!-- Sidebar Column -->
+                <div class="sidebar-column">
+
+                    <!-- Travel Passport - Booking Card -->
+                    <aside class="travel-passport">
+                        <div class="passport-pattern"></div>
+
+                        <div class="passport-header">
+                            <div class="passport-stamp" id="tourBadge">FEATURED</div>
+                        </div>
+
+                        <div class="passport-price-ribbon">
+                            <div class="price-label">From</div>
+                            <div class="price-amount" id="tourPrice">$999</div>
+                            <div class="price-note">per person</div>
+                        </div>
+
+                        <div class="passport-details">
+                            <div class="passport-detail-item">
+                                <span class="detail-label">⏱️ Duration</span>
+                                <span class="detail-value" id="tourDuration">7 Days</span>
+                            </div>
+                            <div class="passport-detail-item">
+                                <span class="detail-label">👥 Group Size</span>
+                                <span class="detail-value" id="tourGroup">Max 12</span>
+                            </div>
+                            <div class="passport-detail-item">
+                                <span class="detail-label">🌍 Destinations</span>
+                                <span class="detail-value" id="tourDestinations">5 Cities</span>
+                            </div>
+                            <div class="passport-detail-item">
+                                <span class="detail-label">⭐ Rating</span>
+                                <span class="detail-value" id="tourRating">4.9/5</span>
+                            </div>
+                        </div>
+
+                        <button class="book-journey-btn">
+                            <span>Book Your Journey</span>
+                            <span>→</span>
+                        </button>
+
+                        <div class="trust-badges">
+                            <div class="trust-badge">
+                                <div class="trust-badge-icon">✓</div>
+                                <div class="trust-badge-text">Best Price</div>
+                            </div>
+                            <div class="trust-badge">
+                                <div class="trust-badge-icon">🛡️</div>
+                                <div class="trust-badge-text">Secure</div>
+                            </div>
+                            <div class="trust-badge">
+                                <div class="trust-badge-icon">💬</div>
+                                <div class="trust-badge-text">24/7 Support</div>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- Quick Facts -->
+                    <aside class="quick-facts">
+                        <h3 class="quick-facts-title">Quick Facts</h3>
+                        <div class="quick-fact">
+                            <div class="quick-fact-icon">🎒</div>
+                            <div class="quick-fact-text">Backpack & comfortable shoes recommended</div>
+                        </div>
+                        <div class="quick-fact">
+                            <div class="quick-fact-icon">🌡️</div>
+                            <div class="quick-fact-text">Check seasonal weather conditions</div>
+                        </div>
+                        <div class="quick-fact">
+                            <div class="quick-fact-icon">📱</div>
+                            <div class="quick-fact-text">Mobile app with offline maps included</div>
+                        </div>
+                        <div class="quick-fact">
+                            <div class="quick-fact-icon">🍴</div>
+                            <div class="quick-fact-text">Dietary requirements accommodated</div>
+                        </div>
+                    </aside>
+
+                    <!-- Share Section -->
+                    <aside class="share-section">
+                        <h3 class="share-title">Share This Journey</h3>
+                        <div class="share-buttons">
+                            <button class="share-btn share-facebook">
+                                <span>f</span>
+                                <span>Facebook</span>
+                            </button>
+                            <button class="share-btn share-twitter">
+                                <span>𝕏</span>
+                                <span>Twitter</span>
+                            </button>
+                            <button class="share-btn share-whatsapp">
+                                <span>📱</span>
+                                <span>WhatsApp</span>
+                            </button>
+                            <button class="share-btn share-email">
+                                <span>✉️</span>
+                                <span>Email</span>
+                            </button>
+                        </div>
+                    </aside>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ===================================
+        // TRAVEL BLISS - TOUR DETAILS APP
+        // ===================================
+
+        const API_BASE = 'http://localhost:4000';
+
+        // Get tour ID from URL
+        function getTourId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id') || '1';
+        }
+
+        // Fetch tour data
+        async function fetchTourData(tourId) {
+            try {
+                const response = await fetch(`${API_BASE}/api/tours/${tourId}`);
+                if (!response.ok) {
+                    throw new Error('Tour not found');
+                }
+                const data = await response.json();
+                return data.tour;
+            } catch (error) {
+                console.error('Error fetching tour:', error);
+                throw error;
+            }
+        }
+
+        // Render Hero Section
+        function renderHero(tour) {
+            // Hero Image
+            const heroImage = document.getElementById('heroImage');
+            heroImage.src = tour.image || 'assets/img/home1/tour-default.jpg';
+            heroImage.alt = tour.title || 'Tour Experience';
+
+            // Breadcrumb
+            const breadcrumb = document.getElementById('breadcrumb');
+            const locations = tour.location ? tour.location.split(',').map(loc => loc.trim()) : ['Destination'];
+            breadcrumb.innerHTML = locations.map((loc, index) => `
+                ${index > 0 ? '<span class="breadcrumb-separator">→</span>' : ''}
+                <div class="breadcrumb-item">${loc}</div>
+            `).join('');
+
+            // Title & Subtitle
+            document.getElementById('heroTitle').textContent = tour.title || 'Amazing Journey';
+            document.getElementById('heroSubtitle').textContent = tour.subtitle || 'Discover extraordinary experiences';
+
+            // Floating Info Cards
+            const floatingCards = document.getElementById('floatingCards');
+            floatingCards.innerHTML = `
+                <div class="info-card">
+                    <div class="info-card-icon">⏱️</div>
+                    <div class="info-card-content">
+                        <div class="info-card-label">Duration</div>
+                        <div class="info-card-value">${tour.nights || 7} Days</div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">👥</div>
+                    <div class="info-card-content">
+                        <div class="info-card-label">Group Size</div>
+                        <div class="info-card-value">Max ${tour.maxGroupSize || 12}</div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">⭐</div>
+                    <div class="info-card-content">
+                        <div class="info-card-label">Rating</div>
+                        <div class="info-card-value">${tour.rating || '4.9'}/5</div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-icon">💰</div>
+                    <div class="info-card-content">
+                        <div class="info-card-label">From</div>
+                        <div class="info-card-value">$${tour.price || 999}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render Journey Overview
+        function renderJourney(tour) {
+            const description = document.getElementById('tourDescription');
+            description.innerHTML = `
+                <p>${tour.description || 'Embark on an unforgettable journey through breathtaking landscapes and rich cultural experiences. This carefully crafted tour combines adventure, relaxation, and authentic local encounters to create memories that will last a lifetime.'}</p>
+                <p style="margin-top: 1rem;">
+                    ${tour.longDescription || 'Our expert guides will lead you through hidden gems and iconic landmarks, ensuring you experience the very best of each destination. From stunning natural wonders to vibrant local markets, every day brings new discoveries and adventures.'}
+                </p>
+            `;
+        }
+
+        // Render Day-by-Day Timeline
+        function renderItinerary(tour) {
+            const timelineContent = document.getElementById('timelineContent');
+
+            if (!timelineContent) {
+                console.error('Timeline content element not found');
+                return;
+            }
+
+            const days = tour.itinerary || generateDefaultItinerary(tour.nights || 7);
+
+            // Ensure days is an array
+            const daysArray = Array.isArray(days) ? days : [];
+
+            timelineContent.innerHTML = '<div class="timeline-line"></div>';
+
+            daysArray.forEach((day, index) => {
+                // Ensure activities is an array
+                const activities = Array.isArray(day.activities)
+                    ? day.activities
+                    : (day.activities ? [day.activities] : ['Guided tour', 'Local lunch', 'Cultural experience']);
+
+                const dayElement = document.createElement('div');
+                dayElement.className = 'timeline-item';
+                dayElement.innerHTML = `
+                    <div class="timeline-dot">Day ${index + 1}</div>
+                    <div class="timeline-card">
+                        <h3 class="timeline-day-title">${day.title || `Day ${index + 1}`}</h3>
+                        <p style="color: var(--gray-600); margin-bottom: 1rem;">
+                            ${day.description || 'Exciting activities and experiences await you today.'}
+                        </p>
+                        <ul class="timeline-activities">
+                            ${activities.map(activity => `
+                                <li class="timeline-activity">${activity}</li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+                timelineContent.appendChild(dayElement);
+            });
+        }
+
+        // Generate default itinerary if not provided
+        function generateDefaultItinerary(days) {
+            const itinerary = [];
+            for (let i = 0; i < days; i++) {
+                itinerary.push({
+                    title: `Day ${i + 1} - Exploration`,
+                    description: 'Discover amazing sights and experiences',
+                    activities: [
+                        'Morning guided tour',
+                        'Authentic local lunch',
+                        'Afternoon activities',
+                        'Evening leisure time'
+                    ]
+                });
+            }
+            return itinerary;
+        }
+
+        // Render Reviews
+        function renderReviews(tour) {
+            const storiesContent = document.getElementById('storiesContent');
+            const reviews = tour.reviews || generateDefaultReviews();
+
+            storiesContent.innerHTML = reviews.map(review => `
+                <div class="story-card">
+                    <div class="story-quote">"</div>
+                    <div class="story-date">${review.date || 'Recent'}</div>
+                    <div class="story-header">
+                        <div class="story-avatar">${review.name ? review.name.charAt(0).toUpperCase() : 'T'}</div>
+                        <div class="story-author-info">
+                            <div class="story-author-name">${review.name || 'Traveler'}</div>
+                            <div class="story-author-location">
+                                <span>📍</span>
+                                <span>${review.location || 'Global Traveler'}</span>
+                            </div>
+                        </div>
+                        <div class="story-rating">
+                            ${'★'.repeat(review.rating || 5).split('').map(() => '<span class="story-star">★</span>').join('')}
+                        </div>
+                    </div>
+                    <div class="story-content">
+                        ${review.comment || 'An absolutely amazing experience! Highly recommended for anyone looking for adventure and cultural immersion.'}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Generate default reviews
+        function generateDefaultReviews() {
+            return [
+                {
+                    name: 'Sarah Johnson',
+                    location: 'United States',
+                    rating: 5,
+                    date: 'Oct 2024',
+                    comment: 'This was the trip of a lifetime! The guides were knowledgeable, the accommodations were perfect, and every day brought new wonders. Travel Bliss exceeded all my expectations.'
+                },
+                {
+                    name: 'Marco Rossi',
+                    location: 'Italy',
+                    rating: 5,
+                    date: 'Sep 2024',
+                    comment: 'Incredible journey from start to finish. The attention to detail and genuine care for creating authentic experiences sets Travel Bliss apart. I\'ll definitely book again!'
+                },
+                {
+                    name: 'Yuki Tanaka',
+                    location: 'Japan',
+                    rating: 4,
+                    date: 'Aug 2024',
+                    comment: 'A wonderful cultural experience. The local guides shared fascinating stories and took us to places we would never have found on our own. Highly recommended!'
+                }
+            ];
+        }
+
+        // Render Gallery
+        function renderGallery(tour) {
+            const galleryContent = document.getElementById('galleryContent');
+            const images = tour.gallery || generateDefaultGallery();
+
+            galleryContent.innerHTML = images.map((img, index) => `
+                <div class="memory-photo">
+                    <img src="${img.url || 'assets/img/home1/tour-default.jpg'}" alt="${img.caption || `Photo ${index + 1}`}">
+                    <div class="memory-caption">${img.caption || `Memory ${index + 1}`}</div>
+                </div>
+            `).join('');
+        }
+
+        // Generate default gallery
+        function generateDefaultGallery() {
+            return [
+                { url: 'assets/img/home1/destination1.jpg', caption: 'Stunning landscapes' },
+                { url: 'assets/img/home1/destination2.jpg', caption: 'Cultural experiences' },
+                { url: 'assets/img/home1/destination3.jpg', caption: 'Local cuisine' },
+                { url: 'assets/img/home1/destination4.jpg', caption: 'Adventure activities' },
+                { url: 'assets/img/home1/destination5.jpg', caption: 'Historic sites' },
+                { url: 'assets/img/home1/destination6.jpg', caption: 'Natural wonders' }
+            ];
+        }
+
+        // Render Booking Card
+        function renderBookingCard(tour) {
+            document.getElementById('tourBadge').textContent = tour.badge || 'FEATURED';
+            document.getElementById('tourPrice').textContent = `$${tour.price || 999}`;
+            document.getElementById('tourDuration').textContent = `${tour.nights || 7} Days`;
+            document.getElementById('tourGroup').textContent = `Max ${tour.maxGroupSize || 12}`;
+            document.getElementById('tourDestinations').textContent = tour.destinations || '5 Cities';
+            document.getElementById('tourRating').textContent = `${tour.rating || '4.9'}/5`;
+        }
+
+        // Initialize FAQ Accordion
+        function initFAQ() {
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                question.addEventListener('click', () => {
+                    const isActive = item.classList.contains('active');
+
+                    // Close all items
+                    faqItems.forEach(i => i.classList.remove('active'));
+
+                    // Open clicked item if it wasn't active
+                    if (!isActive) {
+                        item.classList.add('active');
+                    }
+                });
+            });
+        }
+
+        // Initialize Navigation Tabs
+        function initNavTabs() {
+            const tabs = document.querySelectorAll('.nav-tab');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+
+                    // Add active class to clicked tab
+                    tab.classList.add('active');
+
+                    // Scroll to target section
+                    const targetId = tab.getAttribute('data-target');
+                    const targetSection = document.getElementById(targetId);
+
+                    if (targetSection) {
+                        const offset = 100; // Account for sticky nav
+                        const targetPosition = targetSection.offsetTop - offset;
+
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Update active tab on scroll
+            window.addEventListener('scroll', () => {
+                const sections = document.querySelectorAll('.section');
+                const scrollPosition = window.scrollY + 150;
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+                    const sectionId = section.getAttribute('id');
+
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        tabs.forEach(tab => {
+                            tab.classList.remove('active');
+                            if (tab.getAttribute('data-target') === sectionId) {
+                                tab.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            });
+        }
+
+        // Show Error State
+        function showError() {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('errorState').classList.remove('hidden');
+            document.getElementById('mainContent').classList.add('hidden');
+        }
+
+        // Show Main Content
+        function showContent() {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('errorState').classList.add('hidden');
+            document.getElementById('mainContent').classList.remove('hidden');
+        }
+
+        // Main Initialization
+        async function init() {
+            try {
+                const tourId = getTourId();
+                const tour = await fetchTourData(tourId);
+
+                // Render all sections
+                renderHero(tour);
+                renderJourney(tour);
+                renderItinerary(tour);
+                renderReviews(tour);
+                renderGallery(tour);
+                renderBookingCard(tour);
+
+                // Initialize interactive elements
+                initFAQ();
+                initNavTabs();
+
+                // Show content
+                showContent();
+
+            } catch (error) {
+                showError();
+            }
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+
+</body>
+</html>

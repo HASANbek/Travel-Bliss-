@@ -34,7 +34,24 @@ const uploadMultipleImages = asyncHandler(async (req, res) => {
     );
 });
 
+// @route   POST /api/upload/tour-image
+// @desc    Upload tour itinerary day image
+// @access  Public (later add authentication)
+const uploadTourImage = asyncHandler(async (req, res) => {
+    if (!req.file) {
+        throw new ApiError(400, 'Please upload an image file');
+    }
+
+    // Return the file URL (accessible from browser)
+    const imageUrl = `/uploads/tours/${req.file.filename}`;
+
+    res.status(200).json(
+        new ApiResponse(200, { imageUrl }, 'Tour image uploaded successfully')
+    );
+});
+
 module.exports = {
     uploadImage,
-    uploadMultipleImages
+    uploadMultipleImages,
+    uploadTourImage
 };

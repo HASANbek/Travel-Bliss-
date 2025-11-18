@@ -30,31 +30,6 @@
     <link rel="icon" href="assets/img/fav-icon.svg" type="image/gif" sizes="20x20">
 
 <style>
-/* Override primary color to match logo */
-:root {
-    --primary-color1: #6366F1 !important;
-    --primary-color1-opc: 99, 102, 241 !important;
-}
-
-.primary-btn1,
-button.primary-btn1,
-a.primary-btn1 {
-    background-color: #6366F1 !important;
-}
-
-.slider-btn-grp .slider-btn:hover,
-.progress-wrap:hover,
-.primary-btn1::after,
-.primary-btn1.white-bg::after,
-.primary-btn1.black-bg::after,
-.primary-btn1.transparent::after {
-    background-color: #6366F1 !important;
-}
-
-.swiper-pagination-bullet.swiper-pagination-bullet-active {
-    background-color: #6366F1 !important;
-}
-
 /* Custom Header Styling - Nuratau Style */
 .top-info-bar {
     background: #0d8b7a;
@@ -363,119 +338,42 @@ a.primary-btn1 {
     display: none !important;
 }
 
-/* IndyGuide Style Banner Swiper Gallery */
+/* Banner Background Image */
 .home4-banner-section {
     position: relative;
-    height: 700px;
-    overflow: hidden;
 }
 
-.banner-swiper-container {
+.banner-video-area {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-}
-
-.banner-main-swiper {
-    width: 100%;
-    height: 100%;
-}
-
-.banner-main-swiper .swiper-slide {
-    position: relative;
     overflow: hidden;
 }
 
-.banner-main-swiper .swiper-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-}
-
-.banner-main-swiper .swiper-slide::before {
+.banner-video-area::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4));
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)),
+                url('/uploads/bukhara-from-above-1762763979031-887658796.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     z-index: 1;
 }
 
-/* Thumbnail Swiper */
-.banner-thumb-swiper {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 600px;
-    height: 80px;
-    z-index: 10;
-    padding: 0 10px;
-}
-
-.banner-thumb-swiper .swiper-slide {
-    opacity: 0.6;
-    cursor: pointer;
-    border: 3px solid transparent;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-.banner-thumb-swiper .swiper-slide-thumb-active {
-    opacity: 1;
-    border-color: #fff;
-    transform: scale(1.1);
-}
-
-.banner-thumb-swiper .swiper-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 5px;
-}
-
-/* Navigation Buttons */
-.banner-main-swiper .swiper-button-next,
-.banner-main-swiper .swiper-button-prev {
-    color: #fff;
-    background: rgba(0, 0, 0, 0.5);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    backdrop-filter: blur(10px);
-}
-
-.banner-main-swiper .swiper-button-next:hover,
-.banner-main-swiper .swiper-button-prev:hover {
-    background: rgba(0, 0, 0, 0.7);
-}
-
-.banner-main-swiper .swiper-button-next::after,
-.banner-main-swiper .swiper-button-prev::after {
-    font-size: 20px;
+.banner-video-area video {
+    display: none;
 }
 
 .banner-content-wrap {
     position: relative;
     z-index: 2;
-}
-
-@media (max-width: 768px) {
-    .home4-banner-section {
-        height: 500px;
-    }
-
-    .banner-thumb-swiper {
-        height: 60px;
-        max-width: 400px;
-    }
 }
 
 /* Tour Package Cards - Fixed Design */
@@ -760,55 +658,11 @@ a.primary-btn1 {
     </header>
     <!-- header Section End-->
 
-    <!-- home4 Banner Section Start - IndyGuide Style Swiper Gallery -->
+    <!-- home4 Banner Section Start-->
     <div class="home4-banner-section mb-100">
-        <!-- Main Banner Swiper -->
-        <div class="banner-swiper-container">
-            <div class="swiper banner-main-swiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="assets/img/home1/tour-package-img1.jpg" alt="Samarkand Registan">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="assets/img/home1/tour-package-img2.jpg" alt="Bukhara">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="assets/img/home1/tour-package-img3.jpg" alt="Khiva">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="assets/img/home1/tour-package-img4.jpg" alt="Tashkent">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="assets/img/home1/tour-package-img10.jpg" alt="Silk Road">
-                    </div>
-                </div>
-                <!-- Navigation buttons -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-            </div>
-
-            <!-- Thumbnail Swiper -->
-            <div class="swiper banner-thumb-swiper">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="assets/img/home1/tour-package-img1.jpg" alt="Samarkand">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="assets/img/home1/tour-package-img2.jpg" alt="Bukhara">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="assets/img/home1/tour-package-img3.jpg" alt="Khiva">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="assets/img/home1/tour-package-img4.jpg" alt="Tashkent">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="assets/img/home1/tour-package-img10.jpg" alt="Silk Road">
-                    </div>
-                </div>
-            </div>
+        <div class="banner-video-area">
+            <video autoplay loop muted playsinline src="assets/video/home4-banner-video.mp4"></video>
         </div>
-
         <div class="banner-content-wrap">
             <div class="container">
                 <div class="banner-content">
@@ -3549,7 +3403,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Load Popular Tours
 async function loadPopularTours() {
     try {
-        const response = await fetch('http://localhost:4000/api/tours');
+        const response = await fetch('http://localhost:5000/api/tours');
         const data = await response.json();
 
         if (data.success && data.data.tours) {
@@ -3566,7 +3420,7 @@ async function loadPopularTours() {
 // Load Popular Packages
 async function loadPopularPackages() {
     try {
-        const response = await fetch('http://localhost:4000/api/tours');
+        const response = await fetch('http://localhost:5000/api/tours');
         const data = await response.json();
 
         if (data.success && data.data.tours) {
@@ -3576,136 +3430,9 @@ async function loadPopularPackages() {
         console.error('Error loading packages:', error);
     }
 }
-// Display Tours Function - Swiper Compatible
-function displayTours(tours, containerId = 'toursContainer') {
-    const container = document.getElementById(containerId);
-    if (!container) {
-        console.error(`Container with id '${containerId}' not found`);
-        return;
-    }
-
-    if (!tours || tours.length === 0) {
-        container.innerHTML = '<div class="swiper-slide"><div class="col-12 text-center"><p>No tours available</p></div></div>';
-        return;
-    }
-
-    // console.log('Displaying tours:', tours); // Debug only
-
-    // Get image path helper
-    const getImageSrc = (tour) => {
-        const img = tour.imageCover || tour.image;
-        if (!img) return 'assets/img/home1/tour-package-img1.jpg';
-        if (img.startsWith('http')) return img;
-        if (img.startsWith('/uploads/')) return `http://localhost:4000${img}`;
-        if (img.startsWith('assets/')) return img;
-        return `assets/img/home1/${img}`;
-    };
-
-    const toursHTML = tours.map(tour => {
-        // console.log('Tour price:', tour.price, 'for', tour.title); // Debug only
-
-        // Get rating stars
-        const rating = tour.rating || 5.0;
-        const fullStars = Math.floor(rating);
-        const hasHalfStar = rating % 1 >= 0.5;
-
-        // Category styling
-        const categoryStyles = {
-            'cultural': { bg: '#e3f2fd', color: '#1565c0', icon: '🏛️', label: 'Cultural' },
-            'adventure': { bg: '#fff3e0', color: '#e65100', icon: '⛰️', label: 'Adventure' },
-            'hiking': { bg: '#e8f5e9', color: '#2e7d32', icon: '🥾', label: 'Hiking' },
-            'day-trip': { bg: '#fce4ec', color: '#c2185b', icon: '☀️', label: 'Day Trip' },
-            'default': { bg: '#f5f5f5', color: '#616161', icon: '🎯', label: 'Tour' }
-        };
-        const category = tour.category?.toLowerCase() || 'default';
-        const categoryStyle = categoryStyles[category] || categoryStyles.default;
-
-        return `
-        <div class="swiper-slide">
-            <div class="package-card" style="border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white;">
-                <!-- Image Section -->
-                <div class="package-img" style="position: relative; height: 240px; overflow: hidden;">
-                    <a href="tour-details.html?id=${tour.id}">
-                        <img src="${getImageSrc(tour)}" alt="${tour.title}" style="width: 100%; height: 100%; object-fit: cover;">
-                    </a>
-                    ${tour.hotSale ? '<div class="batch" style="position: absolute; top: 12px; left: 12px; background: #ff6b6b; color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;"><span>Hot Sale</span></div>' : ''}
-                    <div style="position: absolute; top: 12px; right: 12px; background: ${categoryStyle.bg}; color: ${categoryStyle.color}; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; backdrop-filter: blur(10px);">
-                        ${categoryStyle.icon} ${categoryStyle.label}
-                    </div>
-                </div>
-
-                <!-- Content Section -->
-                <div class="package-content" style="padding: 20px;">
-                    <!-- Title -->
-                    <h5 style="font-size: 18px; font-weight: 700; margin-bottom: 12px; line-height: 1.4; min-height: 50px;">
-                        <a href="tour-details.html?id=${tour.id}" style="color: #2c3e50; text-decoration: none;">
-                            ${tour.title}
-                        </a>
-                    </h5>
-
-                    <!-- Location Tags -->
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px;">
-                        <span style="background: #e8f5e9; color: #2e7d32; padding: 4px 12px; border-radius: 12px; font-size: 13px; display: inline-flex; align-items: center; gap: 4px;">
-                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                            </svg>
-                            ${tour.destination || 'Uzbekistan'}
-                        </span>
-                        <span style="background: #fff3e0; color: #e65100; padding: 4px 12px; border-radius: 12px; font-size: 13px; display: inline-flex; align-items: center; gap: 4px;">
-                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
-                            </svg>
-                            ${tour.duration || 0} Days
-                        </span>
-                    </div>
-
-                    <!-- Rating -->
-                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
-                        <div style="color: #ffc107; font-size: 14px;">
-                            ${'★'.repeat(fullStars)}${hasHalfStar ? '⯨' : ''}${'☆'.repeat(5 - fullStars - (hasHalfStar ? 1 : 0))}
-                        </div>
-                        <span style="color: #666; font-size: 13px; font-weight: 600;">${rating}</span>
-                        <span style="color: #999; font-size: 12px;">(${tour.ratingsCount || 0} reviews)</span>
-                    </div>
-
-                    <!-- Price and Button -->
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 16px; border-top: 1px solid #f0f0f0;">
-                        <div>
-                            <div style="font-size: 12px; color: #999; margin-bottom: 4px;">From</div>
-                            <div style="font-size: 26px; font-weight: 700; color: #ff6b35;">
-                                €${tour.price || 0}
-                                <span style="font-size: 14px; color: #666; font-weight: 400;">/person</span>
-                            </div>
-                        </div>
-                        <a href="tour-details.html?id=${tour.id}"
-                           style="background: #ffc107; color: #000; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; transition: all 0.3s; display: inline-block;"
-                           onmouseover="this.style.background='#ffb300'"
-                           onmouseout="this.style.background='#ffc107'">
-                            View Details
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        `;
-    }).join('');
-
-    container.innerHTML = toursHTML;
-
-    // Re-initialize Swiper after content update
-    setTimeout(() => {
-        if (containerId === 'toursContainer' && window.popularToursSwiper) {
-            window.popularToursSwiper.update();
-        } else if (containerId === 'tours-container' && window.popularPackageSwiper) {
-            window.popularPackageSwiper.update();
-        }
-    }, 100);
-}
-
 // Display Error Message
 function displayToursError(message) {
     const container = document.getElementById('toursContainer');
-    if (!container) return;
     container.innerHTML = `<div class="col-12 text-center"><p class="text-danger">${message}</p></div>`;
 }
 </script>
@@ -3794,7 +3521,7 @@ if (document.readyState === 'loading') {
 // Load categories and populate menu with dropdowns
 async function loadCategoryMenu() {
     try {
-        const response = await fetch('http://localhost:4000/api/categories?active=true');
+        const response = await fetch('http://localhost:5000/api/categories?active=true');
         const result = await response.json();
 
         if (result.success && result.data.categories) {
@@ -3823,7 +3550,7 @@ async function loadCategoryMenu() {
                 };
 
                 const categoryValue = categoryMap[category.slug];
-                const toursResponse = await fetch(`http://localhost:4000/api/tours?category=${categoryValue}`);
+                const toursResponse = await fetch(`http://localhost:5000/api/tours?category=${categoryValue}`);
                 const toursResult = await toursResponse.json();
 
                 const li = document.createElement('li');
@@ -3872,7 +3599,7 @@ async function loadCategoryMenu() {
 
 // Filter tours by category
 function filterToursByCategory(categorySlug) {
-    // console.log('Filtering tours by category:', categorySlug); // Debug only
+    console.log('Filtering tours by category:', categorySlug);
 
     // Remove active class from all menu items
     document.querySelectorAll('.menu-list li').forEach(li => li.classList.remove('active'));
@@ -3904,135 +3631,12 @@ if (document.readyState === 'loading') {
 </script>
 
 <script>
-// Main function to load tours from backend
-async function loadToursFromBackend() {
-    // console.log('Loading tours from backend...'); // Debug only
-
-    // Load both popular tours and packages
-    await Promise.all([
-        loadPopularTours(),
-        loadPopularPackages()
-    ]);
-}
-
 // Load tours when page loads
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', loadToursFromBackend);
 } else {
     loadToursFromBackend();
 }
-</script>
-
-<script>
-// ========== INDYGUIDE STYLE BANNER SWIPER GALLERY ==========
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize thumbnail swiper first
-    const bannerThumbSwiper = new Swiper('.banner-thumb-swiper', {
-        spaceBetween: 10,
-        slidesPerView: 5,
-        freeMode: true,
-        watchSlidesProgress: true,
-        breakpoints: {
-            320: {
-                slidesPerView: 3,
-                spaceBetween: 8
-            },
-            640: {
-                slidesPerView: 4,
-                spaceBetween: 10
-            },
-            1024: {
-                slidesPerView: 5,
-                spaceBetween: 10
-            }
-        }
-    });
-
-    // Initialize main banner swiper with thumbnail connection
-    const bannerMainSwiper = new Swiper('.banner-main-swiper', {
-        spaceBetween: 0,
-        loop: true,
-        autoplay: {
-            delay: 5000,
-            disableOnInteraction: false,
-        },
-        effect: 'fade',
-        fadeEffect: {
-            crossFade: true
-        },
-        navigation: {
-            nextEl: '.banner-main-swiper .swiper-button-next',
-            prevEl: '.banner-main-swiper .swiper-button-prev',
-        },
-        thumbs: {
-            swiper: bannerThumbSwiper
-        }
-    });
-
-    console.log('IndyGuide Banner Swiper Gallery initialized successfully!');
-
-    // Initialize Popular Tours Swiper
-    window.popularToursSwiper = new Swiper('.popular-tours-slider', {
-        slidesPerView: 1,
-        spaceBetween: 30,
-        loop: false,
-        navigation: {
-            nextEl: '.tours-nav-next',
-            prevEl: '.tours-nav-prev',
-        },
-        pagination: {
-            el: '.tours-pagination',
-            clickable: true,
-        },
-        breakpoints: {
-            640: {
-                slidesPerView: 2,
-            },
-            1024: {
-                slidesPerView: 3,
-            }
-        }
-    });
-
-    // Initialize Popular Package Swiper
-    window.popularPackageSwiper = new Swiper('.popular-package-slider', {
-        slidesPerView: 1,
-        spaceBetween: 30,
-        loop: false,
-        navigation: {
-            nextEl: '.package-nav-next',
-            prevEl: '.package-nav-prev',
-        },
-        pagination: {
-            el: '.package-pagination',
-            clickable: true,
-        },
-        breakpoints: {
-            640: {
-                slidesPerView: 2,
-            },
-            1024: {
-                slidesPerView: 3,
-            }
-        }
-    });
-
-    console.log('Tours and Package Swipers initialized successfully!');
-});
-
-// Force update button colors to match logo
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Forcing color update...');
-
-    // Update all primary buttons
-    const buttons = document.querySelectorAll('.primary-btn1');
-    buttons.forEach(btn => {
-        btn.style.backgroundColor = '#6366F1';
-        btn.style.setProperty('background-color', '#6366F1', 'important');
-    });
-
-    console.log('Updated', buttons.length, 'buttons to #6366F1');
-});
 </script>
 
 </body>

@@ -16,29 +16,17 @@
     <link rel="stylesheet" href="assets/css/jquery.fancybox.min.css">
     <link rel="stylesheet" href="assets/css/daterangepicker.css">
     <link rel="stylesheet" href="assets/css/jquery-ui.css">
-    <link rel="stylesheet" href="assets/css/style.css?v=3">
+    <link rel="stylesheet" href="assets/css/style.css">
 
     <style>
-        /* ============================================
-           TRAVEL BLISS - Logo Colors (Simple & Clean)
-        ============================================ */
-        :root {
-            --tb-blue: #1B4F9C;        /* Logo ko'k */
-            --tb-gold: #F5B800;        /* Logo oltin */
-            --tb-blue-light: #4A90E2; /* Ochiq ko'k */
-            --tb-gray: #6B7280;        /* Kulrang */
-            --tb-white: #FFFFFF;       /* Oq */
-        }
-
-        /* Travel Bliss Hero Banner */
         .tour-details-banner {
-            height: 500px;
+            height: 550px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
             position: relative;
             overflow: hidden;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: flex-end;
         }
 
         .tour-details-banner::before {
@@ -48,47 +36,14 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 100%);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%);
             z-index: 1;
         }
 
         .tour-details-content {
             position: relative;
             z-index: 2;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 40px 60px;
-            width: 100%;
-        }
-
-        .tour-details-content h1 {
-            color: white;
-            font-size: 48px;
-            font-weight: 700;
-            margin: 0;
-            line-height: 1.2;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-
-        .tour-meta-info {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .tour-meta-info > div {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: rgba(255,255,255,0.95);
-            font-size: 15px;
-            font-weight: 500;
-        }
-
-        .tour-meta-info svg {
-            opacity: 0.9;
+            text-align: center;
         }
 
         .tour-badge {
@@ -270,23 +225,37 @@
 
         @media (max-width: 768px) {
             .tour-details-banner {
-                height: 350px;
+                height: 400px;
             }
 
-            .tour-details-content {
-                padding: 0 20px 40px;
+            .tour-details-banner h1 {
+                font-size: 32px !important;
             }
 
-            .tour-details-content h1 {
-                font-size: 28px !important;
+            .tour-details-banner .tour-meta {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
             }
 
-            .tour-meta-info {
-                gap: 12px;
+            .tour-details-banner .tour-meta-item span {
+                font-size: 14px;
             }
 
-            .tour-meta-info > div {
-                font-size: 13px;
+            .tour-details-banner div[style*="padding: 8px 20px"] {
+                padding: 6px 15px !important;
+            }
+
+            .tour-details-banner div[style*="padding: 8px 20px"] span:nth-child(1) {
+                font-size: 14px !important;
+            }
+
+            .tour-details-banner div[style*="padding: 8px 20px"] span:nth-child(2) {
+                font-size: 22px !important;
+            }
+
+            .tour-details-banner div[style*="padding: 8px 20px"] span:nth-child(3) {
+                font-size: 14px !important;
             }
 
             .brochure-banner {
@@ -417,169 +386,57 @@
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
-        /* KimKim Style - Simple Booking Box */
         .booking-box {
             position: sticky;
             top: 100px;
             background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 32px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            border: 2px solid #e5e7eb;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
-        /* KimKim Style - Simple Button */
         .book-now-btn {
             width: 100%;
-            padding: 14px;
-            background: #2563eb;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 10px;
+            font-size: 18px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
         }
 
         .book-now-btn:hover {
-            background: #1d4ed8;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
 
-        /* KimKim Style Typography */
         .section-title {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 24px;
-            color: #111827;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #1f2937;
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            color: #374151;
-            line-height: 1.7;
-        }
-
-        p {
-            font-size: 16px;
-            line-height: 1.7;
-            color: #4b5563;
-            margin-bottom: 16px;
-        }
-
-        /* KimKim Style - Simple Highlights */
-        .highlight-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .highlight-list li {
-            padding: 6px 0;
-            font-size: 16px;
+        .highlight-card {
+            background: #f9fafb;
+            border-left: 4px solid #3b82f6;
+            padding: 18px 20px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
             line-height: 1.6;
-            color: #4b5563;
-            position: relative;
-            padding-left: 24px;
+            transition: all 0.2s;
         }
 
-        .highlight-list li:before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #6b7280;
-            font-weight: bold;
-            font-size: 20px;
-        }
-
-        /* Tab Navigation Styles */
-        .tab-button:hover {
-            color: #2563eb !important;
-            background-color: #f9fafb;
-        }
-
-        .tab-content {
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* KimKim Style - Itinerary Table */
-        .itinerary-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 30px 0;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .itinerary-table th {
-            background: #f9fafb;
-            padding: 10px 14px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 13px;
-            color: #374151;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .itinerary-table td {
-            padding: 12px 14px;
-            border-bottom: 1px solid #f3f4f6;
-            font-size: 14px;
-            color: #4b5563;
-            line-height: 1.5;
-        }
-
-        .itinerary-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .itinerary-table tr:hover {
-            background: #f9fafb;
-        }
-
-        /* Day Detail Section - KimKim Compact Style */
-        .day-detail {
-            margin: 30px 0 20px 0;
-            padding: 0;
-        }
-
-        .day-detail h3 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #111827;
-            margin-bottom: 12px;
-        }
-
-        .day-detail p {
-            margin-bottom: 12px;
-        }
-
-        .day-detail ul {
-            margin: 12px 0 !important;
-        }
-
-        .day-detail-image {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin: 20px 0;
+        .highlight-card:hover {
+            background: #f3f4f6;
+            border-left-color: #2563eb;
         }
 
         /* Modern Menu Styling - Consistent Background Color */
@@ -852,39 +709,6 @@
         .btn-and-price-area {
             margin-top: 15px;
         }
-
-        /* ============================================
-           TRAVEL BLISS - Simple & Professional
-           Logo colors only, no gradients
-        ============================================ */
-
-        /* Tab buttons - Logo ko'k */
-        .tab-button.active {
-            color: var(--tb-blue) !important;
-            border-bottom-color: var(--tb-blue) !important;
-            font-weight: 600 !important;
-        }
-
-        /* Buttons - Logo ko'k, hover oltin */
-        button[onclick="downloadTourPDF()"] {
-            background: var(--tb-blue) !important;
-            box-shadow: 0 2px 8px rgba(27, 79, 156, 0.2) !important;
-        }
-
-        button[onclick="downloadTourPDF()"]:hover {
-            background: var(--tb-gold) !important;
-            color: #333 !important;
-        }
-
-        button[onclick="expandAllDays()"] {
-            border: 2px solid var(--tb-blue) !important;
-            color: var(--tb-blue) !important;
-        }
-
-        button[onclick="expandAllDays()"]:hover {
-            background: var(--tb-blue) !important;
-            color: white !important;
-        }
     </style>
 </head>
 <body>
@@ -1016,13 +840,18 @@
         </div>
     </header>
 
-    <!-- KimKim Style Tour Hero Banner -->
-    <div class="tour-details-banner" id="tourBanner" style="background-image: url('https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=1600');">
+    <!-- Tour Details Banner -->
+    <div class="tour-details-banner" id="tourBanner" style="background-image: url('https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=1600'); background-size: cover; background-position: center;">
         <div class="tour-details-content">
-            <h1 id="tourTitle">Loading Tour...</h1>
-            <div class="tour-meta-info">
-                <div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <div style="display: inline-block; padding: 8px 20px; background: rgba(255,255,255,0.25); border-radius: 25px; margin-bottom: 20px; backdrop-filter: blur(10px);">
+                <span style="font-size: 16px; font-weight: 600;">Starting From</span>
+                <span style="font-size: 28px; font-weight: 700; margin-left: 10px;" id="tourPriceBanner">$0</span>
+                <span style="font-size: 16px; font-weight: 500;">/per person</span>
+            </div>
+            <h1 id="tourTitle" style="font-size: 56px; margin: 0; font-weight: 800; text-shadow: 0 4px 12px rgba(0,0,0,0.3);">Loading Tour...</h1>
+            <div class="tour-meta" style="margin-top: 25px;">
+                <div class="tour-meta-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                         <line x1="16" y1="2" x2="16" y2="6"></line>
                         <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -1030,48 +859,37 @@
                     </svg>
                     <span id="tourDuration">0 Days</span>
                 </div>
-                <div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 10h-2a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H3V8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2z"></path>
-                    </svg>
+                <div class="tour-meta-item">
+                    <span style="font-weight: 700;">|</span>
+                </div>
+                <div class="tour-meta-item">
                     <span id="tourNights">0 Nights</span>
                 </div>
-                <div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
-                        <circle cx="12" cy="10" r="3"></circle>
-                    </svg>
-                    <span id="tourDestinations">0 Destinations</span>
+                <div class="tour-meta-item">
+                    <span style="font-weight: 700;">|</span>
+                </div>
+                <div class="tour-meta-item">
+                    <span id="tourDestinations">3 Destinations</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Info Bar with Price -->
-    <div style="background: white; border-bottom: 1px solid #e5e7eb; padding: 25px 0;">
+    <!-- Info Bar -->
+    <div style="background: #f9fafb; border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; padding: 20px 0;">
         <div class="container">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <div>
-                        <div style="color: #6b7280; font-size: 14px; margin-bottom: 4px;">From</div>
-                        <div style="display: flex; align-items: baseline; gap: 8px;">
-                            <span style="font-size: 32px; font-weight: 700; color: #1f2937;" id="tourPriceBanner">€0</span>
-                            <span style="color: #6b7280; font-size: 14px;">per person</span>
-                        </div>
-                    </div>
-                    <div style="height: 40px; width: 1px; background: #e5e7eb;"></div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        <span style="color: #1f2937; font-weight: 500;">No Booking Fee</span>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        <span style="color: #1f2937; font-weight: 500;">Best Price Guarantee</span>
-                    </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span style="color: #1f2937; font-weight: 500;">No Booking Fee</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span style="color: #1f2937; font-weight: 500;">Best Price Ever</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <!-- TripAdvisor Logo -->
@@ -1122,364 +940,27 @@
         </div>
     </div>
 
-    <!-- Tour Details Content - KimKim Single Column Layout -->
-    <div class="container" style="max-width: 900px; margin-top: 60px; margin-bottom: 80px;">
+    <!-- Tour Details Content -->
+    <div class="container" style="margin-top: 50px; margin-bottom: 80px;">
         <div class="row">
-            <!-- Main Content - Full Width -->
-            <div class="col-12">
-                <!-- Large Image Slider - Sogda Style -->
-                <div class="mb-5" id="tourImageSlider" style="position: relative; height: 500px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
-                    <!-- Main Slider Image -->
-                    <div id="mainSliderImage" style="width: 100%; height: 100%; background-size: cover; background-position: center; transition: background-image 0.5s ease;">
-                        <!-- Image will be set by JavaScript -->
-                    </div>
-
-                    <!-- Image Caption Overlay -->
-                    <div style="position: absolute; bottom: 20px; left: 20px; background: rgba(255,255,255,0.95); color: #1f2937; padding: 14px 24px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); backdrop-filter: blur(10px);">
-                        <p id="sliderCaption" style="margin: 0; font-size: 17px; font-weight: 600; letter-spacing: 0.3px;">Loading...</p>
-                    </div>
-
-                    <!-- Navigation Arrows -->
-                    <button onclick="previousSlide()" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); z-index: 10; width: 50px; height: 50px; border-radius: 50%; border: none; background: rgba(255,255,255,0.9); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1f2937" stroke-width="2.5">
-                            <polyline points="15 18 9 12 15 6"></polyline>
-                        </svg>
-                    </button>
-                    <button onclick="nextSlide()" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); z-index: 10; width: 50px; height: 50px; border-radius: 50%; border: none; background: rgba(255,255,255,0.9); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1f2937" stroke-width="2.5">
-                            <polyline points="9 18 15 12 9 6"></polyline>
-                        </svg>
-                    </button>
-
-                    <!-- Thumbnail Navigation -->
-                    <div style="position: absolute; bottom: 20px; right: 20px; display: flex; gap: 8px; max-width: 400px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;">
-                        <div id="thumbnailContainer" style="display: flex; gap: 8px;">
-                            <!-- Thumbnails will be inserted here by JavaScript -->
-                        </div>
-                    </div>
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <!-- Overview -->
+                <div class="mb-5">
+                    <h2 class="section-title">Overview</h2>
+                    <p id="tourDescription" style="font-size: 16px; line-height: 1.8; color: #4b5563;">
+                        Loading tour description...
+                    </p>
                 </div>
 
-                <!-- Tab Navigation - KimKim Style -->
-                <div class="tab-navigation" style="border-bottom: 2px solid #e5e7eb; margin-bottom: 40px;">
-                    <div style="display: flex; gap: 0;">
-                        <button class="tab-button active" onclick="switchTab('description')" data-tab="description" style="background: none; border: none; padding: 16px 24px; font-size: 16px; font-weight: 500; color: #6b7280; cursor: pointer; position: relative; border-bottom: 3px solid transparent; transition: all 0.3s;">
-                            Description
-                        </button>
-                        <button class="tab-button" onclick="switchTab('itinerary')" data-tab="itinerary" style="background: none; border: none; padding: 16px 24px; font-size: 16px; font-weight: 500; color: #6b7280; cursor: pointer; position: relative; border-bottom: 3px solid transparent; transition: all 0.3s;">
-                            Itinerary
-                        </button>
-                        <button class="tab-button" onclick="switchTab('pickup')" data-tab="pickup" style="background: none; border: none; padding: 16px 24px; font-size: 16px; font-weight: 500; color: #6b7280; cursor: pointer; position: relative; border-bottom: 3px solid transparent; transition: all 0.3s;">
-                            Pick-up
-                        </button>
-                    </div>
+                <!-- Highlights -->
+                <div class="mb-5" id="highlightsSection">
+                    <h2 class="section-title">Tour Highlights</h2>
+                    <div id="highlightsList"></div>
                 </div>
 
-                <!-- Tab Content: Description -->
-                <div id="tab-description" class="tab-content active">
-                    <!-- Tour Title with Blue Underline - Sogda Style -->
-                    <div style="margin-bottom: 30px;">
-                        <h1 id="tourTitleMain" style="font-size: 32px; font-weight: 700; color: #1f2937; margin-bottom: 8px; position: relative; display: inline-block;">
-                            Loading...
-                        </h1>
-                        <div style="width: 60px; height: 4px; background: #2563eb; margin-bottom: 20px;"></div>
-
-                        <!-- Meta Info: Days, Difficulty, Private -->
-                        <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
-                            <div style="display: flex; align-items: center; gap: 6px; color: #6b7280;">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <span id="metaDays">8 days</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 6px; color: #6b7280;">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
-                                </svg>
-                                <span id="metaDifficulty">Easy</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 6px; color: #6b7280;">
-                                <span id="metaPrivate">Private</span>
-                            </div>
-                        </div>
-
-                        <!-- Rating - TripAdvisor Style -->
-                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
-                            <div style="width: 24px; height: 24px; border-radius: 50%; background: #00aa6c; display: flex; align-items: center; justify-content: center;">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
-                                    <circle cx="12" cy="8" r="3"></circle>
-                                    <circle cx="12" cy="16" r="1.5"></circle>
-                                </svg>
-                            </div>
-                            <div style="display: flex; gap: 2px;" id="ratingStars">
-                                <span style="color: #00aa6c; font-size: 18px;">●</span>
-                                <span style="color: #00aa6c; font-size: 18px;">●</span>
-                                <span style="color: #00aa6c; font-size: 18px;">●</span>
-                                <span style="color: #00aa6c; font-size: 18px;">●</span>
-                                <span style="color: #d1d5db; font-size: 18px;">●</span>
-                            </div>
-                            <span id="ratingCount" style="color: #6b7280; font-size: 14px;">33</span>
-                        </div>
-
-                        <!-- Short Description -->
-                        <p id="tourShortDescription" style="color: #4b5563; line-height: 1.7; margin-bottom: 0;"></p>
-                    </div>
-
-                    <!-- Overview - Sogda Style -->
-                    <div style="margin-bottom: 40px;">
-                        <h2 class="section-title">Overview</h2>
-                        <p id="tourDescription"></p>
-                    </div>
-
-                    <!-- Highlights - Sogda Simple List -->
-                    <div style="margin-bottom: 40px;" id="highlightsSection">
-                        <h2 class="section-title">Highlights</h2>
-                        <ul class="highlight-list" id="highlightsList"></ul>
-                    </div>
-
-                    <!-- What's Included/Exclusions - 2 Column Layout -->
-                    <div style="margin-bottom: 40px;">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
-                            <!-- What's Included -->
-                            <div>
-                                <h3 style="font-size: 18px; font-weight: 600; color: #1f2937; margin-bottom: 16px;">What's Included?</h3>
-                                <ul id="includedListTab" style="list-style: none; padding: 0; margin: 0;">
-                                    <!-- Will be populated -->
-                                </ul>
-                            </div>
-
-                            <!-- Exclusions -->
-                            <div>
-                                <h3 style="font-size: 18px; font-weight: 600; color: #1f2937; margin-bottom: 16px;">Exclusions</h3>
-                                <ul id="excludedListTab" style="list-style: none; padding: 0; margin: 0;">
-                                    <!-- Will be populated -->
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Please Note Section -->
-                    <div style="margin-bottom: 40px;">
-                        <h3 style="font-size: 18px; font-weight: 600; color: #1f2937; margin-bottom: 16px;">Please Note</h3>
-                        <ul id="pleaseNoteList" style="list-style: disc; padding-left: 24px; color: #4b5563; line-height: 1.8;">
-                            <li>Smaller groups are also possible</li>
-                            <li>If your travel dates coincide with high season or major public holidays (March, May, August, September, October), please be aware that accommodation prices will be higher. We can share accommodation costs with you once your dates are set.</li>
-                            <li>Early bookings available</li>
-                            <li>Price may increase during peak travel seasons or public holidays</li>
-                            <li>Infants must sit on laps</li>
-                            <li>Infant seats available</li>
-                            <li>Not wheelchair accessible</li>
-                            <li>Near public transportation</li>
-                            <li>Infants must sit on laps</li>
-                            <li>Infant seats available</li>
-                            <li>Most travelers can participate</li>
-                        </ul>
-                    </div>
-
-                    <!-- What do I need to bring? -->
-                    <div style="margin-bottom: 40px;">
-                        <h3 style="font-size: 18px; font-weight: 600; color: #1f2937; margin-bottom: 16px;">What do I need to bring?</h3>
-                        <p style="color: #4b5563; line-height: 1.7;">
-                            Uzbekistan has a dry continental climate, with very cold winters and extremely hot summers. The temperature fluctuations are large, with daytime and nighttime temperatures varying greatly. We recommend warm and cold weather clothes, as days and nights vary.
-                        </p>
-                    </div>
-
-                    <!-- Cancellation Policy -->
-                    <div style="margin-bottom: 40px;">
-                        <h3 style="font-size: 18px; font-weight: 600; color: #1f2937; margin-bottom: 16px;">Cancellation policy</h3>
-                        <ul style="list-style: disc; padding-left: 24px; color: #4b5563; line-height: 1.8;">
-                            <li>We will refund a cancellation fee of 7% if booking is cancelled 60 days before travel</li>
-                            <li>We will refund a cancellation fee of 15% if booking is cancelled 45 days before travel</li>
-                            <li>We will refund a cancellation fee of 30% if booking is cancelled 30 days before travel</li>
-                            <li>We will refund a cancellation fee of 100% if booking is cancelled 15 days before travel</li>
-                        </ul>
-                    </div>
-
-                    <!-- More Info - Compact 2 Column Layout -->
-                    <div style="margin-bottom: 32px;">
-                        <h3 style="font-size: 17px; font-weight: 600; color: #1f2937; margin-bottom: 12px;">More Info</h3>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px;">
-                            <!-- Left Column -->
-                            <div>
-                                <div style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
-                                    <div style="color: #6b7280; font-size: 13px; margin-bottom: 4px;">Experience type</div>
-                                    <div style="color: #1f2937; font-weight: 500; font-size: 14px;" id="experienceType">Multi-day Tours</div>
-                                </div>
-                                <div style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
-                                    <div style="color: #6b7280; font-size: 13px; margin-bottom: 4px;">Duration</div>
-                                    <div style="color: #1f2937; font-weight: 500; font-size: 14px;" id="metaInfoDuration">8 days</div>
-                                </div>
-                                <div style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
-                                    <div style="color: #6b7280; font-size: 13px; margin-bottom: 4px;">Destination</div>
-                                    <div style="color: #1f2937; font-weight: 500; font-size: 14px;" id="metaInfoDestination">Uzbekistan</div>
-                                </div>
-                                <div style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
-                                    <div style="color: #6b7280; font-size: 13px; margin-bottom: 4px;">Languages</div>
-                                    <div style="color: #1f2937; font-weight: 500; font-size: 14px;" id="metaInfoLanguages">English, Russian</div>
-                                </div>
-                                <div style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
-                                    <div style="color: #6b7280; font-size: 13px; margin-bottom: 4px;">Accessibility</div>
-                                    <div style="color: #1f2937; font-weight: 500; font-size: 14px;">Not wheelchair</div>
-                                </div>
-                            </div>
-                            <!-- Right Column -->
-                            <div>
-                                <div style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
-                                    <div style="color: #6b7280; font-size: 13px; margin-bottom: 4px;">Booking in advance</div>
-                                    <div style="color: #1f2937; font-weight: 500; font-size: 14px;">Required</div>
-                                </div>
-                                <div style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
-                                    <div style="color: #6b7280; font-size: 13px; margin-bottom: 4px;">Activity level</div>
-                                    <div style="color: #1f2937; font-weight: 500; font-size: 14px;" id="activityLevel">Moderate</div>
-                                </div>
-                                <div style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
-                                    <div style="color: #6b7280; font-size: 13px; margin-bottom: 4px;">Difficulty</div>
-                                    <div style="color: #1f2937; font-weight: 500; font-size: 14px;" id="metaInfoDifficulty">Easy</div>
-                                </div>
-                                <div style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
-                                    <div style="color: #6b7280; font-size: 13px; margin-bottom: 4px;">Active cultural</div>
-                                    <div style="color: #1f2937; font-weight: 500; font-size: 14px;">Yes</div>
-                                </div>
-                                <div style="padding: 8px 0; border-bottom: 1px solid #e5e7eb;">
-                                    <div style="color: #6b7280; font-size: 13px; margin-bottom: 4px;">Tour guide</div>
-                                    <div style="color: #1f2937; font-weight: 500; font-size: 14px;">Professional</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tags/Categories -->
-                    <div style="margin-bottom: 40px;">
-                        <div style="display: flex; flex-wrap: wrap; gap: 10px;" id="tourTags">
-                            <span style="background: #f3f4f6; color: #4b5563; padding: 8px 16px; border-radius: 20px; font-size: 14px; border: 1px solid #e5e7eb;">Cultural Tours</span>
-                            <span style="background: #f3f4f6; color: #4b5563; padding: 8px 16px; border-radius: 20px; font-size: 14px; border: 1px solid #e5e7eb;">Day Trip</span>
-                            <span style="background: #f3f4f6; color: #4b5563; padding: 8px 16px; border-radius: 20px; font-size: 14px; border: 1px solid #e5e7eb;">Hidden Gems</span>
-                            <span style="background: #f3f4f6; color: #4b5563; padding: 8px 16px; border-radius: 20px; font-size: 14px; border: 1px solid #e5e7eb;">Historical</span>
-                            <span style="background: #f3f4f6; color: #4b5563; padding: 8px 16px; border-radius: 20px; font-size: 14px; border: 1px solid #e5e7eb;">Private experience</span>
-                        </div>
-                    </div>
-
-                    <!-- Additional Info with Checkmarks (Moved from bottom) -->
-                    <div style="margin-bottom: 40px;">
-                        <h3 style="font-size: 18px; font-weight: 600; color: #1f2937; margin-bottom: 16px;">Additional Info</h3>
-                        <div style="display: flex; flex-direction: column; gap: 15px;">
-                            <div style="display: flex; align-items: flex-start; gap: 12px;">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0; margin-top: 2px;">
-                                    <circle cx="12" cy="12" r="10" fill="#3b82f6"/>
-                                    <path d="M8 12l2 2 4-4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                <div>
-                                    <strong style="color: #1f2937;">Free Cancellation</strong>
-                                    <span style="color: #6b7280;"> – Some tours offer free cancellation up to a certain period (e.g., 24-48 hours before departure).</span>
-                                </div>
-                            </div>
-                            <div style="display: flex; align-items: flex-start; gap: 12px;">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0; margin-top: 2px;">
-                                    <circle cx="12" cy="12" r="10" fill="#3b82f6"/>
-                                    <path d="M8 12l2 2 4-4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                <div>
-                                    <strong style="color: #1f2937;">Health & Safety Guidelines</strong>
-                                    <span style="color: #6b7280;"> – COVID-19 regulations, vaccinations, or travel restrictions.</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- FAQ Section (Moved from bottom) -->
-                    <div style="margin-bottom: 40px;">
-                        <h3 style="font-size: 18px; font-weight: 600; color: #1f2937; margin-bottom: 16px;">Frequently Asked Questions</h3>
-                        <div class="accordion" id="faqAccordion"></div>
-                    </div>
-                </div>
-
-                <!-- Tab Content: Itinerary -->
-                <div id="tab-itinerary" class="tab-content" style="display: none;">
-                    <!-- Itinerary Table Summary - HIDDEN -->
-                    <div style="margin-bottom: 30px; display: none;">
-                        <h2 class="section-title">Itinerary</h2>
-                        <table class="itinerary-table" id="itineraryTableSummary">
-                        <thead>
-                            <tr>
-                                <th style="width: 80px;">Day</th>
-                                <th>Highlights</th>
-                                <th style="width: 180px;">Overnight</th>
-                            </tr>
-                        </thead>
-                        <tbody id="itineraryTableBody">
-                            <!-- Rows will be inserted here -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Detailed Day-by-Day Itinerary - KimKim Style -->
-                <div style="margin-bottom: 50px;" id="detailedItinerarySection">
-                    <!-- Expand/Collapse Buttons - KimKim Style -->
-                    <div style="display: flex; gap: 12px; margin-bottom: 20px; justify-content: space-between; align-items: center;">
-                        <!-- Download PDF Button -->
-                        <button onclick="downloadTourPDF()" style="background: #2563eb; border: none; color: white; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7 10 12 15 17 10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
-                            </svg>
-                            Download Full Tour PDF
-                        </button>
-
-                        <!-- Expand/Collapse Buttons -->
-                        <div style="display: flex; gap: 12px;">
-                            <button onclick="expandAllDays()" style="background: white; border: 1px solid #d1d5db; color: #374151; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
-                                EXPAND ALL ITINERARY DAYS
-                                <div style="width: 20px; height: 20px; border-radius: 50%; background: #d4a574; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; font-weight: bold;">+</div>
-                            </button>
-                            <button onclick="collapseAllDays()" style="background: white; border: 1px solid #d1d5db; color: #374151; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s;">
-                                COLLAPSE ALL ITINERARY DAYS
-                                <div style="width: 20px; height: 20px; border-radius: 50%; background: #d4a574; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; font-weight: bold;">−</div>
-                            </button>
-                        </div>
-                    </div>
-                    <div id="detailedItineraryList"></div>
-                </div>
-                </div>
-
-                <!-- Tab Content: Pick-up -->
-                <div id="tab-pickup" class="tab-content" style="display: none;">
-                    <div style="margin-bottom: 40px;">
-                        <h2 class="section-title">Pick-up Information</h2>
-                        <div style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 24px; margin-bottom: 20px;">
-                            <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px; color: #111827;">Meeting Point</h3>
-                            <p style="color: #4b5563; line-height: 1.6; margin-bottom: 16px;">
-                                Pick-up is available from all hotels in Tashkent city center. Please provide your hotel details at least 24 hours before the tour start date.
-                            </p>
-                            <div style="display: flex; align-items: start; gap: 12px; margin-top: 12px;">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <polyline points="12 6 12 12 16 14"></polyline>
-                                </svg>
-                                <div>
-                                    <p style="font-weight: 600; color: #111827; margin: 0;">Pick-up Time</p>
-                                    <p style="color: #4b5563; margin: 4px 0 0 0;">08:00 AM (exact time will be confirmed via email)</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style="background: #fef3c7; border: 1px solid #fde68a; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
-                            <div style="display: flex; gap: 12px;">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="flex-shrink: 0;">
-                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                    <line x1="12" y1="9" x2="12" y2="13"></line>
-                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                                </svg>
-                                <p style="margin: 0; color: #92400e; font-size: 14px;">
-                                    <strong>Important:</strong> Please be ready at the hotel lobby 10 minutes before the scheduled pick-up time.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Old Tour Itinerary Summary - Hidden -->
-                <div class="mb-5" id="tourItinerarySummary" style="display: none;">
+                <!-- Tour Itinerary Summary -->
+                <div class="mb-5" id="tourItinerarySummary">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                         <h2 class="section-title" style="margin-bottom: 0;">Tour Itinerary</h2>
                         <button id="expandAllBtn" onclick="toggleExpandAll()" style="background: transparent; border: 2px solid #6366f1; color: #6366f1; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px;">
@@ -1510,26 +991,14 @@
                     </div>
                 </div>
 
-                <!-- Old Itinerary - Hidden -->
+                <!-- Itinerary -->
                 <div class="mb-5" id="itinerarySection" style="display: none;">
                     <div id="itineraryList"></div>
                 </div>
 
-                <!-- KimKim Style - Inline CTA Box - HIDDEN -->
-                <div style="display: none; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 40px; text-align: center; margin: 60px 0;">
-                    <h3 style="font-size: 24px; font-weight: 600; margin-bottom: 12px; color: #111827;">Plan your trip to Uzbekistan</h3>
-                    <p style="font-size: 16px; color: #6b7280; margin-bottom: 28px; line-height: 1.6;">Chat with a local specialist who can help organize your trip</p>
-                    <button class="book-now-btn" onclick="bookNow()" style="max-width: 280px; margin: 0 auto;">
-                        Get Started
-                    </button>
-                    <p style="font-size: 13px; color: #9ca3af; margin-top: 20px; margin-bottom: 0;">
-                        From <strong style="color: #111827; font-size: 20px;" id="inlinePriceDisplay">€0</strong> per person
-                    </p>
-                </div>
-
-                <!-- Package Features List - HIDDEN (now in Description tab) -->
-                <div class="mb-5" style="display: none;">
-                    <h2 class="section-title">What's Included</h2>
+                <!-- Package Features List -->
+                <div class="mb-5">
+                    <h2 class="section-title">Package Features List</h2>
                     <div class="row">
                         <div class="col-md-6 mb-4">
                             <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 25px;">Include Features</h3>
@@ -1542,8 +1011,8 @@
                     </div>
                 </div>
 
-                <!-- Download Brochure - Compact - HIDDEN (PDF button in Itinerary tab) -->
-                <div class="mb-4" style="display: none;">
+                <!-- Download Brochure - Compact -->
+                <div class="mb-4">
                     <div class="brochure-banner-compact" style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); border-radius: 12px; overflow: hidden; position: relative; display: flex; align-items: center; padding: 20px 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                         <!-- Background Image Overlay -->
                         <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 50%; background-image: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600'); background-size: cover; background-position: center; opacity: 0.2;"></div>
@@ -1580,8 +1049,8 @@
                     </div>
                 </div>
 
-                <!-- Additional Info - HIDDEN (now in Description tab as More Info) -->
-                <div class="mb-5" id="additionalInfoSection" style="display: none;">
+                <!-- Additional Info -->
+                <div class="mb-5" id="additionalInfoSection">
                     <h2 class="section-title">Additional Information</h2>
                     <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 35px;">
                         <div class="row g-4">
@@ -1752,12 +1221,54 @@
                     </div>
                 </div>
 
-                <!-- Additional Info with Checkmarks - HIDDEN (Moved to Description tab) -->
-                <div class="mb-5" style="display: none;">
+                <!-- Additional Info with Checkmarks -->
+                <div class="mb-5">
+                    <h2 class="section-title">Additional Info</h2>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="display: flex; align-items: flex-start; gap: 12px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0; margin-top: 2px;">
+                                <circle cx="12" cy="12" r="10" fill="#3b82f6"/>
+                                <path d="M8 12l2 2 4-4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <div>
+                                <strong style="color: #1f2937;">Free Cancellation</strong>
+                                <span style="color: #6b7280;"> – Some tours offer free cancellation up to a certain period (e.g., 24-48 hours before departure).</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 12px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0; margin-top: 2px;">
+                                <circle cx="12" cy="12" r="10" fill="#3b82f6"/>
+                                <path d="M8 12l2 2 4-4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <div>
+                                <strong style="color: #1f2937;">Health & Safety Guidelines</strong>
+                                <span style="color: #6b7280;"> – COVID-19 regulations, vaccinations, or travel restrictions.</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Explore Locations - OLD POSITION (Moved to top, this is duplicate) -->
-                <div class="mb-5" style="display: none;">
+                <!-- Explore Locations -->
+                <div class="mb-5" id="exploreLocationsSection">
+                    <h2 class="section-title">Explore Locations</h2>
+                    <div class="position-relative">
+                        <!-- Navigation Arrows -->
+                        <button class="location-nav-btn location-nav-prev" onclick="scrollLocations('prev')" style="position: absolute; left: -20px; top: 50%; transform: translateY(-50%); z-index: 10; width: 40px; height: 40px; border-radius: 50%; border: none; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.15); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1f2937" stroke-width="2">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+                        <button class="location-nav-btn location-nav-next" onclick="scrollLocations('next')" style="position: absolute; right: -20px; top: 50%; transform: translateY(-50%); z-index: 10; width: 40px; height: 40px; border-radius: 50%; border: none; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.15); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1f2937" stroke-width="2">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+
+                        <!-- Locations Container -->
+                        <div id="locationsContainer" style="display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth; padding: 10px 0; scrollbar-width: none; -ms-overflow-style: none;">
+                            <!-- Location cards will be inserted here by JavaScript -->
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Location Map Modal -->
@@ -1780,12 +1291,14 @@
                     </div>
                 </div>
 
-                <!-- FAQ Section - HIDDEN (Moved to Description tab) -->
-                <div class="mb-5" id="faqSectionOld" style="display: none;">
+                <!-- FAQ Section -->
+                <div class="mb-5" id="faqSection">
+                    <h2 class="section-title">Frequently Asked Questions</h2>
+                    <div class="accordion" id="faqAccordion"></div>
                 </div>
 
-                <!-- Reviews Section - HIDDEN -->
-                <div class="mb-5" id="reviewsSection" style="display: none;">
+                <!-- Reviews Section -->
+                <div class="mb-5" id="reviewsSection">
                     <h2 class="section-title">Customer Review & Rating</h2>
 
                     <!-- Rating Summary Box - Compact & Modern Design -->
@@ -1999,23 +1512,25 @@
                 </div>
             </div>
 
-            <!-- Sidebar - Hidden in KimKim Style -->
-            <div class="col-lg-4" style="display: none;">
+            <!-- Sidebar - Booking Box -->
+            <div class="col-lg-4">
                 <div class="booking-box">
-                    <h3 style="font-size: 22px; font-weight: 600; margin-bottom: 12px; color: #111827;">Plan your trip to Uzbekistan</h3>
-                    <p style="font-size: 15px; color: #6b7280; margin-bottom: 24px; line-height: 1.6;">Chat with a local specialist who can help organize your trip</p>
+                    <h3 style="font-size: 24px; margin-bottom: 25px;">Book This Tour</h3>
 
-                    <div style="background: #f9fafb; padding: 18px; border-radius: 8px; margin-bottom: 20px;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                            <span style="font-size: 14px; color: #6b7280;">From</span>
-                            <strong id="pricePerPerson" style="font-size: 24px; color: #111827;">€0</strong>
+                    <div style="background: #f9fafb; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                            <span>Price per person:</span>
+                            <strong id="pricePerPerson" style="font-size: 24px; color: #667eea;">$0</strong>
                         </div>
-                        <p style="font-size: 13px; color: #9ca3af; margin: 0;">per person</p>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;" id="discountSection">
+                            <span>Discount:</span>
+                            <strong id="discountPrice" style="color: #10b981;">-$0</strong>
+                        </div>
                     </div>
 
                     <div class="mb-3">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; color: #374151;">Number of Travelers</label>
-                        <select class="form-select" id="travelers" style="padding: 10px 12px; border-radius: 6px; border: 1px solid #d1d5db; font-size: 15px;">
+                        <label style="display: block; margin-bottom: 10px; font-weight: 600;">Number of Travelers</label>
+                        <select class="form-select" id="travelers" style="padding: 12px; border-radius: 8px;">
                             <option value="1">1 Person</option>
                             <option value="2">2 People</option>
                             <option value="3">3 People</option>
@@ -2027,20 +1542,25 @@
                         </select>
                     </div>
 
-                    <div class="mb-4">
-                        <label style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; color: #374151;">Select Date</label>
-                        <input type="date" class="form-control" id="tourDate" style="padding: 10px 12px; border-radius: 6px; border: 1px solid #d1d5db; font-size: 15px;">
+                    <div class="mb-3">
+                        <label style="display: block; margin-bottom: 10px; font-weight: 600;">Select Date</label>
+                        <input type="date" class="form-control" id="tourDate" style="padding: 12px; border-radius: 8px;">
+                    </div>
+
+                    <div style="background: #f9fafb; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; font-size: 18px;">
+                            <strong>Total:</strong>
+                            <strong id="totalPrice" style="color: #667eea; font-size: 28px;">$0</strong>
+                        </div>
                     </div>
 
                     <button class="book-now-btn" onclick="bookNow()">
-                        Get Started
+                        <i class="bi bi-calendar-check me-2"></i> Book Now
                     </button>
 
                     <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
-                        <p style="font-size: 13px; color: #6b7280; margin: 0; display: flex; align-items: center; gap: 8px;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                            </svg>
+                        <p style="font-size: 14px; color: #6b7280; margin: 0;">
+                            <i class="bi bi-shield-check" style="color: #10b981;"></i>
                             Free cancellation up to 24 hours before
                         </p>
                     </div>
@@ -2129,90 +1649,9 @@
             }
 
             await loadTour(tourId);
-            // Sidebar booking calculator - optional if sidebar exists
-            if (document.getElementById('travelers')) {
-                setupPriceCalculator();
-            }
+            setupPriceCalculator();
             setMinDate();
         });
-
-        // Download Tour PDF Function
-        function downloadTourPDF() {
-            if (!currentTour) {
-                alert('Tour information not loaded');
-                return;
-            }
-
-            // Generate and download the PDF using the existing function
-            generateBrochurePDF();
-        }
-
-        // Day Expand/Collapse Functions - KimKim Style
-        function toggleDay(index) {
-            const content = document.querySelector(`.day-content-${index}`);
-            const icon = document.querySelector(`.toggle-icon-${index}`);
-
-            if (content.style.maxHeight && content.style.maxHeight !== '0px') {
-                content.style.maxHeight = '0';
-                icon.textContent = '+';
-            } else {
-                content.style.maxHeight = content.scrollHeight + 'px';
-                icon.textContent = '−';
-            }
-        }
-
-        function expandAllDays() {
-            const totalDays = document.querySelectorAll('.day-detail-collapsible').length;
-            for (let i = 0; i < totalDays; i++) {
-                const content = document.querySelector(`.day-content-${i}`);
-                const icon = document.querySelector(`.toggle-icon-${i}`);
-                if (content) {
-                    content.style.maxHeight = content.scrollHeight + 'px';
-                    if (icon) icon.textContent = '−';
-                }
-            }
-        }
-
-        function collapseAllDays() {
-            const totalDays = document.querySelectorAll('.day-detail-collapsible').length;
-            for (let i = 0; i < totalDays; i++) {
-                const content = document.querySelector(`.day-content-${i}`);
-                const icon = document.querySelector(`.toggle-icon-${i}`);
-                if (content) {
-                    content.style.maxHeight = '0';
-                    if (icon) icon.textContent = '+';
-                }
-            }
-        }
-
-        // Tab Switching Function - KimKim Style
-        function switchTab(tabName) {
-            // Hide all tab contents
-            const allTabs = document.querySelectorAll('.tab-content');
-            allTabs.forEach(tab => {
-                tab.style.display = 'none';
-            });
-
-            // Remove active class from all buttons
-            const allButtons = document.querySelectorAll('.tab-button');
-            allButtons.forEach(btn => {
-                btn.style.color = '#6b7280';
-                btn.style.borderBottom = '3px solid transparent';
-            });
-
-            // Show selected tab content
-            const selectedTab = document.getElementById(`tab-${tabName}`);
-            if (selectedTab) {
-                selectedTab.style.display = 'block';
-            }
-
-            // Add active styling to selected button
-            const selectedButton = document.querySelector(`[data-tab="${tabName}"]`);
-            if (selectedButton) {
-                selectedButton.style.color = '#2563eb';
-                selectedButton.style.borderBottom = '3px solid #2563eb';
-            }
-        }
 
         // Social Media Sharing Functions
         function shareOnFacebook(event) {
@@ -2298,22 +1737,16 @@
             document.getElementById('pageTitle').textContent = `${title} - Travel Bliss`;
             document.getElementById('tourTitle').textContent = title;
 
-            // Price in banner and inline CTA
+            // Price in banner
             const price = tour.discountPrice || tour.price;
-            document.getElementById('tourPriceBanner').textContent = `€${price}`;
-            document.getElementById('pricePerPerson').textContent = `€${price}`;
-            // Update inline CTA price if exists
-            const inlinePrice = document.getElementById('inlinePriceDisplay');
-            if (inlinePrice) inlinePrice.textContent = `€${price}`;
+            document.getElementById('tourPriceBanner').textContent = `$${price}`;
+            document.getElementById('pricePerPerson').textContent = `$${price}`;
 
-            // Discount - optional (only if sidebar exists)
-            const discountSection = document.getElementById('discountSection');
-            if (discountSection) {
-                if (tour.discountPrice && tour.discountPrice < tour.price) {
-                    document.getElementById('discountPrice').textContent = `-$${tour.price - tour.discountPrice}`;
-                } else {
-                    discountSection.style.display = 'none';
-                }
+            // Discount
+            if (tour.discountPrice && tour.discountPrice < tour.price) {
+                document.getElementById('discountPrice').textContent = `-$${tour.price - tour.discountPrice}`;
+            } else {
+                document.getElementById('discountSection').style.display = 'none';
             }
 
             // Meta Info in banner
@@ -2356,112 +1789,82 @@
 
             bannerEl.style.backgroundImage = `url('${bgImage}')`;
 
-            // Populate Title and Meta Info - Sogda Style
-            const tourTitleMainEl = document.getElementById('tourTitleMain');
-            if (tourTitleMainEl) tourTitleMainEl.textContent = tour.title || tour.name || 'Tour Details';
-
-            const metaDaysEl = document.getElementById('metaDays');
-            if (metaDaysEl) metaDaysEl.textContent = `${tour.duration || 8} days`;
-
-            const metaDifficultyEl = document.getElementById('metaDifficulty');
-            if (metaDifficultyEl) metaDifficultyEl.textContent = tour.difficulty ? tour.difficulty.charAt(0).toUpperCase() + tour.difficulty.slice(1) : 'Easy';
-
-            const metaPrivateEl = document.getElementById('metaPrivate');
-            if (metaPrivateEl) metaPrivateEl.textContent = 'Private';
-
-            // Rating for Description Tab
-            const tourRating = tour.rating || 4.0;
-            const ratingCount = tour.ratingsCount || 33;
-            const ratingCountEl = document.getElementById('ratingCount');
-            if (ratingCountEl) ratingCountEl.textContent = ratingCount;
-
-            // Update rating stars based on actual rating
-            const ratingStars = document.getElementById('ratingStars');
-            if (ratingStars) {
-                const fullStars = Math.floor(tourRating);
-                const emptyStars = 5 - fullStars;
-                let starsHTML = '';
-                for (let i = 0; i < fullStars; i++) {
-                    starsHTML += '<span style="color: #00aa6c; font-size: 18px;">●</span>';
-                }
-                for (let i = 0; i < emptyStars; i++) {
-                    starsHTML += '<span style="color: #d1d5db; font-size: 18px;">●</span>';
-                }
-                ratingStars.innerHTML = starsHTML;
-            }
-
-            // Short Description
-            const tourShortDescEl = document.getElementById('tourShortDescription');
-            if (tourShortDescEl) tourShortDescEl.textContent = tour.description || tour.summary || 'Explore this amazing tour.';
-
             // Description
             document.getElementById('tourDescription').textContent = tour.description || tour.summary || 'No description available.';
 
-            // Highlights - KimKim Simple List
-            console.log('Tour highlights:', tour.highlights);
+            // Highlights
             if (tour.highlights && Array.isArray(tour.highlights) && tour.highlights.length > 0) {
                 const highlightsList = document.getElementById('highlightsList');
-                const highlightsHTML = tour.highlights.map(h => `<li>${h}</li>`).join('');
-                console.log('Highlights HTML:', highlightsHTML);
-                highlightsList.innerHTML = highlightsHTML;
+                highlightsList.innerHTML = tour.highlights.map(h =>
+                    `<div class="highlight-card">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink: 0;">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#fbbf24" stroke="#fbbf24" stroke-width="0.5"/>
+                        </svg>
+                        <span style="color: #4b5563; line-height: 1.6;">${h}</span>
+                    </div>`
+                ).join('');
             } else {
-                console.log('No highlights found, hiding section');
                 document.getElementById('highlightsSection').style.display = 'none';
             }
 
-            // Itinerary Table Summary - KimKim Style
-            console.log('Tour itinerary:', tour.itinerary);
+            // Tour Itinerary Summary
             if (tour.itinerary && Array.isArray(tour.itinerary) && tour.itinerary.length > 0) {
-                const tableBody = document.getElementById('itineraryTableBody');
-                tableBody.innerHTML = tour.itinerary.map((day, index) => {
-                    const dayNum = day.day || index + 1;
-                    const highlights = day.title || 'Tour activities';
-                    const overnight = day.accommodation || 'Hotel';
+                // Set destination
+                document.getElementById('itineraryDestination').textContent = tour.destination || tour.location || 'Uzbekistan';
 
-                    return `
-                        <tr>
-                            <td style="font-weight: 600; color: #111827;">Day ${dayNum}</td>
-                            <td>${highlights}</td>
-                            <td>${overnight}</td>
-                        </tr>
-                    `;
-                }).join('');
+                // Set departure time (default if not available)
+                const departureTime = tour.departureTime || '8:00 am - 8:30am';
+                document.getElementById('departureTime').textContent = departureTime;
 
-                // Detailed Day-by-Day Itinerary - KimKim Style with Collapse
-                const detailedList = document.getElementById('detailedItineraryList');
-                detailedList.innerHTML = tour.itinerary.map((day, index) => {
-                    const dayNum = day.day || index + 1;
-                    const dayTitle = day.title || `Day ${dayNum}`;
+                // Create days list
+                const itineraryDaysList = document.getElementById('itineraryDaysList');
+                itineraryDaysList.innerHTML = tour.itinerary.map((day, index) => {
+                    const dayTitle = day.title || `Day ${day.day || index + 1}`;
                     const description = day.description || '';
-                    const activities = Array.isArray(day.activities) ? day.activities : [];
+                    const activities = day.activities || [];
 
                     return `
-                        <div class="day-detail-collapsible" style="border-bottom: 1px solid #e5e7eb; padding: 16px 0;">
-                            <div onclick="toggleDay(${index})" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
-                                <div style="flex: 1;">
-                                    <span style="font-weight: 600; color: #111827; font-size: 16px;">Day ${dayNum}</span>
-                                    <span style="color: #4b5563; font-size: 16px; margin-left: 12px;">${dayTitle}</span>
+                        <div class="itinerary-item">
+                            <div class="itinerary-header" onclick="toggleItineraryDay(${index})">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1f2937" stroke-width="2" style="flex-shrink: 0;">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    <div>
+                                        <span style="font-weight: 600; color: #1f2937;">Day-${String(day.day || index + 1).padStart(2, '0')}</span>
+                                        <span style="color: #6b7280; margin-left: 15px;">${dayTitle}</span>
+                                    </div>
                                 </div>
-                                <div class="toggle-icon-${index}" style="width: 32px; height: 32px; border-radius: 50%; background: #d4a574; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; font-weight: bold; transition: all 0.3s; flex-shrink: 0;">+</div>
+                                <svg class="expand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
                             </div>
-                            <div class="day-content-${index}" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
-                                <div style="padding-top: 12px;">
-                                    ${description ? `<p style="margin-bottom: 12px; color: #4b5563; line-height: 1.6;">${description}</p>` : ''}
-                                    ${activities && activities.length > 0 ? `
-                                        <ul style="list-style: disc; padding-left: 24px; margin: 12px 0;">
-                                            ${activities.map(activity => `<li style="margin: 6px 0; color: #4b5563;">${activity}</li>`).join('')}
+                            <div class="itinerary-content">
+                                ${description ? `<p style="color: #4b5563; line-height: 1.8; margin-bottom: 20px;">${description}</p>` : ''}
+                                ${activities.length > 0 ? `
+                                    <div>
+                                        <h4 style="font-size: 16px; font-weight: 700; color: #1f2937; margin-bottom: 15px;">Activities:</h4>
+                                        <ul style="list-style: none; padding: 0; margin: 0;">
+                                            ${activities.map(activity => `
+                                                <li style="padding: 8px 0; display: flex; align-items: flex-start; gap: 10px;">
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="flex-shrink: 0; margin-top: 2px;">
+                                                        <circle cx="12" cy="12" r="10" fill="#3b82f6"/>
+                                                        <path d="M8 12l2 2 4-4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                    <span style="color: #4b5563; line-height: 1.6;">${activity}</span>
+                                                </li>
+                                            `).join('')}
                                         </ul>
-                                    ` : ''}
-                                    ${day.meals ? `<p style="font-size: 14px; color: #6b7280; margin-top: 12px;"><strong>Meals:</strong> ${day.meals}</p>` : ''}
-                                    ${day.accommodation ? `<p style="font-size: 14px; color: #6b7280;"><strong>Accommodation:</strong> ${day.accommodation}</p>` : ''}
-                                </div>
+                                    </div>
+                                ` : ''}
                             </div>
                         </div>
                     `;
                 }).join('');
+            } else {
+                document.getElementById('tourItinerarySummary').style.display = 'none';
             }
-
-            // Old Itinerary Summary code - removed to prevent errors
 
             // Itinerary
             if (tour.itinerary && Array.isArray(tour.itinerary) && tour.itinerary.length > 0) {
@@ -2538,96 +1941,38 @@
 
             // Included
             const included = tour.includes || tour.included || [];
-            const includedListEl = document.getElementById('includedList');
-            const includedListTabEl = document.getElementById('includedListTab');
-
             if (Array.isArray(included) && included.length > 0) {
-                if (includedListEl) {
-                    includedListEl.innerHTML = included.map(item =>
-                        `<li>${item}</li>`
-                    ).join('');
-                }
-                // Also populate tab version
-                if (includedListTabEl) {
-                    includedListTabEl.innerHTML = included.map(item =>
-                        `<li style="padding: 8px 0; color: #4b5563; line-height: 1.6; border-bottom: 1px solid #f3f4f6; display: flex; align-items: start; gap: 8px;">
-                            <span style="color: #10b981; flex-shrink: 0;">✓</span>
-                            <span>${item}</span>
-                        </li>`
-                    ).join('');
-                }
+                document.getElementById('includedList').innerHTML = included.map(item =>
+                    `<li>${item}</li>`
+                ).join('');
             } else {
-                if (includedListEl) includedListEl.innerHTML = '<li>Not specified</li>';
-                if (includedListTabEl) includedListTabEl.innerHTML = '<li style="padding: 8px 0; color: #9ca3af;">Not specified</li>';
+                document.getElementById('includedList').innerHTML = '<li>Not specified</li>';
             }
 
             // Excluded
             const excluded = tour.excludes || tour.excluded || [];
-            const excludedListEl = document.getElementById('excludedList');
-            const excludedListTabEl = document.getElementById('excludedListTab');
-
             if (Array.isArray(excluded) && excluded.length > 0) {
-                if (excludedListEl) {
-                    excludedListEl.innerHTML = excluded.map(item =>
-                        `<li>${item}</li>`
-                    ).join('');
-                }
-                // Also populate tab version
-                if (excludedListTabEl) {
-                    excludedListTabEl.innerHTML = excluded.map(item =>
-                        `<li style="padding: 8px 0; color: #4b5563; line-height: 1.6; border-bottom: 1px solid #f3f4f6; display: flex; align-items: start; gap: 8px;">
-                            <span style="color: #ef4444; flex-shrink: 0;">✗</span>
-                            <span>${item}</span>
-                        </li>`
-                    ).join('');
-                }
+                document.getElementById('excludedList').innerHTML = excluded.map(item =>
+                    `<li>${item}</li>`
+                ).join('');
             } else {
-                if (excludedListEl) excludedListEl.innerHTML = '<li>Not specified</li>';
-                if (excludedListTabEl) excludedListTabEl.innerHTML = '<li style="padding: 8px 0; color: #9ca3af;">Not specified</li>';
+                document.getElementById('excludedList').innerHTML = '<li>Not specified</li>';
             }
 
             // Additional Info
-            const tourDifficultyEl = document.getElementById('tourDifficulty');
-            if (tourDifficultyEl) tourDifficultyEl.textContent = tour.difficulty || 'Moderate';
-
-            const tourAccommodationEl = document.getElementById('tourAccommodation');
-            if (tourAccommodationEl) tourAccommodationEl.textContent = tour.accommodation || '3-4 Star Hotel';
-
-            // More Info Section - Populate meta data
-            const metaInfoDurationEl = document.getElementById('metaInfoDuration');
-            if (metaInfoDurationEl) metaInfoDurationEl.textContent = `${tour.duration || 8} days`;
-
-            const metaInfoDestinationEl = document.getElementById('metaInfoDestination');
-            if (metaInfoDestinationEl) metaInfoDestinationEl.textContent = tour.destination || tour.location || 'Uzbekistan';
-
-            const metaInfoDifficultyEl = document.getElementById('metaInfoDifficulty');
-            if (metaInfoDifficultyEl) metaInfoDifficultyEl.textContent = tour.difficulty ? tour.difficulty.charAt(0).toUpperCase() + tour.difficulty.slice(1) : 'Easy';
-
-            const languages = tour.languages && Array.isArray(tour.languages) && tour.languages.length > 0 ? tour.languages.join(', ') : (tour.language || 'English, Russian');
-            const metaInfoLanguagesEl = document.getElementById('metaInfoLanguages');
-            if (metaInfoLanguagesEl) metaInfoLanguagesEl.textContent = languages;
-
-            const tourMealsEl = document.getElementById('tourMeals');
-            if (tourMealsEl) tourMealsEl.textContent = tour.meals || 'Breakfast & Dinner';
-
-            const tourTransportEl = document.getElementById('tourTransport');
-            if (tourTransportEl) tourTransportEl.textContent = tour.transportation || 'Car, Bus';
-
-            const tourGroupSizeInfoEl = document.getElementById('tourGroupSizeInfo');
-            if (tourGroupSizeInfoEl) tourGroupSizeInfoEl.textContent = tour.maxGroupSize ? `2-${tour.maxGroupSize} People` : '2-15 People';
-
-            const tourLanguageEl = document.getElementById('tourLanguage');
-            if (tourLanguageEl) tourLanguageEl.textContent = (tour.languages && Array.isArray(tour.languages) && tour.languages.length > 0) ? tour.languages.join(', ') : (tour.language || 'English, Russian');
+            document.getElementById('tourDifficulty').textContent = tour.difficulty || 'Moderate';
+            document.getElementById('tourAccommodation').textContent = tour.accommodation || '3-4 Star Hotel';
+            document.getElementById('tourMeals').textContent = tour.meals || 'Breakfast & Dinner';
+            document.getElementById('tourTransport').textContent = tour.transportation || 'Car, Bus';
+            document.getElementById('tourGroupSizeInfo').textContent = tour.maxGroupSize ? `2-${tour.maxGroupSize} People` : '2-15 People';
+            document.getElementById('tourLanguage').textContent = (tour.languages && Array.isArray(tour.languages) && tour.languages.length > 0) ? tour.languages.join(', ') : (tour.language || 'English, Russian');
 
             // Fix ageRange - it could be an object or string
             const ageRangeText = tour.ageRange ?
                 (typeof tour.ageRange === 'object' ? `${tour.ageRange.min || 0}-${tour.ageRange.max || 99} Years` : tour.ageRange)
                 : '12-70 Years';
-            const tourAgeRangeEl = document.getElementById('tourAgeRange');
-            if (tourAgeRangeEl) tourAgeRangeEl.textContent = ageRangeText;
-
-            const tourSeasonEl = document.getElementById('tourSeason');
-            if (tourSeasonEl) tourSeasonEl.textContent = tour.season || 'All Year Round';
+            document.getElementById('tourAgeRange').textContent = ageRangeText;
+            document.getElementById('tourSeason').textContent = tour.season || 'All Year Round';
 
             // Category
             const categoryMap = {
@@ -2636,8 +1981,7 @@
                 'hiking': 'Hiking Tour',
                 'day-trip': 'Day Trip'
             };
-            const tourCategoryInfoEl = document.getElementById('tourCategoryInfo');
-            if (tourCategoryInfoEl) tourCategoryInfoEl.textContent = categoryMap[tour.category] || 'Cultural Tour';
+            document.getElementById('tourCategoryInfo').textContent = categoryMap[tour.category] || 'Cultural Tour';
 
             // FAQ Section
             if (tour.faq && Array.isArray(tour.faq) && tour.faq.length > 0) {
@@ -2661,12 +2005,9 @@
             }
 
             // Reviews
-            const overallRatingValue = (tour.rating || 4.5).toFixed(1);
-            const overallRatingEl = document.getElementById('overallRating');
-            if (overallRatingEl) overallRatingEl.textContent = overallRatingValue;
-
-            const reviewCountEl = document.getElementById('reviewCount');
-            if (reviewCountEl) reviewCountEl.textContent = tour.ratingsCount || tour.reviewCount || '3,545';
+            const tourRating = (tour.rating || 4.5).toFixed(1);
+            document.getElementById('overallRating').textContent = tourRating;
+            document.getElementById('reviewCount').textContent = tour.ratingsCount || tour.reviewCount || '3,545';
 
             // Update Brochure Image
             updateBrochureImage(tour);
@@ -2910,88 +2251,8 @@
             doc.save(fileName);
         }
 
-        // Image Slider Variables
-        let currentSlideIndex = 0;
-        let sliderImages = [];
-
-        // Slider Navigation Functions
-        function previousSlide() {
-            currentSlideIndex = (currentSlideIndex - 1 + sliderImages.length) % sliderImages.length;
-            updateSliderImage();
-        }
-
-        function nextSlide() {
-            currentSlideIndex = (currentSlideIndex + 1) % sliderImages.length;
-            updateSliderImage();
-        }
-
-        function goToSlide(index) {
-            currentSlideIndex = index;
-            updateSliderImage();
-        }
-
-        function updateSliderImage() {
-            if (sliderImages.length === 0) return;
-
-            const mainImage = document.getElementById('mainSliderImage');
-            const caption = document.getElementById('sliderCaption');
-            const currentImage = sliderImages[currentSlideIndex];
-
-            if (mainImage && currentImage) {
-                mainImage.style.backgroundImage = `url('${currentImage.url}')`;
-                if (caption) {
-                    caption.textContent = currentImage.name || `Image ${currentSlideIndex + 1}`;
-                }
-
-                // Update thumbnail active state
-                document.querySelectorAll('.slider-thumbnail').forEach((thumb, index) => {
-                    if (index === currentSlideIndex) {
-                        thumb.style.border = '3px solid #2563eb';
-                        thumb.style.opacity = '1';
-                    } else {
-                        thumb.style.border = '3px solid transparent';
-                        thumb.style.opacity = '0.7';
-                    }
-                });
-            }
-        }
-
-        function initializeImageSlider(tour) {
-            console.log('🔵 Initializing image slider...');
-            sliderImages = [];
-
-            // Use beautiful Uzbekistan images from Unsplash
-            // These are high-quality, reliable images that showcase the tour destinations
-            sliderImages = [
-                { url: 'https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=1600&q=80', name: 'Registan Square, Samarkand' },
-                { url: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1600&q=80', name: 'Bukhara Old City' },
-                { url: 'https://images.unsplash.com/photo-1587974928442-77dc3e0dba72?w=1600&q=80', name: 'Khiva - Ancient Silk Road City' },
-                { url: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1600&q=80', name: 'Uzbekistan Landscapes' },
-                { url: 'https://images.unsplash.com/photo-1585009495034-e0ddaeb2c44e?w=1600&q=80', name: 'Traditional Architecture' }
-            ];
-
-            // Create thumbnails
-            const thumbnailContainer = document.getElementById('thumbnailContainer');
-            if (thumbnailContainer) {
-                thumbnailContainer.innerHTML = sliderImages.map((img, index) => `
-                    <div onclick="goToSlide(${index})" class="slider-thumbnail" style="width: 60px; height: 60px; border-radius: 8px; overflow: hidden; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; flex-shrink: 0;">
-                        <div style="width: 100%; height: 100%; background-image: url('${img.url}'); background-size: cover; background-position: center;"></div>
-                    </div>
-                `).join('');
-            }
-
-            // Set initial image
-            updateSliderImage();
-            console.log('✅ Image slider initialized with', sliderImages.length, 'images');
-        }
-
         function loadExploreLocations(tour) {
             console.log('🔵 loadExploreLocations started');
-
-            // Initialize the new image slider instead
-            initializeImageSlider(tour);
-
-            // OLD: locations container (now hidden)
             const locationsContainer = document.getElementById('locationsContainer');
 
             // Safety check
@@ -3091,15 +2352,9 @@
                 );
             }
 
-            // Generate HTML for location cards (only if container exists)
+            // Generate HTML for location cards
             console.log('🔵 Generating HTML for', locations.length, 'locations');
             console.log('🔵 Locations array:', locations);
-
-            if (!locationsContainer) {
-                console.log('🔵 locationsContainer not found - using image slider instead');
-                return;
-            }
-
             locationsContainer.innerHTML = locations.map(location => {
                 // Create clickable card that opens Google Maps modal if location exists
                 let cardHTML = '';
@@ -3609,7 +2864,6 @@
 
         function setupPriceCalculator() {
             const travelersSelect = document.getElementById('travelers');
-            if (!travelersSelect) return; // Exit if sidebar doesn't exist
             travelersSelect.addEventListener('change', updateTotalPrice);
             updateTotalPrice();
         }
@@ -3617,25 +2871,16 @@
         function updateTotalPrice() {
             if (!currentTour) return;
 
-            const travelersEl = document.getElementById('travelers');
-            if (!travelersEl) return; // Exit if sidebar doesn't exist
-
-            const travelers = parseInt(travelersEl.value);
+            const travelers = parseInt(document.getElementById('travelers').value);
             const pricePerPerson = currentTour.discountPrice || currentTour.price;
             const total = pricePerPerson * travelers;
 
-            const totalPriceEl = document.getElementById('totalPrice');
-            if (totalPriceEl) {
-                totalPriceEl.textContent = `$${total}`;
-            }
+            document.getElementById('totalPrice').textContent = `$${total}`;
         }
 
         function setMinDate() {
             const today = new Date().toISOString().split('T')[0];
-            const tourDateEl = document.getElementById('tourDate');
-            if (tourDateEl) {
-                tourDateEl.setAttribute('min', today);
-            }
+            document.getElementById('tourDate').setAttribute('min', today);
         }
 
         function bookNow() {

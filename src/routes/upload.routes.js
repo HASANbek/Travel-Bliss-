@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const upload = require('../middlewares/upload.middleware');
-const { uploadImage, uploadMultipleImages } = require('../controllers/upload.controller');
+const { uploadImage, uploadMultipleImages, uploadTourImage } = require('../controllers/upload.controller');
 
 // @route   POST /api/upload
 // @desc    Upload a single image
@@ -12,5 +12,10 @@ router.post('/', upload.single('image'), uploadImage);
 // @desc    Upload multiple images
 // @access  Public
 router.post('/multiple', upload.array('images', 10), uploadMultipleImages);
+
+// @route   POST /api/upload/tour-image
+// @desc    Upload tour itinerary day image
+// @access  Public
+router.post('/tour-image', upload.uploadTourImage.single('image'), uploadTourImage);
 
 module.exports = router;

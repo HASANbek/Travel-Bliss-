@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Luxury Style - Demo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: #222;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section - Airbnb Style */
+        .luxury-hero {
+            height: 70vh;
+            min-height: 500px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .luxury-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=1600') center/cover;
+            animation: zoomIn 20s ease infinite alternate;
+        }
+
+        .luxury-hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6));
+        }
+
+        @keyframes zoomIn {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .luxury-hero-content {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 60px 0;
+        }
+
+        .luxury-title {
+            font-size: 56px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .luxury-subtitle {
+            font-size: 20px;
+            color: rgba(255,255,255,0.95);
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .luxury-meta {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .luxury-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            background: rgba(255,255,255,0.15);
+            padding: 12px 24px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating Booking Card */
+        .floating-booking {
+            position: sticky;
+            top: 100px;
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+            transition: all 0.3s;
+        }
+
+        .floating-booking:hover {
+            box-shadow: 0 12px 50px rgba(0,0,0,0.18);
+        }
+
+        .price-tag {
+            font-size: 36px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 8px;
+        }
+
+        .price-tag span {
+            font-size: 18px;
+            color: #717171;
+            font-weight: 400;
+        }
+
+        .btn-book-now {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-book-now:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Content Section */
+        .content-section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #222;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 50px;
+        }
+
+        .feature-card {
+            background: #f7f7f7;
+            padding: 30px;
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            background: white;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        /* Timeline Itinerary */
+        .timeline-item {
+            position: relative;
+            padding-left: 60px;
+            padding-bottom: 40px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 40px;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .timeline-content:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            transform: translateX(10px);
+        }
+
+        .timeline-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #222;
+        }
+
+        .timeline-desc {
+            color: #717171;
+            line-height: 1.6;
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 50px;
+        }
+
+        .gallery-grid img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .gallery-grid img:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        .gallery-grid img:first-child {
+            grid-column: 1 / 3;
+            grid-row: 1 / 3;
+            height: 412px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .luxury-title {
+                font-size: 36px;
+            }
+
+            .floating-booking {
+                position: static;
+                margin-top: 30px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .gallery-grid img:first-child {
+                grid-column: 1 / 3;
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <div class="luxury-hero">
+        <div class="container">
+            <div class="luxury-hero-content">
+                <h1 class="luxury-title">Discover Samarkand's Ancient Wonders</h1>
+                <p class="luxury-subtitle">Experience the magical Silk Road city with expert guides</p>
+                <div class="luxury-meta">
+                    <div class="luxury-meta-item">
+                        <i class="bi bi-clock"></i>
+                        <span>5 Days / 4 Nights</span>
+                    </div>
+                    <div class="luxury-meta-item">
+                        <i class="bi bi-people"></i>
+                        <span>Max 12 People</span>
+                    </div>
+                    <div class="luxury-meta-item">
+                        <i class="bi bi-geo-alt"></i>
+                        <span>Samarkand, Uzbekistan</span>
+                    </div>
+                    <div class="luxury-meta-item">
+                        <i class="bi bi-star-fill"></i>
+                        <span>4.9 (127 reviews)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-section">
+        <div class="container">
+            <div class="row">
+                <!-- Left Column - Content -->
+                <div class="col-lg-8">
+
+                    <!-- Gallery -->
+                    <div class="gallery-grid">
+                        <img src="https://images.unsplash.com/photo-1597212618440-806262de4f6b?w=800" alt="Gallery 1">
+                        <img src="https://images.unsplash.com/photo-1587974928442-77dc3e0dba72?w=400" alt="Gallery 2">
+                        <img src="https://images.unsplash.com/photo-1564507592333-c60657eea523?w=400" alt="Gallery 3">
+                        <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400" alt="Gallery 4">
+                        <img src="https://images.unsplash.com/photo-1512632578888-169bbbc64f33?w=400" alt="Gallery 5">
+                    </div>
+
+                    <!-- Features -->
+                    <h2 class="section-title">What's Included</h2>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="bi bi-house-door"></i>
+                            </div>
+                            <h4>Accommodation</h4>
+                            <p>4-star hotels with breakfast</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="bi bi-car-front"></i>
+                            </div>
+                            <h4>Transportation</h4>
+                            <p>Comfortable AC vehicles</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="bi bi-person-badge"></i>
+                            </div>
+                            <h4>Guide</h4>
+                            <p>Professional English guide</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="bi bi-ticket-perforated"></i>
+                            </div>
+                            <h4>Entrance Fees</h4>
+                            <p>All monument tickets included</p>
+                        </div>
+                    </div>
+
+                    <!-- Itinerary -->
+                    <h2 class="section-title">Itinerary</h2>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot">1</div>
+                            <div class="timeline-content">
+                                <h3 class="timeline-title">Arrival & Registan Square</h3>
+                                <p class="timeline-desc">Welcome to Samarkand! Visit the magnificent Registan Square, explore three stunning madrasahs and enjoy a traditional Uzbek dinner.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot">2</div>
+                            <div class="timeline-content">
+                                <h3 class="timeline-title">Gur-e-Amir & Shah-i-Zinda</h3>
+                                <p class="timeline-desc">Discover the stunning mausoleum of Tamerlane and the breathtaking necropolis of Shah-i-Zinda with its azure-tiled domes.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot">3</div>
+                            <div class="timeline-content">
+                                <h3 class="timeline-title">Ulugbek Observatory & Afrosiab</h3>
+                                <p class="timeline-desc">Visit the 15th-century observatory and explore ancient Afrosiab settlement with its fascinating museum.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot">4</div>
+                            <div class="timeline-content">
+                                <h3 class="timeline-title">Samarkand Paper Mill & Bazaar</h3>
+                                <p class="timeline-desc">Learn about traditional paper-making and shop for souvenirs at the colorful Siyob Bazaar.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot">5</div>
+                            <div class="timeline-content">
+                                <h3 class="timeline-title">Departure Day</h3>
+                                <p class="timeline-desc">Free morning for last-minute shopping or relaxation before transfer to airport.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column - Booking Card -->
+                <div class="col-lg-4">
+                    <div class="floating-booking">
+                        <div class="price-tag">
+                            $499 <span>/ person</span>
+                        </div>
+                        <p style="color: #717171; margin-bottom: 24px;">Best price guaranteed</p>
+
+                        <div class="mb-3">
+                            <label class="form-label">Select Date</label>
+                            <input type="date" class="form-control" style="padding: 12px; border-radius: 8px;">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Guests</label>
+                            <select class="form-select" style="padding: 12px; border-radius: 8px;">
+                                <option>1 person</option>
+                                <option>2 people</option>
+                                <option>3 people</option>
+                                <option>4+ people</option>
+                            </select>
+                        </div>
+
+                        <button class="btn-book-now">
+                            <i class="bi bi-check-circle"></i> Book Now
+                        </button>
+
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #efefef; text-align: center; color: #717171; font-size: 14px;">
+                            <i class="bi bi-shield-check"></i> Free cancellation up to 24 hours
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

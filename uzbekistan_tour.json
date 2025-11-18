@@ -1,0 +1,175 @@
+{
+  "title": "Grand Uzbekistan Tour - 9 Days",
+  "description": "Complete journey through Uzbekistan's ancient Silk Road cities: Tashkent, Samarkand, Bukhara, and Khiva. Experience the best of Central Asian culture, architecture, and hospitality.",
+  "destination": "Tashkent, Samarkand, Bukhara, Khiva",
+  "price": 1250,
+  "duration": 9,
+  "nights": 8,
+  "destinationsCount": 4,
+  "maxGroupSize": 12,
+  "groupSizeMin": 2,
+  "difficulty": "easy",
+  "category": "cultural",
+  "imageCover": "tour-package-img1.jpg",
+  "image": "tour-package-img1.jpg",
+  "images": ["tour-package-img1.jpg", "tour-package-img2.jpg"],
+  "accommodation": "4-5 Star Hotels",
+  "meals": "Breakfast Daily, 4 Dinners",
+  "transportation": "Private Car, High-Speed Train",
+  "languages": ["English", "Russian", "Uzbek"],
+  "animal": "No pets allowed",
+  "ageRange": {
+    "min": 10,
+    "max": 80
+  },
+  "season": "All Seasons (Best: Apr-Jun, Sep-Nov)",
+  "highlights": [
+    "Tashkent – Modern capital with Soviet-era architecture and vibrant bazaars",
+    "Samarkand – Iconic Registan Square, Shah-i-Zinda, and Gur-e-Amir Mausoleum",
+    "Bukhara – Ancient Silk Road city with 140+ architectural monuments",
+    "Khiva – Open-air museum city with perfectly preserved old town (Itchan Kala)"
+  ],
+  "locations": [
+    {
+      "name": "Tashkent",
+      "image": "tashkent.jpg",
+      "days": "02 Days"
+    },
+    {
+      "name": "Samarkand",
+      "image": "registan.jpg",
+      "days": "02 Days"
+    },
+    {
+      "name": "Bukhara",
+      "image": "bukhara.jpg",
+      "days": "03 Days"
+    },
+    {
+      "name": "Khiva",
+      "image": "khiva.jpg",
+      "days": "02 Days"
+    }
+  ],
+  "freeCancellation": "Free cancellation up to 7 days before departure",
+  "healthSafety": "All safety measures followed. Travel insurance recommended.",
+  "faq": [
+    {
+      "question": "What is the best time to visit Uzbekistan?",
+      "answer": "Spring (April-June) and autumn (September-November) offer the most pleasant weather. Summer can be very hot (40°C+) while winter is cold but atmospheric."
+    },
+    {
+      "question": "Do I need a visa for Uzbekistan?",
+      "answer": "Many nationalities can enter visa-free for up to 30 days. Check your country's requirements before booking."
+    },
+    {
+      "question": "What currency is used in Uzbekistan?",
+      "answer": "Uzbek Som (UZS). USD and EUR are widely accepted. ATMs available in major cities."
+    }
+  ],
+  "itinerary": [
+    {
+      "day": 1,
+      "title": "Arrival in Tashkent",
+      "description": "Welcome to Uzbekistan! Meet your guide at Tashkent International Airport and transfer to your hotel. Free time to rest and acclimatize. Optional evening walk around Amir Timur Square.",
+      "activities": ["Airport pickup", "Hotel check-in", "Welcome briefing", "Optional city walk"],
+      "meals": "Dinner",
+      "accommodation": "Wyndham Hotel or similar",
+      "transport": ["Private Car"]
+    },
+    {
+      "day": 2,
+      "title": "Tashkent City Tour",
+      "description": "Explore the capital's highlights: Khast Imam Complex (home to the world's oldest Quran), Chorsu Bazaar, Tashkent Metro stations (underground palaces), and Independence Square. Experience blend of Soviet and Islamic architecture.",
+      "activities": ["Khast Imam Complex tour", "Chorsu Bazaar visit", "Metro station tour", "Independence Square"],
+      "meals": "Breakfast",
+      "accommodation": "Wyndham Hotel or similar",
+      "transport": ["Private Car", "Metro"]
+    },
+    {
+      "day": 3,
+      "title": "Tashkent to Samarkand (High-Speed Train)",
+      "description": "Morning transfer to railway station for comfortable high-speed train journey to Samarkand (2 hours). Afternoon visit to Registan Square, the heart of ancient Samarkand with three magnificent madrasahs. Evening stroll and optional light show.",
+      "activities": ["High-speed train experience", "Registan Square tour", "Evening light show", "Local restaurant dinner"],
+      "meals": "Breakfast, Dinner",
+      "accommodation": "Registan Plaza Hotel or similar",
+      "transport": ["Private Car", "High-Speed Train"]
+    },
+    {
+      "day": 4,
+      "title": "Samarkand Full Day Tour",
+      "description": "Full day exploring Samarkand's treasures: Gur-e-Amir Mausoleum (Timur's tomb), Shah-i-Zinda necropolis with stunning blue tilework, Ulugbek Observatory, and Bibi-Khanym Mosque. Visit Siab Bazaar for local crafts and spices.",
+      "activities": ["Gur-e-Amir visit", "Shah-i-Zinda exploration", "Observatory tour", "Siab Bazaar shopping"],
+      "meals": "Breakfast",
+      "accommodation": "Registan Plaza Hotel or similar",
+      "transport": ["Private Car", "Walking"]
+    },
+    {
+      "day": 5,
+      "title": "Samarkand to Bukhara",
+      "description": "Morning drive to Bukhara (280km, 4 hours) through scenic landscapes. En route visit pottery workshop in Gijduvan. Afternoon arrival in Bukhara, check-in and rest. Evening walk around Lyabi-Hauz complex.",
+      "activities": ["Scenic drive", "Pottery workshop visit", "Lyabi-Hauz evening walk", "Traditional tea house"],
+      "meals": "Breakfast, Dinner",
+      "accommodation": "Zargaron Plaza Hotel or similar",
+      "transport": ["Private Car"]
+    },
+    {
+      "day": 6,
+      "title": "Bukhara Old City Tour",
+      "description": "Explore Bukhara's architectural wonders: Ark Fortress, Po-i-Kalyan Complex with iconic Kalyan Minaret, Mir-i-Arab Madrasah, and the historic trading domes. Visit Magoki-Attori Mosque and enjoy a traditional folk show in the evening.",
+      "activities": ["Ark Fortress tour", "Po-i-Kalyan Complex", "Trading domes shopping", "Folk show"],
+      "meals": "Breakfast",
+      "accommodation": "Zargaron Plaza Hotel or similar",
+      "transport": ["Walking", "Private Car"]
+    },
+    {
+      "day": 7,
+      "title": "Bukhara to Khiva",
+      "description": "Early morning departure for long but scenic drive across Kyzylkum Desert to Khiva (450km, 7 hours). Lunch stop in desert oasis. Arrive evening in Khiva, check-in to hotel. Rest and prepare for next day's exploration.",
+      "activities": ["Desert drive", "Lunch in oasis", "Amu Darya River crossing", "Evening arrival"],
+      "meals": "Breakfast, Lunch",
+      "accommodation": "Asia Khiva Hotel or similar",
+      "transport": ["Private Car"]
+    },
+    {
+      "day": 8,
+      "title": "Khiva - Itchan Kala Full Day",
+      "description": "Full day exploring UNESCO-listed Itchan Kala, the walled inner town of Khiva. Visit Kalta Minor Minaret, Kunya Ark Citadel, Juma Mosque with 212 wooden columns, Islam Khodja Minaret, and Tash Khovli Palace. Climb minaret for sunset views.",
+      "activities": ["Itchan Kala walking tour", "Kalta Minor visit", "Juma Mosque tour", "Sunset from minaret"],
+      "meals": "Breakfast, Dinner",
+      "accommodation": "Asia Khiva Hotel or similar",
+      "transport": ["Walking"]
+    },
+    {
+      "day": 9,
+      "title": "Khiva to Tashkent - Departure",
+      "description": "Morning flight from Urgench to Tashkent. Depending on your international flight time, optional last-minute shopping or visit to Tashkent's modern areas. Transfer to airport for your departure flight home with unforgettable memories.",
+      "activities": ["Morning flight", "Last shopping", "Airport transfer", "Departure"],
+      "meals": "Breakfast",
+      "accommodation": "N/A",
+      "transport": ["Domestic Flight", "Private Car"]
+    }
+  ],
+  "included": [
+    "8 nights accommodation (4-5 star hotels)",
+    "All transfers with private air-conditioned vehicle",
+    "High-speed train Tashkent-Samarkand",
+    "Domestic flight Urgench-Tashkent",
+    "Professional English-speaking guide",
+    "All entrance fees to monuments and museums",
+    "Breakfasts daily and 4 dinners"
+  ],
+  "excluded": [
+    "International flights",
+    "Visa fees (if applicable)",
+    "Travel insurance",
+    "Lunches (except day 7)",
+    "Personal expenses and tips",
+    "Optional activities"
+  ],
+  "rating": 5.0,
+  "ratingsCount": 0,
+  "isActive": true,
+  "isFeatured": true,
+  "hotSale": true
+}

@@ -85,9 +85,12 @@ const tourSchema = new mongoose.Schema({
     day: Number,
     title: String,
     description: String,
+    image: String,
+    imageCaption: String,
+    city: String,
+    accommodation: String,
     activities: [String],
     meals: String,
-    accommodation: String,
     transport: [String]
   }],
   tags: {

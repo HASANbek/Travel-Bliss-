@@ -206,6 +206,75 @@ let demoTours = [
     isFeatured: false,
     hotSale: false,
     createdAt: new Date()
+  },
+  {
+    id: '4',
+    title: '10-Day Uzbekistan Grand Tour',
+    description: 'Discover the ancient Silk Road cities of Uzbekistan on this comprehensive 10-day journey through history, culture, and breathtaking landscapes. Visit Tashkent, Samarkand, Bukhara, Khiva and experience the authentic Uzbek hospitality.',
+    destination: 'Uzbekistan',
+    price: 1299,
+    duration: 10,
+    nights: 9,
+    destinationsCount: 4,
+    maxGroupSize: 16,
+    groupSizeMin: 2,
+    difficulty: 'easy',
+    category: 'cultural',
+    imageCover: 'tour-package-img1.jpg',
+    image: 'tour-package-img1.jpg',
+    images: ['tour-package-img1.jpg', 'tour-package-img2.jpg', 'tour-package-img3.jpg', 'tour-package-img4.jpg', 'tour-package-img5.jpg'],
+    accommodation: '4-Star Hotels & Guesthouses',
+    meals: 'Breakfast & Select Dinners',
+    transportation: 'AC Bus, High-Speed Train',
+    languages: ['English', 'Russian', 'Uzbek'],
+    animal: 'No pets allowed',
+    ageRange: { min: 12, max: 75 },
+    season: 'Spring & Autumn (Best)',
+    summary: 'Complete Silk Road adventure covering all major historical cities of Uzbekistan',
+    highlights: [
+      'Explore three UNESCO World Heritage Sites (Samarkand, Bukhara, Khiva)',
+      'Visit the legendary Registan Square in Samarkand',
+      'Walk through the ancient streets of Bukhara old town',
+      'Discover the walled city of Khiva - an open-air museum',
+      'Experience traditional Uzbek cuisine and hospitality',
+      'Stay in authentic guesthouses and boutique hotels',
+      'Professional English-speaking guide throughout the tour',
+      'High-speed train journey from Tashkent to Samarkand'
+    ],
+    locations: [
+      { name: 'Tashkent', image: 'tashkent.jpg', days: '02 Days' },
+      { name: 'Samarkand', image: 'samarkand.jpg', days: '02 Days' },
+      { name: 'Bukhara', image: 'bukhara.jpg', days: '03 Days' },
+      { name: 'Khiva', image: 'khiva.jpg', days: '02 Days' }
+    ],
+    freeCancellation: 'Free cancellation up to 14 days before departure',
+    healthSafety: 'All COVID-19 safety measures followed. Travel insurance recommended.',
+    faq: [
+      { question: 'Is visa required for Uzbekistan?', answer: 'Citizens of many countries can visit Uzbekistan visa-free for up to 30 days. Please check current requirements for your nationality.' },
+      { question: 'What is the best time to visit Uzbekistan?', answer: 'Spring (April-May) and Autumn (September-October) offer the best weather with comfortable temperatures and clear skies.' },
+      { question: 'Are meals included in the tour?', answer: 'Daily breakfast and 5 traditional Uzbek dinners are included. Lunches are not included to give you flexibility to try different local restaurants.' },
+      { question: 'What should I pack for this tour?', answer: 'Comfortable walking shoes, modest clothing for mosque visits, sunscreen, hat, and a light jacket for evenings.' }
+    ],
+    itinerary: [
+      { day: 1, title: 'Arrival in Tashkent', description: 'Arrive in Tashkent, transfer to hotel. City tour including Chorsu Bazaar and Independence Square. Welcome dinner.', activities: ['Airport pickup', 'Chorsu Bazaar', 'Independence Square', 'Welcome dinner'], meals: 'Dinner', accommodation: 'City Palace Hotel', transport: ['Car'] },
+      { day: 2, title: 'Tashkent to Samarkand by Train', description: 'High-speed train to Samarkand. Visit Registan Square and Gur-e-Amir Mausoleum.', activities: ['High-speed train', 'Registan Square', 'Gur-e-Amir Mausoleum'], meals: 'Breakfast, Dinner', accommodation: 'Registan Plaza', transport: ['Train', 'Car'] },
+      { day: 3, title: 'Samarkand Highlights', description: 'Full day exploring Shah-i-Zinda, Bibi-Khanym Mosque, and Ulugbek Observatory.', activities: ['Shah-i-Zinda', 'Bibi-Khanym Mosque', 'Ulugbek Observatory'], meals: 'Breakfast, Dinner', accommodation: 'Registan Plaza', transport: ['Car'] },
+      { day: 4, title: 'Samarkand to Bukhara', description: 'Scenic drive to Bukhara. Stop at pottery workshop. Evening at Lyabi-Hauz.', activities: ['Drive to Bukhara', 'Pottery workshop', 'Lyabi-Hauz'], meals: 'Breakfast', accommodation: 'Zargaron Plaza', transport: ['Car'] },
+      { day: 5, title: 'Bukhara Old City', description: 'Explore Ark Fortress, trading domes, Kalyan Complex. UNESCO World Heritage Site.', activities: ['Ark Fortress', 'Trading domes', 'Kalyan Minaret'], meals: 'Breakfast, Dinner', accommodation: 'Zargaron Plaza', transport: ['Walking'] },
+      { day: 6, title: 'Bukhara Surroundings', description: 'Bahauddin Naqshband Complex and Sitorai Palace. Evening folklore show.', activities: ['Naqshband shrine', 'Summer Palace', 'Folklore show'], meals: 'Breakfast, Dinner', accommodation: 'Zargaron Plaza', transport: ['Car'] },
+      { day: 7, title: 'Bukhara to Khiva', description: 'Desert drive to Khiva through Kyzylkum. Cross Amu Darya River.', activities: ['Desert drive', 'Amu Darya River', 'Arrival in Khiva'], meals: 'Breakfast', accommodation: 'Orient Star Khiva', transport: ['Car'] },
+      { day: 8, title: 'Khiva - Open Air Museum', description: 'Full day in Itchan Kala. Visit Kalta Minor, Kunya Ark, Juma Mosque.', activities: ['Itchan Kala', 'Kalta Minor', 'Tash Khovli Palace'], meals: 'Breakfast, Dinner', accommodation: 'Orient Star Khiva', transport: ['Walking'] },
+      { day: 9, title: 'Return to Tashkent', description: 'Flight to Tashkent. Last shopping and farewell dinner.', activities: ['Flight to Tashkent', 'Shopping', 'Farewell dinner'], meals: 'Breakfast, Dinner', accommodation: 'City Palace Hotel', transport: ['Flight', 'Car'] },
+      { day: 10, title: 'Departure', description: 'Hotel check-out and airport transfer.', activities: ['Check-out', 'Airport transfer'], meals: 'Breakfast', accommodation: 'N/A', transport: ['Car'] }
+    ],
+    included: ['9 nights accommodation', 'All transfers and transport', 'English-speaking guide', 'Entrance fees', 'Breakfast daily', '5 traditional dinners', 'High-speed train ticket'],
+    excluded: ['International flights', 'Travel insurance', 'Lunches', 'Personal expenses', 'Tips for guide'],
+    rating: 5.0,
+    ratingsCount: 3,
+    isActive: true,
+    isFeatured: true,
+    hotSale: true,
+    createdAt: new Date()
   }
 ];
 
@@ -291,9 +360,12 @@ exports.getTour = asyncHandler(async (req, res) => {
     if (!tour) {
       throw new ApiError(404, 'Tour not found');
     }
-    return res.status(200).json(
-      new ApiResponse(200, { tour, mode: 'DEMO' }, 'Tour details retrieved successfully')
-    );
+    return res.status(200).json({
+      statusCode: 200,
+      success: true,
+      message: 'Tour details retrieved successfully',
+      data: { tour, mode: 'DEMO' }
+    });
   }
 
   const tour = await Tour.findById(id);
