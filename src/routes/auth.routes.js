@@ -8,7 +8,10 @@ const {
   logout,
   getMe,
   updatePassword,
-  updateProfile
+  updateProfile,
+  forgotPassword,
+  verifyOTP,
+  resetPassword
 } = require('../controllers/auth.controller');
 
 // Middleware
@@ -34,6 +37,21 @@ router.post('/register', registerValidation, validate, register);
 // @desc    Tizimga kirish
 // @access  Public
 router.post('/login', loginValidation, validate, login);
+
+// @route   POST /api/auth/forgot-password
+// @desc    Parolni tiklash uchun OTP yuborish
+// @access  Public
+router.post('/forgot-password', forgotPassword);
+
+// @route   POST /api/auth/verify-otp
+// @desc    OTP kodni tekshirish
+// @access  Public
+router.post('/verify-otp', verifyOTP);
+
+// @route   POST /api/auth/reset-password
+// @desc    Yangi parol o'rnatish (OTP bilan)
+// @access  Public
+router.post('/reset-password', resetPassword);
 
 /**
  * PROTECTED ROUTES (Autentifikatsiya talab qilinadi)

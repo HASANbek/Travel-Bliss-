@@ -139,8 +139,8 @@ Version: 1.0
   --title-color2-opc: 246, 243, 188;
   --text-color: #525252;
   --white-text-color: #AAAAAA;
-  --primary-color1: #6366F1;
-  --primary-color1-opc: 99, 102, 241;
+  --primary-color1: #0F16E6;
+  --primary-color1-opc: 15, 22, 230;
   --primary-color2: #0EA9D0;
   --primary-color2-opc: 14, 169, 208;
   --primary-color3: #285340;
@@ -11365,7 +11365,7 @@ header.style-3.two .main-menu > ul > li.active > a i {
   16. Home1 Footer Section CSS
 ========================================*/
 .footer-section {
-  background-image: url(../img/home1/footer-bg.png), linear-gradient(180deg, #110F0F 0%, #110F0F 100%);
+  background: linear-gradient(180deg, #110F0F 0%, #110F0F 100%);
   background-size: cover;
   background-repeat: no-repeat;
 }

@@ -1,0 +1,36 @@
+[
+  {
+    "id": "1",
+    "name": "Admin",
+    "email": "admin@travelbliss.uz",
+    "phone": "+998901234567",
+    "password": "$2b$10$f6izBIlgv21BqtjmHmuvae7m507T8dsYci4oV6RwMTDFDr/roQO7m",
+    "role": "admin",
+    "avatar": "default-avatar.png",
+    "isEmailVerified": true,
+    "isPhoneVerified": true,
+    "isActive": true,
+    "createdAt": "2025-11-19T08:33:49.817Z",
+    "updatedAt": "2025-11-19T16:12:12.133Z",
+    "lastLogin": "2025-11-19T16:12:12.132Z",
+    "resetPasswordOTP": "893069",
+    "resetPasswordOTPExpires": "2025-11-19T09:29:22.754Z"
+  },
+  {
+    "id": "2",
+    "name": "Yusufjon",
+    "email": "info@travel-bliss.uz",
+    "phone": "+998932244333",
+    "password": "$2b$10$wfrB2gwwQ.Ug/GIgEykAfOSBvmdpFYBrj/uKupB3AMMs98xBSVAw2",
+    "role": "admin",
+    "avatar": "default-avatar.png",
+    "isEmailVerified": false,
+    "isPhoneVerified": false,
+    "isActive": true,
+    "createdAt": "2025-11-19T09:17:23.951Z",
+    "updatedAt": "2025-11-19T10:03:22.127Z",
+    "resetPasswordOTP": "280101",
+    "resetPasswordOTPExpires": "2025-11-19T09:28:34.917Z",
+    "lastLogin": "2025-11-19T10:03:22.126Z"
+  }
+]

@@ -2,6 +2,11 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User.model');
 const asyncHandler = require('../utils/asyncHandler');
 const ApiError = require('../utils/ApiError');
+const FileStorage = require('../utils/fileStorage');
+const mongoose = require('mongoose');
+
+// Initialize file storage for users
+const usersStorage = new FileStorage('users.json');
 
 /**
  * Foydalanuvchi autentifikatsiya qilinganligini tekshirish
@@ -34,7 +39,15 @@ exports.protect = asyncHandler(async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // 4. Foydalanuvchini topish
-    const user = await User.findById(decoded.id);
+    let user;
+
+    if (mongoose.connection.readyState !== 1) {
+      // Use file storage
+      user = await usersStorage.findById(decoded.id);
+    } else {
+      // Use MongoDB
+      user = await User.findById(decoded.id);
+    }
 
     if (!user) {
       return next(new ApiError(401, 'Foydalanuvchi topilmadi'));

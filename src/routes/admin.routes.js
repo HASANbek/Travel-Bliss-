@@ -26,11 +26,10 @@ const { protect, authorize } = require('../middlewares/auth.middleware');
 
 // ========== MIDDLEWARE ==========
 // Barcha admin routelar uchun authentication va authorization
-// DEMO MODE: Hozircha protect va authorize o'chirilgan (MongoDB yo'q)
-// MongoDB ulanganidan keyin uncomment qiling
+// ✅ FILE STORAGE bilan ishlaydi!
 
-// router.use(protect);              // Faqat login qilgan userlar
-// router.use(authorize('admin'));   // Faqat admin rolga ega userlar
+router.use(protect);              // Faqat login qilgan userlar
+router.use(authorize('admin'));   // Faqat admin rolga ega userlar
 
 // ========== DASHBOARD ==========
 

@@ -14,9 +14,29 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // Cookie parser
 app.use(cookieParser);
 
-// CORS configuration
+// CORS configuration - allow all localhost origins for development
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, postman)
+    if (!origin) return callback(null, true);
+
+    // Allow all localhost origins
+    if (origin.startsWith('http://localhost') || origin.startsWith('http://127.0.0.1')) {
+      return callback(null, true);
+    }
+
+    // Allow file:// protocol for local HTML files
+    if (origin === 'null' || origin.startsWith('file://')) {
+      return callback(null, true);
+    }
+
+    // For production, check environment variable
+    if (process.env.CORS_ORIGIN && origin === process.env.CORS_ORIGIN) {
+      return callback(null, true);
+    }
+
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true
 }));
 
@@ -58,6 +78,7 @@ const blogRoutes = require('./routes/blog.routes');
 const destinationRoutes = require('./routes/destination.routes');
 const categoryRoutes = require('./routes/category.routes');
 const aiRoutes = require('./routes/ai.routes');
+const bookingRoutes = require('./routes/booking.routes');
 
 // Use routes
 app.use('/api/demo', demoRoutes);
@@ -70,6 +91,7 @@ app.use('/api/blogs', blogRoutes);
 app.use('/api/destinations', destinationRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/bookings', bookingRoutes);
 
 // Static files (uploads)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));

@@ -3,6 +3,10 @@ const asyncHandler = require('../utils/asyncHandler');
 const ApiError = require('../utils/ApiError');
 const ApiResponse = require('../utils/ApiResponse');
 const mongoose = require('mongoose');
+const FileStorage = require('../utils/fileStorage');
+
+// Initialize file storage for tours
+const toursStorage = new FileStorage('tours.json');
 
 // Demo tours data (works when MongoDB is not connected)
 let demoTours = [
@@ -75,8 +79,8 @@ let demoTours = [
     ],
     included: ['Accommodation', 'Transportation', 'Guide services', 'All entrance fees'],
     excluded: ['International flights', 'Personal expenses', 'Tips'],
-    rating: 4.8,
-    ratingsCount: 125,
+    rating: 5.0,
+    ratingsCount: 89,
     isActive: true,
     isFeatured: true,
     hotSale: true,
@@ -142,8 +146,8 @@ let demoTours = [
     ],
     included: ['Accommodation', 'Transportation', 'Guide services', 'Museum entries'],
     excluded: ['Lunch & Dinner', 'Personal expenses', 'Tips'],
-    rating: 4.9,
-    ratingsCount: 98,
+    rating: 4.8,
+    ratingsCount: 76,
     isActive: true,
     isFeatured: true,
     hotSale: true,
@@ -200,8 +204,8 @@ let demoTours = [
     ],
     included: ['Transportation', 'Guide', 'Equipment', 'Cable car tickets', 'Lunch'],
     excluded: ['Accommodation', 'Personal expenses', 'Tips'],
-    rating: 4.5,
-    ratingsCount: 67,
+    rating: 4.7,
+    ratingsCount: 52,
     isActive: true,
     isFeatured: false,
     hotSale: false,
@@ -269,8 +273,8 @@ let demoTours = [
     ],
     included: ['9 nights accommodation', 'All transfers and transport', 'English-speaking guide', 'Entrance fees', 'Breakfast daily', '5 traditional dinners', 'High-speed train ticket'],
     excluded: ['International flights', 'Travel insurance', 'Lunches', 'Personal expenses', 'Tips for guide'],
-    rating: 5.0,
-    ratingsCount: 3,
+    rating: 4.9,
+    ratingsCount: 79,
     isActive: true,
     isFeatured: true,
     hotSale: true,
@@ -282,10 +286,19 @@ let demoTours = [
 // @route   GET /api/tours
 // @access  Public
 exports.getAllTours = asyncHandler(async (req, res) => {
-  // MongoDB ulanmagan bo'lsa demo data qaytarish
+  // MongoDB ulanmagan bo'lsa file storage yoki demo data qaytarish
   if (mongoose.connection.readyState !== 1) {
     const { category, difficulty, minPrice, maxPrice } = req.query;
-    let filteredTours = [...demoTours];
+
+    // Try to get tours from file storage first
+    let tours = await toursStorage.findAll();
+
+    // If no tours in file, use demo tours
+    if (tours.length === 0) {
+      tours = demoTours;
+    }
+
+    let filteredTours = [...tours];
 
     // Apply filters to demo data
     if (category) {
@@ -354,17 +367,25 @@ exports.getAllTours = asyncHandler(async (req, res) => {
 exports.getTour = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  // MongoDB ulanmagan bo'lsa demo data
+  // MongoDB ulanmagan bo'lsa file storage yoki demo data
   if (mongoose.connection.readyState !== 1) {
-    const tour = demoTours.find(t => t.id === id);
+    // Try to get tour from file storage first
+    let tour = await toursStorage.findById(id);
+
+    // If not found in file storage, try demo tours
+    if (!tour) {
+      tour = demoTours.find(t => t.id === id);
+    }
+
     if (!tour) {
       throw new ApiError(404, 'Tour not found');
     }
+
     return res.status(200).json({
       statusCode: 200,
       success: true,
       message: 'Tour details retrieved successfully',
-      data: { tour, mode: 'DEMO' }
+      data: { tour, mode: 'FILE_STORAGE' }
     });
   }
 

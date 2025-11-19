@@ -472,8 +472,8 @@
 
         .timeline-item {
             position: relative;
-            margin-bottom: 30px;
-            padding-bottom: 30px;
+            margin-bottom: 5px;
+            padding-bottom: 5px;
             border-bottom: 1px solid #f0f0f0;
         }
 
@@ -483,26 +483,26 @@
 
         .timeline-marker {
             position: absolute;
-            left: -70px;
-            width: 60px;
-            height: 60px;
+            left: -60px;
+            width: 45px;
+            height: 45px;
             background: linear-gradient(135deg, var(--travel-bliss-blue), var(--travel-bliss-blue-light));
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 14px;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            font-weight: 600;
+            font-size: 11px;
+            box-shadow: 0 3px 8px rgba(99, 102, 241, 0.25);
         }
 
         .timeline-item::before {
             content: '';
             position: absolute;
             left: -40px;
-            top: 60px;
-            bottom: -30px;
+            top: 45px;
+            bottom: -5px;
             width: 2px;
             background: linear-gradient(to bottom, var(--travel-bliss-blue-light), #E0E0E0);
         }
@@ -520,21 +520,22 @@
 
         .timeline-content p {
             color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 10px;
+            line-height: 1.5;
+            margin-bottom: 5px;
         }
 
         .timeline-activities {
             list-style: none;
             padding: 0;
-            margin: 15px 0 0 0;
+            margin: 5px 0 0 0;
         }
 
         .timeline-activities li {
-            padding: 8px 0;
-            padding-left: 25px;
+            padding: 2px 0;
+            padding-left: 20px;
             position: relative;
             color: var(--text-secondary);
+            line-height: 1.4;
         }
 
         .timeline-activities li::before {
@@ -577,11 +578,11 @@
         .timeline-header {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 10px;
+            margin-bottom: 0px;
             cursor: pointer;
-            padding: 10px;
-            margin: -10px -10px 15px -10px;
+            padding: 8px;
+            margin: -8px -8px 0px -8px;
             border-radius: 8px;
             transition: background-color 0.2s ease;
         }
@@ -603,6 +604,22 @@
         .timeline-body {
             overflow: hidden;
             transition: max-height 0.3s ease, opacity 0.3s ease;
+            margin-top: 8px;
+        }
+
+        .timeline-body p {
+            margin: 0 0 8px 0;
+            line-height: 1.5;
+        }
+
+        .timeline-body ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+
+        .timeline-body ul li {
+            margin: 3px 0;
+            line-height: 1.4;
         }
 
         .timeline-item.collapsed .timeline-body {
@@ -913,10 +930,10 @@
             }
 
             .timeline-marker {
-                left: -50px;
-                width: 45px;
-                height: 45px;
-                font-size: 12px;
+                left: -45px;
+                width: 38px;
+                height: 38px;
+                font-size: 10px;
             }
 
             .timeline-item::before {
@@ -950,14 +967,18 @@
             }
 
             .timeline-itinerary {
-                padding-left: 30px;
+                padding-left: 50px;
             }
 
             .timeline-marker {
-                left: -30px;
-                width: 40px;
-                height: 40px;
-                font-size: 14px;
+                left: -45px;
+                width: 35px;
+                height: 35px;
+                font-size: 9px;
+            }
+
+            .timeline-item::before {
+                left: -27px;
             }
 
             .photo-gallery-grid {
@@ -1254,19 +1275,46 @@
                 <div class="tab-pane fade" id="reviews" role="tabpanel">
                     <h2 class="section-title">Traveler Reviews</h2>
 
-                    <div class="reviews-header">
-                        <div class="reviews-summary">
-                            <div class="rating-score" id="avgRatingScore">0.0</div>
-                            <div class="rating-breakdown">
-                                <div class="rating-circles">●●●●●</div>
-                                <div class="rating-text" id="totalReviewsText">0 reviews</div>
-                                <div class="rating-text" style="font-weight: 600; color: var(--text-primary);">Excellent</div>
+                    <!-- TripAdvisor Header -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; padding: 20px; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                        <div style="display: flex; align-items: center; gap: 20px;">
+                            <img src="https://www.tripadvisor.co.uk/img/cdsi/img2/branding/v2/Tripadvisor_lockup_horizontal_secondary_registered-18034-2.svg" alt="TripAdvisor" style="height: 30px;">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
+                                    <span style="font-size: 32px; font-weight: 700; color: #333;">4.9</span>
+                                    <div>
+                                        <svg width="20" height="20" viewBox="0 0 14 14" fill="#00AA6C" xmlns="http://www.w3.org/2000/svg" style="display: inline-block;">
+                                            <path d="M7 0L8.5716 4.83688H13.6574L9.5429 7.82624L11.1145 12.6631L7 9.67376L2.8855 12.6631L4.4571 7.82624L0.342604 4.83688H5.4284L7 0Z"/>
+                                        </svg>
+                                        <svg width="20" height="20" viewBox="0 0 14 14" fill="#00AA6C" xmlns="http://www.w3.org/2000/svg" style="display: inline-block;">
+                                            <path d="M7 0L8.5716 4.83688H13.6574L9.5429 7.82624L11.1145 12.6631L7 9.67376L2.8855 12.6631L4.4571 7.82624L0.342604 4.83688H5.4284L7 0Z"/>
+                                        </svg>
+                                        <svg width="20" height="20" viewBox="0 0 14 14" fill="#00AA6C" xmlns="http://www.w3.org/2000/svg" style="display: inline-block;">
+                                            <path d="M7 0L8.5716 4.83688H13.6574L9.5429 7.82624L11.1145 12.6631L7 9.67376L2.8855 12.6631L4.4571 7.82624L0.342604 4.83688H5.4284L7 0Z"/>
+                                        </svg>
+                                        <svg width="20" height="20" viewBox="0 0 14 14" fill="#00AA6C" xmlns="http://www.w3.org/2000/svg" style="display: inline-block;">
+                                            <path d="M7 0L8.5716 4.83688H13.6574L9.5429 7.82624L11.1145 12.6631L7 9.67376L2.8855 12.6631L4.4571 7.82624L0.342604 4.83688H5.4284L7 0Z"/>
+                                        </svg>
+                                        <svg width="20" height="20" viewBox="0 0 14 14" fill="#00AA6C" xmlns="http://www.w3.org/2000/svg" style="display: inline-block;">
+                                            <path d="M7 0L8.5716 4.83688H13.6574L9.5429 7.82624L11.1145 12.6631L7 9.67376L2.8855 12.6631L4.4571 7.82624L0.342604 4.83688H5.4284L7 0Z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div style="color: #666; font-size: 14px;">79 reviews</div>
                             </div>
                         </div>
+                        <a href="https://www.tripadvisor.co.uk/Attraction_Review-g298068-d26852419-Reviews-Travel_Bliss-Samarkand_Samarqand_Province.html"
+                           target="_blank"
+                           style="background: #00AA6C; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; transition: all 0.3s;"
+                           onmouseover="this.style.background='#008c59'"
+                           onmouseout="this.style.background='#00AA6C'">
+                            View All Reviews
+                        </a>
                     </div>
 
-                    <div id="reviewsContainer">
-                        <!-- Reviews will be loaded here -->
+                    <!-- Review Cards -->
+                    <div id="reviewCardsContainer">
+                        <!-- Review cards will be loaded here -->
                     </div>
                 </div>
 
@@ -1308,23 +1356,27 @@
 
             <form class="booking-form">
                 <div class="form-group">
-                    <label>Check-in</label>
-                    <input type="date" class="form-control" id="checkInDate">
+                    <label for="checkInDate">Check-in</label>
+                    <input type="date" class="form-control" id="checkInDate" required>
                 </div>
                 <div class="form-group">
-                    <label>Guests</label>
-                    <select class="form-control" id="guestCount">
+                    <label for="guestCount">Guests</label>
+                    <select class="form-control" id="guestCount" required>
                         <option value="1">1 Guest</option>
-                        <option value="2">2 Guests</option>
+                        <option value="2" selected>2 Guests</option>
                         <option value="3">3 Guests</option>
                         <option value="4">4 Guests</option>
                         <option value="5">5 Guests</option>
-                        <option value="6">6+ Guests</option>
+                        <option value="6">6 Guests</option>
+                        <option value="7">7 Guests</option>
+                        <option value="8">8 Guests</option>
+                        <option value="9">9 Guests</option>
+                        <option value="10">10+ Guests</option>
                     </select>
                 </div>
             </form>
 
-            <button class="check-availability-btn">Check Availability</button>
+            <button class="check-availability-btn" id="checkAvailabilityBtn" onclick="handleCheckAvailability()">Check Availability</button>
 
             <div class="cancellation-badge">
                 <i class="bi bi-check-circle-fill"></i>
@@ -1810,10 +1862,10 @@
                         </div>
                         <div class="timeline-body">
                             ${item.image ? `
-                                <div class="day-image-container" style="position: relative; margin-bottom: 20px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                <div class="day-image-container" style="position: relative; margin-bottom: 10px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                                     <img src="${item.image}" alt="${item.imageCaption || item.title}"
                                          onerror="this.src=getPlaceholder(${item.day - 1}); this.onerror=null;"
-                                         style="width: 100%; height: 300px; object-fit: cover; display: block;">
+                                         style="width: 100%; height: 250px; object-fit: cover; display: block;">
                                     ${item.imageCaption ? `
                                         <div class="image-caption-overlay" style="
                                             position: absolute;
@@ -1839,10 +1891,10 @@
                                 </ul>
                             ` : ''}
                             ${item.city || item.accommodation || item.meals ? `
-                                <div style="display: flex; gap: 20px; margin-top: 15px; padding: 12px; background: #f8f9fa; border-radius: 8px; border-left: 3px solid #667eea; flex-wrap: wrap;">
-                                    ${item.city ? `<span style="color: #495057; font-size: 14px;"><strong>📍</strong> ${item.city}</span>` : ''}
-                                    ${item.accommodation && item.accommodation.trim() && item.accommodation !== 'N/A' ? `<span style="color: #495057; font-size: 14px;"><strong>🏨</strong> ${item.accommodation} <span style="color: #6c757d; font-style: italic;">or similar</span></span>` : ''}
-                                    ${item.meals ? `<span style="color: #495057; font-size: 14px;"><strong>🍽️</strong> ${item.meals === 'BB' ? 'Bed & Breakfast' : item.meals === 'HB' ? 'Half Board' : item.meals === 'FB' ? 'Full Board' : item.meals === 'AI' ? 'All Inclusive' : item.meals}</span>` : ''}
+                                <div style="display: flex; gap: 12px; margin-top: 8px; padding: 8px; background: #f8f9fa; border-radius: 6px; border-left: 3px solid #667eea; flex-wrap: wrap;">
+                                    ${item.city ? `<span style="color: #495057; font-size: 13px;"><strong>📍</strong> ${item.city}</span>` : ''}
+                                    ${item.accommodation && item.accommodation.trim() && item.accommodation !== 'N/A' ? `<span style="color: #495057; font-size: 13px;"><strong>🏨</strong> ${item.accommodation} <span style="color: #6c757d; font-style: italic;">or similar</span></span>` : ''}
+                                    ${item.meals ? `<span style="color: #495057; font-size: 13px;"><strong>🍽️</strong> ${item.meals === 'BB' ? 'Bed & Breakfast' : item.meals === 'HB' ? 'Half Board' : item.meals === 'FB' ? 'Full Board' : item.meals === 'AI' ? 'All Inclusive' : item.meals}</span>` : ''}
                                 </div>
                             ` : ''}
                         </div>
@@ -1933,43 +1985,311 @@
         }
 
         function loadReviews(tour) {
-            const container = document.getElementById('reviewsContainer');
-            const reviews = [
+            const container = document.getElementById('reviewCardsContainer');
+
+            // All available reviews
+            const allReviews = {
+                // Tour 1: Samarkand City Tour reviews
+                '1': [
                 {
-                    name: 'Sarah Johnson',
+                    name: 'Jennifer_M',
+                    location: 'New York, USA',
+                    avatar: 'https://i.pravatar.cc/150?img=1',
                     rating: 5,
-                    date: 'November 2025',
-                    text: 'Absolutely incredible experience! The tour was well-organized, our guide was knowledgeable and friendly, and every moment was memorable. Highly recommended!'
+                    date: 'Nov 2025',
+                    title: 'Unforgettable journey through Uzbekistan!',
+                    text: 'Travel Bliss made our trip to Uzbekistan absolutely magical. Our guide was incredibly knowledgeable about the history and culture. The organization was flawless, hotels were beautiful, and the experiences were once in a lifetime. Highly recommend!',
+                    helpful: 12
                 },
                 {
-                    name: 'Michael Chen',
+                    name: 'David_Thompson',
+                    location: 'London, UK',
+                    avatar: 'https://i.pravatar.cc/150?img=12',
                     rating: 5,
-                    date: 'October 2025',
-                    text: 'Best vacation ever! Everything exceeded our expectations. The accommodations were excellent, the food was amazing, and the activities were perfectly balanced.'
+                    date: 'Oct 2025',
+                    title: 'Best tour company we\'ve used!',
+                    text: 'We\'ve traveled extensively but Travel Bliss exceeded all our expectations. The attention to detail, the genuine care for their guests, and the expertly crafted itinerary made this our best vacation ever. The Silk Road came alive through their tours.',
+                    helpful: 8
                 },
                 {
-                    name: 'Emma Williams',
+                    name: 'Sarah_Martinez',
+                    location: 'Barcelona, Spain',
+                    avatar: 'https://i.pravatar.cc/150?img=5',
+                    rating: 5,
+                    date: 'Oct 2025',
+                    title: 'Exceptional service and stunning destinations',
+                    text: 'From the moment we arrived, everything was perfectly arranged. The historical sites were breathtaking, the local food experiences were amazing, and our guide was both professional and friendly. Travel Bliss really knows how to create memorable experiences.',
+                    helpful: 15
+                },
+                {
+                    name: 'Michael_K',
+                    location: 'Sydney, Australia',
+                    avatar: 'https://i.pravatar.cc/150?img=13',
+                    rating: 5,
+                    date: 'Sep 2025',
+                    title: 'A must-do experience!',
+                    text: 'Samarkand, Bukhara, and Khiva were spectacular. Travel Bliss arranged everything perfectly - comfortable transport, excellent hotels, and fascinating tours. Our guide\'s passion for Uzbek history was infectious. Can\'t wait to return!',
+                    helpful: 6
+                },
+                {
+                    name: 'Emma_Wilson',
+                    location: 'Toronto, Canada',
+                    avatar: 'https://i.pravatar.cc/150?img=9',
+                    rating: 5,
+                    date: 'Sep 2025',
+                    title: 'Outstanding tour operator',
+                    text: 'Travel Bliss is simply the best. Professional, responsive, and genuinely caring. They went above and beyond to make our trip special, even celebrating my birthday with a surprise cake at Registan Square. Unforgettable memories!',
+                    helpful: 10
+                },
+                {
+                    name: 'Robert_Chen',
+                    location: 'Singapore',
+                    avatar: 'https://i.pravatar.cc/150?img=8',
                     rating: 4,
-                    date: 'September 2025',
-                    text: 'Great tour with wonderful experiences. The itinerary was packed but not rushed. Our guide made sure everyone was comfortable and having a good time.'
+                    date: 'Aug 2025',
+                    title: 'Great experience overall',
+                    text: 'Very well organized tour with knowledgeable guides. The historical sites were magnificent and the pace was just right. Food was delicious and hotels were comfortable. Only minor issue was some wait times, but overall highly recommend Travel Bliss.',
+                    helpful: 4
+                },
+                {
+                    name: 'Lisa_Anderson',
+                    location: 'Los Angeles, USA',
+                    avatar: 'https://i.pravatar.cc/150?img=3',
+                    rating: 5,
+                    date: 'Aug 2025',
+                    title: 'Exceeded expectations',
+                    text: 'I was hesitant about traveling to Central Asia, but Travel Bliss made everything easy and comfortable. The blend of history, culture, and hospitality was incredible. Our group became like family. Thank you for an amazing journey!',
+                    helpful: 9
+                },
+                {
+                    name: 'James_Brown',
+                    location: 'Dublin, Ireland',
+                    avatar: 'https://i.pravatar.cc/150?img=14',
+                    rating: 5,
+                    date: 'Jul 2025',
+                    title: 'Highly professional and fun',
+                    text: 'Travel Bliss strikes the perfect balance between structured tours and free time. The guides are amazing storytellers who bring history to life. Accommodations were excellent and the whole experience felt authentic and genuine.',
+                    helpful: 7
+                },
+                {
+                    name: 'Maria_Garcia',
+                    location: 'Madrid, Spain',
+                    avatar: 'https://i.pravatar.cc/150?img=10',
+                    rating: 5,
+                    date: 'Jul 2025',
+                    title: 'Simply wonderful',
+                    text: 'From booking to farewell, Travel Bliss was exceptional. The attention to detail, the cultural insights, and the warm hospitality made this trip extraordinary. Uzbekistan is stunning and Travel Bliss is the perfect way to experience it.',
+                    helpful: 11
+                },
+                {
+                    name: 'Thomas_Schmidt',
+                    location: 'Berlin, Germany',
+                    avatar: 'https://i.pravatar.cc/150?img=15',
+                    rating: 5,
+                    date: 'Jun 2025',
+                    title: 'Fantastic adventure!',
+                    text: 'Best organized tour I\'ve ever been on. Travel Bliss handled everything seamlessly - transport, hotels, meals, and tours. Our guide was wonderful and patient with all our questions. The Silk Road cities are absolutely magnificent!',
+                    helpful: 5
                 }
-            ];
+            ],
+            // Tour 2: Bukhara Heritage Tour reviews (different reviews)
+            '2': [
+                {
+                    name: 'Alex_Rodriguez',
+                    location: 'Miami, USA',
+                    avatar: 'https://i.pravatar.cc/150?img=7',
+                    rating: 5,
+                    date: 'Nov 2025',
+                    title: 'Bukhara is magical!',
+                    text: 'The old city of Bukhara is like stepping back in time. Travel Bliss showed us hidden gems that most tourists never see. Our guide was passionate about the history and made every story come alive. Absolutely worth every penny!',
+                    helpful: 18
+                },
+                {
+                    name: 'Sophie_Laurent',
+                    location: 'Paris, France',
+                    avatar: 'https://i.pravatar.cc/150?img=2',
+                    rating: 5,
+                    date: 'Oct 2025',
+                    title: 'Incredible historical experience',
+                    text: 'As a history teacher, I was amazed by the depth of knowledge our guide had. The Ark fortress, trading domes, and madrasahs were stunning. Travel Bliss organized everything perfectly. Highly recommend for culture lovers!',
+                    helpful: 14
+                },
+                {
+                    name: 'Hans_Mueller',
+                    location: 'Munich, Germany',
+                    avatar: 'https://i.pravatar.cc/150?img=11',
+                    rating: 4,
+                    date: 'Sep 2025',
+                    title: 'Very good tour',
+                    text: 'Great tour with excellent organization. The hotels were comfortable and the food was delicious. Only minor issue was the pace felt a bit rushed at times. But overall a wonderful experience in beautiful Bukhara.',
+                    helpful: 7
+                }
+            ],
+            // Tour 3: Chimgan Mountain Day Trip reviews
+            '3': [
+                {
+                    name: 'Chris_Walker',
+                    location: 'Denver, USA',
+                    avatar: 'https://i.pravatar.cc/150?img=6',
+                    rating: 5,
+                    date: 'Oct 2025',
+                    title: 'Perfect day trip from Tashkent!',
+                    text: 'Amazing escape from the city! The mountains were beautiful, the cable car ride was thrilling, and lunch was delicious. Our guide was friendly and made sure everyone was safe and having fun. Great value for money!',
+                    helpful: 9
+                },
+                {
+                    name: 'Anna_Kowalski',
+                    location: 'Warsaw, Poland',
+                    avatar: 'https://i.pravatar.cc/150?img=4',
+                    rating: 5,
+                    date: 'Sep 2025',
+                    title: 'Beautiful nature!',
+                    text: 'Loved every minute! The scenery was breathtaking and the fresh mountain air was wonderful. Travel Bliss picked us up right on time and everything went smoothly. Highly recommend if you want to see Uzbekistan\'s natural beauty.',
+                    helpful: 11
+                },
+                {
+                    name: 'Mohammed_Ali',
+                    location: 'Dubai, UAE',
+                    avatar: 'https://i.pravatar.cc/150?img=16',
+                    rating: 4,
+                    date: 'Aug 2025',
+                    title: 'Nice day out',
+                    text: 'Good day trip with nice views. The cable car and ski resort area were interesting. Guide was helpful. Would have liked a bit more time at the top but overall a pleasant experience.',
+                    helpful: 5
+                }
+            ],
+            // Tour 4: Grand Uzbekistan Tour reviews
+            '4': [
+                {
+                    name: 'Patricia_Johnson',
+                    location: 'Chicago, USA',
+                    avatar: 'https://i.pravatar.cc/150?img=18',
+                    rating: 5,
+                    date: 'Nov 2025',
+                    title: 'Trip of a lifetime!',
+                    text: 'This 10-day tour covered everything! Tashkent, Samarkand, Bukhara, Khiva - each city was unique and fascinating. Travel Bliss took care of every detail. The high-speed train was a highlight. Our guide became like family. Cannot recommend enough!',
+                    helpful: 22
+                },
+                {
+                    name: 'Marco_Rossi',
+                    location: 'Rome, Italy',
+                    avatar: 'https://i.pravatar.cc/150?img=17',
+                    rating: 5,
+                    date: 'Oct 2025',
+                    title: 'Comprehensive and well-paced',
+                    text: 'As someone who has traveled extensively, this was one of the best organized tours I\'ve experienced. Perfect balance of guided tours and free time. Hotels were excellent, food was amazing, and the itinerary covered all the major sites without feeling rushed.',
+                    helpful: 16
+                },
+                {
+                    name: 'Yuki_Tanaka',
+                    location: 'Tokyo, Japan',
+                    avatar: 'https://i.pravatar.cc/150?img=19',
+                    rating: 5,
+                    date: 'Sep 2025',
+                    title: 'Amazing Silk Road adventure',
+                    text: 'Every day brought new wonders! The architecture, the markets, the people - everything was incredible. Travel Bliss guides were knowledgeable and patient with all our questions. The traditional dinners were delicious. Worth every moment!',
+                    helpful: 13
+                }
+            ],
+            // Default reviews for new tours (general Travel Bliss reviews)
+            'default': [
+                {
+                    name: 'Jennifer_M',
+                    location: 'New York, USA',
+                    avatar: 'https://i.pravatar.cc/150?img=1',
+                    rating: 5,
+                    date: 'Nov 2025',
+                    title: 'Unforgettable journey through Uzbekistan!',
+                    text: 'Travel Bliss made our trip to Uzbekistan absolutely magical. Our guide was incredibly knowledgeable about the history and culture. The organization was flawless, hotels were beautiful, and the experiences were once in a lifetime. Highly recommend!',
+                    helpful: 12
+                },
+                {
+                    name: 'David_Thompson',
+                    location: 'London, UK',
+                    avatar: 'https://i.pravatar.cc/150?img=12',
+                    rating: 5,
+                    date: 'Oct 2025',
+                    title: 'Best tour company we\'ve used!',
+                    text: 'We\'ve traveled extensively but Travel Bliss exceeded all our expectations. The attention to detail, the genuine care for their guests, and the expertly crafted itinerary made this our best vacation ever. The Silk Road came alive through their tours.',
+                    helpful: 8
+                },
+                {
+                    name: 'Sarah_Martinez',
+                    location: 'Barcelona, Spain',
+                    avatar: 'https://i.pravatar.cc/150?img=5',
+                    rating: 5,
+                    date: 'Oct 2025',
+                    title: 'Exceptional service and stunning destinations',
+                    text: 'From the moment we arrived, everything was perfectly arranged. The historical sites were breathtaking, the local food experiences were amazing, and our guide was both professional and friendly. Travel Bliss really knows how to create memorable experiences.',
+                    helpful: 15
+                }
+            ]
+        };
+
+            // Get reviews for current tour, or use default reviews
+            const reviews = allReviews[tour.id] || allReviews['default'];
+
+            if (!container) {
+                console.error('Review cards container not found');
+                return;
+            }
 
             container.innerHTML = reviews.map(review => {
-                const initial = review.name.charAt(0);
-                const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                // Generate star rating SVGs (TripAdvisor green color)
+                const fullStars = Math.floor(review.rating);
+                const hasHalfStar = review.rating % 1 !== 0;
+
+                const starsSVG = Array.from({length: 5}).map((_, i) => {
+                    if (i < fullStars) {
+                        return `<svg width="16" height="16" viewBox="0 0 14 14" fill="#00AA6C" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; margin-right: 2px;">
+                            <path d="M7 0L8.5716 4.83688H13.6574L9.5429 7.82624L11.1145 12.6631L7 9.67376L2.8855 12.6631L4.4571 7.82624L0.342604 4.83688H5.4284L7 0Z"/>
+                        </svg>`;
+                    } else if (i === fullStars && hasHalfStar) {
+                        return `<svg width="16" height="16" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; margin-right: 2px;">
+                            <defs>
+                                <linearGradient id="half-grad-review-${i}">
+                                    <stop offset="50%" stop-color="#00AA6C"/>
+                                    <stop offset="50%" stop-color="#E0E0E0"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M7 0L8.5716 4.83688H13.6574L9.5429 7.82624L11.1145 12.6631L7 9.67376L2.8855 12.6631L4.4571 7.82624L0.342604 4.83688H5.4284L7 0Z" fill="url(#half-grad-review-${i})"/>
+                        </svg>`;
+                    } else {
+                        return `<svg width="16" height="16" viewBox="0 0 14 14" fill="#E0E0E0" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; margin-right: 2px;">
+                            <path d="M7 0L8.5716 4.83688H13.6574L9.5429 7.82624L11.1145 12.6631L7 9.67376L2.8855 12.6631L4.4571 7.82624L0.342604 4.83688H5.4284L7 0Z"/>
+                        </svg>`;
+                    }
+                }).join('');
 
                 return `
-                    <div class="review-card">
-                        <div class="review-header">
-                            <div class="reviewer-avatar">${initial}</div>
-                            <div class="reviewer-info">
-                                <h5>${review.name}</h5>
-                                <div class="review-date">${review.date}</div>
+                    <div style="background: white; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s;"
+                         onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)'"
+                         onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'">
+                        <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+                            <img src="${review.avatar}"
+                                 alt="${review.name}"
+                                 style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; flex-shrink: 0;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                                    <h5 style="margin: 0; font-size: 16px; font-weight: 700; color: #333;">${review.name}</h5>
+                                    <span style="color: #999; font-size: 13px;">${review.date}</span>
+                                </div>
+                                <div style="color: #666; font-size: 13px; margin-bottom: 8px;">${review.location}</div>
+                                <div style="display: flex; align-items: center; gap: 4px;">
+                                    ${starsSVG}
+                                </div>
                             </div>
                         </div>
-                        <div class="review-rating">${stars}</div>
-                        <p class="review-text">${review.text}</p>
+
+                        <h6 style="font-size: 16px; font-weight: 600; color: #333; margin-bottom: 12px;">${review.title}</h6>
+                        <p style="color: #666; line-height: 1.6; margin-bottom: 16px; font-size: 14px;">${review.text}</p>
+
+                        <div style="display: flex; align-items: center; gap: 6px; padding-top: 12px; border-top: 1px solid #f0f0f0;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
+                            </svg>
+                            <span style="color: #666; font-size: 13px;">Helpful (${review.helpful})</span>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -2033,12 +2353,64 @@
         document.getElementById('checkInDate').setAttribute('min', today);
         document.getElementById('checkInDate').value = today;
 
+        // Set minimum date for check-in (today)
+        function setMinDate() {
+            const dateInput = document.getElementById('checkInDate');
+            if (dateInput) {
+                const today = new Date();
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const minDate = tomorrow.toISOString().split('T')[0];
+                dateInput.min = minDate;
+                dateInput.value = minDate; // Set default to tomorrow
+            }
+        }
+
         // Load data when page loads
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', loadTourData);
+            document.addEventListener('DOMContentLoaded', () => {
+                setMinDate();
+                loadTourData();
+            });
         } else {
+            setMinDate();
             loadTourData();
         }
+
+        // Handle anchor navigation to reviews section
+        window.addEventListener('load', function() {
+            console.log('Page loaded, checking hash:', window.location.hash);
+            if (window.location.hash === '#reviews') {
+                console.log('Reviews hash detected, will navigate to reviews tab');
+                // Wait a bit for the page to fully load
+                setTimeout(() => {
+                    // Find the reviews tab button (it's a button, not an anchor!)
+                    const reviewsTabBtn = document.getElementById('reviews-tab');
+                    console.log('Found reviews tab button:', reviewsTabBtn);
+
+                    if (reviewsTabBtn) {
+                        // Click the tab to activate it
+                        console.log('Clicking reviews tab button');
+                        reviewsTabBtn.click();
+
+                        // Wait for tab content to load, then scroll
+                        setTimeout(() => {
+                            // Find the tab navigation container
+                            const tabNav = document.getElementById('tourTabs');
+                            console.log('Found tab navigation:', tabNav);
+
+                            if (tabNav) {
+                                // Scroll to tab navigation with some space above
+                                const yOffset = -20;
+                                const y = tabNav.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                                console.log('Scrolling to tab navigation at position:', y);
+                                window.scrollTo({ top: y, behavior: 'smooth' });
+                            }
+                        }, 600);
+                    }
+                }, 500);
+            }
+        });
 
         // PDF Download Functionality
         function initPDFDownload() {
@@ -2514,6 +2886,37 @@
         } else {
             initPDFDownload();
         }
+
+        // Booking functionality
+        // currentTour is already declared above, no need to redeclare
+
+        // Handle check availability button click
+        function handleCheckAvailability() {
+            if (!currentTour) {
+                alert('Tour ma\'lumotlari yuklanmoqda. Iltimos, kuting...');
+                return;
+            }
+
+            const tourId = currentTour.id || currentTour._id;
+            const tourName = currentTour.title;
+            const pricePerPerson = currentTour.price || 0;
+
+            openBookingModal(tourId, tourName, pricePerPerson);
+        }
+
+        // Store tour data when loaded
+        const originalDisplayTourData = window.displayTourData || function() {};
+        window.displayTourData = function(tour) {
+            currentTour = tour;
+            if (originalDisplayTourData) {
+                originalDisplayTourData(tour);
+            }
+        };
     </script>
+
+    <!-- Include Booking Widget -->
+    <script src="booking-widget.js"></script>
+    <link rel="stylesheet" href="booking-widget.css">
+
 </body>
 </html>

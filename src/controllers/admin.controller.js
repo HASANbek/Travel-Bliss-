@@ -1,6 +1,16 @@
 const asyncHandler = require('../utils/asyncHandler');
 const ApiResponse = require('../utils/ApiResponse');
 const ApiError = require('../utils/ApiError');
+const FileStorage = require('../utils/fileStorage');
+const bookingsStorage = require('../storage/bookings.storage');
+const {
+  sendBookingConfirmedNotification,
+  sendBookingCancelledNotification
+} = require('../utils/sendEmail');
+
+// Initialize file storage
+const usersStorage = new FileStorage('users.json');
+const toursStorage = new FileStorage('tours.json');
 
 // ========== DEMO MA'LUMOTLAR (MongoDB ulanmaguncha) ==========
 
@@ -155,7 +165,15 @@ exports.getDashboard = asyncHandler(async (req, res) => {
 exports.getAllUsers = asyncHandler(async (req, res) => {
   const { role, isActive, search } = req.query;
 
-  let filteredUsers = [...demoUsers];
+  // Try to get users from file storage
+  let allUsers = await usersStorage.findAll();
+
+  // If no users in file storage, use demo users
+  if (!allUsers || allUsers.length === 0) {
+    allUsers = demoUsers;
+  }
+
+  let filteredUsers = [...allUsers];
 
   // Filter by role
   if (role) {
@@ -205,9 +223,16 @@ exports.getUserById = asyncHandler(async (req, res) => {
  * @route   PUT /api/admin/users/:id/role
  * @access  Private/Admin
  */
-exports.updateUserRole = asyncHandler(async (req, res) => {
+exports.updateUserRole = asyncHandler(async (req, res, next) => {
   const { role } = req.body;
-  const user = demoUsers.find(u => u.id === req.params.id);
+
+  // Try to get user from file storage
+  let user = await usersStorage.findById(req.params.id);
+
+  // If not in file storage, check demo users
+  if (!user) {
+    user = demoUsers.find(u => u.id === req.params.id);
+  }
 
   if (!user) {
     return next(new ApiError(404, 'Foydalanuvchi topilmadi'));
@@ -217,7 +242,14 @@ exports.updateUserRole = asyncHandler(async (req, res) => {
     return next(new ApiError(400, 'Noto\'g\'ri rol'));
   }
 
+  // Update role
   user.role = role;
+
+  // Update in file storage if exists there
+  const fileUsers = await usersStorage.findAll();
+  if (fileUsers.some(u => (u.id || u._id) === req.params.id)) {
+    await usersStorage.update(req.params.id, { role: role });
+  }
 
   res.status(200).json(
     new ApiResponse(200, { user }, 'Foydalanuvchi roli yangilandi')
@@ -229,14 +261,27 @@ exports.updateUserRole = asyncHandler(async (req, res) => {
  * @route   PUT /api/admin/users/:id/status
  * @access  Private/Admin
  */
-exports.toggleUserStatus = asyncHandler(async (req, res) => {
-  const user = demoUsers.find(u => u.id === req.params.id);
+exports.toggleUserStatus = asyncHandler(async (req, res, next) => {
+  // Try to get user from file storage
+  let user = await usersStorage.findById(req.params.id);
+
+  // If not in file storage, check demo users
+  if (!user) {
+    user = demoUsers.find(u => u.id === req.params.id);
+  }
 
   if (!user) {
     return next(new ApiError(404, 'Foydalanuvchi topilmadi'));
   }
 
+  // Toggle status
   user.isActive = !user.isActive;
+
+  // Update in file storage if exists there
+  const fileUsers = await usersStorage.findAll();
+  if (fileUsers.some(u => (u.id || u._id) === req.params.id)) {
+    await usersStorage.update(req.params.id, { isActive: user.isActive });
+  }
 
   res.status(200).json(
     new ApiResponse(
@@ -274,10 +319,18 @@ exports.deleteUser = asyncHandler(async (req, res) => {
  * @access  Private/Admin
  */
 exports.getAllTours = asyncHandler(async (req, res) => {
+  // Try to get tours from file storage first
+  let tours = await toursStorage.findAll();
+
+  // If no tours in file, use demo tours
+  if (tours.length === 0) {
+    tours = demoTours;
+  }
+
   res.status(200).json(
     new ApiResponse(200, {
-      tours: demoTours,
-      total: demoTours.length
+      tours: tours,
+      total: tours.length
     }, 'Turlar ro\'yxati')
   );
 });
@@ -309,22 +362,40 @@ exports.toggleTourStatus = asyncHandler(async (req, res) => {
  * @access  Private/Admin
  */
 exports.getAllBookings = asyncHandler(async (req, res) => {
-  const { status, paymentStatus } = req.query;
+  const { status, tourId, date } = req.query;
 
-  let filteredBookings = [...demoBookings];
+  let bookings = await bookingsStorage.findAll();
 
+  // Filter by status
   if (status) {
-    filteredBookings = filteredBookings.filter(b => b.status === status);
+    bookings = bookings.filter(b => b.status === status);
   }
 
-  if (paymentStatus) {
-    filteredBookings = filteredBookings.filter(b => b.paymentStatus === paymentStatus);
+  // Filter by tour ID
+  if (tourId) {
+    bookings = bookings.filter(b => b.tourId === tourId);
   }
+
+  // Filter by date
+  if (date) {
+    const searchDate = new Date(date).toISOString().split('T')[0];
+    bookings = bookings.filter(b => {
+      const bookingDate = new Date(b.date).toISOString().split('T')[0];
+      return bookingDate === searchDate;
+    });
+  }
+
+  // Sort by created date (newest first)
+  bookings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  // Get statistics
+  const stats = await bookingsStorage.getStats();
 
   res.status(200).json(
     new ApiResponse(200, {
-      bookings: filteredBookings,
-      total: filteredBookings.length
+      bookings,
+      total: bookings.length,
+      stats
     }, 'Buyurtmalar ro\'yxati')
   );
 });
@@ -334,18 +405,44 @@ exports.getAllBookings = asyncHandler(async (req, res) => {
  * @route   PUT /api/admin/bookings/:id/status
  * @access  Private/Admin
  */
-exports.updateBookingStatus = asyncHandler(async (req, res) => {
+exports.updateBookingStatus = asyncHandler(async (req, res, next) => {
   const { status } = req.body;
-  const booking = demoBookings.find(b => b.id === req.params.id);
+  const { id } = req.params;
+
+  if (!status || !['pending', 'confirmed', 'cancelled'].includes(status)) {
+    return next(new ApiError(400, 'Noto\'g\'ri status'));
+  }
+
+  const booking = await bookingsStorage.findById(id);
 
   if (!booking) {
     return next(new ApiError(404, 'Buyurtma topilmadi'));
   }
 
-  booking.status = status;
+  let updatedBooking;
+
+  if (status === 'confirmed') {
+    updatedBooking = await bookingsStorage.confirm(id);
+    // Send confirmation email
+    try {
+      await sendBookingConfirmedNotification(updatedBooking);
+    } catch (error) {
+      console.error('Failed to send confirmation email:', error);
+    }
+  } else if (status === 'cancelled') {
+    updatedBooking = await bookingsStorage.cancel(id);
+    // Send cancellation email
+    try {
+      await sendBookingCancelledNotification(updatedBooking);
+    } catch (error) {
+      console.error('Failed to send cancellation email:', error);
+    }
+  } else {
+    updatedBooking = await bookingsStorage.update(id, { status });
+  }
 
   res.status(200).json(
-    new ApiResponse(200, { booking }, 'Buyurtma statusi yangilandi')
+    new ApiResponse(200, { booking: updatedBooking }, 'Buyurtma statusi yangilandi')
   );
 });
 
