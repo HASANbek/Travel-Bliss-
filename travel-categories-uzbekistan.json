@@ -1,0 +1,370 @@
+{
+  "uzbekistan_destinations": [
+    {
+      "name": "Samarkand Tours",
+      "slug": "samarkand-tours",
+      "description": "Explore the ancient Silk Road city with stunning architecture and rich history",
+      "color": "#667eea",
+      "order": 1,
+      "status": "active"
+    },
+    {
+      "name": "Bukhara Travel Guide",
+      "slug": "bukhara-travel-guide",
+      "description": "Discover 2500 years of history in this UNESCO World Heritage city",
+      "color": "#8b5cf6",
+      "order": 2,
+      "status": "active"
+    },
+    {
+      "name": "Khiva Old City",
+      "slug": "khiva-old-city",
+      "description": "Step into the open-air museum of Ichan-Kala fortress",
+      "color": "#f59e0b",
+      "order": 3,
+      "status": "active"
+    },
+    {
+      "name": "Tashkent City Tours",
+      "slug": "tashkent-city-tours",
+      "description": "Modern capital with mix of Soviet and Islamic architecture",
+      "color": "#06b6d4",
+      "order": 4,
+      "status": "active"
+    },
+    {
+      "name": "Fergana Valley",
+      "slug": "fergana-valley",
+      "description": "Traditional crafts, silk production and mountain scenery",
+      "color": "#10b981",
+      "order": 5,
+      "status": "active"
+    },
+    {
+      "name": "Nuratau Mountains",
+      "slug": "nuratau-mountains",
+      "description": "Pristine nature, yurt stays and traditional village life",
+      "color": "#84cc16",
+      "order": 6,
+      "status": "active"
+    }
+  ],
+  "tour_types": [
+    {
+      "name": "Cultural Heritage Tours",
+      "slug": "cultural-heritage-tours",
+      "description": "UNESCO sites, historical monuments and ancient cities",
+      "color": "#8b5cf6",
+      "order": 10,
+      "status": "active"
+    },
+    {
+      "name": "Adventure Tours",
+      "slug": "adventure-tours",
+      "description": "Hiking, trekking, camping and outdoor activities",
+      "color": "#667eea",
+      "order": 11,
+      "status": "active"
+    },
+    {
+      "name": "Silk Road Journey",
+      "slug": "silk-road-journey",
+      "description": "Follow the ancient trade routes through Central Asia",
+      "color": "#f59e0b",
+      "order": 12,
+      "status": "active"
+    },
+    {
+      "name": "Homestay & Local Life",
+      "slug": "homestay-local-life",
+      "description": "Authentic experiences with local families",
+      "color": "#10b981",
+      "order": 13,
+      "status": "active"
+    },
+    {
+      "name": "Photography Tours",
+      "slug": "photography-tours",
+      "description": "Capture stunning architecture and landscapes",
+      "color": "#ec4899",
+      "order": 14,
+      "status": "active"
+    },
+    {
+      "name": "Food & Culinary Tours",
+      "slug": "food-culinary-tours",
+      "description": "Taste traditional Uzbek cuisine and cooking classes",
+      "color": "#f97316",
+      "order": 15,
+      "status": "active"
+    },
+    {
+      "name": "Luxury Private Tours",
+      "slug": "luxury-private-tours",
+      "description": "Premium accommodations and personalized itineraries",
+      "color": "#a855f7",
+      "order": 16,
+      "status": "active"
+    },
+    {
+      "name": "Group Tours",
+      "slug": "group-tours",
+      "description": "Join other travelers for shared experiences",
+      "color": "#06b6d4",
+      "order": 17,
+      "status": "active"
+    }
+  ],
+  "seasonal_trips": [
+    {
+      "name": "Spring Blossom Tours",
+      "slug": "spring-blossom-tours",
+      "description": "Visit Uzbekistan during the most beautiful season (March-May)",
+      "color": "#ec4899",
+      "order": 20,
+      "status": "active"
+    },
+    {
+      "name": "Summer Adventure Trips",
+      "slug": "summer-adventure-trips",
+      "description": "Mountain hiking and lake activities (June-August)",
+      "color": "#f59e0b",
+      "order": 21,
+      "status": "active"
+    },
+    {
+      "name": "Autumn Harvest Tours",
+      "slug": "autumn-harvest-tours",
+      "description": "Golden season with pleasant weather (September-November)",
+      "color": "#f97316",
+      "order": 22,
+      "status": "active"
+    },
+    {
+      "name": "Winter Cultural Tours",
+      "slug": "winter-cultural-tours",
+      "description": "Fewer crowds and authentic winter experiences",
+      "color": "#06b6d4",
+      "order": 23,
+      "status": "active"
+    },
+    {
+      "name": "Navruz Festival Tours",
+      "slug": "navruz-festival-tours",
+      "description": "Experience the Persian New Year celebrations in March",
+      "color": "#10b981",
+      "order": 24,
+      "status": "active"
+    }
+  ],
+  "special_interest": [
+    {
+      "name": "Islamic Architecture",
+      "slug": "islamic-architecture",
+      "description": "Madrasahs, mosques and mausoleums of Central Asia",
+      "color": "#667eea",
+      "order": 30,
+      "status": "active"
+    },
+    {
+      "name": "Handicrafts & Artisans",
+      "slug": "handicrafts-artisans",
+      "description": "Silk weaving, ceramics, and traditional crafts",
+      "color": "#f59e0b",
+      "order": 31,
+      "status": "active"
+    },
+    {
+      "name": "Wine & Gastronomy",
+      "slug": "wine-gastronomy",
+      "description": "Uzbek wines, spirits and traditional cuisine",
+      "color": "#dc2626",
+      "order": 32,
+      "status": "active"
+    },
+    {
+      "name": "Wellness & Retreats",
+      "slug": "wellness-retreats",
+      "description": "Spa treatments and relaxation in nature",
+      "color": "#10b981",
+      "order": 33,
+      "status": "active"
+    },
+    {
+      "name": "Bird Watching Tours",
+      "slug": "bird-watching-tours",
+      "description": "Discover diverse bird species in unique ecosystems",
+      "color": "#84cc16",
+      "order": 34,
+      "status": "active"
+    }
+  ],
+  "international_tours": [
+    {
+      "name": "Central Asia Tours",
+      "slug": "central-asia-tours",
+      "description": "Multi-country tours: Uzbekistan, Kazakhstan, Kyrgyzstan, Tajikistan",
+      "color": "#667eea",
+      "order": 40,
+      "status": "active"
+    },
+    {
+      "name": "Turkmenistan Tours",
+      "slug": "turkmenistan-tours",
+      "description": "Explore the mysterious Darvaza Gas Crater and ancient Merv",
+      "color": "#10b981",
+      "order": 41,
+      "status": "active"
+    },
+    {
+      "name": "Kazakhstan Adventures",
+      "slug": "kazakhstan-adventures",
+      "description": "From Almaty mountains to Astana futuristic architecture",
+      "color": "#06b6d4",
+      "order": 42,
+      "status": "active"
+    },
+    {
+      "name": "Kyrgyzstan Trekking",
+      "slug": "kyrgyzstan-trekking",
+      "description": "High-altitude lakes and nomadic culture",
+      "color": "#84cc16",
+      "order": 43,
+      "status": "active"
+    },
+    {
+      "name": "Tajikistan Pamir Highway",
+      "slug": "tajikistan-pamir-highway",
+      "description": "One of the world's most spectacular mountain roads",
+      "color": "#8b5cf6",
+      "order": 44,
+      "status": "active"
+    }
+  ],
+  "trip_duration": [
+    {
+      "name": "Day Trips",
+      "slug": "day-trips",
+      "description": "Short excursions perfect for busy travelers",
+      "color": "#f59e0b",
+      "order": 50,
+      "status": "active"
+    },
+    {
+      "name": "Weekend Getaways",
+      "slug": "weekend-getaways",
+      "description": "2-3 day mini adventures",
+      "color": "#ec4899",
+      "order": 51,
+      "status": "active"
+    },
+    {
+      "name": "Week-Long Tours",
+      "slug": "week-long-tours",
+      "description": "7-10 day comprehensive experiences",
+      "color": "#667eea",
+      "order": 52,
+      "status": "active"
+    },
+    {
+      "name": "Extended Adventures",
+      "slug": "extended-adventures",
+      "description": "2+ weeks for deep cultural immersion",
+      "color": "#8b5cf6",
+      "order": 53,
+      "status": "active"
+    }
+  ],
+  "traveler_type": [
+    {
+      "name": "Solo Travel",
+      "slug": "solo-travel",
+      "description": "Safe and enriching experiences for independent travelers",
+      "color": "#06b6d4",
+      "order": 60,
+      "status": "active"
+    },
+    {
+      "name": "Family Vacations",
+      "slug": "family-vacations",
+      "description": "Kid-friendly activities and family accommodations",
+      "color": "#f59e0b",
+      "order": 61,
+      "status": "active"
+    },
+    {
+      "name": "Couples & Honeymoon",
+      "slug": "couples-honeymoon",
+      "description": "Romantic destinations and experiences",
+      "color": "#ec4899",
+      "order": 62,
+      "status": "active"
+    },
+    {
+      "name": "Senior Travel",
+      "slug": "senior-travel",
+      "description": "Comfortable pace and accessible experiences",
+      "color": "#10b981",
+      "order": 63,
+      "status": "active"
+    },
+    {
+      "name": "Student & Youth Travel",
+      "slug": "student-youth-travel",
+      "description": "Budget-friendly adventures for young explorers",
+      "color": "#667eea",
+      "order": 64,
+      "status": "active"
+    }
+  ],
+  "blog_content_types": [
+    {
+      "name": "Destination Guides",
+      "slug": "destination-guides",
+      "description": "Comprehensive travel guides for cities and regions",
+      "color": "#667eea",
+      "order": 70,
+      "status": "active"
+    },
+    {
+      "name": "Travel Tips",
+      "slug": "travel-tips",
+      "description": "Practical advice for visiting Uzbekistan",
+      "color": "#10b981",
+      "order": 71,
+      "status": "active"
+    },
+    {
+      "name": "Travel Inspiration",
+      "slug": "travel-inspiration",
+      "description": "Stories and ideas to inspire your next adventure",
+      "color": "#ec4899",
+      "order": 72,
+      "status": "active"
+    },
+    {
+      "name": "Itinerary Ideas",
+      "slug": "itinerary-ideas",
+      "description": "Sample routes and suggested schedules",
+      "color": "#f59e0b",
+      "order": 73,
+      "status": "active"
+    },
+    {
+      "name": "Culture & Traditions",
+      "slug": "culture-traditions",
+      "description": "Learn about local customs and heritage",
+      "color": "#8b5cf6",
+      "order": 74,
+      "status": "active"
+    },
+    {
+      "name": "Visa & Travel Information",
+      "slug": "visa-travel-information",
+      "description": "Entry requirements and practical travel info",
+      "color": "#06b6d4",
+      "order": 75,
+      "status": "active"
+    }
+  ]
+}

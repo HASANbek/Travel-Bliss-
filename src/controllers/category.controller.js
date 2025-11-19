@@ -6,52 +6,75 @@ const ApiResponse = require('../utils/ApiResponse');
  */
 let demoCategories = [
   {
+    _id: '1',
     id: '1',
-    name: 'Cultural Tours',
-    slug: 'cultural-tours',
-    description: 'Explore the rich cultural heritage and historical sites',
-    icon: '🏛️',
+    name: 'Adventure Tours',
+    slug: 'adventure-tours',
+    description: 'Thrilling adventures and exciting outdoor activities',
+    icon: '⛰️',
     color: '#667eea',
-    image: '/uploads/categories/cultural.jpg',
+    image: '/uploads/categories/adventure.jpg',
+    status: 'active',
+    isActive: true,
+    order: 0,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    _id: '2',
+    id: '2',
+    name: 'Beach Holidays',
+    slug: 'beach-holidays',
+    description: 'Relax on beautiful beaches and enjoy the sun',
+    icon: '🏖️',
+    color: '#06b6d4',
+    image: '/uploads/categories/beach.jpg',
+    status: 'active',
     isActive: true,
     order: 1,
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
-    id: '2',
-    name: 'Adventure Tours',
-    slug: 'adventure-tours',
-    description: 'Thrilling adventures and exciting outdoor activities',
-    icon: '🏔️',
-    color: '#f59e0b',
-    image: '/uploads/categories/adventure.jpg',
+    _id: '3',
+    id: '3',
+    name: 'Cultural Tours',
+    slug: 'cultural-tours',
+    description: 'Explore the rich cultural heritage and historical sites',
+    icon: '🎭',
+    color: '#8b5cf6',
+    image: '/uploads/categories/cultural.jpg',
+    status: 'active',
     isActive: true,
     order: 2,
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
-    id: '3',
-    name: 'Homestays & Hiking',
-    slug: 'homestays-hiking',
-    description: 'Authentic local experiences with comfortable homestays',
-    icon: '🏡',
-    color: '#10b981',
-    image: '/uploads/categories/homestays.jpg',
+    _id: '4',
+    id: '4',
+    name: 'Family Vacations',
+    slug: 'family-vacations',
+    description: 'Fun activities and destinations for the whole family',
+    icon: '👨‍👩‍👧‍👦',
+    color: '#f59e0b',
+    image: '/uploads/categories/family.jpg',
+    status: 'active',
     isActive: true,
     order: 3,
     createdAt: new Date(),
     updatedAt: new Date()
   },
   {
-    id: '4',
-    name: 'Day Trips',
-    slug: 'day-trips',
-    description: 'Perfect one-day excursions to nearby attractions',
-    icon: '☀️',
-    color: '#ec4899',
-    image: '/uploads/categories/day-trips.jpg',
+    _id: '5',
+    id: '5',
+    name: 'Cruises',
+    slug: 'cruises',
+    description: 'Luxury cruises and maritime adventures',
+    icon: '🚢',
+    color: '#06b6d4',
+    image: '/uploads/categories/cruises.jpg',
+    status: 'active',
     isActive: true,
     order: 4,
     createdAt: new Date(),
@@ -108,7 +131,7 @@ exports.getCategoryById = asyncHandler(async (req, res) => {
  * @access  Admin
  */
 exports.createCategory = asyncHandler(async (req, res) => {
-  const { name, description, icon, color, image } = req.body;
+  const { name, slug, description, icon, color, image, status, order } = req.body;
 
   if (!name) {
     return res.status(400).json(
@@ -127,24 +150,32 @@ exports.createCategory = asyncHandler(async (req, res) => {
     );
   }
 
-  // Generate slug
-  const slug = name
+  // Use provided slug or generate from name
+  const finalSlug = slug || name
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
     .trim();
 
+  // Generate unique ID
+  const maxId = demoCategories.reduce((max, cat) => {
+    const catId = parseInt(cat.id) || 0;
+    return catId > max ? catId : max;
+  }, 0);
+
   const newCategory = {
-    id: String(demoCategories.length + 1),
+    _id: String(maxId + 1),
+    id: String(maxId + 1),
     name,
-    slug,
+    slug: finalSlug,
     description: description || '',
     icon: icon || '🎯',
     color: color || '#667eea',
     image: image || '/uploads/default-category.jpg',
-    isActive: true,
-    order: demoCategories.length + 1,
+    status: status || 'active',
+    isActive: status === 'active' || status === true || true,
+    order: order !== undefined ? order : demoCategories.length,
     createdAt: new Date(),
     updatedAt: new Date()
   };
@@ -163,9 +194,9 @@ exports.createCategory = asyncHandler(async (req, res) => {
  */
 exports.updateCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { name, description, icon, color, image, isActive, order } = req.body;
+  const { name, slug, description, icon, color, image, isActive, status, order } = req.body;
 
-  const index = demoCategories.findIndex(cat => cat.id === id);
+  const index = demoCategories.findIndex(cat => cat.id === id || cat._id === id);
 
   if (index === -1) {
     return res.status(404).json(
@@ -176,18 +207,31 @@ exports.updateCategory = asyncHandler(async (req, res) => {
   // Update fields
   if (name) {
     demoCategories[index].name = name;
-    demoCategories[index].slug = name
+    // Use provided slug or generate from name
+    demoCategories[index].slug = slug || name
       .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, '')
       .replace(/\s+/g, '-')
       .replace(/-+/g, '-')
       .trim();
+  } else if (slug) {
+    demoCategories[index].slug = slug;
   }
+
   if (description !== undefined) demoCategories[index].description = description;
   if (icon) demoCategories[index].icon = icon;
   if (color) demoCategories[index].color = color;
   if (image) demoCategories[index].image = image;
-  if (isActive !== undefined) demoCategories[index].isActive = isActive;
+
+  // Handle status (can be string "active"/"inactive" or boolean)
+  if (status !== undefined) {
+    demoCategories[index].status = status;
+    demoCategories[index].isActive = status === 'active' || status === true;
+  } else if (isActive !== undefined) {
+    demoCategories[index].isActive = isActive;
+    demoCategories[index].status = isActive ? 'active' : 'inactive';
+  }
+
   if (order !== undefined) demoCategories[index].order = order;
 
   demoCategories[index].updatedAt = new Date();
@@ -205,7 +249,7 @@ exports.updateCategory = asyncHandler(async (req, res) => {
 exports.deleteCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
-  const index = demoCategories.findIndex(cat => cat.id === id);
+  const index = demoCategories.findIndex(cat => cat.id === id || cat._id === id);
 
   if (index === -1) {
     return res.status(404).json(

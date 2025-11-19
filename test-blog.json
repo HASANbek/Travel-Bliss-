@@ -1,0 +1,27 @@
+{
+  "title": "Samarqand - Sharqning Durdonasi",
+  "category": "destination-guides",
+  "author": "Admin",
+  "featuredImage": "assets/img/home3/blog-img1.jpg",
+  "excerpt": "Samarqandning eng go'zal va tarixiy joylarini kashf eting. Bu qadimiy shahar o'zining noyob me'morchiligi va boy tarixi bilan ajralib turadi.",
+  "contentSections": [
+    {
+      "heading": "Registon Maydoni",
+      "image": "assets/img/home3/blog-img1.jpg",
+      "content": "Registon - Samarqandning markaziy maydoni. Bu yerda uchta ajoyib madrasalar joylashgan: Ulugbek, Sher-Dor va Tillakori madrasalari. Har biri noyob me'moriy uslubi bilan mashhur."
+    },
+    {
+      "heading": "Gur-Amir Maqbarasi",
+      "image": "assets/img/home3/blog-img2.jpg",
+      "content": "Amir Temur va uning oila a'zolari dafn etilgan bu maqbara tarixiy ahamiyatga ega. Maqbara gumbazi noyob ranglar bilan bezatilgan va osmonga ko'tarilgan."
+    },
+    {
+      "heading": "Shah-i-Zinda Ansambli",
+      "image": "assets/img/home3/blog-img3.jpg",
+      "content": "11-15-asrlarda qurilgan maqbaralar majmuasi. Bu yerda 20 dan ortiq maqbaralar mavjud. Har bir maqbara o'ziga xos bezak va me'moriy uslubga ega."
+    }
+  ],
+  "tags": "samarqand, uzbekistan, travel, history",
+  "status": "published",
+  "location": "Samarkand, Uzbekistan"
+}
