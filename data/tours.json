@@ -11,6 +11,32 @@
     "ratingsCount": 89,
     "isActive": true,
     "isFeatured": true,
+    "slug": "samarkand-city-tour-3-days",
+    "seo": {
+      "title": "Samarkand City Tour 3 Days | Samarkand | Travel Bliss Uzbekistan",
+      "description": "Visit the magnificent Registan Square, Ulugbek Observatory and Gur-Amir Mausoleum. 3-day guided tour from $500. All-inclusive package with expert guides. Book your Samarkand adventure now!",
+      "keywords": [
+        "samarkand tour",
+        "registan square tour",
+        "uzbekistan travel",
+        "silk road tour",
+        "samarkand city tour",
+        "central asia travel",
+        "unesco heritage uzbekistan",
+        "samarkand 3 days",
+        "cultural tour uzbekistan",
+        "travel bliss samarkand"
+      ],
+      "canonical": "https://travel-bliss.uz/tours/samarkand-city-tour-3-days",
+      "ogTitle": "Samarkand City Tour - 3 Days in Samarkand",
+      "ogDescription": "Visit the magnificent Registan Square, Ulugbek Observatory and Gur-Amir Mausoleum. Rating: 5/5 (89 reviews). From $500/person.",
+      "ogImage": "https://travel-bliss.uz/images/tours/samarkand-registan-square.jpg",
+      "ogType": "website",
+      "twitterCard": "summary_large_image",
+      "twitterTitle": "Samarkand City Tour - Experience Samarkand",
+      "twitterDescription": "3-day guided tour through Samarkand. From $500/person. Expert guides, all-inclusive.",
+      "twitterImage": "https://travel-bliss.uz/images/tours/samarkand-registan-square.jpg"
+    },
     "itinerary": [
       {
         "day": 1,
@@ -127,7 +153,33 @@
     ],
     "id": "2",
     "createdAt": "2025-11-19T08:20:37.386Z",
-    "maxGroupSize": 50
+    "maxGroupSize": 50,
+    "slug": "bukhara-heritage-tour-5-days",
+    "seo": {
+      "title": "Bukhara Heritage Tour 5 Days | Bukhara | Travel Bliss Uzbekistan",
+      "description": "Explore the ancient city of Bukhara with its stunning Islamic architecture. 5-day guided tour from $450. All-inclusive package with expert guides. Book your Bukhara adventure now!",
+      "keywords": [
+        "bukhara tour",
+        "bukhara heritage",
+        "uzbekistan cultural tour",
+        "islamic architecture tour",
+        "silk road bukhara",
+        "central asia travel",
+        "unesco bukhara",
+        "ancient bukhara",
+        "bukhara 5 days",
+        "travel bliss bukhara"
+      ],
+      "canonical": "https://travel-bliss.uz/tours/bukhara-heritage-tour-5-days",
+      "ogTitle": "Bukhara Heritage Tour - 5 Days in Bukhara",
+      "ogDescription": "Explore the ancient city of Bukhara with its stunning Islamic architecture. Rating: 4.8/5 (76 reviews). From $450/person.",
+      "ogImage": "https://travel-bliss.uz/images/tours/bukhara-kalyan-minaret.jpg",
+      "ogType": "website",
+      "twitterCard": "summary_large_image",
+      "twitterTitle": "Bukhara Heritage Tour - Experience Bukhara",
+      "twitterDescription": "5-day guided tour through Bukhara. From $450/person. Expert guides, all-inclusive.",
+      "twitterImage": "https://travel-bliss.uz/images/tours/bukhara-kalyan-minaret.jpg"
+    }
   },
   {
     "title": "Chimgan Mountain Day Trip",
@@ -173,7 +225,26 @@
     ],
     "id": "3",
     "createdAt": "2025-11-19T08:20:37.388Z",
-    "maxGroupSize": 50
+    "maxGroupSize": 50,
+    "slug": "chimgan-mountain-day-trip-1-days",
+    "seo": {
+      "title": "Chimgan Mountain Day Trip 1 Days | Chimgan | Travel Bliss Uzbekistan",
+      "description": "Escape to the beautiful Chimgan Mountains near Tashkent. 1-day guided tour from $80. All-inclusive package with expert guides. Book your Chimgan adventure now!",
+      "keywords": [
+        "chimgan tour",
+        "uzbekistan travel",
+        "travel bliss"
+      ],
+      "canonical": "https://travel-bliss.uz/tours/chimgan-mountain-day-trip-1-days",
+      "ogTitle": "Chimgan Mountain Day Trip - 1 Days in Chimgan",
+      "ogDescription": "Escape to the beautiful Chimgan Mountains near Tashkent. Rating: 4.7/5 (52 reviews). From $80/person.",
+      "ogImage": "https://travel-bliss.uz/images/tours/chimgan-tour.jpg",
+      "ogType": "website",
+      "twitterCard": "summary_large_image",
+      "twitterTitle": "Chimgan Mountain Day Trip - Experience Chimgan",
+      "twitterDescription": "1-day guided tour through Chimgan. From $80/person. Expert guides, all-inclusive.",
+      "twitterImage": "https://travel-bliss.uz/images/tours/chimgan-tour.jpg"
+    }
   },
   {
     "title": "Grand Uzbekistan Tour",
@@ -238,6 +309,25 @@
     ],
     "id": "4",
     "createdAt": "2025-11-19T08:20:37.389Z",
-    "maxGroupSize": 50
+    "maxGroupSize": 50,
+    "slug": "grand-uzbekistan-tour-10-days",
+    "seo": {
+      "title": "Grand Uzbekistan Tour 10 Days | Multi-city | Travel Bliss Uzbekistan",
+      "description": "Complete 10-day journey through all major cities of Uzbekistan including Tashkent, Samarkand, Bukhara, and Khiva. 10-day guided tour from $1850. All-inclusive package with expert guides. Book your Multi-city adventure now!",
+      "keywords": [
+        "multi-city tour",
+        "uzbekistan travel",
+        "travel bliss"
+      ],
+      "canonical": "https://travel-bliss.uz/tours/grand-uzbekistan-tour-10-days",
+      "ogTitle": "Grand Uzbekistan Tour - 10 Days in Multi-city",
+      "ogDescription": "Complete 10-day journey through all major cities of Uzbekistan including Tashkent, Samarkand, Bukhara, and Khiva. Rating: 4.9/5 (79 reviews). From $1850/person.",
+      "ogImage": "https://travel-bliss.uz/images/tours/multi-city-tour.jpg",
+      "ogType": "website",
+      "twitterCard": "summary_large_image",
+      "twitterTitle": "Grand Uzbekistan Tour - Experience Multi-city",
+      "twitterDescription": "10-day guided tour through Multi-city. From $1850/person. Expert guides, all-inclusive.",
+      "twitterImage": "https://travel-bliss.uz/images/tours/multi-city-tour.jpg"
+    }
   }
 ]
