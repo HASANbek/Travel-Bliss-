@@ -1,22 +1,5 @@
 [
   {
-    "id": "1",
-    "name": "Admin",
-    "email": "admin@travelbliss.uz",
-    "phone": "+998901234567",
-    "password": "$2b$10$f6izBIlgv21BqtjmHmuvae7m507T8dsYci4oV6RwMTDFDr/roQO7m",
-    "role": "admin",
-    "avatar": "default-avatar.png",
-    "isEmailVerified": true,
-    "isPhoneVerified": true,
-    "isActive": true,
-    "createdAt": "2025-11-19T08:33:49.817Z",
-    "updatedAt": "2025-11-19T16:12:12.133Z",
-    "lastLogin": "2025-11-19T16:12:12.132Z",
-    "resetPasswordOTP": "893069",
-    "resetPasswordOTPExpires": "2025-11-19T09:29:22.754Z"
-  },
-  {
     "id": "2",
     "name": "Yusufjon",
     "email": "info@travel-bliss.uz",
@@ -28,9 +11,31 @@
     "isPhoneVerified": false,
     "isActive": true,
     "createdAt": "2025-11-19T09:17:23.951Z",
-    "updatedAt": "2025-11-19T10:03:22.127Z",
+    "updatedAt": "2025-11-20T15:43:21.118Z",
     "resetPasswordOTP": "280101",
     "resetPasswordOTPExpires": "2025-11-19T09:28:34.917Z",
-    "lastLogin": "2025-11-19T10:03:22.126Z"
+    "lastLogin": "2025-11-20T15:43:21.117Z"
+  },
+  {
+    "id": "3",
+    "name": "Hasan",
+    "email": "hmuzaffarov02@gmail.com",
+    "phone": "+998933514448",
+    "password": "$2b$12$f/6F6i7ptxXbm8XJOcPyluGwFKPXy.jY2wNyw6rsDozmMHEQd4fi.",
+    "role": "admin",
+    "avatar": "default-avatar.png",
+    "isEmailVerified": false,
+    "isPhoneVerified": false,
+    "isActive": true,
+    "createdAt": "2025-11-20T15:35:36.450Z",
+    "updatedAt": "2025-11-20T16:23:08.698Z",
+    "lastLogin": "2025-11-20T16:20:28.855Z",
+    "loginHistory": [
+      {
+        "timestamp": "2025-11-20T16:20:28.855Z",
+        "ip": "::1",
+        "userAgent": "curl/8.16.0"
+      }
+    ]
   }
 ]
