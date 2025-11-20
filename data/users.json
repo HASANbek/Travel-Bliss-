@@ -28,9 +28,24 @@
     "isPhoneVerified": false,
     "isActive": true,
     "createdAt": "2025-11-19T09:17:23.951Z",
-    "updatedAt": "2025-11-19T10:03:22.127Z",
+    "updatedAt": "2025-11-20T16:24:24.388Z",
     "resetPasswordOTP": "280101",
     "resetPasswordOTPExpires": "2025-11-19T09:28:34.917Z",
-    "lastLogin": "2025-11-19T10:03:22.126Z"
+    "lastLogin": "2025-11-20T16:24:24.387Z"
+  },
+  {
+    "id": "3",
+    "name": "Hasan",
+    "email": "hmuzaffarov02@gmail.com",
+    "phone": "+998933514448",
+    "password": "$2b$10$21WKd7LGkRNOCkpxzDe.VO1fb3Z9J4srUzZUUiy5kMMXKi0ntag5C",
+    "role": "admin",
+    "avatar": "default-avatar.png",
+    "isEmailVerified": false,
+    "isPhoneVerified": false,
+    "isActive": true,
+    "createdAt": "2025-11-20T16:25:27.639Z",
+    "updatedAt": "2025-11-20T16:25:39.954Z",
+    "lastLogin": "2025-11-20T16:25:39.954Z"
   }
 ]

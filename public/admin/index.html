@@ -1301,33 +1301,368 @@
 
             <!-- Blog Page -->
             <div class="page-section" id="blogPage">
-                <button class="add-tour-btn" onclick="openBlogModal()">+ Add New Blog Post</button>
+                <!-- Blog Header -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin: 0; color: #1a202c; font-size: 24px; font-weight: 700;">📝 Blog Posts</h2>
+                    <button class="add-tour-btn" onclick="openBlogModal()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); transition: all 0.3s;">
+                        <span style="font-size: 18px;">+</span> Add New Blog Post
+                    </button>
+                </div>
 
-                <div class="tours-table">
-                    <div id="blogTableContainer">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Image</th>
-                                    <th>Title</th>
-                                    <th>Category</th>
-                                    <th>Author</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="blogTableBody">
-                                <tr>
-                                    <td colspan="7" class="loading">Loading blog posts...</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <!-- Blog Statistics -->
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px;">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 20px; color: white; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="font-size: 40px;">📄</div>
+                            <div>
+                                <p style="margin: 0; opacity: 0.9; font-size: 14px;">Total Posts</p>
+                                <p style="margin: 5px 0 0 0; font-size: 28px; font-weight: 700;" id="statTotalPosts">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); border-radius: 15px; padding: 20px; color: white; box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="font-size: 40px;">✅</div>
+                            <div>
+                                <p style="margin: 0; opacity: 0.9; font-size: 14px;">Published</p>
+                                <p style="margin: 5px 0 0 0; font-size: 28px; font-weight: 700;" id="statPublished">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 15px; padding: 20px; color: white; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="font-size: 40px;">⏳</div>
+                            <div>
+                                <p style="margin: 0; opacity: 0.9; font-size: 14px;">Draft</p>
+                                <p style="margin: 5px 0 0 0; font-size: 28px; font-weight: 700;" id="statDraft">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 15px; padding: 20px; color: white; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="font-size: 40px;">👁️</div>
+                            <div>
+                                <p style="margin: 0; opacity: 0.9; font-size: 14px;">Total Views</p>
+                                <p style="margin: 5px 0 0 0; font-size: 28px; font-weight: 700;" id="statTotalViews">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters & View Toggle -->
+                <div style="background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                        <!-- Search -->
+                        <div style="flex: 1; min-width: 250px;">
+                            <input type="text" id="blogSearchInput" placeholder="🔍 Search blogs..." style="width: 100%; padding: 12px 20px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 14px; transition: all 0.3s;" onkeyup="filterBlogs()" onfocus="this.style.borderColor='#667eea'" onblur="this.style.borderColor='#e5e7eb'">
+                        </div>
+
+                        <!-- Filters -->
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <select id="blogCategoryFilter" onchange="filterBlogs()" style="padding: 10px 15px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 14px; cursor: pointer; background: white;">
+                                <option value="">All Categories</option>
+                            </select>
+
+                            <select id="blogStatusFilter" onchange="filterBlogs()" style="padding: 10px 15px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 14px; cursor: pointer; background: white;">
+                                <option value="">All Status</option>
+                                <option value="published">Published</option>
+                                <option value="draft">Draft</option>
+                            </select>
+
+                            <!-- View Toggle -->
+                            <div style="display: flex; gap: 5px; background: #f3f4f6; padding: 4px; border-radius: 10px;">
+                                <button id="gridViewBtn" onclick="switchView('grid')" style="padding: 8px 16px; border: none; background: #667eea; color: white; border-radius: 8px; cursor: pointer; font-size: 14px; transition: all 0.3s;">
+                                    ⊞ Grid
+                                </button>
+                                <button id="listViewBtn" onclick="switchView('list')" style="padding: 8px 16px; border: none; background: transparent; color: #6b7280; border-radius: 8px; cursor: pointer; font-size: 14px; transition: all 0.3s;">
+                                    ☰ List
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blog Content Container -->
+                <div id="blogContentContainer">
+                    <!-- Grid View -->
+                    <div id="blogGridView" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+                        <div style="text-align: center; padding: 60px 20px; grid-column: 1 / -1; color: #9ca3af;">
+                            <div style="font-size: 48px; margin-bottom: 16px;">📝</div>
+                            <p>Loading blog posts...</p>
+                        </div>
+                    </div>
+
+                    <!-- List View -->
+                    <div id="blogListView" style="display: none;">
+                        <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background: #f9fafb; border-bottom: 2px solid #e5e7eb;">
+                                        <th style="padding: 15px; text-align: left; font-weight: 600; color: #374151; width: 80px;">Image</th>
+                                        <th style="padding: 15px; text-align: left; font-weight: 600; color: #374151;">Title</th>
+                                        <th style="padding: 15px; text-align: left; font-weight: 600; color: #374151; width: 150px;">Category</th>
+                                        <th style="padding: 15px; text-align: left; font-weight: 600; color: #374151; width: 120px;">Author</th>
+                                        <th style="padding: 15px; text-align: left; font-weight: 600; color: #374151; width: 100px;">Date</th>
+                                        <th style="padding: 15px; text-align: left; font-weight: 600; color: #374151; width: 100px;">Status</th>
+                                        <th style="padding: 15px; text-align: left; font-weight: 600; color: #374151; width: 200px;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="blogListTableBody">
+                                    <tr>
+                                        <td colspan="7" style="padding: 40px; text-align: center; color: #9ca3af;">
+                                            Loading blog posts...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
+                <div id="statTotalPosts" style="display:none;"></div><div id="statPublished" style="display:none;"></div><div id="statDraft" style="display:none;"></div><div id="statTotalViews" style="display:none;"></div><div id="blogSearchInput" style="display:none;"></div><div id="blogCategoryFilter" style="display:none;"></div><div id="blogStatusFilter" style="display:none;"></div><div id="gridViewBtn" style="display:none;"></div><div id="listViewBtn" style="display:none;"></div><div id="blogListTableBody" style="display:none;"></div>
+            </div>
 
-            <!-- Settings Page -->
+
+
+        <!-- ==================== ZAMONAVIY BLOG MODAL ==================== -->
+        <div id="blogModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 10000; overflow-y: auto; backdrop-filter: blur(5px);">
+            <div class="modal-content" style="background: white; max-width: 900px; margin: 30px auto; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); animation: slideDown 0.3s ease-out;">
+                <style>
+                    @keyframes slideDown {
+                        from {
+                            opacity: 0;
+                            transform: translateY(-50px);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
+                </style>
+
+                <!-- Modal Header -->
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 20px 20px 0 0; color: white; position: relative;">
+                    <button onclick="closeBlogModal()" style="position: absolute; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.2); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 24px; line-height: 1; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">&times;</button>
+                    <h2 id="blogModalTitle" style="margin: 0; font-size: 28px; font-weight: 700;">Create New Blog Post</h2>
+                    <p style="margin: 8px 0 0 0; opacity: 0.9;">Fill in the details to create an amazing blog post</p>
+                </div>
+
+                <!-- Step Indicator -->
+                <div style="display: flex; justify-content: space-between; padding: 30px 40px 0; position: relative;">
+                    <div class="blog-step" data-step="1" style="flex: 1; text-align: center; position: relative; z-index: 1;">
+                        <div class="step-circle" style="width: 50px; height: 50px; border-radius: 50%; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: 700; font-size: 20px; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); transition: all 0.3s;">1</div>
+                        <p style="margin: 0; font-size: 13px; font-weight: 600; color: #667eea;">Basic Info</p>
+                    </div>
+                    <div class="blog-step" data-step="2" style="flex: 1; text-align: center; position: relative; z-index: 1;">
+                        <div class="step-circle" style="width: 50px; height: 50px; border-radius: 50%; background: #e5e7eb; color: #9ca3af; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: 700; font-size: 20px; transition: all 0.3s;">2</div>
+                        <p style="margin: 0; font-size: 13px; font-weight: 600; color: #9ca3af;">SEO & Details</p>
+                    </div>
+                    <div class="blog-step" data-step="3" style="flex: 1; text-align: center; position: relative; z-index: 1;">
+                        <div class="step-circle" style="width: 50px; height: 50px; border-radius: 50%; background: #e5e7eb; color: #9ca3af; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: 700; font-size: 20px; transition: all 0.3s;">3</div>
+                        <p style="margin: 0; font-size: 13px; font-weight: 600; color: #9ca3af;">Images</p>
+                    </div>
+                    <div class="blog-step" data-step="4" style="flex: 1; text-align: center; position: relative; z-index: 1;">
+                        <div class="step-circle" style="width: 50px; height: 50px; border-radius: 50%; background: #e5e7eb; color: #9ca3af; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-weight: 700; font-size: 20px; transition: all 0.3s;">4</div>
+                        <p style="margin: 0; font-size: 13px; font-weight: 600; color: #9ca3af;">Location</p>
+                    </div>
+                    <!-- Progress Line -->
+                    <div style="position: absolute; top: 25px; left: 15%; right: 15%; height: 3px; background: #e5e7eb; z-index: 0;">
+                        <div id="blogProgressLine" style="height: 100%; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); width: 0%; transition: width 0.5s ease;"></div>
+                    </div>
+                </div>
+
+                <!-- Modal Body -->
+                <div style="padding: 30px 40px;">
+                    <!-- Step 1: Basic Info -->
+                    <div id="blogStep1" class="blog-step-content">
+                        <h3 style="margin: 0 0 20px 0; color: #1a202c; font-size: 20px;">📝 Basic Information</h3>
+
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">Blog Title <span style="color: #ef4444;">*</span></label>
+                            <input type="text" id="blogTitle" placeholder="Enter an engaging title..." style="width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; transition: all 0.3s;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102, 126, 234, 0.1)'" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'" onkeyup="generateSlug()">
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">URL Slug <span style="color: #ef4444;">*</span></label>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="text" id="blogSlug" placeholder="url-slug" style="flex: 1; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; font-family: monospace; transition: all 0.3s;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102, 126, 234, 0.1)'" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'">
+                                <button onclick="generateSlug()" style="padding: 12px 20px; background: #f3f4f6; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer; font-weight: 600; color: #374151; transition: all 0.3s;" onmouseover="this.style.background='#e5e7eb'" onmouseout="this.style.background='#f3f4f6'">🔄 Generate</button>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">Category <span style="color: #ef4444;">*</span></label>
+                            <select id="blogCategory" style="width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; cursor: pointer; transition: all 0.3s;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102, 126, 234, 0.1)'" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'">
+                                <option value="">Select a category...</option>
+                            </select>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">Excerpt / Short Description <span style="color: #ef4444;">*</span></label>
+                            <textarea id="blogExcerpt" rows="3" placeholder="Write a brief description (150-200 characters)..." style="width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; resize: vertical; transition: all 0.3s;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102, 126, 234, 0.1)'" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'" onkeyup="updateCharCount()"></textarea>
+                            <div style="text-align: right; font-size: 12px; color: #9ca3af; margin-top: 5px;">
+                                <span id="excerptCharCount">0</span>/200 characters
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">Content <span style="color: #ef4444;">*</span></label>
+                            <textarea id="blogContent" rows="8" placeholder="Write your blog content here... You can use markdown for formatting." style="width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; resize: vertical; transition: all 0.3s; font-family: 'Courier New', monospace;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102, 126, 234, 0.1)'" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'"></textarea>
+                            <p style="margin: 8px 0 0 0; font-size: 12px; color: #9ca3af;">💡 Tip: Use markdown for formatting (e.g., **bold**, *italic*, # heading)</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: SEO & Details -->
+                    <div id="blogStep2" class="blog-step-content" style="display: none;">
+                        <h3 style="margin: 0 0 20px 0; color: #1a202c; font-size: 20px;">🎯 SEO & Details</h3>
+
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">Meta Title</label>
+                            <input type="text" id="blogMetaTitle" placeholder="SEO title (60 characters max)" style="width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; transition: all 0.3s;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102, 126, 234, 0.1)'" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'">
+                            <p style="margin: 5px 0 0 0; font-size: 12px; color: #9ca3af;">Leave empty to use blog title</p>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">Meta Description</label>
+                            <textarea id="blogMetaDescription" rows="3" placeholder="SEO description (150-160 characters)" style="width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; resize: vertical; transition: all 0.3s;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102, 126, 234, 0.1)'" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'"></textarea>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">Keywords (comma separated)</label>
+                            <input type="text" id="blogKeywords" placeholder="travel, uzbekistan, tourism, adventure" style="width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; transition: all 0.3s;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102, 126, 234, 0.1)'" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'">
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">Author Name</label>
+                            <input type="text" id="blogAuthor" placeholder="John Doe" style="width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; transition: all 0.3s;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102, 126, 234, 0.1)'" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'">
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">Tags (comma separated)</label>
+                            <input type="text" id="blogTags" placeholder="history, culture, adventure" style="width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; transition: all 0.3s;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102, 126, 234, 0.1)'" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">Reading Time (minutes)</label>
+                                <input type="number" id="blogReadingTime" placeholder="5" min="1" style="width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; transition: all 0.3s;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102, 126, 234, 0.1)'" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">Status</label>
+                                <select id="blogStatus" style="width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; cursor: pointer; transition: all 0.3s;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102, 126, 234, 0.1)'" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'">
+                                    <option value="draft">Draft</option>
+                                    <option value="published">Published</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Images -->
+                    <div id="blogStep3" class="blog-step-content" style="display: none;">
+                        <h3 style="margin: 0 0 20px 0; color: #1a202c; font-size: 20px;">🖼️ Images & Media</h3>
+
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">Featured Image <span style="color: #ef4444;">*</span></label>
+                            <div id="featuredImageDropZone" style="border: 3px dashed #e5e7eb; border-radius: 12px; padding: 40px; text-align: center; cursor: pointer; transition: all 0.3s; background: #f9fafb;" onclick="document.getElementById('featuredImageInput').click()" onmouseover="this.style.borderColor='#667eea'; this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e5e7eb'; this.style.background='#f9fafb'">
+                                <div style="font-size: 48px; margin-bottom: 15px;">📸</div>
+                                <p style="margin: 0 0 5px 0; font-weight: 600; color: #374151;">Click to upload or drag & drop</p>
+                                <p style="margin: 0; font-size: 13px; color: #9ca3af;">PNG, JPG, GIF up to 5MB</p>
+                                <input type="file" id="featuredImageInput" accept="image/*" style="display: none;" onchange="handleFeaturedImage(this)">
+                            </div>
+                            <div id="featuredImagePreview" style="margin-top: 15px; display: none;">
+                                <div style="position: relative; display: inline-block;">
+                                    <img id="featuredImageImg" style="max-width: 100%; height: 200px; object-fit: cover; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                    <button onclick="removeFeaturedImage()" style="position: absolute; top: 10px; right: 10px; background: #ef4444; color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">&times;</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">Gallery Images (Optional)</label>
+                            <div id="galleryDropZone" style="border: 3px dashed #e5e7eb; border-radius: 12px; padding: 30px; text-align: center; cursor: pointer; transition: all 0.3s; background: #f9fafb;" onclick="document.getElementById('galleryInput').click()" onmouseover="this.style.borderColor='#667eea'; this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e5e7eb'; this.style.background='#f9fafb'">
+                                <div style="font-size: 36px; margin-bottom: 10px;">🖼️</div>
+                                <p style="margin: 0 0 5px 0; font-weight: 600; color: #374151;">Add gallery images</p>
+                                <p style="margin: 0; font-size: 13px; color: #9ca3af;">Multiple images allowed</p>
+                                <input type="file" id="galleryInput" accept="image/*" multiple style="display: none;" onchange="handleGalleryImages(this)">
+                            </div>
+                            <div id="galleryPreview" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 15px;"></div>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">Image Alt Text</label>
+                            <input type="text" id="blogImageAlt" placeholder="Describe the image for SEO and accessibility" style="width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; transition: all 0.3s;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102, 126, 234, 0.1)'" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'">
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Location -->
+                    <div id="blogStep4" class="blog-step-content" style="display: none;">
+                        <h3 style="margin: 0 0 20px 0; color: #1a202c; font-size: 20px;">📍 Location (Optional)</h3>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">Country / Davlat</label>
+                                <select id="blogCountry" onchange="loadCitiesForBlog()" style="width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; cursor: pointer; transition: all 0.3s; background: white;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102, 126, 234, 0.1)'" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'">
+                                    <option value="">Select country...</option>
+                                    <option value="uzbekistan">🇺🇿 Uzbekistan</option>
+                                    <option value="kazakhstan">🇰🇿 Kazakhstan</option>
+                                    <option value="kyrgyzstan">🇰🇬 Kyrgyzstan</option>
+                                    <option value="tajikistan">🇹🇯 Tajikistan</option>
+                                    <option value="turkmenistan">🇹🇲 Turkmenistan</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">City / Shahar</label>
+                                <select id="blogCity" onchange="updateBlogCoordinates()" style="width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; cursor: pointer; transition: all 0.3s; background: white;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102, 126, 234, 0.1)'" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='none'">
+                                    <option value="">First select a country...</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, #f0f4ff 0%, #fff4f0 100%); border: 2px solid #667eea; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                            <div style="display: flex; align-items: start; gap: 15px;">
+                                <div style="font-size: 32px;">📍</div>
+                                <div>
+                                    <h4 style="margin: 0 0 8px 0; color: #667eea; font-size: 16px;">Selected Location</h4>
+                                    <p id="selectedLocationName" style="margin: 0 0 8px 0; font-size: 15px; color: #374151; font-weight: 600;">No location selected</p>
+                                    <p id="selectedLocationCoords" style="margin: 0; font-size: 13px; color: #9ca3af; font-family: monospace;">Coordinates: -</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                            <p style="margin: 0; font-size: 14px; color: #374151; line-height: 1.6;">
+                                <strong>💡 Pro Tip:</strong> Adding location makes your blog more discoverable and helps travelers find content about specific destinations!
+                            </p>
+                        </div>
+
+                        <!-- Hidden fields for coordinates -->
+                        <input type="hidden" id="blogLatitude">
+                        <input type="hidden" id="blogLongitude">
+                        <input type="hidden" id="blogLocation">
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div style="padding: 20px 40px; border-top: 2px solid #f3f4f6; display: flex; justify-content: space-between; align-items: center; background: #fafbfc; border-radius: 0 0 20px 20px;">
+                    <button id="blogPrevBtn" onclick="prevBlogStep()" style="padding: 12px 24px; background: #f3f4f6; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer; font-weight: 600; color: #374151; transition: all 0.3s; display: none;" onmouseover="this.style.background='#e5e7eb'" onmouseout="this.style.background='#f3f4f6'">
+                        ← Previous
+                    </button>
+                    <div style="flex: 1;"></div>
+                    <button onclick="closeBlogModal()" style="padding: 12px 24px; background: white; border: 2px solid #e5e7eb; border-radius: 10px; cursor: pointer; font-weight: 600; color: #374151; transition: all 0.3s; margin-right: 10px;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='white'">
+                        Cancel
+                    </button>
+                    <button id="blogNextBtn" onclick="nextBlogStep()" style="padding: 12px 32px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 10px; cursor: pointer; font-weight: 600; color: white; transition: all 0.3s; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(102, 126, 234, 0.3)'">
+                        Next →
+                    </button>
+                    <button id="blogSubmitBtn" onclick="saveBlog()" style="padding: 12px 32px; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); border: none; border-radius: 10px; cursor: pointer; font-weight: 600; color: white; transition: all 0.3s; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); display: none;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(34, 197, 94, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(34, 197, 94, 0.3)'">
+                        ✓ Save Blog Post
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- ==================== END BLOG MODAL ==================== -->
+
+        <!-- Settings Page -->
             <div class="page-section" id="settingsPage">
                 <h3>General settings coming soon...</h3>
             </div>
@@ -4271,5 +4606,865 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
             </div>
         </div>
     </div>
+
+    <script>
+
+        // ==================== LOCATION DATA & FUNCTIONS ====================
+
+        const countryCities = {
+            uzbekistan: [
+                { name: 'Tashkent', nameUz: 'Toshkent', lat: 41.2995, lng: 69.2401 },
+                { name: 'Samarkand', nameUz: 'Samarqand', lat: 39.6270, lng: 66.9750 },
+                { name: 'Bukhara', nameUz: 'Buxoro', lat: 39.7747, lng: 64.4286 },
+                { name: 'Khiva', nameUz: 'Xiva', lat: 41.3775, lng: 60.3642 },
+                { name: 'Nukus', nameUz: 'Nukus', lat: 42.4531, lng: 59.6103 },
+                { name: 'Andijan', nameUz: 'Andijon', lat: 40.7821, lng: 72.3442 },
+                { name: 'Fergana', nameUz: 'Farg\'ona', lat: 40.3864, lng: 71.7864 },
+                { name: 'Namangan', nameUz: 'Namangan', lat: 40.9983, lng: 71.6726 },
+                { name: 'Termez', nameUz: 'Termiz', lat: 37.2242, lng: 67.2783 },
+                { name: 'Karshi', nameUz: 'Qarshi', lat: 38.8606, lng: 65.7897 },
+                { name: 'Urgench', nameUz: 'Urganch', lat: 41.5500, lng: 60.6333 },
+                { name: 'Jizzakh', nameUz: 'Jizzax', lat: 40.1158, lng: 67.8422 },
+                { name: 'Guliston', nameUz: 'Guliston', lat: 40.4897, lng: 68.7842 },
+                { name: 'Navoiy', nameUz: 'Navoiy', lat: 40.0844, lng: 65.3792 }
+            ],
+            kazakhstan: [
+                { name: 'Almaty', nameUz: 'Almati', lat: 43.2220, lng: 76.8512 },
+                { name: 'Astana', nameUz: 'Astana', lat: 51.1694, lng: 71.4491 },
+                { name: 'Shymkent', nameUz: 'Shymkent', lat: 42.3000, lng: 69.6000 },
+                { name: 'Aktobe', nameUz: 'Aktobe', lat: 50.2839, lng: 57.1670 },
+                { name: 'Karaganda', nameUz: 'Qaragandi', lat: 49.8047, lng: 73.1094 }
+            ],
+            kyrgyzstan: [
+                { name: 'Bishkek', nameUz: 'Bishkek', lat: 42.8746, lng: 74.5698 },
+                { name: 'Osh', nameUz: 'Osh', lat: 40.5283, lng: 72.7985 },
+                { name: 'Jalal-Abad', nameUz: 'Jalal-Abad', lat: 40.9333, lng: 73.0000 },
+                { name: 'Karakol', nameUz: 'Karakol', lat: 42.4906, lng: 78.3936 }
+            ],
+            tajikistan: [
+                { name: 'Dushanbe', nameUz: 'Dushanbe', lat: 38.5598, lng: 68.7738 },
+                { name: 'Khujand', nameUz: 'Xo\'jand', lat: 40.2828, lng: 69.6228 },
+                { name: 'Kulob', nameUz: 'Kulob', lat: 37.9144, lng: 69.7847 },
+                { name: 'Bokhtar', nameUz: 'Boxtar', lat: 37.8350, lng: 68.7800 }
+            ],
+            turkmenistan: [
+                { name: 'Ashgabat', nameUz: 'Ashgabat', lat: 37.9601, lng: 58.3261 },
+                { name: 'Turkmenabat', nameUz: 'Turkmenabat', lat: 39.0933, lng: 63.5784 },
+                { name: 'Dashoguz', nameUz: 'Dashoguz', lat: 41.8369, lng: 59.9659 },
+                { name: 'Mary', nameUz: 'Mary', lat: 37.5942, lng: 61.8303 }
+            ]
+        };
+
+        // Load cities based on selected country
+        function loadCitiesForBlog() {
+            const country = document.getElementById('blogCountry').value;
+            const citySelect = document.getElementById('blogCity');
+
+            if (!country) {
+                citySelect.innerHTML = '<option value="">First select a country...</option>';
+                updateLocationDisplay('', '');
+                return;
+            }
+
+            const cities = countryCities[country] || [];
+
+            citySelect.innerHTML = '<option value="">Select a city...</option>';
+            cities.forEach(city => {
+                citySelect.innerHTML += `<option value="${city.name}" data-lat="${city.lat}" data-lng="${city.lng}" data-nameuz="${city.nameUz}">${city.nameUz} (${city.name})</option>`;
+            });
+
+            // Reset location display
+            updateLocationDisplay('', '');
+        }
+
+        // Update coordinates when city is selected
+        function updateBlogCoordinates() {
+            const citySelect = document.getElementById('blogCity');
+            const selectedOption = citySelect.options[citySelect.selectedIndex];
+
+            if (!selectedOption.value) {
+                updateLocationDisplay('', '');
+                return;
+            }
+
+            const cityName = selectedOption.value;
+            const cityNameUz = selectedOption.dataset.nameuz;
+            const lat = selectedOption.dataset.lat;
+            const lng = selectedOption.dataset.lng;
+            const country = document.getElementById('blogCountry').value;
+            const countryName = document.getElementById('blogCountry').options[document.getElementById('blogCountry').selectedIndex].text;
+
+            // Set hidden fields
+            document.getElementById('blogLatitude').value = lat;
+            document.getElementById('blogLongitude').value = lng;
+            document.getElementById('blogLocation').value = `${cityNameUz}, ${countryName.replace(/🇺🇿|🇰🇿|🇰🇬|🇹🇯|🇹🇲/g, '').trim()}`;
+
+            // Update display
+            updateLocationDisplay(`${cityNameUz} (${cityName}), ${countryName}`, `Lat: ${lat}, Lng: ${lng}`);
+        }
+
+        // Update location display
+        function updateLocationDisplay(locationName, coords) {
+            const nameEl = document.getElementById('selectedLocationName');
+            const coordsEl = document.getElementById('selectedLocationCoords');
+
+            if (!locationName) {
+                nameEl.textContent = 'No location selected';
+                nameEl.style.color = '#9ca3af';
+                coordsEl.textContent = 'Coordinates: -';
+            } else {
+                nameEl.textContent = locationName;
+                nameEl.style.color = '#374151';
+                coordsEl.textContent = 'Coordinates: ' + coords;
+            }
+        }
+
+        // ==================== END LOCATION FUNCTIONS ====================
+
+        // ==================== BLOG CMS JAVASCRIPT ====================
+
+        let currentBlogStep = 1;
+        let editingBlogId = null;
+        let blogData = [];
+        let currentView = 'grid';
+        let featuredImageFile = null;
+        let galleryFiles = [];
+
+        // Open Blog Modal
+        function openBlogModal(blogId = null) {
+            editingBlogId = blogId;
+            currentBlogStep = 1;
+
+            // Reset form
+            document.getElementById('blogTitle').value = '';
+            document.getElementById('blogSlug').value = '';
+            document.getElementById('blogCategory').value = '';
+            document.getElementById('blogExcerpt').value = '';
+            document.getElementById('blogContent').value = '';
+            document.getElementById('blogMetaTitle').value = '';
+            document.getElementById('blogMetaDescription').value = '';
+            document.getElementById('blogKeywords').value = '';
+            document.getElementById('blogAuthor').value = '';
+            document.getElementById('blogTags').value = '';
+            document.getElementById('blogReadingTime').value = '';
+            document.getElementById('blogStatus').value = 'draft';
+            document.getElementById('blogCountry').value = '';
+            document.getElementById('blogCity').value = '';
+            document.getElementById('blogCity').innerHTML = '<option value="">First select a country...</option>';
+            document.getElementById('blogLocation').value = '';
+            document.getElementById('blogLatitude').value = '';
+            document.getElementById('blogLongitude').value = '';
+            updateLocationDisplay('', '');
+            document.getElementById('blogImageAlt').value = '';
+            featuredImageFile = null;
+            galleryFiles = [];
+            document.getElementById('featuredImagePreview').style.display = 'none';
+            document.getElementById('galleryPreview').innerHTML = '';
+
+            // Load categories
+            loadBlogCategories();
+
+            // If editing, load blog data
+            if (blogId) {
+                document.getElementById('blogModalTitle').textContent = 'Edit Blog Post';
+                loadBlogForEdit(blogId);
+            } else {
+                document.getElementById('blogModalTitle').textContent = 'Create New Blog Post';
+            }
+
+            // Show modal and go to step 1
+            document.getElementById('blogModal').style.display = 'flex';
+            goToBlogStep(1);
+        }
+
+        // Close Blog Modal
+        function closeBlogModal() {
+            document.getElementById('blogModal').style.display = 'none';
+            editingBlogId = null;
+        }
+
+        // Load Categories for Blog
+        async function loadBlogCategories() {
+            const categorySelect = document.getElementById('blogCategory');
+            const filterSelect = document.getElementById('blogCategoryFilter');
+
+            // Default categories (fallback)
+            const defaultCategories = [
+                { _id: '1', name: 'Travel Tips', slug: 'travel-tips' },
+                { _id: '2', name: 'Destinations', slug: 'destinations' },
+                { _id: '3', name: 'Culture', slug: 'culture' },
+                { _id: '4', name: 'Food & Cuisine', slug: 'food-cuisine' },
+                { _id: '5', name: 'Adventure', slug: 'adventure' },
+                { _id: '6', name: 'Historical Sites', slug: 'historical-sites' }
+            ];
+
+            try {
+                const response = await fetch('http://localhost:4000/api/categories');
+                const data = await response.json();
+                const categories = data.success ? data.data : defaultCategories;
+
+                // Populate modal select
+                categorySelect.innerHTML = '<option value="">Select a category...</option>';
+                categories.forEach(cat => {
+                    categorySelect.innerHTML += `<option value="${cat._id}">${cat.name}</option>`;
+                });
+
+                // Populate filter select
+                filterSelect.innerHTML = '<option value="">All Categories</option>';
+                categories.forEach(cat => {
+                    filterSelect.innerHTML += `<option value="${cat._id}">${cat.name}</option>`;
+                });
+            } catch (error) {
+                console.error('Error loading categories:', error);
+                // Use fallback categories
+                categorySelect.innerHTML = '<option value="">Select a category...</option>';
+                defaultCategories.forEach(cat => {
+                    categorySelect.innerHTML += `<option value="${cat._id}">${cat.name}</option>`;
+                });
+
+                filterSelect.innerHTML = '<option value="">All Categories</option>';
+                defaultCategories.forEach(cat => {
+                    filterSelect.innerHTML += `<option value="${cat._id}">${cat.name}</option>`;
+                });
+            }
+        }
+
+        // Navigate to Blog Step
+        function goToBlogStep(step) {
+            if (step < 1 || step > 4) return;
+
+            currentBlogStep = step;
+
+            // Hide all steps
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`blogStep${i}`).style.display = 'none';
+            }
+
+            // Show current step
+            document.getElementById(`blogStep${step}`).style.display = 'block';
+
+            // Update step indicators
+            const steps = document.querySelectorAll('.blog-step');
+            steps.forEach((stepEl, index) => {
+                const stepNum = index + 1;
+                const circle = stepEl.querySelector('.step-circle');
+                const label = stepEl.querySelector('p');
+
+                if (stepNum < step) {
+                    // Completed step
+                    circle.style.background = '#22c55e';
+                    circle.style.color = 'white';
+                    label.style.color = '#22c55e';
+                } else if (stepNum === step) {
+                    // Active step
+                    circle.style.background = '#667eea';
+                    circle.style.color = 'white';
+                    circle.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)';
+                    label.style.color = '#667eea';
+                } else {
+                    // Upcoming step
+                    circle.style.background = '#e5e7eb';
+                    circle.style.color = '#9ca3af';
+                    circle.style.boxShadow = 'none';
+                    label.style.color = '#9ca3af';
+                }
+            });
+
+            // Update progress line
+            const progress = ((step - 1) / 3) * 100;
+            document.getElementById('blogProgressLine').style.width = progress + '%';
+
+            // Show/hide buttons
+            document.getElementById('blogPrevBtn').style.display = step === 1 ? 'none' : 'inline-block';
+            document.getElementById('blogNextBtn').style.display = step === 4 ? 'none' : 'inline-block';
+            document.getElementById('blogSubmitBtn').style.display = step === 4 ? 'inline-block' : 'none';
+        }
+
+        // Next Blog Step
+        function nextBlogStep() {
+            // Validate current step
+            if (currentBlogStep === 1) {
+                const title = document.getElementById('blogTitle').value.trim();
+                const slug = document.getElementById('blogSlug').value.trim();
+                const category = document.getElementById('blogCategory').value;
+                const excerpt = document.getElementById('blogExcerpt').value.trim();
+                const content = document.getElementById('blogContent').value.trim();
+
+                if (!title) {
+                    alert('Iltimos, blog sarlavhasini kiriting!');
+                    document.getElementById('blogTitle').focus();
+                    return;
+                }
+
+                if (!slug) {
+                    alert('Iltimos, URL slug kiriting!');
+                    document.getElementById('blogSlug').focus();
+                    return;
+                }
+
+                if (!category) {
+                    alert('Iltimos, kategoriyani tanlang!');
+                    document.getElementById('blogCategory').focus();
+                    return;
+                }
+
+                if (!excerpt) {
+                    alert('Iltimos, qisqa tavsifni kiriting!');
+                    document.getElementById('blogExcerpt').focus();
+                    return;
+                }
+
+                if (!content) {
+                    alert('Iltimos, blog kontentini kiriting!');
+                    document.getElementById('blogContent').focus();
+                    return;
+                }
+            }
+
+            if (currentBlogStep < 4) {
+                goToBlogStep(currentBlogStep + 1);
+            }
+        }
+
+        // Previous Blog Step
+        function prevBlogStep() {
+            if (currentBlogStep > 1) {
+                goToBlogStep(currentBlogStep - 1);
+            }
+        }
+
+        // Generate Slug
+        function generateSlug() {
+            const title = document.getElementById('blogTitle').value;
+            const slug = title
+                .toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .trim();
+            document.getElementById('blogSlug').value = slug;
+        }
+
+        // Update Character Count
+        function updateCharCount() {
+            const excerpt = document.getElementById('blogExcerpt').value;
+            document.getElementById('excerptCharCount').textContent = excerpt.length;
+        }
+
+        // Handle Featured Image
+        function handleFeaturedImage(input) {
+            const file = input.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Rasm hajmi 5MB dan kichik bo\'lishi kerak!');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('featuredImageImg').src = e.target.result;
+                    document.getElementById('featuredImagePreview').style.display = 'block';
+                    featuredImageFile = file;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Remove Featured Image
+        function removeFeaturedImage() {
+            document.getElementById('featuredImagePreview').style.display = 'none';
+            document.getElementById('featuredImageInput').value = '';
+            featuredImageFile = null;
+        }
+
+        // Handle Gallery Images
+        function handleGalleryImages(input) {
+            const files = Array.from(input.files);
+            const preview = document.getElementById('galleryPreview');
+
+            files.forEach(file => {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Har bir rasm hajmi 5MB dan kichik bo\'lishi kerak!');
+                    return;
+                }
+
+                galleryFiles.push(file);
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const div = document.createElement('div');
+                    div.style.position = 'relative';
+                    div.innerHTML = `
+                        <img src="${e.target.result}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 10px;">
+                        <button onclick="removeGalleryImage(this, '${file.name}')" style="position: absolute; top: 5px; right: 5px; background: #ef4444; color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 14px;">&times;</button>
+                    `;
+                    preview.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Remove Gallery Image
+        function removeGalleryImage(button, fileName) {
+            galleryFiles = galleryFiles.filter(f => f.name !== fileName);
+            button.parentElement.remove();
+        }
+
+        // Save Blog
+        async function saveBlog() {
+            try {
+                // Collect all data
+                const blogPayload = {
+                    title: document.getElementById('blogTitle').value.trim(),
+                    slug: document.getElementById('blogSlug').value.trim(),
+                    category: document.getElementById('blogCategory').value,
+                    excerpt: document.getElementById('blogExcerpt').value.trim(),
+                    content: document.getElementById('blogContent').value.trim(),
+                    metaTitle: document.getElementById('blogMetaTitle').value.trim(),
+                    metaDescription: document.getElementById('blogMetaDescription').value.trim(),
+                    keywords: document.getElementById('blogKeywords').value.trim().split(',').map(k => k.trim()).filter(k => k),
+                    author: document.getElementById('blogAuthor').value.trim(),
+                    tags: document.getElementById('blogTags').value.trim().split(',').map(t => t.trim()).filter(t => t),
+                    readingTime: parseInt(document.getElementById('blogReadingTime').value) || 5,
+                    status: document.getElementById('blogStatus').value,
+                    location: {
+                        name: document.getElementById('blogLocation').value.trim(),
+                        country: document.getElementById('blogCountry').value,
+                        city: document.getElementById('blogCity').value,
+                        coordinates: {
+                            lat: parseFloat(document.getElementById('blogLatitude').value) || null,
+                            lng: parseFloat(document.getElementById('blogLongitude').value) || null
+                        }
+                    },
+                    imageAlt: document.getElementById('blogImageAlt').value.trim(),
+                    featuredImage: featuredImageFile ? URL.createObjectURL(featuredImageFile) : null,
+                    gallery: galleryFiles.map(f => URL.createObjectURL(f))
+                };
+
+                // Make API call
+                const url = editingBlogId
+                    ? `http://localhost:4000/api/blogs/${editingBlogId}`
+                    : 'http://localhost:4000/api/blogs';
+
+                const method = editingBlogId ? 'PUT' : 'POST';
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(blogPayload)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(editingBlogId ? 'Blog muvaffaqiyatli yangilandi!' : 'Blog muvaffaqiyatli qo\'shildi!');
+                    closeBlogModal();
+                    loadBlogs();
+                } else {
+                    alert(data.message || 'Xatolik yuz berdi!');
+                }
+            } catch (error) {
+                console.error('Save blog error:', error);
+                alert('Server bilan bog\'lanishda xatolik!');
+            }
+        }
+
+        // Load Blogs
+        async function loadBlogs() {
+            try {
+                const response = await fetch('http://localhost:4000/api/blogs');
+                const data = await response.json();
+
+                if (data.success) {
+                    // Handle different response formats
+                    if (Array.isArray(data.data)) {
+                        blogData = data.data;
+                    } else if (data.data && Array.isArray(data.data.blogs)) {
+                        blogData = data.data.blogs;
+                    } else {
+                        console.warn('Unexpected data format:', data);
+                        blogData = [];
+                    }
+
+                    console.log('✅ Loaded blogs:', blogData.length, 'blogs');
+                    updateBlogStats();
+                    renderBlogs();
+                } else {
+                    console.error('Failed to load blogs or invalid data format');
+                    blogData = []; // Initialize as empty array
+                    updateBlogStats();
+                    renderEmptyState();
+                }
+            } catch (error) {
+                console.error('Error loading blogs:', error);
+                blogData = []; // Initialize as empty array
+                updateBlogStats();
+                renderEmptyState();
+            }
+        }
+
+        // Update Blog Statistics
+        function updateBlogStats() {
+            // Ensure blogData is an array
+            if (!Array.isArray(blogData)) {
+                blogData = [];
+            }
+
+            const total = blogData.length;
+            const published = blogData.filter(b => b.status === 'published').length;
+            const draft = blogData.filter(b => b.status === 'draft').length;
+            const totalViews = blogData.reduce((sum, b) => sum + (b.views || 0), 0);
+
+            // Update elements with null checks
+            const statTotalPosts = document.getElementById('statTotalPosts');
+            const statPublished = document.getElementById('statPublished');
+            const statDraft = document.getElementById('statDraft');
+            const statTotalViews = document.getElementById('statTotalViews');
+            const totalBlogs = document.getElementById('totalBlogs');
+
+            if (statTotalPosts) statTotalPosts.textContent = total;
+            if (statPublished) statPublished.textContent = published;
+            if (statDraft) statDraft.textContent = draft;
+            if (statTotalViews) statTotalViews.textContent = totalViews.toLocaleString();
+            if (totalBlogs) totalBlogs.textContent = total;
+        }
+
+        // Render Blogs (Grid or List)
+        function renderBlogs() {
+            if (currentView === 'grid') {
+                renderGridView();
+            } else {
+                renderListView();
+            }
+        }
+
+        // Render Grid View
+        function renderGridView() {
+            const container = document.getElementById('blogGridView');
+
+            if (!container) {
+                console.error('blogGridView element not found');
+                return;
+            }
+
+            // Ensure blogData is an array
+            if (!Array.isArray(blogData)) {
+                blogData = [];
+            }
+
+            if (blogData.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; grid-column: 1 / -1; color: #9ca3af;">
+                        <div style="font-size: 64px; margin-bottom: 16px;">📝</div>
+                        <h3 style="color: #374151; margin-bottom: 8px;">Hech qanday blog yo'q</h3>
+                        <p>Birinchi blogingizni yarating!</p>
+                        <button onclick="openBlogModal()" style="margin-top: 20px; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600;">+ Blog Qo'shish</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = blogData.map(blog => `
+                <div style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: all 0.3s; cursor: pointer;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.12)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'">
+                    <div style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); position: relative; overflow: hidden;">
+                        ${blog.featuredImage ? `<img src="${blog.featuredImage}" style="width: 100%; height: 100%; object-fit: cover;">` : `
+                            <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: white; font-size: 48px;">📝</div>
+                        `}
+                        <div style="position: absolute; top: 10px; right: 10px; background: ${blog.status === 'published' ? '#22c55e' : '#f59e0b'}; color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                            ${blog.status === 'published' ? '✓ Published' : '⏳ Draft'}
+                        </div>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; color: #9ca3af; font-size: 13px;">
+                            <span>${blog.category ? blog.category.name : 'Uncategorized'}</span>
+                            <span>•</span>
+                            <span>${blog.readingTime || 5} min read</span>
+                        </div>
+                        <h3 style="margin: 0 0 10px 0; color: #1a202c; font-size: 18px; font-weight: 700; line-height: 1.4;">${blog.title}</h3>
+                        <p style="margin: 0 0 15px 0; color: #6b7280; font-size: 14px; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${blog.excerpt}</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid #f3f4f6;">
+                            <div style="display: flex; align-items: center; gap: 8px; color: #9ca3af; font-size: 13px;">
+                                <span>👁️ ${blog.views || 0}</span>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <button onclick="event.stopPropagation(); viewBlog('${blog._id}')" style="padding: 6px 12px; background: #dbeafe; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; color: #2563eb; font-weight: 600;" onmouseover="this.style.background='#bfdbfe'" onmouseout="this.style.background='#dbeafe'">👁️ View</button>
+                                <button onclick="event.stopPropagation(); openBlogModal('${blog._id}')" style="padding: 6px 12px; background: #f3f4f6; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; color: #374151; font-weight: 600;" onmouseover="this.style.background='#e5e7eb'" onmouseout="this.style.background='#f3f4f6'">✏️ Edit</button>
+                                <button onclick="event.stopPropagation(); deleteBlog('${blog._id}')" style="padding: 6px 12px; background: #fee; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; color: #ef4444; font-weight: 600;" onmouseover="this.style.background='#fecaca'" onmouseout="this.style.background='#fee'">🗑️ Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render List View
+        function renderListView() {
+            const tbody = document.getElementById('blogListTableBody');
+
+            if (!tbody) {
+                console.error('blogListTableBody element not found');
+                return;
+            }
+
+            // Ensure blogData is an array
+            if (!Array.isArray(blogData)) {
+                blogData = [];
+            }
+
+            if (blogData.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="padding: 60px; text-align: center; color: #9ca3af;">
+                            <div style="font-size: 48px; margin-bottom: 16px;">📝</div>
+                            <p>Hech qanday blog yo'q</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = blogData.map(blog => `
+                <tr style="border-bottom: 1px solid #f3f4f6; transition: background 0.2s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='white'">
+                    <td style="padding: 15px;">
+                        <div style="width: 60px; height: 60px; border-radius: 8px; overflow: hidden; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            ${blog.featuredImage ? `<img src="${blog.featuredImage}" style="width: 100%; height: 100%; object-fit: cover;">` : `<div style="display: flex; align-items: center; justify-content: center; height: 100%; color: white; font-size: 24px;">📝</div>`}
+                        </div>
+                    </td>
+                    <td style="padding: 15px; font-weight: 600; color: #1a202c;">${blog.title}</td>
+                    <td style="padding: 15px; color: #6b7280;">${blog.category ? blog.category.name : 'Uncategorized'}</td>
+                    <td style="padding: 15px; color: #6b7280;">${blog.author || 'Admin'}</td>
+                    <td style="padding: 15px; color: #6b7280; font-size: 13px;">${new Date(blog.createdAt || Date.now()).toLocaleDateString()}</td>
+                    <td style="padding: 15px;">
+                        <span style="background: ${blog.status === 'published' ? '#dcfce7' : '#fef3c7'}; color: ${blog.status === 'published' ? '#16a34a' : '#d97706'}; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                            ${blog.status === 'published' ? 'Published' : 'Draft'}
+                        </span>
+                    </td>
+                    <td style="padding: 15px;">
+                        <div style="display: flex; gap: 8px;">
+                            <button onclick="viewBlog('${blog._id}')" style="padding: 6px 12px; background: #dbeafe; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; color: #2563eb; font-weight: 600;">View</button>
+                            <button onclick="openBlogModal('${blog._id}')" style="padding: 6px 12px; background: #f3f4f6; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; color: #374151; font-weight: 600;">Edit</button>
+                            <button onclick="deleteBlog('${blog._id}')" style="padding: 6px 12px; background: #fee; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; color: #ef4444; font-weight: 600;">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Render Empty State
+        function renderEmptyState() {
+            const container = document.getElementById('blogGridView');
+            if (!container) {
+                console.error('blogGridView element not found');
+                return;
+            }
+            container.innerHTML = `
+                <div style="text-align: center; padding: 60px 20px; grid-column: 1 / -1; color: #9ca3af;">
+                    <div style="font-size: 64px; margin-bottom: 16px;">📝</div>
+                    <h3 style="color: #374151; margin-bottom: 8px;">Hech qanday blog yo'q</h3>
+                    <p>Birinchi blogingizni yarating!</p>
+                    <button onclick="openBlogModal()" style="margin-top: 20px; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600;">+ Blog Qo'shish</button>
+                </div>
+            `;
+        }
+
+        // Switch View (Grid/List)
+        function switchView(view) {
+            currentView = view;
+
+            if (view === 'grid') {
+                document.getElementById('blogGridView').style.display = 'grid';
+                document.getElementById('blogListView').style.display = 'none';
+                document.getElementById('gridViewBtn').style.background = '#667eea';
+                document.getElementById('gridViewBtn').style.color = 'white';
+                document.getElementById('listViewBtn').style.background = 'transparent';
+                document.getElementById('listViewBtn').style.color = '#6b7280';
+            } else {
+                document.getElementById('blogGridView').style.display = 'none';
+                document.getElementById('blogListView').style.display = 'block';
+                document.getElementById('gridViewBtn').style.background = 'transparent';
+                document.getElementById('gridViewBtn').style.color = '#6b7280';
+                document.getElementById('listViewBtn').style.background = '#667eea';
+                document.getElementById('listViewBtn').style.color = 'white';
+            }
+
+            renderBlogs();
+        }
+
+        // Filter Blogs
+        function filterBlogs() {
+            // Ensure blogData is an array
+            if (!Array.isArray(blogData)) {
+                blogData = [];
+            }
+
+            const searchInput = document.getElementById('blogSearchInput');
+            const categoryFilterEl = document.getElementById('blogCategoryFilter');
+            const statusFilterEl = document.getElementById('blogStatusFilter');
+
+            if (!searchInput || !categoryFilterEl || !statusFilterEl) {
+                console.error('Filter elements not found');
+                return;
+            }
+
+            const searchTerm = searchInput.value.toLowerCase();
+            const categoryFilter = categoryFilterEl.value;
+            const statusFilter = statusFilterEl.value;
+
+            // Get all blogs from the original data
+            let filtered = [...blogData];
+
+            // Apply search
+            if (searchTerm) {
+                filtered = filtered.filter(blog =>
+                    blog.title.toLowerCase().includes(searchTerm) ||
+                    blog.excerpt.toLowerCase().includes(searchTerm) ||
+                    blog.content.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // Apply category filter
+            if (categoryFilter) {
+                filtered = filtered.filter(blog => blog.category && blog.category._id === categoryFilter);
+            }
+
+            // Apply status filter
+            if (statusFilter) {
+                filtered = filtered.filter(blog => blog.status === statusFilter);
+            }
+
+            // Temporarily replace blogData with filtered data
+            const originalData = blogData;
+            blogData = filtered;
+            renderBlogs();
+            blogData = originalData; // Restore original data
+        }
+
+
+        // View Blog Preview
+        function viewBlog(blogId) {
+            const blog = blogData.find(b => b._id === blogId);
+            if (!blog) { alert('Blog topilmadi!'); return; }
+
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:10000;display:flex;align-items:center;justify-content:center;overflow-y:auto;backdrop-filter:blur(5px);';
+            modal.innerHTML = `<div style="background:white;max-width:800px;width:90%;margin:20px;border-radius:20px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+                <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:30px;color:white;position:relative;border-radius:20px 20px 0 0;">
+                    <button onclick="this.closest('div').parentElement.parentElement.remove()" style="position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.2);border:none;color:white;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:24px;line-height:1;transition:all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">&times;</button>
+                    <h2 style="margin:0;font-size:28px;font-weight:700;">📝 Blog Preview</h2>
+                    <p style="margin:8px 0 0 0;opacity:0.9;">Preview how your blog will look</p>
+                </div>
+                <div style="padding:40px;">
+                    ${blog.featuredImage ? `<div style="margin-bottom:30px;border-radius:15px;overflow:hidden;"><img src="${blog.featuredImage}" style="width:100%;height:300px;object-fit:cover;"></div>` : ''}
+                    <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+                        ${blog.category ? `<span style="background:#667eea;color:white;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:600;">${typeof blog.category==='object'?blog.category.name:blog.category}</span>` : ''}
+                        <span style="background:#f3f4f6;color:#6b7280;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:600;">⏱️ ${blog.readingTime||5} min read</span>
+                        <span style="background:#f3f4f6;color:#6b7280;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:600;">👁️ ${blog.views||0} views</span>
+                    </div>
+                    <h1 style="margin:0 0 15px 0;font-size:36px;font-weight:700;color:#1a202c;line-height:1.3;">${blog.title}</h1>
+                    <div style="display:flex;gap:20px;margin-bottom:30px;padding-bottom:20px;border-bottom:2px solid #f3f4f6;color:#6b7280;font-size:14px;">
+                        <span>✍️ By ${blog.author||(blog.author&&blog.author.name)||'Admin'}</span>
+                        <span>📅 ${new Date(blog.createdAt||Date.now()).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}</span>
+                    </div>
+                    <div style="background:#f0f4ff;border-left:4px solid #667eea;padding:20px;margin-bottom:30px;border-radius:8px;">
+                        <p style="margin:0;font-size:18px;color:#374151;line-height:1.6;font-style:italic;">${blog.excerpt}</p>
+                    </div>
+                    <div style="color:#374151;font-size:16px;line-height:1.8;">
+                        <p style="white-space:pre-wrap;">${blog.content}</p>
+                    </div>
+                    ${blog.tags?.length?`<div style="margin-top:40px;padding-top:20px;border-top:2px solid #f3f4f6;"><h3 style="margin:0 0 15px 0;font-size:18px;color:#1a202c;">Tags:</h3><div style="display:flex;gap:10px;flex-wrap:wrap;">${blog.tags.map(t=>`<span style="background:#f3f4f6;color:#6b7280;padding:8px 16px;border-radius:20px;font-size:13px;">#${t}</span>`).join('')}</div></div>`:''}
+                    ${blog.location?.name?`<div style="margin-top:30px;padding:20px;background:#f9fafb;border-radius:12px;"><h3 style="margin:0 0 10px 0;font-size:18px;color:#1a202c;">📍 Location</h3><p style="margin:0;color:#6b7280;">${blog.location.name}</p></div>`:''}
+                </div>
+                <div style="padding:20px 40px;background:#f9fafb;border-radius:0 0 20px 20px;display:flex;justify-content:flex-end;gap:10px;">
+                    <button onclick="this.closest('div').parentElement.parentElement.remove()" style="padding:12px 24px;background:white;border:2px solid #e5e7eb;border-radius:10px;cursor:pointer;font-weight:600;color:#374151;transition:all 0.3s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='white'">Close</button>
+                    <button onclick="openBlogModal('${blog._id}');this.closest('div').parentElement.parentElement.remove();" style="padding:12px 24px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border:none;border-radius:10px;cursor:pointer;font-weight:600;color:white;box-shadow:0 4px 12px rgba(102,126,234,0.3);transition:all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">✏️ Edit Blog</button>
+                </div>
+            </div>`;
+            document.body.appendChild(modal);
+            modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+        }
+
+        // Delete Blog
+        async function deleteBlog(blogId) {
+            if (!confirm('Blogging o\'chirishga ishonchingiz komilmi?')) return;
+
+            try {
+                const response = await fetch(`http://localhost:4000/api/blogs/${blogId}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Blog muvaffaqiyatli o\'chirildi!');
+                    loadBlogs();
+                } else {
+                    alert(data.message || 'O\'chirishda xatolik!');
+                }
+            } catch (error) {
+                console.error('Delete blog error:', error);
+                alert('Server bilan bog\'lanishda xatolik!');
+            }
+        }
+
+        // Load Blog for Edit
+        async function loadBlogForEdit(blogId) {
+            try {
+                const response = await fetch(`http://localhost:4000/api/blogs/${blogId}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const blog = data.data;
+
+                    // Fill form fields
+                    document.getElementById('blogTitle').value = blog.title || '';
+                    document.getElementById('blogSlug').value = blog.slug || '';
+                    document.getElementById('blogCategory').value = blog.category?._id || '';
+                    document.getElementById('blogExcerpt').value = blog.excerpt || '';
+                    document.getElementById('blogContent').value = blog.content || '';
+                    document.getElementById('blogMetaTitle').value = blog.metaTitle || '';
+                    document.getElementById('blogMetaDescription').value = blog.metaDescription || '';
+                    document.getElementById('blogKeywords').value = (blog.keywords || []).join(', ');
+                    document.getElementById('blogAuthor').value = blog.author || '';
+                    document.getElementById('blogTags').value = (blog.tags || []).join(', ');
+                    document.getElementById('blogReadingTime').value = blog.readingTime || 5;
+                    document.getElementById('blogStatus').value = blog.status || 'draft';
+                    if (blog.location) {
+                        document.getElementById('blogCountry').value = blog.location.country || '';
+                        loadCitiesForBlog();
+                        setTimeout(() => {
+                            document.getElementById('blogCity').value = blog.location.city || '';
+                            updateBlogCoordinates();
+                        }, 100);
+                    }
+                    document.getElementById('blogImageAlt').value = blog.imageAlt || '';
+
+                    // Show featured image if exists
+                    if (blog.featuredImage) {
+                        document.getElementById('featuredImageImg').src = blog.featuredImage;
+                        document.getElementById('featuredImagePreview').style.display = 'block';
+                    }
+                }
+            } catch (error) {
+                console.error('Load blog error:', error);
+                alert('Blogni yuklashda xatolik!');
+            }
+        }
+
+        // Initialize Blog Page
+        function initBlogPage() {
+            loadBlogs();
+        }
+
+        // Add to page load
+        if (typeof window.initFunctions === 'undefined') {
+            window.initFunctions = [];
+        }
+        window.initFunctions.push(initBlogPage);
+
+        // ==================== END BLOG CMS JAVASCRIPT ====================
+    </script>
 </body>
+
 </html>
