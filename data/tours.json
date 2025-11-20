@@ -68,7 +68,8 @@
       "Tips"
     ],
     "id": "1",
-    "createdAt": "2025-11-19T08:20:37.384Z"
+    "createdAt": "2025-11-19T08:20:37.384Z",
+    "maxGroupSize": 50
   },
   {
     "title": "Bukhara Heritage Tour",
@@ -125,7 +126,8 @@
       "Tips"
     ],
     "id": "2",
-    "createdAt": "2025-11-19T08:20:37.386Z"
+    "createdAt": "2025-11-19T08:20:37.386Z",
+    "maxGroupSize": 50
   },
   {
     "title": "Chimgan Mountain Day Trip",
@@ -170,7 +172,8 @@
       "Tips"
     ],
     "id": "3",
-    "createdAt": "2025-11-19T08:20:37.388Z"
+    "createdAt": "2025-11-19T08:20:37.388Z",
+    "maxGroupSize": 50
   },
   {
     "title": "Grand Uzbekistan Tour",
@@ -234,6 +237,7 @@
       "Tips for guide"
     ],
     "id": "4",
-    "createdAt": "2025-11-19T08:20:37.389Z"
+    "createdAt": "2025-11-19T08:20:37.389Z",
+    "maxGroupSize": 50
   }
 ]

@@ -29,7 +29,8 @@ exports.checkAvailability = asyncHandler(async (req, res, next) => {
     return next(new ApiError(404, 'Tur topilmadi'));
   }
 
-  const maxCapacity = tour.maxCapacity || 20; // Default 20 if not specified
+  // Use maxGroupSize or default to 50 if not specified
+  const maxCapacity = tour.maxCapacity || tour.maxGroupSize || 50;
   const availability = await bookingsStorage.checkAvailability(tourId, date, maxCapacity);
 
   // Check if requested guests can be accommodated
@@ -106,7 +107,8 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
     return next(new ApiError(404, 'Tur topilmadi'));
   }
 
-  const maxCapacity = tour.maxCapacity || 20;
+  // Use maxGroupSize or default to 50 if not specified
+  const maxCapacity = tour.maxCapacity || tour.maxGroupSize || 50;
   const availability = await bookingsStorage.checkAvailability(tourId, date, maxCapacity);
   const requestedGuests = (guests.adults || 0) + (guests.children || 0);
 
