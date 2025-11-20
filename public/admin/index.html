@@ -3337,6 +3337,7 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                                 <th style="padding: 12px; text-align: left;">Price</th>
                                 <th style="padding: 12px; text-align: left;">Duration</th>
                                 <th style="padding: 12px; text-align: left;">Category</th>
+                                <th style="padding: 12px; text-align: center;">SEO</th>
                                 <th style="padding: 12px; text-align: left;">Status</th>
                                 <th style="padding: 12px; text-align: center;">Actions</th>
                             </tr>
@@ -3347,6 +3348,14 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                 tours.forEach(tour => {
                     const statusColor = tour.isActive ? '#28a745' : '#6c757d';
                     const statusText = tour.isActive ? 'Active' : 'Inactive';
+
+                    // SEO Badge
+                    let seoBadge = '';
+                    if (tour.seo && tour.seo.title) {
+                        seoBadge = '<span style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;" onclick="viewTourSEO(\'' + (tour.id || tour._id) + '\')" title="Click to view SEO details">✓ SEO</span>';
+                    } else {
+                        seoBadge = '<span style="background: #ffc107; color: #000; padding: 4px 8px; border-radius: 4px; font-size: 11px;">⚠ No SEO</span>';
+                    }
 
                     html += `
                         <tr style="border-bottom: 1px solid #dee2e6;">
@@ -3361,6 +3370,9 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                                 <span style="background: #e7f3ff; color: #0066cc; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
                                     ${tour.category || 'N/A'}
                                 </span>
+                            </td>
+                            <td style="padding: 12px; text-align: center;">
+                                ${seoBadge}
                             </td>
                             <td style="padding: 12px;">
                                 <span style="color: ${statusColor}; font-weight: 600;">●</span> ${statusText}
@@ -3550,6 +3562,132 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
             } catch (error) {
                 console.error('Error deleting tour:', error);
                 alert('Error deleting tour: ' + error.message);
+            }
+        }
+
+        // View Tour SEO Details
+        async function viewTourSEO(tourId) {
+            try {
+                // Fetch tour SEO data
+                const response = await fetch(`${API_URL}/tours/${tourId}/seo`);
+                const result = await response.json();
+
+                if (!result.success) {
+                    alert('Failed to load SEO data');
+                    return;
+                }
+
+                const { tour, seo } = result.data;
+
+                // Create modal HTML
+                const modalHTML = `
+                    <div id="seoModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center; overflow-y: auto; padding: 20px;">
+                        <div style="background: white; border-radius: 15px; max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                            <!-- Header -->
+                            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px 30px; border-radius: 15px 15px 0 0; display: flex; justify-content: space-between; align-items: center;">
+                                <h2 style="margin: 0; font-size: 24px;">🔍 SEO Details: ${tour.title}</h2>
+                                <button onclick="closeSEOModal()" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center;">&times;</button>
+                            </div>
+
+                            <!-- Body -->
+                            <div style="padding: 30px;">
+                                <!-- SEO Score -->
+                                ${seo.score ? `
+                                <div style="background: ${seo.score.score >= 90 ? '#d4edda' : seo.score.score >= 70 ? '#fff3cd' : '#f8d7da'}; border: 2px solid ${seo.score.score >= 90 ? '#28a745' : seo.score.score >= 70 ? '#ffc107' : '#dc3545'}; border-radius: 10px; padding: 20px; margin-bottom: 25px; text-align: center;">
+                                    <h3 style="margin: 0 0 10px 0; font-size: 20px; color: #333;">SEO Score</h3>
+                                    <div style="font-size: 48px; font-weight: bold; color: ${seo.score.score >= 90 ? '#28a745' : seo.score.score >= 70 ? '#ffc107' : '#dc3545'}; margin-bottom: 10px;">
+                                        ${seo.score.score}/100
+                                    </div>
+                                    <div style="font-size: 24px; font-weight: 600; color: ${seo.score.score >= 90 ? '#28a745' : seo.score.score >= 70 ? '#ffc107' : '#dc3545'};">
+                                        Grade: ${seo.score.grade}
+                                    </div>
+                                </div>
+                                ` : ''}
+
+                                <!-- Google Preview -->
+                                <div style="margin-bottom: 25px;">
+                                    <h4 style="color: #667eea; font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #667eea;">🔍 Google Search Preview</h4>
+                                    <div style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #f9f9f9;">
+                                        <h4 style="color: #1a0dab; font-size: 18px; margin: 0 0 5px 0; font-weight: 400;">${seo.meta.title}</h4>
+                                        <div style="color: #006621; font-size: 14px; margin-bottom: 5px;">${seo.meta.canonical}</div>
+                                        <div style="color: #545454; font-size: 14px; line-height: 1.5;">${seo.meta.description}</div>
+                                    </div>
+                                </div>
+
+                                <!-- Meta Tags -->
+                                <div style="margin-bottom: 25px;">
+                                    <h4 style="color: #667eea; font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #667eea;">🏷️ Meta Tags</h4>
+
+                                    <div style="margin-bottom: 15px;">
+                                        <div style="font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase; margin-bottom: 5px;">Title (${seo.meta.title.length} characters)</div>
+                                        <div style="background: #f5f5f5; padding: 10px; border-radius: 5px; font-size: 14px;">${seo.meta.title}</div>
+                                    </div>
+
+                                    <div style="margin-bottom: 15px;">
+                                        <div style="font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase; margin-bottom: 5px;">Description (${seo.meta.description.length} characters)</div>
+                                        <div style="background: #f5f5f5; padding: 10px; border-radius: 5px; font-size: 14px;">${seo.meta.description}</div>
+                                    </div>
+
+                                    <div style="margin-bottom: 15px;">
+                                        <div style="font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase; margin-bottom: 5px;">URL Slug</div>
+                                        <div style="background: #f5f5f5; padding: 10px; border-radius: 5px; font-size: 14px; font-family: monospace;">${tour.slug}</div>
+                                    </div>
+
+                                    <div>
+                                        <div style="font-size: 12px; font-weight: 600; color: #666; text-transform: uppercase; margin-bottom: 5px;">Keywords (${seo.meta.keywords.length})</div>
+                                        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                                            ${seo.meta.keywords.map(kw => `<span style="background: #667eea; color: white; padding: 4px 10px; border-radius: 15px; font-size: 11px;">${kw}</span>`).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Social Media Preview -->
+                                <div style="margin-bottom: 25px;">
+                                    <h4 style="color: #667eea; font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #667eea;">📘 Social Media (Open Graph)</h4>
+                                    <div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: white;">
+                                        <img src="${seo.meta.ogImage}" alt="${seo.meta.ogTitle}" style="width: 100%; height: 200px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/600x300?text=Image+Not+Found'">
+                                        <div style="padding: 15px;">
+                                            <div style="font-size: 12px; color: #65676b; margin-bottom: 5px;">${new URL(seo.meta.canonical).hostname}</div>
+                                            <h4 style="font-size: 16px; margin: 0 0 8px 0;">${seo.meta.ogTitle}</h4>
+                                            <div style="font-size: 13px; color: #1c1e21;">${seo.meta.ogDescription}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                ${seo.score && seo.score.checks ? `
+                                <!-- SEO Checks -->
+                                <div>
+                                    <h4 style="color: #667eea; font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #667eea;">✓ SEO Checklist</h4>
+                                    ${seo.score.checks.map(check => `
+                                        <div style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee;">
+                                            <span style="font-size: 14px;">${check.name}</span>
+                                            <div>
+                                                <span style="background: ${check.status === 'perfect' ? '#28a745' : check.status === 'good' ? '#ffc107' : '#dc3545'}; color: white; padding: 3px 10px; border-radius: 12px; font-size: 11px; margin-right: 10px;">${check.status.toUpperCase()}</span>
+                                                <span style="font-weight: 600; color: #667eea;">${check.points} pts</span>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Add modal to document
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+            } catch (error) {
+                console.error('Error loading SEO data:', error);
+                alert('Error loading SEO data: ' + error.message);
+            }
+        }
+
+        // Close SEO Modal
+        function closeSEOModal() {
+            const modal = document.getElementById('seoModal');
+            if (modal) {
+                modal.remove();
             }
         }
 
