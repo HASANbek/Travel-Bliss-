@@ -4,6 +4,8 @@ const ApiError = require('../utils/ApiError');
 const ApiResponse = require('../utils/ApiResponse');
 const mongoose = require('mongoose');
 const FileStorage = require('../utils/fileStorage');
+const { generateCompleteSEO } = require('../utils/seoHelpers');
+const aiSeoGenerator = require('../services/aiSeoGenerator');
 
 // Initialize file storage for tours
 const toursStorage = new FileStorage('tours.json');
@@ -454,28 +456,76 @@ exports.createTour = asyncHandler(async (req, res) => {
     }
   });
 
-  // MongoDB ulanmagan bo'lsa demo data
+  // 🤖 AUTOMATIC SEO GENERATION
+  // Generate SEO automatically if not provided
+  let seoGenerated = false;
+  let seoScore = null;
+
+  if (!requestData.seo && tourData.title && tourData.destination && tourData.duration && tourData.price) {
+    try {
+      console.log('🤖 Generating SEO automatically for tour:', tourData.title);
+
+      // Try AI-powered SEO first, fallback to template if AI not available
+      let seoData;
+      try {
+        seoData = await aiSeoGenerator.generateSEO(tourData);
+      } catch (aiError) {
+        // AI not available, use template
+        console.log('AI not available, using template SEO generation');
+        seoData = aiSeoGenerator.generateTemplateSEO(tourData);
+      }
+
+      seoScore = aiSeoGenerator.calculateSEOScore(seoData);
+
+      // Add SEO to tour data
+      tourData.seo = seoData;
+      tourData.slug = seoData.slug;
+
+      seoGenerated = true;
+      console.log(`✅ SEO generated successfully! Score: ${seoScore.score}/100 (${seoScore.grade})`);
+    } catch (error) {
+      console.error('⚠️ Failed to generate SEO automatically:', error.message);
+      // Continue without SEO - tour will still be created
+    }
+  } else if (requestData.seo) {
+    // User provided SEO manually
+    tourData.seo = requestData.seo;
+    tourData.slug = requestData.seo.slug || aiSeoGenerator.createSlug(tourData.title, tourData.duration);
+  }
+
+  // MongoDB ulanmagan bo'lsa file storage
   if (mongoose.connection.readyState !== 1) {
     const newTour = {
-      id: String(demoTours.length + 1),
+      id: String(Date.now()),
       ...tourData,
-      rating: 0,
+      rating: tourData.rating || 0,
       ratingsCount: 0,
-      isActive: true,
-      isFeatured: false,
-      createdAt: new Date()
+      isActive: tourData.isActive !== undefined ? tourData.isActive : true,
+      isFeatured: tourData.isFeatured || false,
+      createdAt: new Date().toISOString()
     };
-    demoTours.push(newTour);
+
+    // Save to file storage
+    await toursStorage.create(newTour);
 
     return res.status(201).json(
-      new ApiResponse(201, { tour: newTour, mode: 'DEMO' }, 'Tour created successfully')
+      new ApiResponse(201, {
+        tour: newTour,
+        mode: 'FILE_STORAGE',
+        seoGenerated: seoGenerated,
+        seoScore: seoScore
+      }, seoGenerated ? 'Tour created successfully with AI-generated SEO!' : 'Tour created successfully')
     );
   }
 
   const tour = await Tour.create(tourData);
 
   res.status(201).json(
-    new ApiResponse(201, { tour }, 'Tour created successfully')
+    new ApiResponse(201, {
+      tour,
+      seoGenerated: seoGenerated,
+      seoScore: seoScore
+    }, seoGenerated ? 'Tour created successfully with AI-generated SEO!' : 'Tour created successfully')
   );
 });
 
@@ -528,22 +578,76 @@ exports.updateTour = asyncHandler(async (req, res) => {
   if (requestData.isFeatured !== undefined) updateData.isFeatured = requestData.isFeatured;
   if (requestData.hotSale !== undefined) updateData.hotSale = requestData.hotSale;
 
-  // MongoDB ulanmagan bo'lsa demo data
+  // 🤖 AUTOMATIC SEO REGENERATION
+  // Regenerate SEO if main fields changed and regenerateSEO flag is set
+  let seoRegenerated = false;
+  let seoScore = null;
+
+  const mainFieldsChanged = updateData.title || updateData.destination || updateData.duration || updateData.price || updateData.description;
+
+  if (requestData.regenerateSEO === true && mainFieldsChanged) {
+    try {
+      // Get current tour data first
+      let currentTour;
+      if (mongoose.connection.readyState !== 1) {
+        currentTour = await toursStorage.findById(id);
+      } else {
+        currentTour = await Tour.findById(id);
+      }
+
+      if (currentTour) {
+        // Merge current tour with updates
+        const tourDataForSEO = {
+          ...currentTour.toObject ? currentTour.toObject() : currentTour,
+          ...updateData
+        };
+
+        console.log('🤖 Regenerating SEO for updated tour:', tourDataForSEO.title);
+
+        const seoData = await aiSeoGenerator.generateSEO(tourDataForSEO);
+        seoScore = aiSeoGenerator.calculateSEOScore(seoData);
+
+        updateData.seo = seoData;
+        updateData.slug = seoData.slug;
+
+        seoRegenerated = true;
+        console.log(`✅ SEO regenerated! Score: ${seoScore.score}/100 (${seoScore.grade})`);
+      }
+    } catch (error) {
+      console.error('⚠️ Failed to regenerate SEO:', error.message);
+    }
+  } else if (requestData.seo) {
+    // Manual SEO update
+    updateData.seo = requestData.seo;
+    if (requestData.seo.slug) {
+      updateData.slug = requestData.seo.slug;
+    }
+  }
+
+  // MongoDB ulanmagan bo'lsa file storage
   if (mongoose.connection.readyState !== 1) {
-    const tourIndex = demoTours.findIndex(t => t.id === id);
-    if (tourIndex === -1) {
+    let tour = await toursStorage.findById(id);
+    if (!tour) {
       throw new ApiError(404, 'Tour not found');
     }
 
-    demoTours[tourIndex] = {
-      ...demoTours[tourIndex],
+    const updatedTour = {
+      ...tour,
       ...updateData,
-      id: demoTours[tourIndex].id,
-      createdAt: demoTours[tourIndex].createdAt
+      id: tour.id,
+      createdAt: tour.createdAt,
+      updatedAt: new Date().toISOString()
     };
 
+    await toursStorage.update(id, updatedTour);
+
     return res.status(200).json(
-      new ApiResponse(200, { tour: demoTours[tourIndex], mode: 'DEMO' }, 'Tour updated successfully')
+      new ApiResponse(200, {
+        tour: updatedTour,
+        mode: 'FILE_STORAGE',
+        seoRegenerated: seoRegenerated,
+        seoScore: seoScore
+      }, seoRegenerated ? 'Tour updated with regenerated SEO!' : 'Tour updated successfully')
     );
   }
 
@@ -557,7 +661,11 @@ exports.updateTour = asyncHandler(async (req, res) => {
   }
 
   res.status(200).json(
-    new ApiResponse(200, { tour }, 'Tour updated successfully')
+    new ApiResponse(200, {
+      tour,
+      seoRegenerated: seoRegenerated,
+      seoScore: seoScore
+    }, seoRegenerated ? 'Tour updated with regenerated SEO!' : 'Tour updated successfully')
   );
 });
 
@@ -663,5 +771,67 @@ exports.getTourStats = asyncHandler(async (req, res) => {
       general: stats[0] || {},
       categories: categoryStats
     }, 'Tour statistics retrieved successfully')
+  );
+});
+
+// @desc    Get tour SEO data
+// @route   GET /api/tours/:id/seo
+// @access  Public
+exports.getTourSEO = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  // MongoDB ulanmagan bo'lsa file storage yoki demo data
+  if (mongoose.connection.readyState !== 1) {
+    // Try to get tour from file storage first
+    let tour = await toursStorage.findById(id);
+
+    // If not found in file storage, try demo tours
+    if (!tour) {
+      tour = demoTours.find(t => t.id === id);
+    }
+
+    if (!tour) {
+      throw new ApiError(404, 'Tour not found');
+    }
+
+    // Generate complete SEO package
+    const seoData = generateCompleteSEO(tour);
+
+    return res.status(200).json({
+      statusCode: 200,
+      success: true,
+      message: 'Tour SEO data retrieved successfully',
+      data: {
+        tour: {
+          id: tour.id,
+          title: tour.title,
+          slug: tour.slug,
+          destination: tour.destination
+        },
+        seo: seoData,
+        mode: 'FILE_STORAGE'
+      }
+    });
+  }
+
+  const tour = await Tour.findById(id);
+
+  if (!tour) {
+    throw new ApiError(404, 'Tour not found');
+  }
+
+  // Generate complete SEO package
+  const seoData = generateCompleteSEO(tour);
+
+  res.status(200).json(
+    new ApiResponse(200, {
+      tour: {
+        id: tour._id,
+        title: tour.title,
+        slug: tour.slug,
+        destination: tour.destination
+      },
+      seo: seoData
+    }, 'Tour SEO data retrieved successfully')
   );
 });
