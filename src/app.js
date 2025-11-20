@@ -96,6 +96,11 @@ app.use('/api/bookings', bookingRoutes);
 // Static files (uploads)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
+// Admin panel route - MUST be before static files
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/admin/index.html'));
+});
+
 // Static files (public - HTML pages) - OXIRIDA
 app.use(express.static(path.join(__dirname, '../public')));
 

@@ -24,14 +24,29 @@ function createTransporter() {
     };
   }
 
-  // Create real transporter with Gmail
-  return nodemailer.createTransport({
-    service: 'gmail',
+  // Create real transporter
+  const transporterConfig = {
+    host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+    port: parseInt(process.env.EMAIL_PORT) || 587,
+    secure: parseInt(process.env.EMAIL_PORT) === 465, // true for 465, false for other ports
     auth: {
       user: EMAIL_USER,
       pass: EMAIL_PASSWORD
     }
-  });
+  };
+
+  // For Gmail, use service shorthand
+  if (process.env.EMAIL_HOST === 'smtp.gmail.com') {
+    return nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: EMAIL_USER,
+        pass: EMAIL_PASSWORD
+      }
+    });
+  }
+
+  return nodemailer.createTransport(transporterConfig);
 }
 
 /**
@@ -49,7 +64,7 @@ async function sendEmail({ to, subject, html, text }) {
     const transporter = createTransporter();
 
     const mailOptions = {
-      from: `"Travel Bliss" <${process.env.EMAIL_USER || 'noreply@travelbliss.uz'}>`,
+      from: `"Travel Bliss" <${process.env.ADMIN_EMAIL || 'info@travel-bliss.uz'}>`,
       to,
       subject,
       html,
