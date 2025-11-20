@@ -445,5 +445,74 @@
     "slug": "fergana-valley-cultural-tour-4-days",
     "ratingsCount": 0,
     "createdAt": "2025-11-20T17:34:11.468Z"
+  },
+  {
+    "id": "1763661087063",
+    "title": "Khiva Ancient City Tour",
+    "description": "Discover the ancient city of Khiva, a UNESCO World Heritage site. Walk through the Ichan Kala fortress, visit stunning madrasahs, minarets, and palaces. Experience the rich history of the Silk Road in this perfectly preserved medieval city.",
+    "destination": "Khiva",
+    "price": 450,
+    "duration": 3,
+    "difficulty": "easy",
+    "startDates": [],
+    "imageCover": "default-tour.jpg",
+    "images": [
+      "khiva-1.jpg",
+      "khiva-2.jpg"
+    ],
+    "category": "cultural",
+    "tags": [],
+    "included": [
+      "Professional guide",
+      "Entrance fees",
+      "Traditional lunch",
+      "Transportation"
+    ],
+    "excluded": [],
+    "languages": [],
+    "highlights": [
+      "Ichan Kala Fortress",
+      "Kalta Minor Minaret",
+      "Juma Mosque with 200 wooden columns",
+      "Tash Khovli Palace",
+      "Islam Khodja Minaret"
+    ],
+    "locations": [],
+    "faq": [],
+    "rating": 0,
+    "isActive": true,
+    "isFeatured": false,
+    "hotSale": false,
+    "seo": {
+      "title": "Khiva Ancient City Tour 3 Days | Khiva | Travel Bliss",
+      "description": "Discover the ancient city of Khiva, a UNESCO World Heritage site. Walk through the Ichan Kala fortre. 3-day guided tour from $450. Book your Khiva adventure now!",
+      "keywords": [
+        "khiva tour",
+        "khiva travel",
+        "uzbekistan travel",
+        "silk road tour",
+        "central asia travel",
+        "3 day tour",
+        "cultural tour uzbekistan",
+        "travel bliss",
+        "khiva 3 days",
+        "uzbekistan tours",
+        "khiva package",
+        "uzbekistan vacation"
+      ],
+      "slug": "khiva-ancient-city-tour-3-days",
+      "canonical": "https://travel-bliss.uz/tours/khiva-ancient-city-tour-3-days",
+      "ogTitle": "Khiva Ancient City Tour - 3 Days in Khiva",
+      "ogDescription": "Explore Khiva with Travel Bliss. 3 days from $450/person. Expert guides, all-inclusive.",
+      "ogImage": "https://travel-bliss.uz/images/tours/khiva-tour.jpg",
+      "ogType": "website",
+      "twitterCard": "summary_large_image",
+      "twitterTitle": "Khiva Ancient City Tour - Experience Khiva",
+      "twitterDescription": "3-day guided tour through Khiva. From $450/person. Expert guides, all-inclusive.",
+      "twitterImage": "https://travel-bliss.uz/images/tours/khiva-tour.jpg"
+    },
+    "slug": "khiva-ancient-city-tour-3-days",
+    "ratingsCount": 0,
+    "createdAt": "2025-11-20T17:51:27.063Z"
   }
 ]
