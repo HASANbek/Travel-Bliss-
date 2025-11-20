@@ -9,10 +9,13 @@ const {
   updateUserRole,
   toggleUserStatus,
   deleteUser,
+  resetUserPassword,
+  getUserLoginHistory,
   getAllTours,
   toggleTourStatus,
   getAllBookings,
   updateBookingStatus,
+  deleteBooking,
   getStatistics,
   getAllBlogs,
   getBlogById,
@@ -50,6 +53,11 @@ router.get('/statistics', getStatistics);
 // @access  Private/Admin
 router.get('/users', getAllUsers);
 
+// @route   GET /api/admin/login-history/:userId
+// @desc    Foydalanuvchi login tarixini olish
+// @access  Private/Admin
+router.get('/login-history/:userId', getUserLoginHistory);
+
 // @route   GET /api/admin/users/:id
 // @desc    Foydalanuvchini ID bo'yicha olish
 // @access  Private/Admin
@@ -64,6 +72,11 @@ router.put('/users/:id/role', updateUserRole);
 // @desc    Foydalanuvchini bloklash/faollashtirish
 // @access  Private/Admin
 router.put('/users/:id/status', toggleUserStatus);
+
+// @route   PUT /api/admin/users/:id/reset-password
+// @desc    Foydalanuvchi parolini tiklash/yangilash
+// @access  Private/Admin
+router.put('/users/:id/reset-password', resetUserPassword);
 
 // @route   DELETE /api/admin/users/:id
 // @desc    Foydalanuvchini o'chirish
@@ -93,6 +106,11 @@ router.get('/bookings', getAllBookings);
 // @desc    Buyurtma statusini yangilash
 // @access  Private/Admin
 router.put('/bookings/:id/status', updateBookingStatus);
+
+// @route   DELETE /api/admin/bookings/:id
+// @desc    Buyurtmani o'chirish
+// @access  Private/Admin
+router.delete('/bookings/:id', deleteBooking);
 
 // ========== BLOG MANAGEMENT ==========
 // Blog post management routes

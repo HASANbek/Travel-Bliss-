@@ -3,6 +3,7 @@ const ApiResponse = require('../utils/ApiResponse');
 const ApiError = require('../utils/ApiError');
 const FileStorage = require('../utils/fileStorage');
 const bookingsStorage = require('../storage/bookings.storage');
+const bcrypt = require('bcryptjs');
 const {
   sendBookingConfirmedNotification,
   sendBookingCancelledNotification
@@ -297,7 +298,21 @@ exports.toggleUserStatus = asyncHandler(async (req, res, next) => {
  * @route   DELETE /api/admin/users/:id
  * @access  Private/Admin
  */
-exports.deleteUser = asyncHandler(async (req, res) => {
+exports.deleteUser = asyncHandler(async (req, res, next) => {
+  // Try to delete from file storage first
+  const allUsers = await usersStorage.findAll();
+  const user = allUsers.find(u => (u.id || u._id) === req.params.id);
+
+  if (user) {
+    // Delete from file storage
+    await usersStorage.delete(req.params.id);
+
+    return res.status(200).json(
+      new ApiResponse(200, { user }, 'Foydalanuvchi o\'chirildi')
+    );
+  }
+
+  // If not in file storage, check demo users
   const index = demoUsers.findIndex(u => u.id === req.params.id);
 
   if (index === -1) {
@@ -308,6 +323,82 @@ exports.deleteUser = asyncHandler(async (req, res) => {
 
   res.status(200).json(
     new ApiResponse(200, { user: deletedUser[0] }, 'Foydalanuvchi o\'chirildi')
+  );
+});
+
+/**
+ * @desc    Foydalanuvchi parolini tiklash/yangilash
+ * @route   PUT /api/admin/users/:id/reset-password
+ * @access  Private/Admin
+ */
+exports.resetUserPassword = asyncHandler(async (req, res, next) => {
+  const { newPassword } = req.body;
+
+  if (!newPassword || newPassword.length < 6) {
+    return next(new ApiError(400, 'Parol kamida 6 ta belgidan iborat bo\'lishi kerak'));
+  }
+
+  // Try to get user from file storage
+  let user = await usersStorage.findById(req.params.id);
+
+  if (!user) {
+    return next(new ApiError(404, 'Foydalanuvchi topilmadi'));
+  }
+
+  // Hash new password
+  const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+  // Update password
+  user.password = hashedPassword;
+  await usersStorage.update(req.params.id, { password: hashedPassword });
+
+  res.status(200).json(
+    new ApiResponse(200, null, 'Parol muvaffaqiyatli yangilandi')
+  );
+});
+
+/**
+ * @desc    Foydalanuvchi login tarixini olish
+ * @route   GET /api/admin/users/:userId/login-history
+ * @access  Private/Admin
+ */
+exports.getUserLoginHistory = asyncHandler(async (req, res, next) => {
+  // Try to get user from file storage
+  const userId = req.params.userId || req.params.id;
+  let user = await usersStorage.findById(userId);
+
+  if (!user) {
+    return next(new ApiError(404, 'Foydalanuvchi topilmadi'));
+  }
+
+  const loginHistory = user.loginHistory || [];
+  const lastLogin = user.lastLogin || null;
+
+  // Calculate account age (days since registration)
+  const accountAge = user.createdAt
+    ? Math.floor((new Date() - new Date(user.createdAt)) / (1000 * 60 * 60 * 24))
+    : 0;
+
+  // Calculate days since last login
+  const daysSinceLastLogin = lastLogin
+    ? Math.floor((new Date() - new Date(lastLogin)) / (1000 * 60 * 60 * 24))
+    : null;
+
+  res.status(200).json(
+    new ApiResponse(200, {
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isActive: user.isActive
+      },
+      lastLogin,
+      daysSinceLastLogin,
+      accountAge,
+      loginHistory,
+      totalLogins: loginHistory.length
+    }, 'Login tarixi')
   );
 });
 
@@ -443,6 +534,28 @@ exports.updateBookingStatus = asyncHandler(async (req, res, next) => {
 
   res.status(200).json(
     new ApiResponse(200, { booking: updatedBooking }, 'Buyurtma statusi yangilandi')
+  );
+});
+
+/**
+ * @desc    Buyurtmani o'chirish
+ * @route   DELETE /api/admin/bookings/:id
+ * @access  Private/Admin
+ */
+exports.deleteBooking = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+
+  const booking = await bookingsStorage.findById(id);
+
+  if (!booking) {
+    return next(new ApiError(404, 'Buyurtma topilmadi'));
+  }
+
+  // Delete booking
+  await bookingsStorage.delete(id);
+
+  res.status(200).json(
+    new ApiResponse(200, { booking }, 'Buyurtma o\'chirildi')
   );
 });
 
