@@ -3690,7 +3690,7 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                                 </span>
                             </td>
                             <td style="padding: 15px;">
-                                <div style="display: flex; gap: 8px;">
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                                     ${booking.status === 'pending' ? `
                                         <button onclick="updateBookingStatus('${booking.id}', 'confirmed')" style="padding: 6px 12px; background: #22c55e; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">
                                             Confirm
@@ -3701,6 +3701,9 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                                     ` : ''}
                                     <button onclick="viewBookingDetails('${booking.id}')" style="padding: 6px 12px; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">
                                         View
+                                    </button>
+                                    <button onclick="deleteBooking('${booking.id}', '${booking.tourName}')" style="padding: 6px 12px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">
+                                        🗑️ Delete
                                     </button>
                                 </div>
                             </td>
@@ -3749,6 +3752,41 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
             } catch (error) {
                 console.error('Error updating booking status:', error);
                 alert('Error: ' + error.message);
+            }
+        }
+
+        async function deleteBooking(bookingId, tourName) {
+            if (!confirm(`⚠️ Are you sure you want to DELETE this booking?\n\nTour: ${tourName}\n\nThis action CANNOT be undone!`)) {
+                return;
+            }
+
+            // Double confirmation for safety
+            const confirmText = prompt('Type "DELETE" to confirm deletion:', '');
+            if (confirmText !== 'DELETE') {
+                alert('❌ Deletion cancelled. You must type "DELETE" to confirm.');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('accessToken');
+                const response = await fetch(`${API_URL}/admin/bookings/${bookingId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error(result.message || 'Failed to delete booking');
+                }
+
+                alert('✅ Booking deleted successfully!');
+                loadBookings(); // Reload bookings
+            } catch (error) {
+                console.error('Error deleting booking:', error);
+                alert('❌ Error: ' + error.message);
             }
         }
 
@@ -3906,7 +3944,7 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                             </td>
                             <td style="padding: 12px; color: #6c757d; font-size: 14px;">${joinedDate}</td>
                             <td style="padding: 12px; text-align: center;">
-                                <div style="display: flex; gap: 8px; justify-content: center;">
+                                <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
                                     <button onclick="toggleUserStatus('${user.id || user._id}')"
                                             style="padding: 6px 12px; background: ${user.isActive ? '#ffc107' : '#28a745'}; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;"
                                             title="${user.isActive ? 'Block User' : 'Activate User'}">
@@ -3919,6 +3957,21 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                                         👤 Role
                                     </button>
                                     ` : ''}
+                                    <button onclick="resetUserPassword('${user.id || user._id}', '${user.name}')"
+                                            style="padding: 6px 12px; background: #6f42c1; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;"
+                                            title="Reset Password">
+                                        🔑 Password
+                                    </button>
+                                    <button onclick="viewLoginHistory('${user.id || user._id}', '${user.name}')"
+                                            style="padding: 6px 12px; background: #20c997; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;"
+                                            title="View Login History">
+                                        📊 History
+                                    </button>
+                                    <button onclick="deleteUser('${user.id || user._id}', '${user.name}')"
+                                            style="padding: 6px 12px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;"
+                                            title="Delete User">
+                                        🗑️ Delete
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -3996,6 +4049,155 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
             } catch (error) {
                 console.error('Error changing user role:', error);
                 alert('❌ Error updating user role');
+            }
+        }
+
+        // Reset user password
+        async function resetUserPassword(userId, userName) {
+            const newPassword = prompt(`Enter new password for ${userName}:`, '');
+
+            if (!newPassword) {
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                alert('❌ Password must be at least 6 characters long!');
+                return;
+            }
+
+            if (!confirm(`Are you sure you want to reset password for ${userName}?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/admin/users/${userId}/reset-password`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ newPassword: newPassword })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('✅ Password reset successfully!');
+                } else {
+                    alert('❌ Error: ' + (result.message || 'Failed to reset password'));
+                }
+            } catch (error) {
+                console.error('Error resetting password:', error);
+                alert('❌ Error resetting password');
+            }
+        }
+
+        // View login history
+        async function viewLoginHistory(userId, userName) {
+            try {
+                const response = await fetch(`${API_URL}/admin/login-history/${userId}`);
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error(result.message || 'Failed to load login history');
+                }
+
+                const data = result.data;
+                const loginHistory = data.loginHistory || [];
+
+                let historyHTML = `
+                    <div style="background: white; padding: 20px; border-radius: 8px; max-width: 800px; max-height: 80vh; overflow-y: auto;">
+                        <h3 style="margin-bottom: 20px; color: #333;">Login History - ${userName}</h3>
+
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 6px;">
+                            <div>
+                                <div style="font-size: 12px; color: #6c757d; margin-bottom: 5px;">Account Age</div>
+                                <div style="font-size: 20px; font-weight: bold; color: #28a745;">${data.accountAge || 0} days</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 12px; color: #6c757d; margin-bottom: 5px;">Last Login</div>
+                                <div style="font-size: 14px; font-weight: bold; color: #17a2b8;">
+                                    ${data.lastLogin ? new Date(data.lastLogin).toLocaleString() : 'Never'}
+                                </div>
+                            </div>
+                            <div>
+                                <div style="font-size: 12px; color: #6c757d; margin-bottom: 5px;">Total Logins</div>
+                                <div style="font-size: 20px; font-weight: bold; color: #6f42c1;">${data.totalLogins || 0}</div>
+                            </div>
+                        </div>
+
+                        ${loginHistory.length > 0 ? `
+                            <h4 style="margin: 20px 0 10px; color: #555;">Recent Login Activity</h4>
+                            <div style="max-height: 400px; overflow-y: auto;">
+                                ${loginHistory.map((login, index) => `
+                                    <div style="padding: 12px; border: 1px solid #dee2e6; border-radius: 6px; margin-bottom: 10px; background: ${index === 0 ? '#f0f8ff' : 'white'};">
+                                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                                            <div>
+                                                <div style="font-weight: 600; color: #333; margin-bottom: 5px;">
+                                                    📅 ${new Date(login.timestamp).toLocaleString()}
+                                                </div>
+                                                <div style="font-size: 13px; color: #6c757d;">
+                                                    🌐 IP: ${login.ip || 'N/A'}
+                                                </div>
+                                                <div style="font-size: 13px; color: #6c757d;">
+                                                    💻 ${login.userAgent || 'Unknown device'}
+                                                </div>
+                                            </div>
+                                            ${index === 0 ? '<span style="background: #28a745; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px;">Latest</span>' : ''}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : '<p style="text-align: center; color: #6c757d; padding: 20px;">No login history available</p>'}
+
+                        <button onclick="Swal.close()"
+                                style="margin-top: 20px; padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; width: 100%;">
+                            Close
+                        </button>
+                    </div>
+                `;
+
+                Swal.fire({
+                    html: historyHTML,
+                    showConfirmButton: false,
+                    width: '850px',
+                    padding: 0
+                });
+
+            } catch (error) {
+                console.error('Error loading login history:', error);
+                alert('❌ Error: ' + error.message);
+            }
+        }
+
+        // Delete user
+        async function deleteUser(userId, userName) {
+            if (!confirm(`⚠️ Are you sure you want to DELETE user "${userName}"?\n\nThis action CANNOT be undone!`)) {
+                return;
+            }
+
+            // Double confirmation for safety
+            const confirmText = prompt(`Type "DELETE" to confirm deletion of ${userName}:`, '');
+            if (confirmText !== 'DELETE') {
+                alert('❌ Deletion cancelled. You must type "DELETE" to confirm.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/admin/users/${userId}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('✅ User deleted successfully!');
+                    loadUsers(); // Reload users list
+                } else {
+                    alert('❌ Error: ' + (result.message || 'Failed to delete user'));
+                }
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                alert('❌ Error deleting user');
             }
         }
 

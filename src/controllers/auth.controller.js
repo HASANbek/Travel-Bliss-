@@ -140,9 +140,29 @@ exports.login = asyncHandler(async (req, res, next) => {
       return next(new ApiError(403, 'Akkauntingiz bloklangan. Iltimos admin bilan bog\'laning'));
     }
 
-    // 5. Oxirgi kirish vaqtini yangilash
-    user.lastLogin = new Date();
-    await usersStorage.update(user.id, { lastLogin: user.lastLogin });
+    // 5. Oxirgi kirish vaqtini yangilash va login tarixini saqlash
+    const now = new Date();
+    const loginHistory = user.loginHistory || [];
+
+    // Add current login to history (keep last 10 logins)
+    loginHistory.unshift({
+      timestamp: now,
+      ip: req.ip || req.connection.remoteAddress,
+      userAgent: req.headers['user-agent'] || 'Unknown'
+    });
+
+    // Keep only last 10 login records
+    if (loginHistory.length > 10) {
+      loginHistory.pop();
+    }
+
+    user.lastLogin = now;
+    user.loginHistory = loginHistory;
+
+    await usersStorage.update(user.id, {
+      lastLogin: user.lastLogin,
+      loginHistory: loginHistory
+    });
 
     // 6. Tokenlar yaratish
     const accessToken = generateAccessToken(user.id);
@@ -175,8 +195,25 @@ exports.login = asyncHandler(async (req, res, next) => {
       return next(new ApiError(403, 'Akkauntingiz bloklangan. Iltimos admin bilan bog\'laning'));
     }
 
-    // 5. Oxirgi kirish vaqtini yangilash
-    user.lastLogin = Date.now();
+    // 5. Oxirgi kirish vaqtini yangilash va login tarixini saqlash
+    const now = Date.now();
+    const loginHistory = user.loginHistory || [];
+
+    // Add current login to history (keep last 10 logins)
+    loginHistory.unshift({
+      timestamp: now,
+      ip: req.ip || req.connection.remoteAddress,
+      userAgent: req.headers['user-agent'] || 'Unknown'
+    });
+
+    // Keep only last 10 login records
+    if (loginHistory.length > 10) {
+      loginHistory.pop();
+    }
+
+    user.lastLogin = now;
+    user.loginHistory = loginHistory;
+
     await user.save({ validateBeforeSave: false });
 
     // 6. Tokenlar yaratish
