@@ -1334,9 +1334,220 @@ window.switchView = function(view) {
             </div>
 
             <!-- Media Page -->
+            
+            <!-- Media Library Page -->
             <div class="page-section" id="mediaPage">
-                <h3>Media library coming soon...</h3>
+                <!-- Header -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <div>
+                        <h2 style="margin: 0; font-size: 24px; color: #1e293b;">Media Library</h2>
+                        <p style="margin: 5px 0 0; color: #64748b; font-size: 14px;">Manage your files, images and documents</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="openCreateFolderModal()" style="padding: 10px 20px; background: #f1f5f9; color: #475569; border: none; border-radius: 8px; cursor: pointer; font-weight: 500;">📁 New Folder</button>
+                        <button onclick="openUploadModal()" style="padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500;">⬆️ Upload Files</button>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 25px;">
+                    <div style="background: white; padding: 18px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                        <p style="margin: 0; color: #64748b; font-size: 12px;">Total Files</p>
+                        <h3 id="statTotalFiles" style="margin: 5px 0 0; font-size: 24px; color: #1e293b;">0</h3>
+                    </div>
+                    <div style="background: white; padding: 18px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                        <p style="margin: 0; color: #64748b; font-size: 12px;">Images</p>
+                        <h3 id="statImages" style="margin: 5px 0 0; font-size: 24px; color: #3b82f6;">0</h3>
+                    </div>
+                    <div style="background: white; padding: 18px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                        <p style="margin: 0; color: #64748b; font-size: 12px;">Videos</p>
+                        <h3 id="statVideos" style="margin: 5px 0 0; font-size: 24px; color: #8b5cf6;">0</h3>
+                    </div>
+                    <div style="background: white; padding: 18px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                        <p style="margin: 0; color: #64748b; font-size: 12px;">Documents</p>
+                        <h3 id="statDocs" style="margin: 5px 0 0; font-size: 24px; color: #f59e0b;">0</h3>
+                    </div>
+                    <div style="background: white; padding: 18px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                        <p style="margin: 0; color: #64748b; font-size: 12px;">Total Size</p>
+                        <h3 id="statTotalSize" style="margin: 5px 0 0; font-size: 24px; color: #10b981;">0 MB</h3>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 20px;">
+                    <!-- Sidebar - Folders -->
+                    <div style="width: 250px; flex-shrink: 0;">
+                        <div style="background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden;">
+                            <div style="padding: 15px; border-bottom: 1px solid #e2e8f0;">
+                                <h4 style="margin: 0; color: #1e293b; font-size: 14px;">Folders</h4>
+                            </div>
+                            <div id="foldersList" style="max-height: 400px; overflow-y: auto;">
+                                <!-- Folders will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div style="flex: 1;">
+                        <!-- Toolbar -->
+                        <div style="background: white; padding: 15px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px;">
+                            <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                                <input type="text" id="searchMedia" placeholder="Search files..." onkeyup="filterMedia()" style="padding: 10px 15px; border: 1px solid #e2e8f0; border-radius: 8px; width: 200px; font-size: 14px;">
+                                <select id="filterType" onchange="filterMedia()" style="padding: 10px 15px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;">
+                                    <option value="">All Types</option>
+                                    <option value="image">Images</option>
+                                    <option value="video">Videos</option>
+                                    <option value="document">Documents</option>
+                                    <option value="audio">Audio</option>
+                                </select>
+                                <select id="filterDate" onchange="filterMedia()" style="padding: 10px 15px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;">
+                                    <option value="">All Dates</option>
+                                    <option value="today">Today</option>
+                                    <option value="week">This Week</option>
+                                    <option value="month">This Month</option>
+                                </select>
+                                <div style="margin-left: auto; display: flex; gap: 5px;">
+                                    <button onclick="setViewMode('grid')" id="gridViewBtn" style="padding: 10px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer;">▦</button>
+                                    <button onclick="setViewMode('list')" id="listViewBtn" style="padding: 10px; background: #f1f5f9; color: #475569; border: none; border-radius: 8px; cursor: pointer;">☰</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bulk Actions Bar -->
+                        <div id="mediaBulkBar" style="display: none; background: #1e293b; padding: 12px 20px; border-radius: 10px; margin-bottom: 15px; align-items: center; justify-content: space-between;">
+                            <span style="color: white; font-size: 14px;"><span id="selectedMediaCount">0</span> files selected</span>
+                            <div style="display: flex; gap: 10px;">
+                                <button onclick="bulkMoveMedia()" style="padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px;">📁 Move</button>
+                                <button onclick="bulkDownloadMedia()" style="padding: 8px 16px; background: #10b981; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px;">⬇️ Download</button>
+                                <button onclick="bulkDeleteMedia()" style="padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px;">🗑️ Delete</button>
+                            </div>
+                        </div>
+
+                        <!-- Files Grid/List -->
+                        <div id="mediaGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px;">
+                            <!-- Files will be rendered here -->
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- Upload Modal -->
+            <div id="uploadModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; overflow-y: auto;">
+                <div style="max-width: 600px; margin: 50px auto; background: white; border-radius: 16px; overflow: hidden;">
+                    <div style="background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); padding: 25px; color: white;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h3 style="margin: 0; font-size: 20px;">⬆️ Upload Files</h3>
+                            <button onclick="closeUploadModal()" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 18px;">×</button>
+                        </div>
+                    </div>
+                    <div style="padding: 25px;">
+                        <div id="dropZone" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" style="border: 2px dashed #e2e8f0; border-radius: 12px; padding: 50px; text-align: center; transition: all 0.3s; cursor: pointer;" onclick="document.getElementById('fileInput').click()">
+                            <div style="font-size: 48px; margin-bottom: 15px;">📁</div>
+                            <p style="margin: 0; color: #1e293b; font-weight: 600; font-size: 16px;">Drag & drop files here</p>
+                            <p style="margin: 10px 0 0; color: #64748b; font-size: 14px;">or click to browse</p>
+                            <p style="margin: 15px 0 0; color: #94a3b8; font-size: 12px;">Supports: JPG, PNG, GIF, SVG, MP4, PDF, DOC (Max 10MB)</p>
+                        </div>
+                        <input type="file" id="fileInput" multiple accept="image/*,video/*,.pdf,.doc,.docx" style="display: none;" onchange="handleFileSelect(event)">
+
+                        <div style="margin-top: 20px;">
+                            <label style="display: block; margin-bottom: 8px; color: #475569; font-weight: 500;">Upload to folder:</label>
+                            <select id="uploadFolder" style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px;">
+                                <option value="">Root (No folder)</option>
+                            </select>
+                        </div>
+
+                        <div id="uploadProgress" style="display: none; margin-top: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span style="color: #475569; font-size: 14px;">Uploading...</span>
+                                <span id="uploadPercent" style="color: #3b82f6; font-weight: 600;">0%</span>
+                            </div>
+                            <div style="background: #e2e8f0; border-radius: 10px; height: 8px; overflow: hidden;">
+                                <div id="uploadBar" style="background: #3b82f6; height: 100%; width: 0%; transition: width 0.3s;"></div>
+                            </div>
+                        </div>
+
+                        <div id="uploadedFiles" style="margin-top: 20px; max-height: 200px; overflow-y: auto;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File Detail Modal -->
+            <div id="fileDetailModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; overflow-y: auto;">
+                <div style="max-width: 800px; margin: 50px auto; background: white; border-radius: 16px; overflow: hidden;">
+                    <div style="background: #1e293b; padding: 20px; color: white;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h3 id="fileDetailName" style="margin: 0; font-size: 18px;">File Details</h3>
+                            <button onclick="closeFileDetailModal()" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 18px;">×</button>
+                        </div>
+                    </div>
+                    <div style="display: flex;">
+                        <!-- Preview -->
+                        <div style="flex: 1; background: #f8fafc; padding: 20px; display: flex; align-items: center; justify-content: center; min-height: 300px;">
+                            <img id="filePreviewImg" src="" style="max-width: 100%; max-height: 400px; border-radius: 8px;">
+                        </div>
+                        <!-- Details -->
+                        <div style="width: 300px; padding: 20px; border-left: 1px solid #e2e8f0;">
+                            <div style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 6px; color: #64748b; font-size: 12px;">FILE NAME</label>
+                                <input type="text" id="fileDetailNameInput" style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px;">
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 6px; color: #64748b; font-size: 12px;">ALT TEXT</label>
+                                <input type="text" id="fileDetailAlt" placeholder="Describe this image..." style="width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px;">
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                                <div>
+                                    <label style="display: block; margin-bottom: 6px; color: #64748b; font-size: 12px;">TYPE</label>
+                                    <p id="fileDetailType" style="margin: 0; color: #1e293b; font-size: 14px;">-</p>
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 6px; color: #64748b; font-size: 12px;">SIZE</label>
+                                    <p id="fileDetailSize" style="margin: 0; color: #1e293b; font-size: 14px;">-</p>
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 6px; color: #64748b; font-size: 12px;">RESOLUTION</label>
+                                    <p id="fileDetailRes" style="margin: 0; color: #1e293b; font-size: 14px;">-</p>
+                                </div>
+                                <div>
+                                    <label style="display: block; margin-bottom: 6px; color: #64748b; font-size: 12px;">UPLOADED</label>
+                                    <p id="fileDetailDate" style="margin: 0; color: #1e293b; font-size: 14px;">-</p>
+                                </div>
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <label style="display: block; margin-bottom: 6px; color: #64748b; font-size: 12px;">FILE URL</label>
+                                <div style="display: flex; gap: 8px;">
+                                    <input type="text" id="fileDetailUrl" readonly style="flex: 1; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 12px; background: #f8fafc;">
+                                    <button onclick="copyFileUrl()" style="padding: 10px 15px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer;">📋</button>
+                                </div>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <button onclick="saveFileDetails()" style="padding: 12px; background: #22c55e; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">💾 Save Changes</button>
+                                <button onclick="downloadFile()" style="padding: 12px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">⬇️ Download</button>
+                                <button onclick="deleteCurrentFile()" style="padding: 12px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">🗑️ Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Folder Modal -->
+            <div id="createFolderModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999;">
+                <div style="max-width: 400px; margin: 100px auto; background: white; border-radius: 16px; overflow: hidden;">
+                    <div style="background: #1e293b; padding: 20px; color: white;">
+                        <h3 style="margin: 0; font-size: 18px;">📁 Create New Folder</h3>
+                    </div>
+                    <div style="padding: 25px;">
+                        <input type="text" id="newFolderName" placeholder="Folder name..." style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; margin-bottom: 15px;">
+                        <select id="parentFolder" style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; margin-bottom: 20px;">
+                            <option value="">Root (No parent)</option>
+                        </select>
+                        <div style="display: flex; gap: 10px;">
+                            <button onclick="closeCreateFolderModal()" style="flex: 1; padding: 12px; background: #f1f5f9; color: #475569; border: none; border-radius: 8px; cursor: pointer; font-weight: 500;">Cancel</button>
+                            <button onclick="createFolder()" style="flex: 1; padding: 12px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500;">Create</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             
             <!-- Reviews Page -->
@@ -2077,6 +2288,7 @@ window.saveBlog = async function() {
             body: JSON.stringify(data)
         });
         const result = await res.json();
+                if (result.success && featuredImageData) { addBlogImageToMedia(featuredImageData, document.getElementById('postTitle').value); }
         if (result.success) {
             alert('✅ Blog saqlandi!');
             closeBlogModal();
@@ -4381,6 +4593,8 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                 loadCategories();
             } else if (pageName === 'blog') {
                 window.loadPosts();
+            } else if (pageName === 'media') {
+                initMediaLibrary();
             } else if (pageName === 'reviews') {
                 initReviews();
             }
@@ -6230,6 +6444,498 @@ function closeImagePreview() {
     const preview = document.getElementById('imagePreviewModal');
     if (preview) preview.style.display = 'none';
 }
+        
+// ==================== MEDIA LIBRARY ====================
+var mediaFiles = [];
+var mediaFolders = [];
+var currentFolder = null;
+var currentFileId = null;
+var selectedMedia = new Set();
+var viewMode = 'grid';
+
+// Mock Data
+var mockFolders = [
+    { id: 'f1', name: 'Tours', parent: null, count: 5 },
+    { id: 'f2', name: 'Pages', parent: null, count: 3 },
+    { id: 'f3', name: 'Destinations', parent: null, count: 8 },
+    { id: 'f4', name: 'Blog Images', parent: null, count: 4 },
+    { id: 'f5', name: 'Samarkand', parent: 'f3', count: 3 }
+];
+
+var mockFiles = [
+    { id: 'm1', name: 'samarkand-registan.jpg', type: 'image', size: 2500000, width: 1920, height: 1080, url: 'https://images.unsplash.com/photo-1596484552834-6a58f850e0a1?w=400', folder: 'f3', date: '2025-11-20', alt: 'Registan Square', tags: ['samarkand', 'architecture'] },
+    { id: 'm2', name: 'bukhara-minaret.jpg', type: 'image', size: 1800000, width: 1280, height: 720, url: 'https://images.unsplash.com/photo-1565967511849-76a60a516170?w=400', folder: 'f3', date: '2025-11-19', alt: 'Kalon Minaret', tags: ['bukhara'] },
+    { id: 'm3', name: 'silk-road-map.png', type: 'image', size: 500000, width: 800, height: 600, url: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=400', folder: 'f1', date: '2025-11-18', alt: 'Silk Road Map', tags: ['map'] },
+    { id: 'm4', name: 'page-banner.jpg', type: 'image', size: 3200000, width: 1920, height: 1280, url: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400', folder: 'f2', date: '2025-11-17', alt: 'Page Banner', tags: ['hotel'] },
+    { id: 'm5', name: 'tour-guide.mp4', type: 'video', size: 15000000, width: 1920, height: 1080, url: '', folder: 'f1', date: '2025-11-16', alt: '', tags: ['video'] },
+    { id: 'm6', name: 'brochure.pdf', type: 'document', size: 800000, width: 0, height: 0, url: '', folder: null, date: '2025-11-15', alt: '', tags: ['pdf'] },
+    { id: 'm7', name: 'khiva-walls.jpg', type: 'image', size: 2100000, width: 1600, height: 900, url: 'https://images.unsplash.com/photo-1580237072617-771c3ecc4a24?w=400', folder: 'f3', date: '2025-11-14', alt: 'Khiva Old City', tags: ['khiva'] },
+    { id: 'm8', name: 'travel-blog-cover.jpg', type: 'image', size: 1500000, width: 1200, height: 800, url: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400', folder: 'f4', date: '2025-11-13', alt: 'Travel Blog', tags: ['blog'] },
+    { id: 'm9', name: 'uzbek-food.jpg', type: 'image', size: 900000, width: 1000, height: 667, url: 'https://images.unsplash.com/photo-1547496502-affa22d38842?w=400', folder: 'f4', date: '2025-11-12', alt: 'Uzbek Cuisine', tags: ['food'] },
+    { id: 'm10', name: 'desert-tour.jpg', type: 'image', size: 2800000, width: 1920, height: 1080, url: 'https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?w=400', folder: 'f1', date: '2025-11-11', alt: 'Desert Tour', tags: ['desert', 'tour'] }
+];
+
+// Initialize
+
+
+
+
+    function addDestinationImageToMedia(imageData, title) {
+        var newFile = {
+            id: "file" + Date.now(),
+            name: title.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase() + ".jpg",
+            type: "image",
+            size: "Auto",
+            folder: "f3",
+            url: imageData,
+            uploadDate: new Date().toISOString().split("T")[0],
+            dimensions: "Auto"
+        };
+        mockFiles.push(newFile);
+        var folder = mockFolders.find(function(f) { return f.id === "f3"; });
+        if (folder) folder.count++;
+        console.log("Destination image added to Media Library:", title);
+    }
+    function addPageImageToMedia(imageData, title) {
+    if (!imageData || typeof mockFiles === "undefined") return;
+    var newFile = {
+        id: "page_" + Date.now(),
+        name: title.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase() + ".jpg",
+        type: "image",
+        size: Math.floor(imageData.length * 0.75),
+        width: 1920,
+        height: 1080,
+        url: imageData,
+        folder: "f2",
+        date: new Date().toISOString().split("T")[0],
+        alt: title,
+        tags: ["page"]
+    };
+    mockFiles.unshift(newFile);
+    if (typeof mediaFiles !== "undefined") mediaFiles.unshift(newFile);
+    console.log("Page image added to Media Library: " + title);
+}
+function addTourImageToMedia(imageData, title) {
+    if (!imageData || typeof mockFiles === "undefined") return;
+    var newFile = {
+        id: "tour_" + Date.now(),
+        name: title.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase() + ".jpg",
+        type: "image",
+        size: Math.floor(imageData.length * 0.75),
+        width: 1920,
+        height: 1080,
+        url: imageData,
+        folder: "f1",
+        date: new Date().toISOString().split("T")[0],
+        alt: title,
+        tags: ["tour"]
+    };
+    mockFiles.unshift(newFile);
+    if (typeof mediaFiles !== "undefined") mediaFiles.unshift(newFile);
+    console.log("Tour image added to Media Library: " + title);
+}
+function addBlogImageToMedia(imageData, title) {
+    if (!imageData || typeof mockFiles === "undefined") return;
+    var newFile = {
+        id: "blog_" + Date.now(),
+        name: title.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase() + ".jpg",
+        type: "image",
+        size: Math.floor(imageData.length * 0.75),
+        width: 1200,
+        height: 800,
+        url: imageData,
+        folder: "f4",
+        date: new Date().toISOString().split("T")[0],
+        alt: title,
+        tags: ["blog"]
+    };
+    mockFiles.unshift(newFile);
+    if (typeof mediaFiles !== "undefined") mediaFiles.unshift(newFile);
+    console.log("Blog image added to Media Library: " + title);
+}
+window.initMediaLibrary = function() {
+    mediaFolders = [...mockFolders];
+    mediaFiles = [...mockFiles];
+    renderFolders();
+    renderMediaGrid();
+    updateMediaStats();
+    populateFolderSelects();
+};
+
+// Format file size
+function formatSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
+// Render folders
+function renderFolders() {
+    var container = document.getElementById('foldersList');
+    if (!container) return;
+
+    var html = '<div onclick="selectFolder(null)" style="padding: 12px 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f1f5f9; ' + (currentFolder === null ? 'background: #eff6ff; color: #3b82f6;' : '') + '">' +
+        '<span>📂</span><span>All Media</span><span style="margin-left: auto; background: #e2e8f0; padding: 2px 8px; border-radius: 10px; font-size: 11px;">' + mediaFiles.length + '</span></div>';
+
+    html += '<div onclick="selectFolder(\'ungrouped\')" style="padding: 12px 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f1f5f9; ' + (currentFolder === 'ungrouped' ? 'background: #eff6ff; color: #3b82f6;' : '') + '">' +
+        '<span>📁</span><span>Ungrouped</span><span style="margin-left: auto; background: #e2e8f0; padding: 2px 8px; border-radius: 10px; font-size: 11px;">' + mediaFiles.filter(function(f){return !f.folder}).length + '</span></div>';
+
+    mediaFolders.filter(function(f){return !f.parent}).forEach(function(folder) {
+        var count = mediaFiles.filter(function(f){return f.folder === folder.id}).length;
+        var subfolders = mediaFolders.filter(function(f){return f.parent === folder.id});
+
+        html += '<div onclick="selectFolder(\'' + folder.id + '\')" style="padding: 12px 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f1f5f9; ' + (currentFolder === folder.id ? 'background: #eff6ff; color: #3b82f6;' : '') + '">' +
+            '<span>📁</span><span>' + folder.name + '</span><span style="margin-left: auto; background: #e2e8f0; padding: 2px 8px; border-radius: 10px; font-size: 11px;">' + count + '</span></div>';
+
+        subfolders.forEach(function(sub) {
+            var subCount = mediaFiles.filter(function(f){return f.folder === sub.id}).length;
+            html += '<div onclick="selectFolder(\'' + sub.id + '\')" style="padding: 12px 15px 12px 35px; cursor: pointer; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f1f5f9; ' + (currentFolder === sub.id ? 'background: #eff6ff; color: #3b82f6;' : '') + '">' +
+                '<span>📄</span><span>' + sub.name + '</span><span style="margin-left: auto; background: #e2e8f0; padding: 2px 8px; border-radius: 10px; font-size: 11px;">' + subCount + '</span></div>';
+        });
+    });
+
+    container.innerHTML = html;
+}
+
+// Select folder
+window.selectFolder = function(folderId) {
+    currentFolder = folderId;
+    renderFolders();
+    renderMediaGrid();
+};
+
+// Render media grid
+function renderMediaGrid() {
+    var container = document.getElementById('mediaGrid');
+    if (!container) return;
+
+    var files = mediaFiles;
+    if (currentFolder === 'ungrouped') files = files.filter(function(f){return !f.folder});
+    else if (currentFolder) files = files.filter(function(f){return f.folder === currentFolder});
+
+    var search = (document.getElementById('searchMedia')?.value || '').toLowerCase();
+    var typeFilter = document.getElementById('filterType')?.value || '';
+
+    if (search) files = files.filter(function(f){return f.name.toLowerCase().includes(search) || (f.alt && f.alt.toLowerCase().includes(search))});
+    if (typeFilter) files = files.filter(function(f){return f.type === typeFilter});
+
+    if (!files.length) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 60px; color: #94a3b8;">No files found</div>';
+        return;
+    }
+
+    if (viewMode === 'grid') {
+        container.style.display = 'grid';
+        container.innerHTML = files.map(function(file) {
+            var thumb = file.type === 'image' ? file.url : (file.type === 'video' ? '🎬' : (file.type === 'document' ? '📄' : '🎵'));
+            var isImg = file.type === 'image';
+            return '<div class="media-item" data-id="' + file.id + '" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer; position: relative;" onclick="openFileDetail(\'' + file.id + '\')">' +
+                '<div style="position: absolute; top: 10px; left: 10px; z-index: 10;"><input type="checkbox" class="media-checkbox" data-id="' + file.id + '" onclick="event.stopPropagation(); toggleMediaSelect(this)" style="width: 18px; height: 18px;"></div>' +
+                '<div style="height: 140px; background: #f8fafc; display: flex; align-items: center; justify-content: center; overflow: hidden;">' +
+                    (isImg ? '<img src="' + thumb + '" style="width: 100%; height: 100%; object-fit: cover;">' : '<span style="font-size: 48px;">' + thumb + '</span>') +
+                '</div>' +
+                '<div style="padding: 12px;">' +
+                    '<p style="margin: 0; font-size: 13px; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="' + file.name + '">' + file.name + '</p>' +
+                    '<div style="display: flex; justify-content: space-between; margin-top: 6px;">' +
+                        '<span style="font-size: 11px; color: #94a3b8;">' + formatSize(file.size) + '</span>' +
+                        '<span style="font-size: 11px; color: #94a3b8;">' + (file.width ? file.width + 'x' + file.height : file.type) + '</span>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+        }).join('');
+    } else {
+        container.style.display = 'block';
+        container.innerHTML = '<table style="width: 100%; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"><thead><tr style="background: #f8fafc;"><th style="padding: 12px; text-align: left; width: 40px;"><input type="checkbox" id="selectAllMedia" onchange="toggleSelectAllMedia()"></th><th style="padding: 12px; text-align: left;">File</th><th style="padding: 12px; text-align: left;">Type</th><th style="padding: 12px; text-align: left;">Size</th><th style="padding: 12px; text-align: left;">Date</th><th style="padding: 12px; text-align: left;">Actions</th></tr></thead><tbody>' +
+            files.map(function(file) {
+                return '<tr style="border-bottom: 1px solid #f1f5f9; cursor: pointer;" onclick="openFileDetail(\'' + file.id + '\')">' +
+                    '<td style="padding: 12px;" onclick="event.stopPropagation()"><input type="checkbox" class="media-checkbox" data-id="' + file.id + '" onchange="toggleMediaSelect(this)"></td>' +
+                    '<td style="padding: 12px;"><div style="display: flex; align-items: center; gap: 10px;">' + (file.type === 'image' ? '<img src="' + file.url + '" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;">' : '<span style="font-size: 24px;">' + (file.type === 'video' ? '🎬' : '📄') + '</span>') + '<span>' + file.name + '</span></div></td>' +
+                    '<td style="padding: 12px; color: #64748b;">' + file.type + '</td>' +
+                    '<td style="padding: 12px; color: #64748b;">' + formatSize(file.size) + '</td>' +
+                    '<td style="padding: 12px; color: #64748b;">' + file.date + '</td>' +
+                    '<td style="padding: 12px;" onclick="event.stopPropagation()"><button onclick="openFileDetail(\'' + file.id + '\')" style="padding: 6px 12px; background: #dbeafe; color: #3b82f6; border: none; border-radius: 6px; cursor: pointer; margin-right: 5px;">View</button><button onclick="editMediaFile(\'' + file.id + '\')" style="padding: 6px 12px; background: #fef3c7; color: #f59e0b; border: none; border-radius: 6px; cursor: pointer; margin-right: 5px;">Edit</button><button onclick="deleteMediaFile(\'' + file.id + '\')" style="padding: 6px 12px; background: #fee2e2; color: #ef4444; border: none; border-radius: 6px; cursor: pointer;">Delete</button></td>' +
+                '</tr>';
+            }).join('') +
+        '</tbody></table>';
+    }
+}
+
+// Update stats
+function updateMediaStats() {
+    var el = function(id, v) { var e = document.getElementById(id); if(e) e.textContent = v; };
+    el('statTotalFiles', mediaFiles.length);
+    el('statImages', mediaFiles.filter(function(f){return f.type === 'image'}).length);
+    el('statVideos', mediaFiles.filter(function(f){return f.type === 'video'}).length);
+    el('statDocs', mediaFiles.filter(function(f){return f.type === 'document'}).length);
+    var totalSize = mediaFiles.reduce(function(s,f){return s + f.size}, 0);
+    el('statTotalSize', formatSize(totalSize));
+}
+
+// View mode
+window.setViewMode = function(mode) {
+    viewMode = mode;
+    document.getElementById('gridViewBtn').style.background = mode === 'grid' ? '#3b82f6' : '#f1f5f9';
+    document.getElementById('gridViewBtn').style.color = mode === 'grid' ? 'white' : '#475569';
+    document.getElementById('listViewBtn').style.background = mode === 'list' ? '#3b82f6' : '#f1f5f9';
+    document.getElementById('listViewBtn').style.color = mode === 'list' ? 'white' : '#475569';
+    renderMediaGrid();
+};
+
+// Filter
+window.filterMedia = function() { renderMediaGrid(); };
+
+// Selection
+window.toggleMediaSelect = function(cb) {
+    if (cb.checked) selectedMedia.add(cb.dataset.id);
+    else selectedMedia.delete(cb.dataset.id);
+    updateMediaBulkBar();
+};
+
+window.toggleSelectAllMedia = function() {
+    var checked = document.getElementById('selectAllMedia')?.checked;
+    document.querySelectorAll('.media-checkbox').forEach(function(cb) {
+        cb.checked = checked;
+        if (checked) selectedMedia.add(cb.dataset.id);
+        else selectedMedia.delete(cb.dataset.id);
+    });
+    updateMediaBulkBar();
+};
+
+function updateMediaBulkBar() {
+    var bar = document.getElementById('mediaBulkBar');
+    var count = document.getElementById('selectedMediaCount');
+    if (bar) bar.style.display = selectedMedia.size > 0 ? 'flex' : 'none';
+    if (count) count.textContent = selectedMedia.size;
+}
+
+// Bulk actions
+window.bulkDeleteMedia = function() {
+    if (!confirm('Delete ' + selectedMedia.size + ' files?')) return;
+    selectedMedia.forEach(function(id) {
+        mediaFiles = mediaFiles.filter(function(f){return f.id !== id});
+    });
+    selectedMedia.clear();
+    updateMediaBulkBar();
+    renderMediaGrid();
+    renderFolders();
+    updateMediaStats();
+};
+
+window.bulkMoveMedia = function() {
+    var folder = prompt('Enter folder name to move files:');
+    if (!folder) return;
+    var targetFolder = mediaFolders.find(function(f){return f.name.toLowerCase() === folder.toLowerCase()});
+    if (!targetFolder) { alert('Folder not found'); return; }
+    selectedMedia.forEach(function(id) {
+        var file = mediaFiles.find(function(f){return f.id === id});
+        if (file) file.folder = targetFolder.id;
+    });
+    selectedMedia.clear();
+    updateMediaBulkBar();
+    renderMediaGrid();
+    renderFolders();
+};
+
+window.bulkDownloadMedia = function() { alert('Downloading ' + selectedMedia.size + ' files...'); };
+
+// File detail modal
+window.openFileDetail = function(id) {
+    currentFileId = id;
+    var file = mediaFiles.find(function(f){return f.id === id});
+    if (!file) return;
+
+    document.getElementById('fileDetailName').textContent = file.name;
+    document.getElementById('fileDetailNameInput').value = file.name;
+    document.getElementById('fileDetailAlt').value = file.alt || '';
+    document.getElementById('fileDetailType').textContent = file.type.toUpperCase();
+    document.getElementById('fileDetailSize').textContent = formatSize(file.size);
+    document.getElementById('fileDetailRes').textContent = file.width ? file.width + ' x ' + file.height : 'N/A';
+    document.getElementById('fileDetailDate').textContent = file.date;
+    document.getElementById('fileDetailUrl').value = file.url || '/uploads/' + file.name;
+
+    var preview = document.getElementById('filePreviewImg');
+    if (file.type === 'image' && file.url) {
+        preview.src = file.url;
+        preview.style.display = 'block';
+    } else {
+        preview.style.display = 'none';
+    }
+
+    document.getElementById('fileDetailModal').style.display = 'block';
+};
+
+window.closeFileDetailModal = function() {
+    document.getElementById('fileDetailModal').style.display = 'none';
+    currentFileId = null;
+};
+
+window.copyFileUrl = function() {
+    var url = document.getElementById('fileDetailUrl');
+    url.select();
+    document.execCommand('copy');
+    alert('URL copied!');
+};
+
+
+window.editCurrentFile = function() {
+    if (!currentFileId) return;
+    var file = mediaFiles.find(function(f){return f.id === currentFileId});
+    if (file) {
+        var newName = prompt("Yangi fayl nomini kiriting:", file.name);
+        if (newName && newName !== file.name) {
+            file.name = newName;
+            document.getElementById('fileDetailNameInput').value = newName;
+            renderMediaGallery(mediaFiles);
+            alert("Fayl nomi o'zgartirildi!");
+        }
+    }
+};
+
+window.saveFileDetails = function() {
+    if (!currentFileId) return;
+    var file = mediaFiles.find(function(f){return f.id === currentFileId});
+    if (file) {
+        file.name = document.getElementById('fileDetailNameInput').value;
+        file.alt = document.getElementById('fileDetailAlt').value;
+        renderMediaGrid();
+        alert('Saved!');
+    }
+};
+
+window.deleteCurrentFile = function() {
+    if (!currentFileId || !confirm('Delete this file?')) return;
+    mediaFiles = mediaFiles.filter(function(f){return f.id !== currentFileId});
+    closeFileDetailModal();
+    renderMediaGrid();
+    renderFolders();
+    updateMediaStats();
+};
+
+window.downloadFile = function() { alert('Downloading file...'); };
+
+
+window.editMediaFile = function(id) {
+    var file = mediaFiles.find(function(f) { return f.id === id; });
+    if (file) {
+        var newName = prompt("Fayl nomini kiriting:", file.name);
+        if (newName && newName !== file.name) {
+            file.name = newName;
+            renderMediaGallery(mediaFiles);
+            alert("Fayl nomi o'zgartirildi!");
+        }
+    }
+};
+
+window.deleteMediaFile = function(id) {
+    if (!confirm('Delete this file?')) return;
+    mediaFiles = mediaFiles.filter(function(f){return f.id !== id});
+    renderMediaGrid();
+    renderFolders();
+    updateMediaStats();
+};
+
+// Upload modal
+window.openUploadModal = function() {
+    document.getElementById('uploadModal').style.display = 'block';
+    document.getElementById('uploadedFiles').innerHTML = '';
+};
+
+window.closeUploadModal = function() {
+    document.getElementById('uploadModal').style.display = 'none';
+};
+
+window.handleDragOver = function(e) {
+    e.preventDefault();
+    document.getElementById('dropZone').style.borderColor = '#3b82f6';
+    document.getElementById('dropZone').style.background = '#eff6ff';
+};
+
+window.handleDragLeave = function(e) {
+    document.getElementById('dropZone').style.borderColor = '#e2e8f0';
+    document.getElementById('dropZone').style.background = 'transparent';
+};
+
+window.handleDrop = function(e) {
+    e.preventDefault();
+    handleDragLeave(e);
+    var files = e.dataTransfer.files;
+    processFiles(files);
+};
+
+window.handleFileSelect = function(e) {
+    processFiles(e.target.files);
+};
+
+function processFiles(files) {
+    var container = document.getElementById('uploadedFiles');
+    var folder = document.getElementById('uploadFolder')?.value || null;
+
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        var type = file.type.startsWith('image') ? 'image' : (file.type.startsWith('video') ? 'video' : 'document');
+
+        var newFile = {
+            id: 'm' + Date.now() + i,
+            name: file.name,
+            type: type,
+            size: file.size,
+            width: type === 'image' ? 1920 : 0,
+            height: type === 'image' ? 1080 : 0,
+            url: type === 'image' ? URL.createObjectURL(file) : '',
+            folder: folder,
+            date: new Date().toISOString().split('T')[0],
+            alt: '',
+            tags: []
+        };
+
+        mediaFiles.unshift(newFile);
+
+        container.innerHTML += '<div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: #f0fdf4; border-radius: 8px; margin-bottom: 8px;"><span style="color: #22c55e;">✓</span><span style="flex: 1;">' + file.name + '</span><span style="color: #64748b; font-size: 12px;">' + formatSize(file.size) + '</span></div>';
+    }
+
+    renderMediaGrid();
+    renderFolders();
+    updateMediaStats();
+}
+
+// Folder management
+window.openCreateFolderModal = function() {
+    document.getElementById('createFolderModal').style.display = 'block';
+    document.getElementById('newFolderName').value = '';
+};
+
+window.closeCreateFolderModal = function() {
+    document.getElementById('createFolderModal').style.display = 'none';
+};
+
+window.createFolder = function() {
+    var name = document.getElementById('newFolderName').value.trim();
+    if (!name) { alert('Enter folder name'); return; }
+    var parent = document.getElementById('parentFolder')?.value || null;
+
+    mediaFolders.push({
+        id: 'f' + Date.now(),
+        name: name,
+        parent: parent,
+        count: 0
+    });
+
+    closeCreateFolderModal();
+    renderFolders();
+    populateFolderSelects();
+};
+
+function populateFolderSelects() {
+    var options = '<option value="">Root (No folder)</option>' + mediaFolders.map(function(f) {
+        return '<option value="' + f.id + '">' + f.name + '</option>';
+    }).join('');
+
+    var uploadSelect = document.getElementById('uploadFolder');
+    var parentSelect = document.getElementById('parentFolder');
+    if (uploadSelect) uploadSelect.innerHTML = options;
+    if (parentSelect) parentSelect.innerHTML = options;
+}
+
         </script>
 </body>
 
