@@ -81,6 +81,36 @@ class ToursStorage {
       return [];
     }
   }
+
+  /**
+   * Update tour by ID (1-based index)
+   * @param {string} id - Tour ID
+   * @param {Object} updates - Fields to update
+   * @returns {Promise<Object|null>}
+   */
+  async update(id, updates) {
+    try {
+      const data = await fs.readFile(TOURS_FILE, 'utf8');
+      const tours = JSON.parse(data);
+      const index = parseInt(id) - 1;
+
+      if (index < 0 || index >= tours.length) {
+        return null;
+      }
+
+      tours[index] = { ...tours[index], ...updates };
+      await fs.writeFile(TOURS_FILE, JSON.stringify(tours, null, 2));
+
+      return {
+        ...tours[index],
+        id: String(index + 1),
+        _id: String(index + 1)
+      };
+    } catch (error) {
+      console.error('Error updating tour:', error);
+      return null;
+    }
+  }
 }
 
 module.exports = new ToursStorage();

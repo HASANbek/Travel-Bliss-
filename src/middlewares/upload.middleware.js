@@ -44,13 +44,16 @@ const tourStorage = multer.diskStorage({
 
 // File filter - only images
 const fileFilter = (req, file, cb) => {
+    console.log('📤 Upload file filter:', file.originalname, file.mimetype);
     const allowedTypes = /jpeg|jpg|png|gif|webp/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);
 
     if (extname && mimetype) {
+        console.log('✅ File accepted:', file.originalname);
         return cb(null, true);
     } else {
+        console.log('❌ File rejected:', file.originalname, 'mimetype:', file.mimetype);
         cb(new Error('Only image files are allowed (jpeg, jpg, png, gif, webp)'));
     }
 };

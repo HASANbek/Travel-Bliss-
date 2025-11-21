@@ -806,7 +806,9 @@ exports.getTourSEO = asyncHandler(async (req, res) => {
           id: tour.id,
           title: tour.title,
           slug: tour.slug,
-          destination: tour.destination
+          destination: tour.destination,
+          mainImage: tour.mainImage,
+          images: tour.images
         },
         seo: seoData,
         mode: 'FILE_STORAGE'
@@ -833,5 +835,49 @@ exports.getTourSEO = asyncHandler(async (req, res) => {
       },
       seo: seoData
     }, 'Tour SEO data retrieved successfully')
+  );
+});
+
+// @desc    Update tour SEO data
+// @route   PUT /api/tours/:id/seo
+// @access  Private (Admin)
+exports.updateTourSEO = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { seoTitle, seoDescription, slug, seoKeywords } = req.body;
+
+  // Prepare update object
+  const updates = {};
+  if (seoTitle) updates.seoTitle = seoTitle;
+  if (seoDescription) updates.seoDescription = seoDescription;
+  if (slug) updates.slug = slug;
+  if (seoKeywords) updates.seoKeywords = seoKeywords;
+
+  // MongoDB ulanmagan bo'lsa file storage
+  if (mongoose.connection.readyState !== 1) {
+    const updatedTour = await toursStorage.update(id, updates);
+
+    if (!updatedTour) {
+      throw new ApiError(404, 'Tour not found');
+    }
+
+    return res.status(200).json({
+      statusCode: 200,
+      success: true,
+      message: 'Tour SEO updated successfully',
+      data: {
+        tour: updatedTour,
+        mode: 'FILE_STORAGE'
+      }
+    });
+  }
+
+  const tour = await Tour.findByIdAndUpdate(id, updates, { new: true });
+
+  if (!tour) {
+    throw new ApiError(404, 'Tour not found');
+  }
+
+  res.status(200).json(
+    new ApiResponse(200, { tour }, 'Tour SEO updated successfully')
   );
 });

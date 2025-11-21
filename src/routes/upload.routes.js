@@ -6,7 +6,11 @@ const { uploadImage, uploadMultipleImages, uploadTourImage } = require('../contr
 // @route   POST /api/upload
 // @desc    Upload a single image
 // @access  Public
-router.post('/', upload.single('image'), uploadImage);
+router.post('/', (req, res, next) => {
+    console.log('📤 Upload route hit');
+    console.log('📤 Content-Type:', req.headers['content-type']);
+    next();
+}, upload.single('image'), uploadImage);
 
 // @route   POST /api/upload/multiple
 // @desc    Upload multiple images

@@ -9,6 +9,10 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 // Connect to database
 connectDB();
 
+// Keep process alive even without MongoDB
+// This prevents Node from exiting when there are no active handles
+setInterval(() => {}, 1000 * 60 * 60); // Keepalive every hour
+
 // Start server
 const server = app.listen(PORT, () => {
   console.log('\n' + '='.repeat(50));

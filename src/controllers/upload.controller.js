@@ -6,6 +6,9 @@ const ApiError = require('../utils/ApiError');
 // @desc    Upload a single image
 // @access  Public (later add authentication)
 const uploadImage = asyncHandler(async (req, res) => {
+    console.log('📤 Upload request received');
+    console.log('📤 req.file:', req.file);
+    console.log('📤 req.body:', req.body);
     if (!req.file) {
         throw new ApiError(400, 'Please upload an image file');
     }
