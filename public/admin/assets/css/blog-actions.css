@@ -1,0 +1,138 @@
+/* Blog Action Buttons - Beautiful Design */
+
+/* View Button */
+.action-btn[onclick*="viewBlog"] {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+    color: white !important;
+    padding: 8px 16px !important;
+    border: none !important;
+    border-radius: 25px !important;
+    cursor: pointer !important;
+    margin-right: 8px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 15px rgba(17, 153, 142, 0.3) !important;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.action-btn[onclick*="viewBlog"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.action-btn[onclick*="viewBlog"]:hover::before {
+    left: 100%;
+}
+
+.action-btn[onclick*="viewBlog"]:hover {
+    transform: translateY(-3px) scale(1.05) !important;
+    box-shadow: 0 8px 25px rgba(17, 153, 142, 0.5) !important;
+}
+
+.action-btn[onclick*="viewBlog"]:active {
+    transform: translateY(-1px) scale(1.02) !important;
+}
+
+/* Edit Button */
+.action-btn[onclick*="openBlogModal"] {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
+    color: white !important;
+    padding: 8px 16px !important;
+    border: none !important;
+    border-radius: 25px !important;
+    cursor: pointer !important;
+    margin-right: 8px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3) !important;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.action-btn[onclick*="openBlogModal"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.action-btn[onclick*="openBlogModal"]:hover::before {
+    left: 100%;
+}
+
+.action-btn[onclick*="openBlogModal"]:hover {
+    transform: translateY(-3px) scale(1.05) !important;
+    box-shadow: 0 8px 25px rgba(240, 147, 251, 0.5) !important;
+}
+
+.action-btn[onclick*="openBlogModal"]:active {
+    transform: translateY(-1px) scale(1.02) !important;
+}
+
+/* Delete Button */
+.action-btn[onclick*="deleteBlog"] {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%) !important;
+    color: white !important;
+    padding: 8px 16px !important;
+    border: none !important;
+    border-radius: 25px !important;
+    cursor: pointer !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3) !important;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.action-btn[onclick*="deleteBlog"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.action-btn[onclick*="deleteBlog"]:hover::before {
+    left: 100%;
+}
+
+.action-btn[onclick*="deleteBlog"]:hover {
+    transform: translateY(-3px) scale(1.05) !important;
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.5) !important;
+}
+
+.action-btn[onclick*="deleteBlog"]:active {
+    transform: translateY(-1px) scale(1.02) !important;
+}
+
+/* Button Group Spacing */
+.tours-table td .action-btn {
+    margin-bottom: 5px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .action-btn[onclick*="viewBlog"],
+    .action-btn[onclick*="openBlogModal"],
+    .action-btn[onclick*="deleteBlog"] {
+        padding: 6px 12px !important;
+        font-size: 12px !important;
+    }
+}
