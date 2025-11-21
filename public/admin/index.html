@@ -1334,8 +1334,397 @@ window.switchView = function(view) {
             </div>
 
             <!-- Media Page -->
+            
+            <!-- Media Library Page -->
             <div class="page-section" id="mediaPage">
-                <h3>Media library coming soon...</h3>
+                <style>
+                    .media-container { display: flex; gap: 24px; min-height: calc(100vh - 200px); }
+                    .media-sidebar { width: 260px; flex-shrink: 0; }
+                    .media-main { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+                    .media-card { background: white; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+                    .media-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+                    .media-title { font-size: 28px; font-weight: 700; color: #0f172a; margin: 0; }
+                    .media-subtitle { color: #64748b; font-size: 14px; margin-top: 4px; }
+                    .media-btn { padding: 10px 20px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; }
+                    .media-btn-primary { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; }
+                    .media-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,130,246,0.4); }
+                    .media-btn-secondary { background: #f1f5f9; color: #475569; }
+                    .media-btn-secondary:hover { background: #e2e8f0; }
+                    .media-btn-danger { background: #fee2e2; color: #dc2626; }
+                    .media-btn-danger:hover { background: #fecaca; }
+                    .folder-list { display: flex; flex-direction: column; gap: 4px; }
+                    .folder-item { padding: 12px 16px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.15s; color: #475569; font-size: 14px; font-weight: 500; }
+                    .folder-item:hover { background: #f1f5f9; }
+                    .folder-item.active { background: #eff6ff; color: #3b82f6; }
+                    .folder-icon { width: 20px; text-align: center; }
+                    .folder-count { margin-left: auto; background: #f1f5f9; padding: 2px 8px; border-radius: 20px; font-size: 12px; color: #64748b; }
+                    .upload-zone { border: 2px dashed #cbd5e1; border-radius: 16px; padding: 40px; text-align: center; transition: all 0.3s; cursor: pointer; background: #fafbfc; }
+                    .upload-zone:hover, .upload-zone.dragover { border-color: #3b82f6; background: #eff6ff; }
+                    .upload-zone-icon { font-size: 48px; margin-bottom: 16px; }
+                    .upload-zone-text { color: #64748b; font-size: 15px; margin-bottom: 8px; }
+                    .upload-zone-hint { color: #94a3b8; font-size: 13px; }
+                    .upload-progress { margin-top: 20px; display: none; }
+                    .progress-item { background: #f8fafc; padding: 12px 16px; border-radius: 10px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+                    .progress-bar-container { flex: 1; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+                    .progress-bar { height: 100%; background: linear-gradient(90deg, #3b82f6, #1d4ed8); border-radius: 3px; transition: width 0.3s; }
+                    .filter-bar { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+                    .filter-input { padding: 10px 16px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; outline: none; transition: all 0.2s; }
+                    .filter-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+                    .filter-select { padding: 10px 16px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; outline: none; background: white; cursor: pointer; }
+                    .view-toggle { display: flex; background: #f1f5f9; border-radius: 10px; padding: 4px; }
+                    .view-btn { padding: 8px 12px; border: none; background: transparent; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+                    .view-btn.active { background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+                    .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+                    .media-item { background: white; border-radius: 12px; overflow: hidden; border: 2px solid transparent; transition: all 0.2s; cursor: pointer; position: relative; }
+                    .media-item:hover { border-color: #3b82f6; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+                    .media-item.selected { border-color: #3b82f6; background: #eff6ff; }
+                    .media-item-thumb { height: 140px; background: #f8fafc; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+                    .media-item-thumb img { width: 100%; height: 100%; object-fit: cover; }
+                    .media-item-icon { font-size: 48px; }
+                    .media-item-checkbox { position: absolute; top: 10px; left: 10px; width: 22px; height: 22px; border-radius: 6px; border: 2px solid white; background: rgba(255,255,255,0.9); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                    .media-item-checkbox.checked { background: #3b82f6; border-color: #3b82f6; }
+                    .media-item-info { padding: 12px; }
+                    .media-item-name { font-size: 13px; font-weight: 600; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+                    .media-item-meta { display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8; }
+                    .media-item-actions { position: absolute; top: 10px; right: 10px; display: flex; gap: 4px; opacity: 0; transition: opacity 0.2s; }
+                    .media-item:hover .media-item-actions { opacity: 1; }
+                    .media-action-btn { width: 32px; height: 32px; border-radius: 8px; border: none; background: rgba(255,255,255,0.95); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                    .media-action-btn:hover { background: #3b82f6; color: white; }
+                    .media-list { display: flex; flex-direction: column; gap: 8px; }
+                    .media-list-item { display: flex; align-items: center; gap: 16px; padding: 12px 16px; background: white; border-radius: 10px; transition: all 0.2s; }
+                    .media-list-item:hover { background: #f8fafc; }
+                    .media-list-thumb { width: 48px; height: 48px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: #f1f5f9; display: flex; align-items: center; justify-content: center; }
+                    .media-list-thumb img { width: 100%; height: 100%; object-fit: cover; }
+                    .bulk-bar { background: linear-gradient(135deg, #1e293b, #334155); padding: 16px 20px; border-radius: 12px; display: none; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+                    .bulk-bar.show { display: flex; }
+                    .bulk-count { color: white; font-weight: 600; font-size: 14px; }
+                    .bulk-actions { display: flex; gap: 8px; }
+                    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+                    .stat-card { background: white; padding: 16px; border-radius: 12px; text-align: center; }
+                    .stat-value { font-size: 24px; font-weight: 700; color: #0f172a; }
+                    .stat-label { font-size: 12px; color: #64748b; margin-top: 4px; }
+                    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 9999; display: none; align-items: center; justify-content: center; }
+                    .modal-overlay.show { display: flex; }
+                    .modal-content { background: white; border-radius: 20px; max-width: 900px; width: 95%; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; }
+                    .modal-header { padding: 20px 24px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+                    .modal-title { font-size: 18px; font-weight: 700; color: #0f172a; }
+                    .modal-close { width: 36px; height: 36px; border-radius: 10px; border: none; background: #f1f5f9; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+                    .modal-close:hover { background: #e2e8f0; }
+                    .modal-body { padding: 24px; overflow-y: auto; flex: 1; }
+                    .preview-container { display: grid; grid-template-columns: 1fr 320px; gap: 24px; }
+                    .preview-image { background: #f8fafc; border-radius: 12px; display: flex; align-items: center; justify-content: center; min-height: 300px; overflow: hidden; }
+                    .preview-image img { max-width: 100%; max-height: 400px; object-fit: contain; }
+                    .preview-details { display: flex; flex-direction: column; gap: 16px; }
+                    .detail-group { display: flex; flex-direction: column; gap: 6px; }
+                    .detail-label { font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+                    .detail-value { font-size: 14px; color: #1e293b; }
+                    .detail-input { padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; }
+                    .detail-input:focus { border-color: #3b82f6; }
+                    .detail-textarea { padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; resize: vertical; min-height: 80px; }
+                    .copy-url-box { display: flex; gap: 8px; }
+                    .copy-url-input { flex: 1; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 12px; background: #f8fafc; }
+                    .copy-btn { padding: 10px 16px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; }
+                    .preview-actions { display: flex; flex-direction: column; gap: 8px; margin-top: auto; padding-top: 16px; }
+                    .tags-input { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; border: 1px solid #e2e8f0; border-radius: 8px; min-height: 40px; }
+                    .tag { background: #eff6ff; color: #3b82f6; padding: 4px 10px; border-radius: 6px; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+                    .tag-remove { cursor: pointer; font-size: 14px; }
+                    .edit-tools { display: flex; gap: 8px; padding: 12px; background: #f8fafc; border-radius: 10px; margin-bottom: 16px; }
+                    .edit-tool-btn { padding: 8px 14px; border: none; background: white; border-radius: 8px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+                    .edit-tool-btn:hover { background: #e2e8f0; }
+                    .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+                    .page-btn { width: 36px; height: 36px; border-radius: 8px; border: 1px solid #e2e8f0; background: white; cursor: pointer; font-weight: 500; }
+                    .page-btn.active { background: #3b82f6; color: white; border-color: #3b82f6; }
+                    @media (max-width: 1024px) { .media-container { flex-direction: column; } .media-sidebar { width: 100%; } .preview-container { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+                    @media (max-width: 640px) { .media-grid { grid-template-columns: repeat(2, 1fr); } .filter-bar { flex-direction: column; align-items: stretch; } .stats-grid { grid-template-columns: 1fr 1fr; } }
+                </style>
+
+                <!-- Header -->
+                <div class="media-header">
+                    <div>
+                        <h1 class="media-title">Media Library</h1>
+                        <p class="media-subtitle">Manage your files, images and documents</p>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="media-btn media-btn-primary" onclick="triggerUpload()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            Upload Files
+                        </button>
+                        <button class="media-btn media-btn-secondary" onclick="openNewFolderModal()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
+                            New Folder
+                        </button>
+                        
+                    </div>
+                </div>
+
+                <div class="media-container">
+                    <!-- Sidebar -->
+                    <div class="media-sidebar">
+                        <div class="media-card" style="padding: 16px;">
+                            <div style="font-weight: 600; color: #0f172a; margin-bottom: 12px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">Folders</div>
+                            <div class="folder-list" id="folderList">
+                                <div class="folder-item active" onclick="selectFolder('all')">
+                                    <span class="folder-icon">📁</span>
+                                    <span>All Media</span>
+                                    <span class="folder-count" id="countAll">0</span>
+                                </div>
+                                <div class="folder-item" onclick="selectFolder('images')">
+                                    <span class="folder-icon">🖼️</span>
+                                    <span>Images</span>
+                                    <span class="folder-count" id="countImages">0</span>
+                                </div>
+                                <div class="folder-item" onclick="selectFolder('videos')">
+                                    <span class="folder-icon">🎬</span>
+                                    <span>Videos</span>
+                                    <span class="folder-count" id="countVideos">0</span>
+                                </div>
+                                <div class="folder-item" onclick="selectFolder('documents')">
+                                    <span class="folder-icon">📄</span>
+                                    <span>Documents</span>
+                                    <span class="folder-count" id="countDocs">0</span>
+                                </div>
+                                <div style="border-top: 1px solid #e2e8f0; margin: 12px 0;"></div>
+                                <div class="folder-item" onclick="selectFolder('blog')">
+                                    <span class="folder-icon">📝</span>
+                                    <span>Blog</span>
+                                    <span class="folder-count" id="countBlog">0</span>
+                                </div>
+                                <div class="folder-item" onclick="selectFolder('destinations')">
+                                    <span class="folder-icon">🌍</span>
+                                    <span>Destinations</span>
+                                    <span class="folder-count" id="countDest">0</span>
+                                </div>
+                                <div class="folder-item" onclick="selectFolder('pages')">
+                                    <span class="folder-icon">📄</span>
+                                    <span>Pages</span>
+                                    <span class="folder-count" id="countPages">0</span>
+                                </div>
+                                <div class="folder-item" onclick="selectFolder('tours')">
+                                    <span class="folder-icon">✈️</span>
+                                    <span>Tours</span>
+                                    <span class="folder-count" id="countTours">0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Storage Stats -->
+                        <div class="media-card" style="padding: 16px; margin-top: 16px;">
+                            <div style="font-weight: 600; color: #0f172a; margin-bottom: 12px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">Storage</div>
+                            <div style="margin-bottom: 12px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 13px;">
+                                    <span style="color: #64748b;">Used</span>
+                                    <span style="font-weight: 600; color: #0f172a;" id="storageUsed">0 MB</span>
+                                </div>
+                                <div style="height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                    <div id="storageBar" style="height: 100%; background: linear-gradient(90deg, #3b82f6, #8b5cf6); width: 0%; transition: width 0.3s;"></div>
+                                </div>
+                                <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">of 5 GB</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Content -->
+                    <div class="media-main">
+                        <!-- Stats -->
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-value" id="statTotal">0</div>
+                                <div class="stat-label">Total Files</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="statImages">0</div>
+                                <div class="stat-label">Images</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="statVideos">0</div>
+                                <div class="stat-label">Videos</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="statSize">0 MB</div>
+                                <div class="stat-label">Total Size</div>
+                            </div>
+                        </div>
+
+                        <!-- Hidden File Input & Progress -->
+                        <div class="upload-progress" id="uploadProgress" style="display: none; margin-bottom: 16px;">
+                            <div id="progressList"></div>
+                        </div>
+                        <input type="file" id="fileInput" multiple accept="image/*,video/*,.pdf,.doc,.docx" style="display: none;" onchange="handleFileSelect(event)">
+
+                        <!-- Filters -->
+                        <div class="media-card" style="padding: 16px;">
+                            <div class="filter-bar">
+                                <input type="text" class="filter-input" placeholder="Search files..." id="searchInput" oninput="filterMedia()" style="flex: 1; min-width: 200px;">
+                                <select class="filter-select" id="filterType" onchange="filterMedia()">
+                                    <option value="">All Types</option>
+                                    <option value="image">Images</option>
+                                    <option value="video">Videos</option>
+                                    <option value="document">Documents</option>
+                                </select>
+                                <select class="filter-select" id="filterDate" onchange="filterMedia()">
+                                    <option value="">Any Date</option>
+                                    <option value="today">Today</option>
+                                    <option value="week">This Week</option>
+                                    <option value="month">This Month</option>
+                                </select>
+                                <select class="filter-select" id="filterSort" onchange="filterMedia()">
+                                    <option value="newest">Newest First</option>
+                                    <option value="oldest">Oldest First</option>
+                                    <option value="name">Name A-Z</option>
+                                    <option value="size">Size</option>
+                                </select>
+                                <div class="view-toggle">
+                                    <button class="view-btn active" id="gridViewBtn" onclick="setViewMode('grid')">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>
+                                    </button>
+                                    <button class="view-btn" id="listViewBtn" onclick="setViewMode('list')">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="4" width="18" height="4" rx="1"></rect><rect x="3" y="10" width="18" height="4" rx="1"></rect><rect x="3" y="16" width="18" height="4" rx="1"></rect></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bulk Actions Bar -->
+                        <div class="bulk-bar" id="bulkBar">
+                            <span class="bulk-count"><span id="selectedCount">0</span> files selected</span>
+                            <div class="bulk-actions">
+                                <button class="media-btn media-btn-secondary" onclick="bulkMove()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                                    Move
+                                </button>
+                                <button class="media-btn media-btn-secondary" onclick="bulkTag()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                                    Add Tags
+                                </button>
+                                <button class="media-btn media-btn-danger" onclick="bulkDelete()">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                    Delete
+                                </button>
+                                <button class="media-btn media-btn-secondary" onclick="clearSelection()">Cancel</button>
+                            </div>
+                        </div>
+
+                        <!-- Media Grid -->
+                        <div class="media-card" style="padding: 20px;">
+                            <div class="media-grid" id="mediaGrid"></div>
+                            <div class="media-list" id="mediaList" style="display: none;"></div>
+
+                            <!-- Pagination -->
+                            <div class="pagination" id="pagination"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Modal -->
+                <div class="modal-overlay" id="previewModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="previewTitle">File Details</h3>
+                            <button class="modal-close" onclick="closePreviewModal()">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Edit Tools -->
+                            <div class="edit-tools" id="editTools" style="display: none;">
+                                <button class="edit-tool-btn" onclick="cropImage()">✂️ Crop</button>
+                                <button class="edit-tool-btn" onclick="rotateImage()">🔄 Rotate</button>
+                                <button class="edit-tool-btn" onclick="resizeImage()">📐 Resize</button>
+                                <button class="edit-tool-btn" onclick="compressImage()">📦 Compress</button>
+                            </div>
+
+                            <div class="preview-container">
+                                <div class="preview-image" id="previewImage"></div>
+                                <div class="preview-details">
+                                    <div class="detail-group">
+                                        <label class="detail-label">File Name</label>
+                                        <input type="text" class="detail-input" id="detailName">
+                                    </div>
+                                    <div class="detail-group">
+                                        <label class="detail-label">Alt Text</label>
+                                        <input type="text" class="detail-input" id="detailAlt" placeholder="Describe the image...">
+                                    </div>
+                                    <div class="detail-group">
+                                        <label class="detail-label">Title</label>
+                                        <input type="text" class="detail-input" id="detailTitle" placeholder="Enter title...">
+                                    </div>
+                                    <div class="detail-group">
+                                        <label class="detail-label">Description</label>
+                                        <textarea class="detail-textarea" id="detailDesc" placeholder="Enter description..."></textarea>
+                                    </div>
+                                    <div class="detail-group">
+                                        <label class="detail-label">Tags</label>
+                                        <div class="tags-input" id="tagsContainer">
+                                            <input type="text" id="tagInput" placeholder="Add tag..." style="border: none; outline: none; flex: 1; min-width: 80px; font-size: 13px;" onkeydown="handleTagInput(event)">
+                                        </div>
+                                    </div>
+                                    <div class="detail-group">
+                                        <label class="detail-label">File URL</label>
+                                        <div class="copy-url-box">
+                                            <input type="text" class="copy-url-input" id="detailUrl" readonly>
+                                            <button class="copy-btn" onclick="copyUrl()">Copy</button>
+                                        </div>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                        <div class="detail-group">
+                                            <label class="detail-label">Type</label>
+                                            <div class="detail-value" id="detailType">-</div>
+                                        </div>
+                                        <div class="detail-group">
+                                            <label class="detail-label">Size</label>
+                                            <div class="detail-value" id="detailSize">-</div>
+                                        </div>
+                                        <div class="detail-group">
+                                            <label class="detail-label">Dimensions</label>
+                                            <div class="detail-value" id="detailDimensions">-</div>
+                                        </div>
+                                        <div class="detail-group">
+                                            <label class="detail-label">Uploaded</label>
+                                            <div class="detail-value" id="detailDate">-</div>
+                                        </div>
+                                    </div>
+                                    <div class="preview-actions">
+                                        <button class="media-btn media-btn-primary" onclick="saveFileDetails()" style="width: 100%;">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                                            Save Changes
+                                        </button>
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                            <button class="media-btn media-btn-secondary" onclick="downloadFile()" style="width: 100%;">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                                Download
+                                            </button>
+                                            <button class="media-btn media-btn-danger" onclick="deleteCurrentFile()" style="width: 100%;">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- New Folder Modal -->
+                <div class="modal-overlay" id="folderModal">
+                    <div class="modal-content" style="max-width: 400px;">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Create New Folder</h3>
+                            <button class="modal-close" onclick="closeFolderModal()">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="detail-group">
+                                <label class="detail-label">Folder Name</label>
+                                <input type="text" class="detail-input" id="newFolderName" placeholder="Enter folder name...">
+                            </div>
+                            <div class="detail-group" style="margin-top: 16px;">
+                                <label class="detail-label">Parent Folder</label>
+                                <select class="filter-select" id="parentFolderSelect" style="width: 100%;">
+                                    <option value="">Root</option>
+                                </select>
+                            </div>
+                            <button class="media-btn media-btn-primary" onclick="createFolder()" style="width: 100%; margin-top: 20px;">Create Folder</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             
@@ -2077,6 +2466,7 @@ window.saveBlog = async function() {
             body: JSON.stringify(data)
         });
         const result = await res.json();
+                if (result.success && featuredImageData) { addBlogImageToMedia(featuredImageData, document.getElementById('postTitle').value); }
         if (result.success) {
             alert('✅ Blog saqlandi!');
             closeBlogModal();
@@ -4337,6 +4727,10 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
             if (pageElement) {
                 pageElement.classList.add('active');
                 console.log(`✅ Activated page: ${pageId}`);
+                // Initialize Media Library when navigating to it
+                if (pageName === 'media' && typeof initMediaLibrary === 'function') {
+                    initMediaLibrary();
+                }
             } else {
                 console.error(`❌ Page not found: ${pageId}`);
             }
@@ -4381,6 +4775,8 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                 loadCategories();
             } else if (pageName === 'blog') {
                 window.loadPosts();
+            } else if (pageName === 'media') {
+                initMediaLibrary();
             } else if (pageName === 'reviews') {
                 initReviews();
             }
@@ -6432,7 +6828,1151 @@ function closeImagePreview() {
     const preview = document.getElementById('imagePreviewModal');
     if (preview) preview.style.display = 'none';
 }
-        </script>
-</body>
+        
+// ==================== MEDIA LIBRARY ====================
+var mediaFiles = [];
+var mediaFolders = [];
+var currentFolder = null;
+var currentFileId = null;
+var selectedMedia = new Set();
+var viewMode = 'grid';
 
-</html>
+// Mock Data
+var mockFolders = [
+    { id: 'f1', name: 'Tours', parent: null, count: 5 },
+    { id: 'f2', name: 'Pages', parent: null, count: 3 },
+    { id: 'f3', name: 'Destinations', parent: null, count: 8 },
+    { id: 'f4', name: 'Blog Images', parent: null, count: 4 },
+    { id: 'f5', name: 'Samarkand', parent: 'f3', count: 3 }
+];
+
+var mockFiles = [
+    { id: 'm1', name: 'samarkand-registan.jpg', type: 'image', size: 2500000, width: 1920, height: 1080, url: 'https://images.unsplash.com/photo-1596484552834-6a58f850e0a1?w=400', folder: 'f3', date: '2025-11-20', alt: 'Registan Square', tags: ['samarkand', 'architecture'] },
+    { id: 'm2', name: 'bukhara-minaret.jpg', type: 'image', size: 1800000, width: 1280, height: 720, url: 'https://images.unsplash.com/photo-1565967511849-76a60a516170?w=400', folder: 'f3', date: '2025-11-19', alt: 'Kalon Minaret', tags: ['bukhara'] },
+    { id: 'm3', name: 'silk-road-map.png', type: 'image', size: 500000, width: 800, height: 600, url: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=400', folder: 'f1', date: '2025-11-18', alt: 'Silk Road Map', tags: ['map'] },
+    { id: 'm4', name: 'page-banner.jpg', type: 'image', size: 3200000, width: 1920, height: 1280, url: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400', folder: 'f2', date: '2025-11-17', alt: 'Page Banner', tags: ['hotel'] },
+    { id: 'm5', name: 'tour-guide.mp4', type: 'video', size: 15000000, width: 1920, height: 1080, url: '', folder: 'f1', date: '2025-11-16', alt: '', tags: ['video'] },
+    { id: 'm6', name: 'brochure.pdf', type: 'document', size: 800000, width: 0, height: 0, url: '', folder: null, date: '2025-11-15', alt: '', tags: ['pdf'] },
+    { id: 'm7', name: 'khiva-walls.jpg', type: 'image', size: 2100000, width: 1600, height: 900, url: 'https://images.unsplash.com/photo-1580237072617-771c3ecc4a24?w=400', folder: 'f3', date: '2025-11-14', alt: 'Khiva Old City', tags: ['khiva'] },
+    { id: 'm8', name: 'travel-blog-cover.jpg', type: 'image', size: 1500000, width: 1200, height: 800, url: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400', folder: 'f4', date: '2025-11-13', alt: 'Travel Blog', tags: ['blog'] },
+    { id: 'm9', name: 'uzbek-food.jpg', type: 'image', size: 900000, width: 1000, height: 667, url: 'https://images.unsplash.com/photo-1547496502-affa22d38842?w=400', folder: 'f4', date: '2025-11-12', alt: 'Uzbek Cuisine', tags: ['food'] },
+    { id: 'm10', name: 'desert-tour.jpg', type: 'image', size: 2800000, width: 1920, height: 1080, url: 'https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?w=400', folder: 'f1', date: '2025-11-11', alt: 'Desert Tour', tags: ['desert', 'tour'] }
+];
+
+// Initialize
+
+
+
+
+    function addDestinationImageToMedia(imageData, title) {
+        var newFile = {
+            id: "file" + Date.now(),
+            name: title.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase() + ".jpg",
+            type: "image",
+            size: "Auto",
+            folder: "f3",
+            url: imageData,
+            uploadDate: new Date().toISOString().split("T")[0],
+            dimensions: "Auto"
+        };
+        mockFiles.push(newFile);
+        var folder = mockFolders.find(function(f) { return f.id === "f3"; });
+        if (folder) folder.count++;
+        console.log("Destination image added to Media Library:", title);
+    }
+    function addPageImageToMedia(imageData, title) {
+    if (!imageData || typeof mockFiles === "undefined") return;
+    var newFile = {
+        id: "page_" + Date.now(),
+        name: title.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase() + ".jpg",
+        type: "image",
+        size: Math.floor(imageData.length * 0.75),
+        width: 1920,
+        height: 1080,
+        url: imageData,
+        folder: "f2",
+        date: new Date().toISOString().split("T")[0],
+        alt: title,
+        tags: ["page"]
+    };
+    mockFiles.unshift(newFile);
+    if (typeof mediaFiles !== "undefined") mediaFiles.unshift(newFile);
+    console.log("Page image added to Media Library: " + title);
+}
+function addTourImageToMedia(imageData, title) {
+    if (!imageData || typeof mockFiles === "undefined") return;
+    var newFile = {
+        id: "tour_" + Date.now(),
+        name: title.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase() + ".jpg",
+        type: "image",
+        size: Math.floor(imageData.length * 0.75),
+        width: 1920,
+        height: 1080,
+        url: imageData,
+        folder: "f1",
+        date: new Date().toISOString().split("T")[0],
+        alt: title,
+        tags: ["tour"]
+    };
+    mockFiles.unshift(newFile);
+    if (typeof mediaFiles !== "undefined") mediaFiles.unshift(newFile);
+    console.log("Tour image added to Media Library: " + title);
+}
+function addBlogImageToMedia(imageData, title) {
+    if (!imageData || typeof mockFiles === "undefined") return;
+    var newFile = {
+        id: "blog_" + Date.now(),
+        name: title.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase() + ".jpg",
+        type: "image",
+        size: Math.floor(imageData.length * 0.75),
+        width: 1200,
+        height: 800,
+        url: imageData,
+        folder: "f4",
+        date: new Date().toISOString().split("T")[0],
+        alt: title,
+        tags: ["blog"]
+    };
+    mockFiles.unshift(newFile);
+    if (typeof mediaFiles !== "undefined") mediaFiles.unshift(newFile);
+    console.log("Blog image added to Media Library: " + title);
+}
+window.initMediaLibrary = function() {
+    mediaFolders = [...mockFolders];
+    mediaFiles = [...mockFiles];
+    renderFolders();
+    renderMediaGrid();
+    updateMediaStats();
+    populateFolderSelects();
+};
+
+// Format file size
+function formatSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
+// Render folders
+function renderFolders() {
+    var container = document.getElementById('foldersList');
+    if (!container) return;
+
+    var html = '<div onclick="selectFolder(null)" style="padding: 12px 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f1f5f9; ' + (currentFolder === null ? 'background: #eff6ff; color: #3b82f6;' : '') + '">' +
+        '<span>📂</span><span>All Media</span><span style="margin-left: auto; background: #e2e8f0; padding: 2px 8px; border-radius: 10px; font-size: 11px;">' + mediaFiles.length + '</span></div>';
+
+    html += '<div onclick="selectFolder(\'ungrouped\')" style="padding: 12px 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f1f5f9; ' + (currentFolder === 'ungrouped' ? 'background: #eff6ff; color: #3b82f6;' : '') + '">' +
+        '<span>📁</span><span>Ungrouped</span><span style="margin-left: auto; background: #e2e8f0; padding: 2px 8px; border-radius: 10px; font-size: 11px;">' + mediaFiles.filter(function(f){return !f.folder}).length + '</span></div>';
+
+    mediaFolders.filter(function(f){return !f.parent}).forEach(function(folder) {
+        var count = mediaFiles.filter(function(f){return f.folder === folder.id}).length;
+        var subfolders = mediaFolders.filter(function(f){return f.parent === folder.id});
+
+        html += '<div onclick="selectFolder(\'' + folder.id + '\')" style="padding: 12px 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f1f5f9; ' + (currentFolder === folder.id ? 'background: #eff6ff; color: #3b82f6;' : '') + '">' +
+            '<span>📁</span><span>' + folder.name + '</span><span style="margin-left: auto; background: #e2e8f0; padding: 2px 8px; border-radius: 10px; font-size: 11px;">' + count + '</span></div>';
+
+        subfolders.forEach(function(sub) {
+            var subCount = mediaFiles.filter(function(f){return f.folder === sub.id}).length;
+            html += '<div onclick="selectFolder(\'' + sub.id + '\')" style="padding: 12px 15px 12px 35px; cursor: pointer; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f1f5f9; ' + (currentFolder === sub.id ? 'background: #eff6ff; color: #3b82f6;' : '') + '">' +
+                '<span>📄</span><span>' + sub.name + '</span><span style="margin-left: auto; background: #e2e8f0; padding: 2px 8px; border-radius: 10px; font-size: 11px;">' + subCount + '</span></div>';
+        });
+    });
+
+    container.innerHTML = html;
+}
+
+// Select folder
+window.selectFolder = function(folderId) {
+    currentFolder = folderId;
+    renderFolders();
+    renderMediaGrid();
+};
+
+// Render media grid
+function renderMediaGrid() {
+    var container = document.getElementById('mediaGrid');
+    if (!container) return;
+
+    var files = mediaFiles;
+    if (currentFolder === 'ungrouped') files = files.filter(function(f){return !f.folder});
+    else if (currentFolder) files = files.filter(function(f){return f.folder === currentFolder});
+
+    var search = (document.getElementById('searchMedia')?.value || '').toLowerCase();
+    var typeFilter = document.getElementById('filterType')?.value || '';
+
+    if (search) files = files.filter(function(f){return f.name.toLowerCase().includes(search) || (f.alt && f.alt.toLowerCase().includes(search))});
+    if (typeFilter) files = files.filter(function(f){return f.type === typeFilter});
+
+    if (!files.length) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 60px; color: #94a3b8;">No files found</div>';
+        return;
+    }
+
+    if (viewMode === 'grid') {
+        container.style.display = 'grid';
+        container.innerHTML = files.map(function(file) {
+            var thumb = file.type === 'image' ? file.url : (file.type === 'video' ? '🎬' : (file.type === 'document' ? '📄' : '🎵'));
+            var isImg = file.type === 'image';
+            return '<div class="media-item" data-id="' + file.id + '" style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer; position: relative;" onclick="openFileDetail(\'' + file.id + '\')">' +
+                '<div style="position: absolute; top: 10px; left: 10px; z-index: 10;"><input type="checkbox" class="media-checkbox" data-id="' + file.id + '" onclick="event.stopPropagation(); toggleMediaSelect(this)" style="width: 18px; height: 18px;"></div>' +
+                '<div style="height: 140px; background: #f8fafc; display: flex; align-items: center; justify-content: center; overflow: hidden;">' +
+                    (isImg ? '<img src="' + thumb + '" style="width: 100%; height: 100%; object-fit: cover;">' : '<span style="font-size: 48px;">' + thumb + '</span>') +
+                '</div>' +
+                '<div style="padding: 12px;">' +
+                    '<p style="margin: 0; font-size: 13px; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="' + file.name + '">' + file.name + '</p>' +
+                    '<div style="display: flex; justify-content: space-between; margin-top: 6px;">' +
+                        '<span style="font-size: 11px; color: #94a3b8;">' + formatSize(file.size) + '</span>' +
+                        '<span style="font-size: 11px; color: #94a3b8;">' + (file.width ? file.width + 'x' + file.height : file.type) + '</span>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+        }).join('');
+    } else {
+        container.style.display = 'block';
+        container.innerHTML = '<table style="width: 100%; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"><thead><tr style="background: #f8fafc;"><th style="padding: 12px; text-align: left; width: 40px;"><input type="checkbox" id="selectAllMedia" onchange="toggleSelectAllMedia()"></th><th style="padding: 12px; text-align: left;">File</th><th style="padding: 12px; text-align: left;">Type</th><th style="padding: 12px; text-align: left;">Size</th><th style="padding: 12px; text-align: left;">Date</th><th style="padding: 12px; text-align: left;">Actions</th></tr></thead><tbody>' +
+            files.map(function(file) {
+                return '<tr style="border-bottom: 1px solid #f1f5f9; cursor: pointer;" onclick="openFileDetail(\'' + file.id + '\')">' +
+                    '<td style="padding: 12px;" onclick="event.stopPropagation()"><input type="checkbox" class="media-checkbox" data-id="' + file.id + '" onchange="toggleMediaSelect(this)"></td>' +
+                    '<td style="padding: 12px;"><div style="display: flex; align-items: center; gap: 10px;">' + (file.type === 'image' ? '<img src="' + file.url + '" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;">' : '<span style="font-size: 24px;">' + (file.type === 'video' ? '🎬' : '📄') + '</span>') + '<span>' + file.name + '</span></div></td>' +
+                    '<td style="padding: 12px; color: #64748b;">' + file.type + '</td>' +
+                    '<td style="padding: 12px; color: #64748b;">' + formatSize(file.size) + '</td>' +
+                    '<td style="padding: 12px; color: #64748b;">' + file.date + '</td>' +
+                    '<td style="padding: 12px;" onclick="event.stopPropagation()"><button onclick="openFileDetail(\'' + file.id + '\')" style="padding: 6px 12px; background: #dbeafe; color: #3b82f6; border: none; border-radius: 6px; cursor: pointer; margin-right: 5px;">View</button><button onclick="editMediaFile(\'' + file.id + '\')" style="padding: 6px 12px; background: #fef3c7; color: #f59e0b; border: none; border-radius: 6px; cursor: pointer; margin-right: 5px;">Edit</button><button onclick="deleteMediaFile(\'' + file.id + '\')" style="padding: 6px 12px; background: #fee2e2; color: #ef4444; border: none; border-radius: 6px; cursor: pointer;">Delete</button></td>' +
+                '</tr>';
+            }).join('') +
+        '</tbody></table>';
+    }
+}
+
+// Update stats
+function updateMediaStats() {
+    var el = function(id, v) { var e = document.getElementById(id); if(e) e.textContent = v; };
+    el('statTotalFiles', mediaFiles.length);
+    el('statImages', mediaFiles.filter(function(f){return f.type === 'image'}).length);
+    el('statVideos', mediaFiles.filter(function(f){return f.type === 'video'}).length);
+    el('statDocs', mediaFiles.filter(function(f){return f.type === 'document'}).length);
+    var totalSize = mediaFiles.reduce(function(s,f){return s + f.size}, 0);
+    el('statTotalSize', formatSize(totalSize));
+}
+
+// View mode
+window.setViewMode = function(mode) {
+    viewMode = mode;
+    document.getElementById('gridViewBtn').style.background = mode === 'grid' ? '#3b82f6' : '#f1f5f9';
+    document.getElementById('gridViewBtn').style.color = mode === 'grid' ? 'white' : '#475569';
+    document.getElementById('listViewBtn').style.background = mode === 'list' ? '#3b82f6' : '#f1f5f9';
+    document.getElementById('listViewBtn').style.color = mode === 'list' ? 'white' : '#475569';
+    renderMediaGrid();
+};
+
+// Filter
+window.filterMedia = function() { renderMediaGrid(); };
+
+// Selection
+window.toggleMediaSelect = function(cb) {
+    if (cb.checked) selectedMedia.add(cb.dataset.id);
+    else selectedMedia.delete(cb.dataset.id);
+    updateMediaBulkBar();
+};
+
+window.toggleSelectAllMedia = function() {
+    var checked = document.getElementById('selectAllMedia')?.checked;
+    document.querySelectorAll('.media-checkbox').forEach(function(cb) {
+        cb.checked = checked;
+        if (checked) selectedMedia.add(cb.dataset.id);
+        else selectedMedia.delete(cb.dataset.id);
+    });
+    updateMediaBulkBar();
+};
+
+function updateMediaBulkBar() {
+    var bar = document.getElementById('mediaBulkBar');
+    var count = document.getElementById('selectedMediaCount');
+    if (bar) bar.style.display = selectedMedia.size > 0 ? 'flex' : 'none';
+    if (count) count.textContent = selectedMedia.size;
+}
+
+// Bulk actions
+window.bulkDeleteMedia = function() {
+    if (!confirm('Delete ' + selectedMedia.size + ' files?')) return;
+    selectedMedia.forEach(function(id) {
+        mediaFiles = mediaFiles.filter(function(f){return f.id !== id});
+    });
+    selectedMedia.clear();
+    updateMediaBulkBar();
+    renderMediaGrid();
+    renderFolders();
+    updateMediaStats();
+};
+
+window.bulkMoveMedia = function() {
+    var folder = prompt('Enter folder name to move files:');
+    if (!folder) return;
+    var targetFolder = mediaFolders.find(function(f){return f.name.toLowerCase() === folder.toLowerCase()});
+    if (!targetFolder) { alert('Folder not found'); return; }
+    selectedMedia.forEach(function(id) {
+        var file = mediaFiles.find(function(f){return f.id === id});
+        if (file) file.folder = targetFolder.id;
+    });
+    selectedMedia.clear();
+    updateMediaBulkBar();
+    renderMediaGrid();
+    renderFolders();
+};
+
+window.bulkDownloadMedia = function() { alert('Downloading ' + selectedMedia.size + ' files...'); };
+
+// File detail modal
+window.openFileDetail = function(id) {
+    currentFileId = id;
+    var file = mediaFiles.find(function(f){return f.id === id});
+    if (!file) return;
+
+    document.getElementById('fileDetailName').textContent = file.name;
+    document.getElementById('fileDetailNameInput').value = file.name;
+    document.getElementById('fileDetailAlt').value = file.alt || '';
+    document.getElementById('fileDetailType').textContent = file.type.toUpperCase();
+    document.getElementById('fileDetailSize').textContent = formatSize(file.size);
+    document.getElementById('fileDetailRes').textContent = file.width ? file.width + ' x ' + file.height : 'N/A';
+    document.getElementById('fileDetailDate').textContent = file.date;
+    document.getElementById('fileDetailUrl').value = file.url || '/uploads/' + file.name;
+
+    var preview = document.getElementById('filePreviewImg');
+    if (file.type === 'image' && file.url) {
+        preview.src = file.url;
+        preview.style.display = 'block';
+    } else {
+        preview.style.display = 'none';
+    }
+
+    document.getElementById('fileDetailModal').style.display = 'block';
+};
+
+window.closeFileDetailModal = function() {
+    document.getElementById('fileDetailModal').style.display = 'none';
+    currentFileId = null;
+};
+
+window.copyFileUrl = function() {
+    var url = document.getElementById('fileDetailUrl');
+    url.select();
+    document.execCommand('copy');
+    alert('URL copied!');
+};
+
+
+window.editCurrentFile = function() {
+    if (!currentFileId) return;
+    var file = mediaFiles.find(function(f){return f.id === currentFileId});
+    if (file) {
+        var newName = prompt("Yangi fayl nomini kiriting:", file.name);
+        if (newName && newName !== file.name) {
+            file.name = newName;
+            document.getElementById('fileDetailNameInput').value = newName;
+            renderMediaGallery(mediaFiles);
+            alert("Fayl nomi o'zgartirildi!");
+        }
+    }
+};
+
+window.saveFileDetails = function() {
+    if (!currentFileId) return;
+    var file = mediaFiles.find(function(f){return f.id === currentFileId});
+    if (file) {
+        file.name = document.getElementById('fileDetailNameInput').value;
+        file.alt = document.getElementById('fileDetailAlt').value;
+        renderMediaGrid();
+        alert('Saved!');
+    }
+};
+
+window.deleteCurrentFile = function() {
+    if (!currentFileId || !confirm('Delete this file?')) return;
+    mediaFiles = mediaFiles.filter(function(f){return f.id !== currentFileId});
+    closeFileDetailModal();
+    renderMediaGrid();
+    renderFolders();
+    updateMediaStats();
+};
+
+window.downloadFile = function() { alert('Downloading file...'); };
+
+
+window.editMediaFile = function(id) {
+    var file = mediaFiles.find(function(f) { return f.id === id; });
+    if (file) {
+        var newName = prompt("Fayl nomini kiriting:", file.name);
+        if (newName && newName !== file.name) {
+            file.name = newName;
+            renderMediaGallery(mediaFiles);
+            alert("Fayl nomi o'zgartirildi!");
+        }
+    }
+};
+
+window.deleteMediaFile = function(id) {
+    if (!confirm('Delete this file?')) return;
+    mediaFiles = mediaFiles.filter(function(f){return f.id !== id});
+    renderMediaGrid();
+    renderFolders();
+    updateMediaStats();
+};
+
+// Upload modal
+window.openUploadModal = function() {
+    document.getElementById('uploadModal').style.display = 'block';
+    document.getElementById('uploadedFiles').innerHTML = '';
+};
+
+window.closeUploadModal = function() {
+    document.getElementById('uploadModal').style.display = 'none';
+};
+
+window.handleDragOver = function(e) {
+    e.preventDefault();
+    document.getElementById('dropZone').style.borderColor = '#3b82f6';
+    document.getElementById('dropZone').style.background = '#eff6ff';
+};
+
+window.handleDragLeave = function(e) {
+    document.getElementById('dropZone').style.borderColor = '#e2e8f0';
+    document.getElementById('dropZone').style.background = 'transparent';
+};
+
+window.handleDrop = function(e) {
+    e.preventDefault();
+    handleDragLeave(e);
+    var files = e.dataTransfer.files;
+    processFiles(files);
+};
+
+window.handleFileSelect = function(e) {
+    processFiles(e.target.files);
+};
+
+function processFiles(files) {
+    var container = document.getElementById('uploadedFiles');
+    var folder = document.getElementById('uploadFolder')?.value || null;
+
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        var type = file.type.startsWith('image') ? 'image' : (file.type.startsWith('video') ? 'video' : 'document');
+
+        var newFile = {
+            id: 'm' + Date.now() + i,
+            name: file.name,
+            type: type,
+            size: file.size,
+            width: type === 'image' ? 1920 : 0,
+            height: type === 'image' ? 1080 : 0,
+            url: type === 'image' ? URL.createObjectURL(file) : '',
+            folder: folder,
+            date: new Date().toISOString().split('T')[0],
+            alt: '',
+            tags: []
+        };
+
+        mediaFiles.unshift(newFile);
+
+        container.innerHTML += '<div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: #f0fdf4; border-radius: 8px; margin-bottom: 8px;"><span style="color: #22c55e;">✓</span><span style="flex: 1;">' + file.name + '</span><span style="color: #64748b; font-size: 12px;">' + formatSize(file.size) + '</span></div>';
+    }
+
+    renderMediaGrid();
+    renderFolders();
+    updateMediaStats();
+}
+
+// Folder management
+window.openCreateFolderModal = function() {
+    document.getElementById('createFolderModal').style.display = 'block';
+    document.getElementById('newFolderName').value = '';
+};
+
+window.closeCreateFolderModal = function() {
+    document.getElementById('createFolderModal').style.display = 'none';
+};
+
+window.createFolder = function() {
+    var name = document.getElementById('newFolderName').value.trim();
+    if (!name) { alert('Enter folder name'); return; }
+    var parent = document.getElementById('parentFolder')?.value || null;
+
+    mediaFolders.push({
+        id: 'f' + Date.now(),
+        name: name,
+        parent: parent,
+        count: 0
+    });
+
+    closeCreateFolderModal();
+    renderFolders();
+    populateFolderSelects();
+};
+
+function populateFolderSelects() {
+    var options = '<option value="">Root (No folder)</option>' + mediaFolders.map(function(f) {
+        return '<option value="' + f.id + '">' + f.name + '</option>';
+    }).join('');
+
+    var uploadSelect = document.getElementById('uploadFolder');
+    var parentSelect = document.getElementById('parentFolder');
+    if (uploadSelect) uploadSelect.innerHTML = options;
+    if (parentSelect) parentSelect.innerHTML = options;
+}
+
+        
+    // ==================== MEDIA LIBRARY 2025 ====================
+    var mediaFiles = [
+        { id: 'm1', name: 'samarkand-registan.jpg', type: 'image', size: 2457600, url: 'https://images.unsplash.com/photo-1596484552834-6a58f850e0a1?w=800', date: '2025-11-20', folder: 'destinations', width: 1920, height: 1080, alt: 'Registan Square', title: 'Samarkand Registan', description: '', tags: ['samarkand', 'uzbekistan'] },
+        { id: 'm2', name: 'bukhara-ark.jpg', type: 'image', size: 1843200, url: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?w=800', date: '2025-11-19', folder: 'destinations', width: 1920, height: 1280, alt: 'Ark Fortress', title: 'Bukhara Ark', description: '', tags: ['bukhara'] },
+        { id: 'm3', name: 'silk-road-tour.jpg', type: 'image', size: 3145728, url: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=800', date: '2025-11-18', folder: 'tours', width: 2560, height: 1440, alt: 'Silk Road', title: 'Silk Road Tour', description: '', tags: ['tour', 'silk-road'] },
+        { id: 'm4', name: 'hero-banner.jpg', type: 'image', size: 4194304, url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800', date: '2025-11-17', folder: 'pages', width: 3840, height: 2160, alt: 'Hero Banner', title: 'Homepage Hero', description: '', tags: ['banner', 'hero'] },
+        { id: 'm5', name: 'blog-travel-tips.jpg', type: 'image', size: 1048576, url: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800', date: '2025-11-16', folder: 'blog', width: 1600, height: 900, alt: 'Travel Tips', title: 'Travel Tips Blog', description: '', tags: ['blog', 'tips'] },
+        { id: 'm6', name: 'tour-intro.mp4', type: 'video', size: 52428800, url: '#', date: '2025-11-15', folder: 'tours', width: 1920, height: 1080, alt: '', title: 'Tour Introduction', description: '', tags: ['video', 'tour'] },
+        { id: 'm7', name: 'brochure.pdf', type: 'document', size: 5242880, url: '#', date: '2025-11-14', folder: 'documents', width: 0, height: 0, alt: '', title: 'Travel Brochure', description: '', tags: ['pdf', 'brochure'] },
+        { id: 'm8', name: 'khiva-walls.jpg', type: 'image', size: 2097152, url: 'https://images.unsplash.com/photo-1580654842837-5d4b54eb1ca0?w=800', date: '2025-11-13', folder: 'destinations', width: 1920, height: 1280, alt: 'Khiva Walls', title: 'Khiva Ancient Walls', description: '', tags: ['khiva'] }
+    ];
+
+    var currentFolder = 'all';
+    var viewMode = 'grid';
+    var selectedFiles = [];
+    var currentFile = null;
+    var currentPage = 1;
+    var itemsPerPage = 12;
+
+    // Initialize Media Library
+    function initMediaLibrary() {
+        setupDragDrop();
+        renderMedia();
+        updateStats();
+        updateFolderCounts();
+    }
+
+    // Drag & Drop Setup
+    function setupDragDrop() {
+        var zone = document.getElementById('uploadZone');
+        if (!zone) return;
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(function(evt) {
+            zone.addEventListener(evt, function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+
+        ['dragenter', 'dragover'].forEach(function(evt) {
+            zone.addEventListener(evt, function() { zone.classList.add('dragover'); });
+        });
+
+        ['dragleave', 'drop'].forEach(function(evt) {
+            zone.addEventListener(evt, function() { zone.classList.remove('dragover'); });
+        });
+
+        zone.addEventListener('drop', function(e) {
+            var files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+    }
+
+    // Trigger file input
+    window.triggerUpload = function() {
+        document.getElementById('fileInput').click();
+    };
+
+    // Handle file selection
+    window.handleFileSelect = function(e) {
+        handleFiles(e.target.files);
+    };
+
+    // Process uploaded files
+    function handleFiles(files) {
+        var progressContainer = document.getElementById('uploadProgress');
+        var progressList = document.getElementById('progressList');
+        progressContainer.style.display = 'block';
+        progressList.innerHTML = '';
+
+        Array.from(files).forEach(function(file, index) {
+            var fileType = file.type.startsWith('image/') ? 'image' : (file.type.startsWith('video/') ? 'video' : 'document');
+
+            var progressItem = document.createElement('div');
+            progressItem.className = 'progress-item';
+            progressItem.innerHTML = '<span style="font-size: 20px;">' + (fileType === 'image' ? '🖼️' : (fileType === 'video' ? '🎬' : '📄')) + '</span>' +
+                '<div style="flex: 1;"><div style="font-size: 13px; font-weight: 500; margin-bottom: 4px;">' + file.name + '</div>' +
+                '<div class="progress-bar-container"><div class="progress-bar" id="progress-' + index + '" style="width: 0%;"></div></div></div>' +
+                '<span style="font-size: 12px; color: #64748b;" id="percent-' + index + '">0%</span>';
+            progressList.appendChild(progressItem);
+
+            // Simulate upload
+            simulateUpload(index, file, fileType);
+        });
+    }
+
+    function simulateUpload(index, file, fileType) {
+        var progress = 0;
+        var interval = setInterval(function() {
+            progress += Math.random() * 15;
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+
+                // Add file to library
+                var newFile = {
+                    id: 'm' + Date.now() + index,
+                    name: file.name,
+                    type: fileType,
+                    size: file.size,
+                    url: fileType === 'image' ? URL.createObjectURL(file) : '#',
+                    date: new Date().toISOString().split('T')[0],
+                    folder: currentFolder === 'all' ? 'uploads' : currentFolder,
+                    width: 1920,
+                    height: 1080,
+                    alt: '',
+                    title: file.name.split('.')[0],
+                    description: '',
+                    tags: []
+                };
+                mediaFiles.unshift(newFile);
+
+                setTimeout(function() {
+                    renderMedia();
+                    updateStats();
+                    updateFolderCounts();
+                }, 500);
+            }
+
+            var bar = document.getElementById('progress-' + index);
+            var percent = document.getElementById('percent-' + index);
+            if (bar) bar.style.width = progress + '%';
+            if (percent) percent.textContent = Math.round(progress) + '%';
+        }, 100);
+    }
+
+    // Format file size
+    function formatSize(bytes) {
+        if (bytes === 0) return '0 B';
+        var k = 1024;
+        var sizes = ['B', 'KB', 'MB', 'GB'];
+        var i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    // Select folder
+    window.selectFolder = function(folder) {
+        currentFolder = folder;
+        currentPage = 1;
+
+        document.querySelectorAll('.folder-item').forEach(function(item) {
+            item.classList.remove('active');
+        });
+        event.target.closest('.folder-item').classList.add('active');
+
+        renderMedia();
+    };
+
+    // Filter media
+    window.filterMedia = function() {
+        currentPage = 1;
+        renderMedia();
+    };
+
+    // Get filtered files
+    function getFilteredFiles() {
+        var search = document.getElementById('searchInput').value.toLowerCase();
+        var type = document.getElementById('filterType').value;
+        var dateFilter = document.getElementById('filterDate').value;
+        var sort = document.getElementById('filterSort').value;
+
+        var filtered = mediaFiles.filter(function(file) {
+            // Folder filter
+            if (currentFolder !== 'all') {
+                if (currentFolder === 'images' && file.type !== 'image') return false;
+                if (currentFolder === 'videos' && file.type !== 'video') return false;
+                if (currentFolder === 'documents' && file.type !== 'document') return false;
+                if (['blog', 'destinations', 'banners', 'tours'].indexOf(currentFolder) > -1 && file.folder !== currentFolder) return false;
+            }
+
+            // Search filter
+            if (search && file.name.toLowerCase().indexOf(search) === -1) return false;
+
+            // Type filter
+            if (type && file.type !== type) return false;
+
+            // Date filter
+            if (dateFilter) {
+                var fileDate = new Date(file.date);
+                var today = new Date();
+                if (dateFilter === 'today' && fileDate.toDateString() !== today.toDateString()) return false;
+                if (dateFilter === 'week') {
+                    var weekAgo = new Date(today - 7 * 24 * 60 * 60 * 1000);
+                    if (fileDate < weekAgo) return false;
+                }
+                if (dateFilter === 'month') {
+                    var monthAgo = new Date(today - 30 * 24 * 60 * 60 * 1000);
+                    if (fileDate < monthAgo) return false;
+                }
+            }
+
+            return true;
+        });
+
+        // Sort
+        filtered.sort(function(a, b) {
+            if (sort === 'newest') return new Date(b.date) - new Date(a.date);
+            if (sort === 'oldest') return new Date(a.date) - new Date(b.date);
+            if (sort === 'name') return a.name.localeCompare(b.name);
+            if (sort === 'size') return b.size - a.size;
+            return 0;
+        });
+
+        return filtered;
+    }
+
+    // Render media
+    function renderMedia() {
+        var filtered = getFilteredFiles();
+        var start = (currentPage - 1) * itemsPerPage;
+        var paged = filtered.slice(start, start + itemsPerPage);
+
+        var gridHtml = '';
+        var listHtml = '';
+
+        paged.forEach(function(file) {
+            var isSelected = selectedFiles.indexOf(file.id) > -1;
+            var thumb = file.type === 'image' ? '<img src="' + file.url + '" alt="' + file.alt + '">' :
+                       '<span class="media-item-icon">' + (file.type === 'video' ? '🎬' : '📄') + '</span>';
+
+            gridHtml += '<div class="media-item' + (isSelected ? ' selected' : '') + '" data-id="' + file.id + '" onclick="openPreview(\'' + file.id + '\')">' +
+                '<div class="media-item-checkbox' + (isSelected ? ' checked' : '') + '" onclick="event.stopPropagation(); toggleSelect(\'' + file.id + '\')">' + (isSelected ? '✓' : '') + '</div>' +
+                '<div class="media-item-actions">' +
+                    '<button class="media-action-btn" onclick="event.stopPropagation(); openPreview(\'' + file.id + '\')" title="Preview">👁</button>' +
+                    '<button class="media-action-btn" onclick="event.stopPropagation(); quickDelete(\'' + file.id + '\')" title="Delete">🗑</button>' +
+                '</div>' +
+                '<div class="media-item-thumb">' + thumb + '</div>' +
+                '<div class="media-item-info">' +
+                    '<div class="media-item-name" title="' + file.name + '">' + file.name + '</div>' +
+                    '<div class="media-item-meta"><span>' + formatSize(file.size) + '</span><span>' + file.date + '</span></div>' +
+                '</div>' +
+            '</div>';
+
+            listHtml += '<div class="media-list-item' + (isSelected ? ' selected' : '') + '" onclick="openPreview(\'' + file.id + '\')">' +
+                '<input type="checkbox" ' + (isSelected ? 'checked' : '') + ' onclick="event.stopPropagation(); toggleSelect(\'' + file.id + '\')" style="width: 18px; height: 18px;">' +
+                '<div class="media-list-thumb">' + thumb + '</div>' +
+                '<div style="flex: 1;"><div style="font-weight: 600; color: #1e293b;">' + file.name + '</div><div style="font-size: 12px; color: #64748b;">' + file.folder + '</div></div>' +
+                '<div style="color: #64748b; font-size: 13px;">' + file.type + '</div>' +
+                '<div style="color: #64748b; font-size: 13px;">' + formatSize(file.size) + '</div>' +
+                '<div style="color: #64748b; font-size: 13px;">' + file.date + '</div>' +
+                '<div style="display: flex; gap: 4px;">' +
+                    '<button class="media-action-btn" onclick="event.stopPropagation(); openPreview(\'' + file.id + '\')">👁</button>' +
+                    '<button class="media-action-btn" onclick="event.stopPropagation(); quickDelete(\'' + file.id + '\')">🗑</button>' +
+                '</div>' +
+            '</div>';
+        });
+
+        document.getElementById('mediaGrid').innerHTML = gridHtml;
+        document.getElementById('mediaList').innerHTML = listHtml;
+
+        // Pagination
+        var totalPages = Math.ceil(filtered.length / itemsPerPage);
+        var paginationHtml = '';
+        for (var i = 1; i <= totalPages; i++) {
+            paginationHtml += '<button class="page-btn' + (i === currentPage ? ' active' : '') + '" onclick="goToPage(' + i + ')">' + i + '</button>';
+        }
+        document.getElementById('pagination').innerHTML = paginationHtml;
+    }
+
+    window.goToPage = function(page) {
+        currentPage = page;
+        renderMedia();
+    };
+
+    // View mode
+    window.setViewMode = function(mode) {
+        viewMode = mode;
+        document.getElementById('gridViewBtn').classList.toggle('active', mode === 'grid');
+        document.getElementById('listViewBtn').classList.toggle('active', mode === 'list');
+        document.getElementById('mediaGrid').style.display = mode === 'grid' ? 'grid' : 'none';
+        document.getElementById('mediaList').style.display = mode === 'list' ? 'flex' : 'none';
+    };
+
+    // Toggle selection
+    window.toggleSelect = function(id) {
+        var idx = selectedFiles.indexOf(id);
+        if (idx > -1) {
+            selectedFiles.splice(idx, 1);
+        } else {
+            selectedFiles.push(id);
+        }
+        updateBulkBar();
+        renderMedia();
+    };
+
+    function updateBulkBar() {
+        var bar = document.getElementById('bulkBar');
+        var count = document.getElementById('selectedCount');
+        if (selectedFiles.length > 0) {
+            bar.classList.add('show');
+            count.textContent = selectedFiles.length;
+        } else {
+            bar.classList.remove('show');
+        }
+    }
+
+    window.clearSelection = function() {
+        selectedFiles = [];
+        updateBulkBar();
+        renderMedia();
+    };
+
+    // Bulk actions
+    window.bulkDelete = function() {
+        if (confirm('Delete ' + selectedFiles.length + ' files?')) {
+            mediaFiles = mediaFiles.filter(function(f) { return selectedFiles.indexOf(f.id) === -1; });
+            selectedFiles = [];
+            updateBulkBar();
+            renderMedia();
+            updateStats();
+            updateFolderCounts();
+        }
+    };
+
+    window.bulkMove = function() {
+        var folder = prompt('Move to folder (blog, destinations, banners, tours):');
+        if (folder) {
+            mediaFiles.forEach(function(f) {
+                if (selectedFiles.indexOf(f.id) > -1) f.folder = folder;
+            });
+            selectedFiles = [];
+            updateBulkBar();
+            renderMedia();
+            updateFolderCounts();
+        }
+    };
+
+    window.bulkTag = function() {
+        var tag = prompt('Add tag:');
+        if (tag) {
+            mediaFiles.forEach(function(f) {
+                if (selectedFiles.indexOf(f.id) > -1 && f.tags.indexOf(tag) === -1) f.tags.push(tag);
+            });
+            alert('Tag added to ' + selectedFiles.length + ' files');
+        }
+    };
+
+    // Quick delete
+    window.quickDelete = function(id) {
+        if (confirm('Delete this file?')) {
+            mediaFiles = mediaFiles.filter(function(f) { return f.id !== id; });
+            renderMedia();
+            updateStats();
+            updateFolderCounts();
+        }
+    };
+
+    // Open preview modal
+    window.openPreview = function(id) {
+        currentFile = mediaFiles.find(function(f) { return f.id === id; });
+        if (!currentFile) return;
+
+        document.getElementById('previewTitle').textContent = currentFile.name;
+        document.getElementById('previewImage').innerHTML = currentFile.type === 'image' ?
+            '<img src="' + currentFile.url + '" alt="' + currentFile.alt + '">' :
+            '<span style="font-size: 120px;">' + (currentFile.type === 'video' ? '🎬' : '📄') + '</span>';
+
+        document.getElementById('detailName').value = currentFile.name;
+        document.getElementById('detailAlt').value = currentFile.alt || '';
+        document.getElementById('detailTitle').value = currentFile.title || '';
+        document.getElementById('detailDesc').value = currentFile.description || '';
+        document.getElementById('detailUrl').value = currentFile.url;
+        document.getElementById('detailType').textContent = currentFile.type.toUpperCase();
+        document.getElementById('detailSize').textContent = formatSize(currentFile.size);
+        document.getElementById('detailDimensions').textContent = currentFile.width ? currentFile.width + ' x ' + currentFile.height + ' px' : '-';
+        document.getElementById('detailDate').textContent = currentFile.date;
+
+        // Tags
+        renderTags();
+
+        // Show edit tools for images
+        document.getElementById('editTools').style.display = currentFile.type === 'image' ? 'flex' : 'none';
+
+        document.getElementById('previewModal').classList.add('show');
+    };
+
+    function renderTags() {
+        var container = document.getElementById('tagsContainer');
+        var input = document.getElementById('tagInput');
+        container.innerHTML = '';
+        if (currentFile && currentFile.tags) {
+            currentFile.tags.forEach(function(tag) {
+                var tagEl = document.createElement('span');
+                tagEl.className = 'tag';
+                tagEl.innerHTML = tag + '<span class="tag-remove" onclick="removeTag(\'' + tag + '\')">&times;</span>';
+                container.appendChild(tagEl);
+            });
+        }
+        container.appendChild(input);
+    }
+
+    window.removeTag = function(tag) {
+        if (currentFile) {
+            currentFile.tags = currentFile.tags.filter(function(t) { return t !== tag; });
+            renderTags();
+        }
+    };
+
+    window.handleTagInput = function(e) {
+        if (e.key === 'Enter' && e.target.value.trim()) {
+            if (currentFile && currentFile.tags.indexOf(e.target.value.trim()) === -1) {
+                currentFile.tags.push(e.target.value.trim());
+                e.target.value = '';
+                renderTags();
+            }
+        }
+    };
+
+    window.closePreviewModal = function() {
+        document.getElementById('previewModal').classList.remove('show');
+        currentFile = null;
+    };
+
+    window.saveFileDetails = function() {
+        if (!currentFile) return;
+        currentFile.name = document.getElementById('detailName').value;
+        currentFile.alt = document.getElementById('detailAlt').value;
+        currentFile.title = document.getElementById('detailTitle').value;
+        currentFile.description = document.getElementById('detailDesc').value;
+        renderMedia();
+        alert('Changes saved!');
+    };
+
+    window.copyUrl = function() {
+        var input = document.getElementById('detailUrl');
+        input.select();
+        document.execCommand('copy');
+        alert('URL copied!');
+    };
+
+    window.downloadFile = function() {
+        if (currentFile && currentFile.url !== '#') {
+            var a = document.createElement('a');
+            a.href = currentFile.url;
+            a.download = currentFile.name;
+            a.click();
+        }
+    };
+
+    window.deleteCurrentFile = function() {
+        if (currentFile && confirm('Delete this file?')) {
+            mediaFiles = mediaFiles.filter(function(f) { return f.id !== currentFile.id; });
+            closePreviewModal();
+            renderMedia();
+            updateStats();
+            updateFolderCounts();
+        }
+    };
+
+    // Edit tools
+    window.cropImage = function() {
+        if (!currentFile || currentFile.type !== 'image') return;
+        var cropType = prompt('Crop qilish turini tanlang:\n1 - Square (1:1)\n2 - Landscape (16:9)\n3 - Portrait (9:16)\n4 - Custom', '1');
+        if (cropType) {
+            var ratios = { '1': '1:1', '2': '16:9', '3': '9:16', '4': 'Custom' };
+            alert('Rasm ' + (ratios[cropType] || '1:1') + ' formatida crop qilindi!');
+            currentFile.cropped = true;
+        }
+    };
+
+    window.rotateImage = function() {
+        if (!currentFile || currentFile.type !== 'image') return;
+        var degrees = prompt('Necha gradusga aylantirish kerak? (90, 180, 270)', '90');
+        if (degrees) {
+            var img = document.querySelector('#previewImage img');
+            if (img) {
+                var currentRotation = img.dataset.rotation ? parseInt(img.dataset.rotation) : 0;
+                var newRotation = (currentRotation + parseInt(degrees)) % 360;
+                img.style.transform = 'rotate(' + newRotation + 'deg)';
+                img.dataset.rotation = newRotation;
+                currentFile.rotation = newRotation;
+            }
+        }
+    };
+
+    window.resizeImage = function() {
+        if (!currentFile || currentFile.type !== 'image') return;
+        var newWidth = prompt('Yangi kenglik (px):', currentFile.width || 1920);
+        if (newWidth) {
+            var newHeight = prompt('Yangi balandlik (px):', currentFile.height || 1080);
+            if (newHeight) {
+                currentFile.width = parseInt(newWidth);
+                currentFile.height = parseInt(newHeight);
+                document.getElementById('detailDimensions').textContent = newWidth + ' x ' + newHeight + ' px';
+                alert('Rasm o\'lchami o\'zgartirildi: ' + newWidth + 'x' + newHeight);
+            }
+        }
+    };
+
+    window.compressImage = function() {
+        if (!currentFile || currentFile.type !== 'image') return;
+        var quality = prompt('Siqish darajasi (1-100, past = kichik fayl):', '80');
+        if (quality) {
+            var oldSize = currentFile.size;
+            var compression = parseInt(quality) / 100;
+            currentFile.size = Math.floor(oldSize * compression);
+            document.getElementById('detailSize').textContent = formatSize(currentFile.size);
+            alert('Rasm siqildi! Yangi hajm: ' + formatSize(currentFile.size));
+        }
+    };
+
+    // Folder modal
+    window.openNewFolderModal = function() {
+        document.getElementById('folderModal').classList.add('show');
+    };
+
+    window.closeFolderModal = function() {
+        document.getElementById('folderModal').classList.remove('show');
+    };
+
+    window.createFolder = function() {
+        var name = document.getElementById('newFolderName').value.trim();
+        if (name) {
+            alert('Folder "' + name + '" created!');
+            closeFolderModal();
+        }
+    };
+
+    // Update stats
+    function updateStats() {
+        document.getElementById('statTotal').textContent = mediaFiles.length;
+        document.getElementById('statImages').textContent = mediaFiles.filter(function(f) { return f.type === 'image'; }).length;
+        document.getElementById('statVideos').textContent = mediaFiles.filter(function(f) { return f.type === 'video'; }).length;
+
+        var totalSize = mediaFiles.reduce(function(sum, f) { return sum + f.size; }, 0);
+        document.getElementById('statSize').textContent = formatSize(totalSize);
+        document.getElementById('storageUsed').textContent = formatSize(totalSize);
+        document.getElementById('storageBar').style.width = Math.min((totalSize / (5 * 1024 * 1024 * 1024)) * 100, 100) + '%';
+    }
+
+    // Update folder counts
+    function updateFolderCounts() {
+        document.getElementById('countAll').textContent = mediaFiles.length;
+        document.getElementById('countImages').textContent = mediaFiles.filter(function(f) { return f.type === 'image'; }).length;
+        document.getElementById('countVideos').textContent = mediaFiles.filter(function(f) { return f.type === 'video'; }).length;
+        document.getElementById('countDocs').textContent = mediaFiles.filter(function(f) { return f.type === 'document'; }).length;
+        document.getElementById('countBlog').textContent = mediaFiles.filter(function(f) { return f.folder === 'blog'; }).length;
+        document.getElementById('countDest').textContent = mediaFiles.filter(function(f) { return f.folder === 'destinations'; }).length;
+        document.getElementById('countPages').textContent = mediaFiles.filter(function(f) { return f.folder === 'pages'; }).length;
+        document.getElementById('countTours').textContent = mediaFiles.filter(function(f) { return f.folder === 'tours'; }).length;
+    }
+
+    // Initialize on page load
+    if (document.getElementById('mediaPage')) {
+        initMediaLibrary();
+    }
+
+    
+    // ==================== MEDIA INTEGRATIONS ====================
+    // Add Blog image to Media Library
+    window.addBlogImageToMedia = function(imageUrl, title) {
+        var newFile = {
+            id: 'm' + Date.now(),
+            name: title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase() + '.jpg',
+            type: 'image',
+            size: Math.floor(Math.random() * 2000000) + 500000,
+            url: imageUrl,
+            date: new Date().toISOString().split('T')[0],
+            folder: 'blog',
+            width: 1920,
+            height: 1080,
+            alt: title,
+            title: title,
+            description: '',
+            tags: ['blog']
+        };
+        mediaFiles.unshift(newFile);
+        console.log('Blog image added to Media Library:', title);
+    };
+
+    // Add Tour image to Media Library
+    window.addTourImageToMedia = function(imageUrl, title) {
+        var newFile = {
+            id: 'm' + Date.now(),
+            name: title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase() + '.jpg',
+            type: 'image',
+            size: Math.floor(Math.random() * 2000000) + 500000,
+            url: imageUrl,
+            date: new Date().toISOString().split('T')[0],
+            folder: 'tours',
+            width: 1920,
+            height: 1080,
+            alt: title,
+            title: title,
+            description: '',
+            tags: ['tour']
+        };
+        mediaFiles.unshift(newFile);
+        console.log('Tour image added to Media Library:', title);
+    };
+
+    // Add Destination image to Media Library
+    window.addDestinationImageToMedia = function(imageUrl, title) {
+        var newFile = {
+            id: 'm' + Date.now(),
+            name: title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase() + '.jpg',
+            type: 'image',
+            size: Math.floor(Math.random() * 2000000) + 500000,
+            url: imageUrl,
+            date: new Date().toISOString().split('T')[0],
+            folder: 'destinations',
+            width: 1920,
+            height: 1080,
+            alt: title,
+            title: title,
+            description: '',
+            tags: ['destination']
+        };
+        mediaFiles.unshift(newFile);
+        console.log('Destination image added to Media Library:', title);
+    };
+
+    // Add Page image to Media Library
+    window.addPageImageToMedia = function(imageUrl, title) {
+        var newFile = {
+            id: 'm' + Date.now(),
+            name: title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase() + '.jpg',
+            type: 'image',
+            size: Math.floor(Math.random() * 2000000) + 500000,
+            url: imageUrl,
+            date: new Date().toISOString().split('T')[0],
+            folder: 'pages',
+            width: 1920,
+            height: 1080,
+            alt: title,
+            title: title,
+            description: '',
+            tags: ['page']
+        };
+        mediaFiles.unshift(newFile);
+        console.log('Page image added to Media Library:', title);
+    };
+
+    // Generic function to add any image to Media Library
+    window.addToMediaLibrary = function(imageUrl, title, folder) {
+        var newFile = {
+            id: 'm' + Date.now(),
+            name: title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase() + '.jpg',
+            type: 'image',
+            size: Math.floor(Math.random() * 2000000) + 500000,
+            url: imageUrl,
+            date: new Date().toISOString().split('T')[0],
+            folder: folder || 'uploads',
+            width: 1920,
+            height: 1080,
+            alt: title,
+            title: title,
+            description: '',
+            tags: [folder || 'upload']
+        };
+        mediaFiles.unshift(newFile);
+        console.log('Image added to Media Library (' + folder + '):', title);
+    };
+
+    </script>
