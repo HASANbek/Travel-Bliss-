@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transport - Travel Bliss</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; padding: 20px;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 20px; background: rgba(255,255,255,0.2);
+            color: white; border-radius: 50px; text-decoration: none;
+            margin-bottom: 20px; transition: all 0.3s; backdrop-filter: blur(10px);
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.3); transform: translateX(-5px); }
+        .page-card {
+            background: white; border-radius: 20px; overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 60px 40px; text-align: center;
+        }
+        .page-header h1 { font-size: 42px; margin-bottom: 15px; }
+        .page-header p { font-size: 18px; opacity: 0.9; }
+        .page-content { padding: 40px; }
+        .transport-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px; margin-top: 20px;
+        }
+        .transport-card {
+            background: #f9fafb; border-radius: 15px; padding: 30px;
+            text-align: center; transition: all 0.3s;
+        }
+        .transport-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .transport-icon { font-size: 50px; margin-bottom: 15px; }
+        .transport-name { font-size: 22px; color: #333; margin-bottom: 10px; }
+        .transport-desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 15px; }
+        .transport-price { font-size: 18px; color: #667eea; font-weight: bold; }
+        .info-section {
+            background: #f0f9ff; border-left: 4px solid #667eea;
+            padding: 20px; border-radius: 0 10px 10px 0; margin-top: 30px;
+        }
+        .info-section h3 { color: #333; margin-bottom: 10px; }
+        .info-section p { color: #666; line-height: 1.7; }
+        .cta-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px; border-radius: 15px; text-align: center; color: white; margin-top: 40px;
+        }
+        .cta-section h3 { font-size: 24px; margin-bottom: 15px; }
+        .btn {
+            display: inline-block; padding: 15px 40px; background: white;
+            color: #667eea; border-radius: 50px; text-decoration: none;
+            font-weight: bold; transition: all 0.3s;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 32px; }
+            .page-content { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="travel-agency-03.html" class="back-btn">
+            <span>&#8592;</span> Orqaga qaytish
+        </a>
+        <div class="page-card">
+            <div class="page-header">
+                <h1>Transport Xizmatlari</h1>
+                <p>Qulay va xavfsiz sayohat uchun transport</p>
+            </div>
+            <div class="page-content">
+                <div class="transport-grid">
+                    <div class="transport-card">
+                        <div class="transport-icon">🚗</div>
+                        <h3 class="transport-name">Yengil Avtomobil</h3>
+                        <p class="transport-desc">4 kishigacha. Shahar ichida va qisqa masofali sayohatlar uchun ideal</p>
+                        <p class="transport-price">50,000 so'm/soat</p>
+                    </div>
+                    <div class="transport-card">
+                        <div class="transport-icon">🚐</div>
+                        <h3 class="transport-name">Minivan</h3>
+                        <p class="transport-desc">7 kishigacha. Oilaviy sayohatlar va kichik guruhlar uchun</p>
+                        <p class="transport-price">80,000 so'm/soat</p>
+                    </div>
+                    <div class="transport-card">
+                        <div class="transport-icon">🚌</div>
+                        <h3 class="transport-name">Avtobus</h3>
+                        <p class="transport-desc">20-50 kishigacha. Katta guruhlar va ekskursiyalar uchun</p>
+                        <p class="transport-price">200,000 so'm/soat</p>
+                    </div>
+                    <div class="transport-card">
+                        <div class="transport-icon">🚙</div>
+                        <h3 class="transport-name">SUV/Jeep</h3>
+                        <p class="transport-desc">6 kishigacha. Tog'li va qiyin yo'llar uchun</p>
+                        <p class="transport-price">100,000 so'm/soat</p>
+                    </div>
+                </div>
+                <div class="info-section">
+                    <h3>Transport Xizmatiga Nimalar Kiradi?</h3>
+                    <p>Barcha transport xizmatlarimizga tajribali haydovchi, yoqilg'i, sug'urta va yo'l xarajatlari kiradi. Konditsioner va Wi-Fi mavjud.</p>
+                </div>
+                <div class="cta-section">
+                    <h3>Transport Buyurtma Qilish</h3>
+                    <p style="opacity:0.9;margin-bottom:25px;">Biz bilan bog'laning va qulay sayohat rejalashtiring</p>
+                    <a href="contact.html" class="btn">Bog'lanish</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

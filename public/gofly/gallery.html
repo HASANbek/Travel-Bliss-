@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Travel Bliss</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 20px; background: rgba(255,255,255,0.2);
+            color: white; border-radius: 50px; text-decoration: none;
+            margin-bottom: 20px; transition: all 0.3s; backdrop-filter: blur(10px);
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.3); transform: translateX(-5px); }
+        .page-card {
+            background: white; border-radius: 20px; overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 60px 40px; text-align: center;
+        }
+        .page-header h1 { font-size: 42px; margin-bottom: 15px; }
+        .page-header p { font-size: 18px; opacity: 0.9; }
+        .page-content { padding: 40px; }
+        .gallery-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .gallery-item {
+            position: relative; border-radius: 15px; overflow: hidden;
+            aspect-ratio: 4/3; cursor: pointer; transition: all 0.3s;
+        }
+        .gallery-item:hover { transform: scale(1.02); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .gallery-item img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+        .gallery-item .overlay {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            padding: 20px; color: white;
+        }
+        .gallery-item .title { font-size: 16px; font-weight: 600; }
+        .gallery-item .location { font-size: 13px; opacity: 0.8; }
+        .placeholder-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 60px; color: white;
+        }
+        .lightbox {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center;
+        }
+        .lightbox.active { display: flex; }
+        .lightbox img { max-width: 90%; max-height: 90%; border-radius: 10px; }
+        .lightbox-close {
+            position: absolute; top: 20px; right: 30px; color: white;
+            font-size: 40px; cursor: pointer;
+        }
+        .loading { text-align: center; padding: 60px; color: #666; font-size: 18px; }
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 32px; }
+            .page-content { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="travel-agency-03.html" class="back-btn">
+            <span>&#8592;</span> Orqaga qaytish
+        </a>
+        <div class="page-card">
+            <div class="page-header">
+                <h1>Foto Galereya</h1>
+                <p>Sayohatlarimizdan eng go'zal lahzalar</p>
+            </div>
+            <div class="page-content">
+                <div id="galleryGrid" class="gallery-grid">
+                    <div class="loading">Yuklanmoqda...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightboxImg" src="" alt="">
+    </div>
+    <script>
+        const API_BASE = window.location.origin;
+        const defaultImages = [
+            { title: 'Registon', location: 'Samarqand', icon: '🕌' },
+            { title: 'Ichan Qala', location: 'Xiva', icon: '🏰' },
+            { title: 'Chorsu Bozori', location: 'Toshkent', icon: '🛒' },
+            { title: 'Chimyon Tog\'lari', location: 'Toshkent viloyati', icon: '🏔️' },
+            { title: 'Orol Dengizi', location: 'Qoraqalpog\'iston', icon: '🌊' },
+            { title: 'Shahrisabz', location: 'Qashqadaryo', icon: '🏛️' },
+            { title: 'Buxoro Minorasi', location: 'Buxoro', icon: '🗼' },
+            { title: 'Farg\'ona Vodiysi', location: 'Farg\'ona', icon: '🌄' }
+        ];
+        async function loadGallery() {
+            const container = document.getElementById('galleryGrid');
+            try {
+                const response = await fetch(`${API_BASE}/api/tours`);
+                const result = await response.json();
+                let items = [];
+                if (result.success && result.data && result.data.length > 0) {
+                    result.data.forEach(tour => {
+                        if (tour.images && tour.images.length > 0) {
+                            tour.images.forEach(img => {
+                                items.push({ image: img, title: tour.title, location: tour.destination });
+                            });
+                        }
+                    });
+                }
+                if (items.length === 0) {
+                    container.innerHTML = defaultImages.map(item => `
+                        <div class="gallery-item placeholder-item">
+                            <span>${item.icon}</span>
+                            <div class="overlay">
+                                <div class="title">${item.title}</div>
+                                <div class="location">${item.location}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = items.slice(0, 12).map(item => `
+                        <div class="gallery-item" onclick="openLightbox('${item.image}')">
+                            <img src="${item.image}" alt="${item.title}">
+                            <div class="overlay">
+                                <div class="title">${item.title}</div>
+                                <div class="location">${item.location || ''}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Gallery yuklashda xatolik:', error);
+                container.innerHTML = defaultImages.map(item => `
+                    <div class="gallery-item placeholder-item">
+                        <span>${item.icon}</span>
+                        <div class="overlay">
+                            <div class="title">${item.title}</div>
+                            <div class="location">${item.location}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        function openLightbox(src) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightbox').classList.add('active');
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+        document.addEventListener('DOMContentLoaded', loadGallery);
+    </script>
+</body>
+</html>
