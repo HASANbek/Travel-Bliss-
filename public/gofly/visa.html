@@ -15,53 +15,160 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             padding: 20px;
         }
 
         .container {
-            text-align: center;
-            max-width: 600px;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
-        .card {
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .visa-card {
             background: white;
             border-radius: 20px;
-            padding: 60px 40px;
+            overflow: hidden;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
-        .icon {
-            font-size: 100px;
-            margin-bottom: 30px;
+        .visa-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
         }
 
-        h1 {
-            font-size: 36px;
+        .visa-header h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .visa-header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .visa-content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 24px;
             color: #333;
             margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
         }
 
-        p {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 40px;
-            line-height: 1.6;
+        .section-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .info-box {
+            background: #f0f9ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 20px 0;
+        }
+
+        .countries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .country-tag {
+            background: #e0e7ff;
+            color: #4338ca;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .requirements-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .requirements-list li {
+            padding: 15px;
+            background: #f9fafb;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .requirements-list li::before {
+            content: '\\2713';
+            width: 24px;
+            height: 24px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+        }
+
+        .cta-section h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .cta-section p {
+            opacity: 0.9;
+            margin-bottom: 25px;
         }
 
         .btn {
             display: inline-block;
             padding: 15px 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: white;
+            color: #667eea;
             border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            margin: 0 10px;
         }
 
         .btn:hover {
@@ -69,26 +176,142 @@
             box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
-        .btn-secondary {
-            background: #f9fafb;
-            color: #667eea;
-            box-shadow: none;
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #666;
+            font-size: 18px;
         }
 
-        .btn-secondary:hover {
-            background: #e5e7eb;
+        @media (max-width: 768px) {
+            .visa-header h1 {
+                font-size: 32px;
+            }
+
+            .visa-content {
+                padding: 30px 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="card">
-            <div class="icon">📋</div>
-            <h1>Viza Xizmatlari</h1>
-            <p>Viza xizmatlari bo'limi hozircha ishlab chiqilmoqda. Batafsil ma'lumot olish uchun biz bilan bog'laning.</p>
-            <a href="travel-agency-03.html" class="btn">Asosiy Sahifa</a>
-            <a href="contact.html" class="btn btn-secondary">Bog'lanish</a>
+        <a href="travel-agency-03.html" class="back-btn">
+            <span>&#8592;</span> Orqaga qaytish
+        </a>
+
+        <div class="visa-card">
+            <div class="visa-header">
+                <h1>Viza Ma'lumotlari</h1>
+                <p>O'zbekistonga sayohat qilish uchun viza haqida ma'lumot</p>
+            </div>
+
+            <div class="visa-content" id="visaContent">
+                <div class="loading">Yuklanmoqda...</div>
+            </div>
         </div>
     </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+
+        async function loadVisaPage() {
+            try {
+                const response = await fetch(`${API_BASE}/api/pages/visa`);
+                const result = await response.json();
+                const container = document.getElementById('visaContent');
+
+                if (result.success && result.data) {
+                    const data = result.data;
+                    let html = '';
+
+                    // General info
+                    if (data.generalInfo) {
+                        html += `
+                            <div class="section">
+                                <h2 class="section-title">Umumiy Ma'lumot</h2>
+                                <p class="section-text">${data.generalInfo}</p>
+                            </div>
+                        `;
+                    }
+
+                    // Visa free countries
+                    if (data.visaFreeCountries && data.visaFreeCountries.length > 0) {
+                        html += `
+                            <div class="section">
+                                <h2 class="section-title">Vizasiz Kirish Mumkin Bo'lgan Davlatlar</h2>
+                                <div class="info-box">
+                                    Quyidagi davlatlar fuqarolari O'zbekistonga vizasiz 30 kungacha kirishi mumkin
+                                </div>
+                                <div class="countries-grid">
+                                    ${data.visaFreeCountries.map(c => `<div class="country-tag">${c}</div>`).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    // E-visa countries
+                    if (data.eVisaCountries && data.eVisaCountries.length > 0) {
+                        html += `
+                            <div class="section">
+                                <h2 class="section-title">E-Viza Olish Mumkin</h2>
+                                <div class="info-box">
+                                    Quyidagi davlatlar fuqarolari elektron viza olishlari mumkin
+                                </div>
+                                <div class="countries-grid">
+                                    ${data.eVisaCountries.map(c => `<div class="country-tag">${c}</div>`).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    // Requirements
+                    if (data.requirements && data.requirements.length > 0) {
+                        html += `
+                            <div class="section">
+                                <h2 class="section-title">Viza Olish Uchun Kerakli Hujjatlar</h2>
+                                <ul class="requirements-list">
+                                    ${data.requirements.map(r => `<li>${r}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    }
+
+                    // CTA
+                    html += `
+                        <div class="cta-section">
+                            <h3>Yordam Kerakmi?</h3>
+                            <p>Viza olish bo'yicha bepul konsultatsiya oling</p>
+                            <a href="contact.html" class="btn">Bog'lanish</a>
+                        </div>
+                    `;
+
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = `
+                        <div class="section">
+                            <h2 class="section-title">Viza Xizmatlari</h2>
+                            <p class="section-text">Viza xizmatlari bo'limi hozircha ishlab chiqilmoqda. Batafsil ma'lumot olish uchun biz bilan bog'laning.</p>
+                            <div class="cta-section">
+                                <h3>Yordam Kerakmi?</h3>
+                                <p>Biz bilan bog'laning</p>
+                                <a href="contact.html" class="btn">Bog'lanish</a>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Visa yuklashda xatolik:', error);
+                document.getElementById('visaContent').innerHTML = `
+                    <div class="section">
+                        <p class="section-text">Ma'lumotlarni yuklashda xatolik yuz berdi.</p>
+                        <a href="contact.html" class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">Bog'lanish</a>
+                    </div>
+                `;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadVisaPage);
+    </script>
 </body>
 </html>

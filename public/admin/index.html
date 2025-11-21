@@ -1262,7 +1262,22 @@
 
             <!-- Pages Page -->
             <div class="page-section" id="pagesPage">
-                <h3>Pages management coming soon...</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>Pages Management</h2>
+                </div>
+
+                <!-- Pages Tabs -->
+                <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <button onclick="loadPageContent('about')" class="page-tab active" id="tabAbout" style="padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; background: #6366f1; color: white;">About Us</button>
+                    <button onclick="loadPageContent('contact')" class="page-tab" id="tabContact" style="padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; background: #e5e7eb;">Contact</button>
+                    <button onclick="loadPageContent('faq')" class="page-tab" id="tabFaq" style="padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; background: #e5e7eb;">FAQ</button>
+                    <button onclick="loadPageContent('visa')" class="page-tab" id="tabVisa" style="padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; background: #e5e7eb;">Visa Info</button>
+                </div>
+
+                <!-- Page Content Container -->
+                <div id="pageContentContainer" style="background: white; border-radius: 10px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                    <div style="text-align: center; padding: 40px; color: #6b7280;">Loading...</div>
+                </div>
             </div>
 
             <!-- Categories Page -->
@@ -3631,6 +3646,8 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                 loadCategories();
             } else if (pageName === 'blog') {
                 loadBlogs();
+            } else if (pageName === 'pages') {
+                loadPageContent('about');
             }
         }
 
@@ -4316,6 +4333,415 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
             } catch (error) {
                 console.error('Export error:', error);
                 alert('Error exporting: ' + error.message);
+            }
+        }
+
+        // ========== PAGES MANAGEMENT ==========
+        let currentPageType = 'about';
+
+        async function loadPageContent(pageType) {
+            currentPageType = pageType;
+            const container = document.getElementById('pageContentContainer');
+
+            // Update tabs
+            document.querySelectorAll('.page-tab').forEach(tab => {
+                tab.style.background = '#e5e7eb';
+                tab.style.color = '#374151';
+            });
+            const activeTab = document.getElementById('tab' + pageType.charAt(0).toUpperCase() + pageType.slice(1));
+            if (activeTab) {
+                activeTab.style.background = '#6366f1';
+                activeTab.style.color = 'white';
+            }
+
+            container.innerHTML = '<div style="text-align: center; padding: 40px; color: #6b7280;">Loading...</div>';
+
+            try {
+                const response = await fetch(`${API_URL}/pages/${pageType}`);
+                const result = await response.json();
+
+                if (!result.success) throw new Error('Failed to load page');
+
+                const data = result.data;
+
+                if (pageType === 'about') {
+                    renderAboutPage(data);
+                } else if (pageType === 'contact') {
+                    renderContactPage(data);
+                } else if (pageType === 'faq') {
+                    renderFaqPage(data);
+                } else if (pageType === 'visa') {
+                    renderVisaPage(data);
+                }
+            } catch (error) {
+                console.error('Error loading page:', error);
+                container.innerHTML = `<div style="color: #ef4444; text-align: center; padding: 40px;">Error loading page: ${error.message}</div>`;
+            }
+        }
+
+        function renderAboutPage(data) {
+            const container = document.getElementById('pageContentContainer');
+            container.innerHTML = `
+                <h3 style="margin-bottom: 20px; color: #374151;">About Us Page</h3>
+                <form id="aboutForm" onsubmit="saveAboutPage(event)">
+                    <div style="display: grid; gap: 20px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Title (EN)</label>
+                                <input type="text" name="title" value="${data.title || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Title (UZ)</label>
+                                <input type="text" name="titleUz" value="${data.titleUz || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">Hero Image URL</label>
+                            <input type="text" name="heroImage" value="${data.heroImage || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        </div>
+
+                        <h4 style="color: #6366f1; margin-top: 10px;">Mission</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px;">Mission Text (EN)</label>
+                                <textarea name="missionText" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">${data.content?.mission?.text || ''}</textarea>
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px;">Mission Text (UZ)</label>
+                                <textarea name="missionTextUz" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">${data.content?.mission?.textUz || ''}</textarea>
+                            </div>
+                        </div>
+
+                        <h4 style="color: #6366f1; margin-top: 10px;">Description</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px;">Description (EN)</label>
+                                <textarea name="descriptionText" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">${data.content?.description?.text || ''}</textarea>
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px;">Description (UZ)</label>
+                                <textarea name="descriptionTextUz" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">${data.content?.description?.textUz || ''}</textarea>
+                            </div>
+                        </div>
+
+                        <h4 style="color: #6366f1; margin-top: 10px;">Statistics</h4>
+                        <div id="statsContainer" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                            ${(data.stats || []).map((stat, i) => `
+                                <div style="background: #f9fafb; padding: 15px; border-radius: 8px;">
+                                    <input type="text" name="statNumber${i}" value="${stat.number}" placeholder="500+" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 5px; font-weight: bold;">
+                                    <input type="text" name="statLabel${i}" value="${stat.label}" placeholder="Label EN" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 5px; font-size: 12px;">
+                                    <input type="text" name="statLabelUz${i}" value="${stat.labelUz || ''}" placeholder="Label UZ" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 12px;">
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <button type="submit" style="padding: 12px 30px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">Save Changes</button>
+                        </div>
+                    </div>
+                </form>
+            `;
+        }
+
+        async function saveAboutPage(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+
+            const data = {
+                title: formData.get('title'),
+                titleUz: formData.get('titleUz'),
+                heroImage: formData.get('heroImage'),
+                content: {
+                    mission: {
+                        title: 'Our Mission',
+                        titleUz: 'Bizning maqsadimiz',
+                        text: formData.get('missionText'),
+                        textUz: formData.get('missionTextUz')
+                    },
+                    description: {
+                        title: 'Who We Are',
+                        titleUz: 'Biz kimamiz',
+                        text: formData.get('descriptionText'),
+                        textUz: formData.get('descriptionTextUz')
+                    }
+                },
+                stats: [
+                    { number: formData.get('statNumber0'), label: formData.get('statLabel0'), labelUz: formData.get('statLabelUz0') },
+                    { number: formData.get('statNumber1'), label: formData.get('statLabel1'), labelUz: formData.get('statLabelUz1') },
+                    { number: formData.get('statNumber2'), label: formData.get('statLabel2'), labelUz: formData.get('statLabelUz2') },
+                    { number: formData.get('statNumber3'), label: formData.get('statLabel3'), labelUz: formData.get('statLabelUz3') }
+                ]
+            };
+
+            try {
+                const token = localStorage.getItem('accessToken');
+                const response = await fetch(`${API_URL}/pages/about`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    Swal.fire('Saved!', 'About page updated successfully', 'success');
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                Swal.fire('Error', error.message, 'error');
+            }
+        }
+
+        function renderContactPage(data) {
+            const container = document.getElementById('pageContentContainer');
+            container.innerHTML = `
+                <h3 style="margin-bottom: 20px; color: #374151;">Contact Page</h3>
+                <form id="contactForm" onsubmit="saveContactPage(event)">
+                    <div style="display: grid; gap: 20px;">
+                        <h4 style="color: #6366f1;">Contact Information</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Address (EN)</label>
+                                <input type="text" name="address" value="${data.info?.address || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Address (UZ)</label>
+                                <input type="text" name="addressUz" value="${data.info?.addressUz || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Phone 1</label>
+                                <input type="text" name="phone" value="${data.info?.phone || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Phone 2</label>
+                                <input type="text" name="phone2" value="${data.info?.phone2 || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Email 1</label>
+                                <input type="email" name="email" value="${data.info?.email || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Email 2</label>
+                                <input type="email" name="email2" value="${data.info?.email2 || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Working Hours (EN)</label>
+                                <input type="text" name="workingHours" value="${data.info?.workingHours || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Working Hours (UZ)</label>
+                                <input type="text" name="workingHoursUz" value="${data.info?.workingHoursUz || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                        </div>
+
+                        <h4 style="color: #6366f1; margin-top: 10px;">Social Media</h4>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px;">Facebook</label>
+                                <input type="text" name="facebook" value="${data.social?.facebook || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px;">Instagram</label>
+                                <input type="text" name="instagram" value="${data.social?.instagram || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px;">Telegram</label>
+                                <input type="text" name="telegram" value="${data.social?.telegram || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px;">YouTube</label>
+                                <input type="text" name="youtube" value="${data.social?.youtube || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <button type="submit" style="padding: 12px 30px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">Save Changes</button>
+                        </div>
+                    </div>
+                </form>
+            `;
+        }
+
+        async function saveContactPage(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+
+            const data = {
+                info: {
+                    address: formData.get('address'),
+                    addressUz: formData.get('addressUz'),
+                    phone: formData.get('phone'),
+                    phone2: formData.get('phone2'),
+                    email: formData.get('email'),
+                    email2: formData.get('email2'),
+                    workingHours: formData.get('workingHours'),
+                    workingHoursUz: formData.get('workingHoursUz')
+                },
+                social: {
+                    facebook: formData.get('facebook'),
+                    instagram: formData.get('instagram'),
+                    telegram: formData.get('telegram'),
+                    youtube: formData.get('youtube')
+                }
+            };
+
+            try {
+                const token = localStorage.getItem('accessToken');
+                const response = await fetch(`${API_URL}/pages/contact`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    Swal.fire('Saved!', 'Contact page updated successfully', 'success');
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                Swal.fire('Error', error.message, 'error');
+            }
+        }
+
+        function renderFaqPage(data) {
+            const container = document.getElementById('pageContentContainer');
+            container.innerHTML = `
+                <h3 style="margin-bottom: 20px; color: #374151;">FAQ Page</h3>
+                <div style="margin-bottom: 20px;">
+                    <button onclick="addFaqCategory()" style="padding: 10px 20px; background: #22c55e; color: white; border: none; border-radius: 8px; cursor: pointer;">+ Add Category</button>
+                </div>
+                <div id="faqCategoriesContainer">
+                    ${(data.categories || []).map((cat, catIndex) => `
+                        <div style="background: #f9fafb; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <input type="text" value="${cat.name}" onchange="updateFaqCategoryName(${catIndex}, this.value)" style="font-size: 18px; font-weight: bold; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                                <button onclick="addFaqQuestion(${catIndex})" style="padding: 8px 15px; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">+ Add Question</button>
+                            </div>
+                            <div style="display: grid; gap: 10px;">
+                                ${(cat.questions || []).map((q, qIndex) => `
+                                    <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb;">
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                            <strong>Q${qIndex + 1}</strong>
+                                            <button onclick="removeFaqQuestion(${catIndex}, ${qIndex})" style="color: #ef4444; background: none; border: none; cursor: pointer;">Remove</button>
+                                        </div>
+                                        <input type="text" value="${q.question}" placeholder="Question (EN)" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 5px;" onchange="updateFaqQuestion(${catIndex}, ${qIndex}, 'question', this.value)">
+                                        <textarea rows="2" placeholder="Answer (EN)" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;" onchange="updateFaqQuestion(${catIndex}, ${qIndex}, 'answer', this.value)">${q.answer}</textarea>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <button onclick="saveFaqPage()" style="padding: 12px 30px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; margin-top: 20px;">Save All Changes</button>
+            `;
+        }
+
+        let faqData = null;
+        async function saveFaqPage() {
+            try {
+                const token = localStorage.getItem('accessToken');
+                const response = await fetch(`${API_URL}/pages/faq`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(faqData || {})
+                });
+                const result = await response.json();
+                if (result.success) {
+                    Swal.fire('Saved!', 'FAQ page updated successfully', 'success');
+                }
+            } catch (error) {
+                Swal.fire('Error', error.message, 'error');
+            }
+        }
+
+        function renderVisaPage(data) {
+            const container = document.getElementById('pageContentContainer');
+            container.innerHTML = `
+                <h3 style="margin-bottom: 20px; color: #374151;">Visa Information Page</h3>
+                <form id="visaForm" onsubmit="saveVisaPage(event)">
+                    <div style="display: grid; gap: 20px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Intro Text (EN)</label>
+                                <textarea name="introText" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">${data.intro?.text || ''}</textarea>
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Intro Text (UZ)</label>
+                                <textarea name="introTextUz" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">${data.intro?.textUz || ''}</textarea>
+                            </div>
+                        </div>
+
+                        <h4 style="color: #6366f1;">E-Visa Information</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 5px;">E-Visa Link</label>
+                                <input type="text" name="eVisaLink" value="${data.eVisaInfo?.link || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px;">Processing Time</label>
+                                <input type="text" name="processingTime" value="${data.eVisaInfo?.processingTime || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 5px;">Validity</label>
+                                <input type="text" name="validity" value="${data.eVisaInfo?.validity || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                        </div>
+
+                        <h4 style="color: #6366f1;">Visa-Free Countries</h4>
+                        <div>
+                            <label style="display: block; margin-bottom: 5px;">Countries (comma separated)</label>
+                            <textarea name="visaFreeCountries" rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">${(data.visaFreeCountries || []).join(', ')}</textarea>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <button type="submit" style="padding: 12px 30px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">Save Changes</button>
+                        </div>
+                    </div>
+                </form>
+            `;
+        }
+
+        async function saveVisaPage(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+
+            const data = {
+                intro: {
+                    text: formData.get('introText'),
+                    textUz: formData.get('introTextUz')
+                },
+                eVisaInfo: {
+                    link: formData.get('eVisaLink'),
+                    processingTime: formData.get('processingTime'),
+                    validity: formData.get('validity')
+                },
+                visaFreeCountries: formData.get('visaFreeCountries').split(',').map(c => c.trim()).filter(c => c)
+            };
+
+            try {
+                const token = localStorage.getItem('accessToken');
+                const response = await fetch(`${API_URL}/pages/visa`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    Swal.fire('Saved!', 'Visa page updated successfully', 'success');
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                Swal.fire('Error', error.message, 'error');
             }
         }
 
