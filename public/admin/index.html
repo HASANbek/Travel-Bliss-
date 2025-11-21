@@ -1184,6 +1184,19 @@
                         <button onclick="loadBookings()" class="btn-primary" style="padding: 8px 20px; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer;">
                             Refresh
                         </button>
+                        <button onclick="exportBookingsExcel()" style="padding: 8px 16px; background: #22c55e; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px;">
+                            📥 Excel
+                        </button>
+                        <button onclick="exportBookingsPDF()" style="padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 5px;">
+                            📄 PDF
+                        </button>
+                    </div>
+                    <!-- Search Box -->
+                    <div style="margin-top: 15px;">
+                        <input type="text" id="bookingSearchInput" placeholder="🔍 Qidiruv: ism, email yoki telefon..."
+                            style="width: 100%; padding: 12px 15px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px; outline: none; transition: border-color 0.2s;"
+                            onfocus="this.style.borderColor='#6366f1'" onblur="this.style.borderColor='#e5e7eb'"
+                            oninput="filterBookings()">
                     </div>
                 </div>
 
@@ -1204,6 +1217,31 @@
                     <div style="background: #ffebee; border: 2px solid #ef4444; border-radius: 12px; padding: 20px;">
                         <h4 style="color: #666; font-size: 14px; margin: 0 0 10px 0;">Cancelled</h4>
                         <p style="font-size: 32px; font-weight: bold; color: #ef4444; margin: 0;" id="cancelledBookings">0</p>
+                    </div>
+                </div>
+
+                <!-- Upcoming Tours (7 kun ichida) -->
+                <div id="upcomingToursSection" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 20px; margin-bottom: 30px; display: none;">
+                    <h3 style="color: white; margin: 0 0 15px 0; display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 24px;">🔔</span> Yaqinlashgan Turlar (7 kun ichida)
+                    </h3>
+                    <div id="upcomingToursList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
+                    </div>
+                </div>
+
+                <!-- Gantt Calendar Section -->
+                <div style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="margin: 0; color: #374151; display: flex; align-items: center; gap: 10px;">
+                            📅 Kalendar (Tasdiqlangan bronlar)
+                        </h3>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <button onclick="changeCalendarWeek(-1)" style="padding: 8px 15px; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer;">← 7 kun</button>
+                            <button onclick="goToToday()" style="padding: 8px 15px; background: #22c55e; color: white; border: none; border-radius: 5px; cursor: pointer;">Bugun</button>
+                            <button onclick="changeCalendarWeek(1)" style="padding: 8px 15px; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer;">7 kun →</button>
+                        </div>
+                    </div>
+                    <div id="ganttCalendar" style="overflow-x: auto;">
                     </div>
                 </div>
 
@@ -1334,7 +1372,32 @@
 
             <!-- SEO Page -->
             <div class="page-section" id="seoPage">
-                <h3>SEO settings coming soon...</h3>
+                <div class="card">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3>🔍 SEO Settings for Tours</h3>
+                    </div>
+                    <div class="card-body">
+                        <p style="color: #666; margin-bottom: 20px;">Manage SEO metadata for all tours. Click on a tour to edit its SEO settings.</p>
+
+                        <div class="table-responsive">
+                            <table class="table" id="seoToursTable">
+                                <thead>
+                                    <tr>
+                                        <th>Tour</th>
+                                        <th>Meta Title</th>
+                                        <th>Meta Description</th>
+                                        <th>OG Image</th>
+                                        <th>SEO Score</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="seoToursTableBody">
+                                    <tr><td colspan="6" style="text-align: center;">Loading tours...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -2050,8 +2113,10 @@
                 }
 
                 // Add Content-Type if not present and it's a POST/PUT request
+                // BUT skip if body is FormData (for file uploads)
                 if (options.method && ['POST', 'PUT', 'PATCH'].includes(options.method.toUpperCase())) {
-                    if (!options.headers['Content-Type']) {
+                    const isFormData = options.body instanceof FormData;
+                    if (!options.headers['Content-Type'] && !isFormData) {
                         options.headers['Content-Type'] = 'application/json';
                     }
                 }
@@ -2986,15 +3051,26 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
             emptyState.style.display = 'none';
             container.innerHTML = '';
 
-            tourMediaImages.forEach((url, index) => {
+            tourMediaImages.forEach((item, index) => {
+                // Support both old format (string) and new format ({url, caption})
+                const url = typeof item === 'string' ? item : (item.url || '');
+                const caption = typeof item === 'string' ? '' : (item.caption || '');
+
+                // Skip if no URL
+                if (!url) return;
+
                 const imageCard = document.createElement('div');
                 imageCard.style.cssText = 'position: relative; width: 150px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden;';
 
+                // Convert relative URL to absolute URL for display
+                const fullUrl = url.startsWith('http') ? url : `http://localhost:4000${url}`;
+
                 imageCard.innerHTML = `
                     <div style="position: relative; width: 150px; height: 150px; overflow: hidden;">
-                        <img src="${url}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22150%22%3E%3Crect fill=%22%23ddd%22 width=%22150%22 height=%22150%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22%3ENo Image%3C/text%3E%3C/svg%3E';">
+                        <img src="${fullUrl}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22150%22%3E%3Crect fill=%22%23ddd%22 width=%22150%22 height=%22150%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22%3ENo Image%3C/text%3E%3C/svg%3E';">
                         ${index === 0 ? '<div style="position: absolute; top: 5px; left: 5px; background: #ffc107; color: #000; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">COVER</div>' : ''}
                         <div style="position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.6); color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">#${index + 1}</div>
+                        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 5px; font-size: 10px; text-align: center; cursor: pointer;" onclick="editCaption(${index})" title="Click to edit caption">${caption || 'Click to add caption'}</div>
                     </div>
                     <div style="padding: 8px; display: flex; flex-direction: column; gap: 5px;">
                         <div style="display: flex; gap: 5px;">
@@ -3011,8 +3087,8 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                 container.appendChild(imageCard);
             });
 
-            // Update hidden textarea
-            textarea.value = tourMediaImages.join('\n');
+            // Update hidden textarea - store as JSON for proper format
+            textarea.value = JSON.stringify(tourMediaImages);
         }
 
         // Move image up
@@ -3036,6 +3112,18 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
             updateImageManager();
         }
 
+        // Edit caption
+        function editCaption(index) {
+            const item = tourMediaImages[index];
+            const currentCaption = typeof item === 'string' ? '' : (item.caption || '');
+            const newCaption = prompt('Enter caption for this image:', currentCaption);
+            if (newCaption !== null) {
+                const url = typeof item === 'string' ? item : item.url;
+                tourMediaImages[index] = { url: url, caption: newCaption };
+                updateImageManager();
+            }
+        }
+
         // Remove image
         function removeImage(index) {
             if (confirm('Remove this image?')) {
@@ -3048,7 +3136,7 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
         function addImageUrlManually() {
             const url = prompt('Enter image URL:');
             if (url && url.trim()) {
-                tourMediaImages.push(url.trim());
+                tourMediaImages.push({ url: url.trim(), caption: '' });
                 updateImageManager();
             }
         }
@@ -3073,6 +3161,10 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
 
         // Upload media images to server
         async function uploadMediaImages() {
+            console.log('uploadMediaImages called');
+            console.log('selectedMediaFiles:', selectedMediaFiles);
+            console.log('selectedMediaFiles.length:', selectedMediaFiles.length);
+
             if (selectedMediaFiles.length === 0) {
                 alert('Please select images first');
                 return;
@@ -3085,9 +3177,12 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
 
             try {
                 const uploadedUrls = [];
+                const files = Array.from(selectedMediaFiles);
+                console.log('Files to upload:', files);
 
-                for (let i = 0; i < selectedMediaFiles.length; i++) {
-                    const file = selectedMediaFiles[i];
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    console.log(`Processing file ${i + 1}:`, file.name, file.type, file.size);
 
                     // Validate file size (5MB max)
                     if (file.size > 5 * 1024 * 1024) {
@@ -3095,28 +3190,33 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                         continue;
                     }
 
-                    // Validate file type
+                    // Validate file type - check extension too
                     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
-                    if (!validTypes.includes(file.type)) {
-                        alert(`Image ${i + 1} has invalid type`);
+                    const ext = file.name.split('.').pop().toLowerCase();
+                    const validExts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+                    if (!validTypes.includes(file.type) && !validExts.includes(ext)) {
+                        alert(`Image ${i + 1} has invalid type: ${file.type}`);
                         continue;
                     }
 
-                    uploadBtn.textContent = `Uploading ${i + 1}/${selectedMediaFiles.length}...`;
+                    uploadBtn.textContent = `Uploading ${i + 1}/${files.length}...`;
 
                     const formData = new FormData();
                     formData.append('image', file);
+                    console.log('FormData created, sending to:', `${API_URL}/upload`);
 
                     const response = await fetch(`${API_URL}/upload`, {
                         method: 'POST',
                         body: formData
                     });
 
-                    if (!response.ok) {
-                        throw new Error(`Upload failed for image ${i + 1}`);
-                    }
-
+                    console.log('Response status:', response.status);
                     const result = await response.json();
+                    console.log('Response data:', result);
+
+                    if (!response.ok) {
+                        throw new Error(result.message || `Upload failed for image ${i + 1}`);
+                    }
 
                     if (result.success && result.data.filePath) {
                         uploadedUrls.push(result.data.filePath);
@@ -3124,9 +3224,13 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                 }
 
                 if (uploadedUrls.length > 0) {
-                    // Add to tour media images
-                    tourMediaImages.push(...uploadedUrls);
+                    // Add to tour media images with caption support
+                    uploadedUrls.forEach(url => {
+                        tourMediaImages.push({ url: url, caption: '' });
+                    });
+                    console.log('tourMediaImages after upload:', tourMediaImages);
                     updateImageManager();
+                    console.log('updateImageManager called');
                     alert(`✅ Successfully uploaded ${uploadedUrls.length} image(s)!`);
                 }
 
@@ -3261,9 +3365,14 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
             formData.included = document.getElementById('tourIncluded').value.split('\n').filter(i => i.trim());
             formData.excluded = document.getElementById('tourExcluded').value.split('\n').filter(e => e.trim());
 
-            // Collect images
-            const imageUrls = document.getElementById('tourImages').value.split('\n').filter(url => url.trim());
-            formData.images = imageUrls;
+            // Collect images (stored as JSON)
+            const imagesValue = document.getElementById('tourImages').value;
+            try {
+                formData.images = imagesValue ? JSON.parse(imagesValue) : [];
+            } catch(e) {
+                // Fallback for old format
+                formData.images = imagesValue.split('\n').filter(url => url.trim());
+            }
 
             console.log('Tour data to save:', formData);
 
@@ -3349,14 +3458,19 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                     const statusColor = tour.isActive ? '#28a745' : '#6c757d';
                     const statusText = tour.isActive ? 'Active' : 'Inactive';
 
-                    // SEO Badge - with safe checking
+                    // SEO Badge - with safe checking (supports both seo.meta.title and seo.title structures)
                     let seoBadge = '';
                     try {
-                        if (tour.seo && tour.seo.title && tour.seo.title.length > 0) {
+                        const hasSeo = tour.seo && (
+                            (tour.seo.meta && tour.seo.meta.title && tour.seo.meta.title.length > 0) ||
+                            (tour.seo.title && tour.seo.title.length > 0)
+                        );
+                        if (hasSeo) {
                             const tourId = tour.id || tour._id || '';
                             seoBadge = '<span style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;" onclick="viewTourSEO(\'' + tourId + '\')" title="Click to view SEO details">✓ SEO</span>';
                         } else {
-                            seoBadge = '<span style="background: #ffc107; color: #000; padding: 4px 8px; border-radius: 4px; font-size: 11px;">⚠ No SEO</span>';
+                            const tourId = tour.id || tour._id || '';
+                            seoBadge = '<span style="background: #ffc107; color: #000; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;" onclick="viewTourSEO(\'' + tourId + '\')" title="Click to generate SEO">⚠ No SEO</span>';
                         }
                     } catch (err) {
                         console.error('Error creating SEO badge for tour:', tour.title, err);
@@ -3423,7 +3537,8 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                     return;
                 }
 
-                const tour = result.data;
+                // Handle both response formats: result.data.tour or result.data
+                const tour = result.data.tour || result.data;
 
                 // Set modal title to Edit mode
                 document.querySelector('.add-tour-modal-header h2').textContent = '✏️ Edit Tour';
@@ -3651,8 +3766,12 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                                 <div style="margin-bottom: 25px;">
                                     <h4 style="color: #667eea; font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #667eea;">📘 Social Media (Open Graph)</h4>
                                     <div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: white;">
-                                        <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: 600;">
-                                            📷 ${tour.title}
+                                        <div id="ogImagePreviewArea" style="width: 100%; height: 200px; background: ${(seo.meta?.ogImage || seo.ogImage) ? 'url(' + ((seo.meta?.ogImage || seo.ogImage).startsWith('http') ? (seo.meta?.ogImage || seo.ogImage) : 'http://localhost:4000' + (seo.meta?.ogImage || seo.ogImage)) + ')' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: 600; position: relative;">
+                                            ${!(seo.meta?.ogImage || seo.ogImage) ? '📷 No OG Image' : ''}
+                                            <div style="position: absolute; bottom: 10px; right: 10px;">
+                                                <input type="file" id="ogImageUploadInput" accept="image/*" style="display: none;" onchange="uploadOgImageForTour(this, '${tour.id || tour._id}')">
+                                                <button onclick="document.getElementById('ogImageUploadInput').click()" style="background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 12px;">📤 Upload OG Image</button>
+                                            </div>
                                         </div>
                                         <div style="padding: 15px;">
                                             <div style="font-size: 12px; color: #65676b; margin-bottom: 5px;">${seo.meta.canonical ? new URL(seo.meta.canonical).hostname : 'No URL'}</div>
@@ -3664,7 +3783,7 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
 
                                 ${seo.score && seo.score.checks ? `
                                 <!-- SEO Checks -->
-                                <div>
+                                <div style="margin-bottom: 25px;">
                                     <h4 style="color: #667eea; font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #667eea;">✓ SEO Checklist</h4>
                                     ${seo.score.checks.map(check => `
                                         <div style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee;">
@@ -3677,6 +3796,31 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                                     `).join('')}
                                 </div>
                                 ` : ''}
+
+                                <!-- Edit SEO Section -->
+                                <div style="background: #f8f9fa; border-radius: 10px; padding: 20px; margin-top: 20px;">
+                                    <h4 style="color: #667eea; font-size: 18px; margin-bottom: 15px;">✏️ Edit SEO</h4>
+
+                                    <div style="margin-bottom: 15px;">
+                                        <label style="display: block; font-weight: bold; margin-bottom: 5px;">Meta Title</label>
+                                        <input type="text" id="editSeoTitle" value="${seo.meta.title || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                                    </div>
+
+                                    <div style="margin-bottom: 15px;">
+                                        <label style="display: block; font-weight: bold; margin-bottom: 5px;">Meta Description</label>
+                                        <textarea id="editSeoDesc" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; min-height: 80px;">${seo.meta.description || ''}</textarea>
+                                    </div>
+
+                                    <div style="margin-bottom: 15px;">
+                                        <label style="display: block; font-weight: bold; margin-bottom: 5px;">Keywords (comma separated)</label>
+                                        <input type="text" id="editSeoKeywords" value="${(seo.meta.keywords || []).join(', ')}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                                    </div>
+
+                                    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                                        <button onclick="regenerateSeoForTour('${tour.id || tour._id}')" style="background: #17a2b8; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">🤖 Regenerate with AI</button>
+                                        <button onclick="saveTourSeoFromModal('${tour.id || tour._id}')" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">💾 Save SEO</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -3696,6 +3840,146 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
             const modal = document.getElementById('seoModal');
             if (modal) {
                 modal.remove();
+            }
+        }
+
+        // Upload OG Image for Tour
+        async function uploadOgImageForTour(input, tourId) {
+            if (!input.files || !input.files[0]) return;
+
+            const formData = new FormData();
+            formData.append('image', input.files[0]);
+
+            try {
+                const response = await fetch(`${API_URL}/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+
+                if (result.success && result.data.filePath) {
+                    // Update tour with OG image
+                    await fetch(`${API_URL}/tours/${tourId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ seo: { ogImage: result.data.filePath } })
+                    });
+
+                    // Update preview
+                    const previewArea = document.getElementById('ogImagePreviewArea');
+                    if (previewArea) {
+                        previewArea.style.background = `url(http://localhost:4000${result.data.filePath})`;
+                        previewArea.style.backgroundSize = 'cover';
+                        previewArea.style.backgroundPosition = 'center';
+                        previewArea.innerHTML = `<div style="position: absolute; bottom: 10px; right: 10px;">
+                            <input type="file" id="ogImageUploadInput" accept="image/*" style="display: none;" onchange="uploadOgImageForTour(this, '${tourId}')">
+                            <button onclick="document.getElementById('ogImageUploadInput').click()" style="background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 12px;">📤 Change OG Image</button>
+                        </div>`;
+                    }
+                    alert('✅ OG Image uploaded!');
+                } else {
+                    alert('Upload failed');
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                alert('Upload failed');
+            }
+        }
+
+        // Regenerate SEO with AI
+        async function regenerateSeoForTour(tourId) {
+            try {
+                console.log('Regenerating SEO for tour:', tourId);
+
+                const response = await fetch(`${API_URL}/tours/${tourId}`);
+                const result = await response.json();
+                console.log('Tour data:', result);
+
+                const tour = result.data?.tour || result.data;
+                if (!tour) {
+                    alert('Tour not found');
+                    return;
+                }
+
+                console.log('Sending to AI:', { title: tour.title, destination: tour.destination, duration: tour.duration, price: tour.price });
+
+                const seoResponse = await fetch(`${API_URL}/ai/generate-seo`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title: tour.title,
+                        destination: tour.destination,
+                        duration: tour.duration,
+                        price: tour.price,
+                        summary: tour.summary || tour.description?.substring(0, 200),
+                        description: tour.description
+                    })
+                });
+
+                const seoResult = await seoResponse.json();
+                console.log('AI SEO result:', seoResult);
+
+                if (seoResult.success && seoResult.data) {
+                    const seo = seoResult.data.seo;
+                    // AI returns seo.meta structure
+                    const title = seo.meta?.title || seo.title || '';
+                    const description = seo.meta?.description || seo.description || '';
+                    const keywords = seo.meta?.keywords || seo.keywords || [];
+
+                    document.getElementById('editSeoTitle').value = title;
+                    document.getElementById('editSeoDesc').value = description;
+                    document.getElementById('editSeoKeywords').value = Array.isArray(keywords) ? keywords.join(', ') : keywords;
+                    alert('✅ SEO regenerated with AI!');
+                } else {
+                    alert('AI xatosi: ' + (seoResult.message || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('AI SEO error:', error);
+                alert('Error generating SEO: ' + error.message);
+            }
+        }
+
+        // Save Tour SEO from Modal
+        async function saveTourSeoFromModal(tourId) {
+            // Get current ogImage from preview area background
+            const previewArea = document.getElementById('ogImagePreviewArea');
+            let ogImage = '';
+            if (previewArea && previewArea.style.background) {
+                const match = previewArea.style.background.match(/url\(["']?([^"')]+)["']?\)/);
+                if (match) {
+                    ogImage = match[1].replace('http://localhost:4000', '');
+                }
+            }
+
+            const seoData = {
+                seo: {
+                    meta: {
+                        title: document.getElementById('editSeoTitle').value,
+                        description: document.getElementById('editSeoDesc').value,
+                        keywords: document.getElementById('editSeoKeywords').value.split(',').map(k => k.trim()).filter(k => k)
+                    },
+                    ogImage: ogImage
+                }
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/tours/${tourId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(seoData)
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    alert('✅ SEO saved!');
+                    closeSEOModal();
+                    loadTours();
+                } else {
+                    alert('Error saving SEO: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Save SEO error:', error);
+                alert('Error saving SEO');
             }
         }
 
@@ -3762,10 +4046,511 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                 loadCategories();
             } else if (pageName === 'blog') {
                 loadBlogs();
+            } else if (pageName === 'seo') {
+                loadSeoTours();
+            }
+        }
+
+        // ========== SEO MANAGEMENT ==========
+        async function loadSeoTours() {
+            const tbody = document.getElementById('seoToursTableBody');
+            try {
+                const response = await fetch(`${API_URL}/tours`);
+                const result = await response.json();
+                const tours = result.data?.tours || result.data || [];
+
+                if (tours.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No tours found</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = tours.map(tour => {
+                    const seo = tour.seo || {};
+                    const meta = seo.meta || {};
+                    const hasTitle = meta.title && meta.title.length > 0;
+                    const hasDesc = meta.description && meta.description.length > 0;
+                    const hasOgImage = seo.ogImage && seo.ogImage.length > 0;
+                    const score = seo.score || 0;
+                    const scoreColor = score >= 80 ? '#28a745' : score >= 50 ? '#ffc107' : '#dc3545';
+
+                    return `
+                        <tr>
+                            <td><strong>${tour.title || 'Untitled'}</strong></td>
+                            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                ${hasTitle ? `<span style="color: green;">✓</span> ${meta.title.substring(0, 40)}...` : '<span style="color: red;">✗ Missing</span>'}
+                            </td>
+                            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                ${hasDesc ? `<span style="color: green;">✓</span> ${meta.description.substring(0, 40)}...` : '<span style="color: red;">✗ Missing</span>'}
+                            </td>
+                            <td>
+                                ${hasOgImage ? `<img src="${seo.ogImage.startsWith('http') ? seo.ogImage : 'http://localhost:4000' + seo.ogImage}" style="width: 50px; height: 30px; object-fit: cover; border-radius: 4px;">` : '<span style="color: red;">✗ No image</span>'}
+                            </td>
+                            <td>
+                                <span style="background: ${scoreColor}; color: white; padding: 3px 10px; border-radius: 20px; font-weight: bold;">${score}%</span>
+                            </td>
+                            <td>
+                                <button onclick="openSeoEditModal('${tour._id}')" style="background: #007bff; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">✏️ Edit SEO</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error loading SEO tours:', error);
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Error loading tours</td></tr>';
+            }
+        }
+
+        let currentSeoTourId = null;
+
+        async function openSeoEditModal(tourId) {
+            currentSeoTourId = tourId;
+            try {
+                const response = await fetch(`${API_URL}/tours/${tourId}`);
+                const result = await response.json();
+                const tour = result.data?.tour || result.data;
+
+                const seo = tour.seo || {};
+                const meta = seo.meta || {};
+
+                // Create modal
+                const modalHtml = `
+                    <div id="seoEditModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                        <div style="background: white; border-radius: 12px; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto;">
+                            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px 12px 0 0;">
+                                <h2 style="margin: 0;">🔍 Edit SEO - ${tour.title}</h2>
+                            </div>
+                            <div style="padding: 20px;">
+                                <div style="margin-bottom: 20px;">
+                                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Meta Title <span style="color: #666; font-weight: normal;">(50-60 characters recommended)</span></label>
+                                    <input type="text" id="seoMetaTitle" value="${meta.title || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;" maxlength="70">
+                                    <div style="text-align: right; font-size: 12px; color: #666;"><span id="titleCount">${(meta.title || '').length}</span>/70</div>
+                                </div>
+
+                                <div style="margin-bottom: 20px;">
+                                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Meta Description <span style="color: #666; font-weight: normal;">(150-160 characters recommended)</span></label>
+                                    <textarea id="seoMetaDesc" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; min-height: 80px;" maxlength="170">${meta.description || ''}</textarea>
+                                    <div style="text-align: right; font-size: 12px; color: #666;"><span id="descCount">${(meta.description || '').length}</span>/170</div>
+                                </div>
+
+                                <div style="margin-bottom: 20px;">
+                                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Keywords <span style="color: #666; font-weight: normal;">(comma separated)</span></label>
+                                    <input type="text" id="seoKeywords" value="${(meta.keywords || []).join(', ')}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;" placeholder="uzbekistan tour, silk road, samarkand">
+                                </div>
+
+                                <div style="margin-bottom: 20px;">
+                                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">OG Image (Social Media Preview)</label>
+                                    <div style="display: flex; gap: 10px; align-items: center;">
+                                        <input type="text" id="seoOgImage" value="${seo.ogImage || ''}" style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 6px;" placeholder="/uploads/og-image.jpg">
+                                        <input type="file" id="seoOgImageUpload" accept="image/*" style="display: none;" onchange="uploadSeoOgImage(this)">
+                                        <button type="button" onclick="document.getElementById('seoOgImageUpload').click()" style="background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer;">📤 Upload</button>
+                                    </div>
+                                    <div id="seoOgImagePreview" style="margin-top: 10px;">
+                                        ${seo.ogImage ? `<img src="${seo.ogImage.startsWith('http') ? seo.ogImage : 'http://localhost:4000' + seo.ogImage}" style="max-width: 300px; border-radius: 8px; border: 1px solid #ddd;">` : '<p style="color: #999;">No image selected</p>'}
+                                    </div>
+                                </div>
+
+                                <div style="margin-bottom: 20px;">
+                                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Canonical URL</label>
+                                    <input type="text" id="seoCanonical" value="${seo.canonicalUrl || ''}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;" placeholder="https://yoursite.com/tours/tour-slug">
+                                </div>
+
+                                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                                    <button onclick="closeSeoEditModal()" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">Cancel</button>
+                                    <button onclick="generateSeoWithAI()" style="background: #17a2b8; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">🤖 Generate with AI</button>
+                                    <button onclick="saveSeoSettings()" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">💾 Save SEO</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+                // Add character counters
+                document.getElementById('seoMetaTitle').addEventListener('input', function() {
+                    document.getElementById('titleCount').textContent = this.value.length;
+                });
+                document.getElementById('seoMetaDesc').addEventListener('input', function() {
+                    document.getElementById('descCount').textContent = this.value.length;
+                });
+
+            } catch (error) {
+                console.error('Error opening SEO modal:', error);
+                alert('Error loading tour data');
+            }
+        }
+
+        function closeSeoEditModal() {
+            const modal = document.getElementById('seoEditModal');
+            if (modal) modal.remove();
+            currentSeoTourId = null;
+        }
+
+        async function uploadSeoOgImage(input) {
+            if (!input.files || !input.files[0]) return;
+
+            const formData = new FormData();
+            formData.append('image', input.files[0]);
+
+            try {
+                const response = await fetch(`${API_URL}/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+
+                if (result.success && result.data.filePath) {
+                    document.getElementById('seoOgImage').value = result.data.filePath;
+                    document.getElementById('seoOgImagePreview').innerHTML = `<img src="http://localhost:4000${result.data.filePath}" style="max-width: 300px; border-radius: 8px; border: 1px solid #ddd;">`;
+                } else {
+                    alert('Upload failed');
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                alert('Upload failed');
+            }
+        }
+
+        async function generateSeoWithAI() {
+            if (!currentSeoTourId) return;
+
+            try {
+                const response = await fetch(`${API_URL}/tours/${currentSeoTourId}`);
+                const result = await response.json();
+                const tour = result.data?.tour || result.data;
+
+                const seoResponse = await fetch(`${API_URL}/ai/generate-seo`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title: tour.title,
+                        destination: tour.destination,
+                        duration: tour.duration,
+                        price: tour.price,
+                        summary: tour.summary,
+                        description: tour.description
+                    })
+                });
+
+                const seoResult = await seoResponse.json();
+                if (seoResult.success && seoResult.data.seo) {
+                    const seo = seoResult.data.seo;
+                    document.getElementById('seoMetaTitle').value = seo.meta?.title || '';
+                    document.getElementById('seoMetaDesc').value = seo.meta?.description || '';
+                    document.getElementById('seoKeywords').value = (seo.meta?.keywords || []).join(', ');
+                    document.getElementById('titleCount').textContent = (seo.meta?.title || '').length;
+                    document.getElementById('descCount').textContent = (seo.meta?.description || '').length;
+                    alert('✅ SEO generated with AI!');
+                }
+            } catch (error) {
+                console.error('AI SEO error:', error);
+                alert('Error generating SEO');
+            }
+        }
+
+        async function saveSeoSettings() {
+            if (!currentSeoTourId) return;
+
+            const seoData = {
+                seo: {
+                    meta: {
+                        title: document.getElementById('seoMetaTitle').value,
+                        description: document.getElementById('seoMetaDesc').value,
+                        keywords: document.getElementById('seoKeywords').value.split(',').map(k => k.trim()).filter(k => k)
+                    },
+                    ogImage: document.getElementById('seoOgImage').value,
+                    canonicalUrl: document.getElementById('seoCanonical').value
+                }
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/tours/${currentSeoTourId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(seoData)
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    alert('✅ SEO settings saved!');
+                    closeSeoEditModal();
+                    loadSeoTours();
+                } else {
+                    alert('Error saving SEO: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Save SEO error:', error);
+                alert('Error saving SEO settings');
             }
         }
 
         // ========== BOOKINGS MANAGEMENT ==========
+        let allBookingsData = []; // Global for search filtering
+        let calendarStartDate = new Date();
+        calendarStartDate.setHours(0, 0, 0, 0);
+        const CALENDAR_DAYS = 21; // 3 weeks visible
+
+        function changeCalendarWeek(delta) {
+            calendarStartDate.setDate(calendarStartDate.getDate() + (delta * 7));
+            renderCalendar();
+        }
+
+        function goToToday() {
+            calendarStartDate = new Date();
+            calendarStartDate.setHours(0, 0, 0, 0);
+            renderCalendar();
+        }
+
+        function renderCalendar() {
+            const container = document.getElementById('ganttCalendar');
+            const confirmedBookings = allBookingsData.filter(b => b.status === 'confirmed');
+
+            // Get unique tours
+            const toursMap = {};
+            confirmedBookings.forEach(b => {
+                if (!toursMap[b.tourId]) {
+                    toursMap[b.tourId] = { name: b.tourName, bookings: [] };
+                }
+                toursMap[b.tourId].bookings.push(b);
+            });
+            const tours = Object.entries(toursMap);
+
+            if (tours.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">Tasdiqlangan bronlar yo\'q</p>';
+                return;
+            }
+
+            // Generate dates array
+            const dates = [];
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            for (let i = 0; i < CALENDAR_DAYS; i++) {
+                const d = new Date(calendarStartDate);
+                d.setDate(d.getDate() + i);
+                dates.push(d);
+            }
+
+            const dayNames = ['Yak', 'Dush', 'Sesh', 'Chor', 'Pay', 'Jum', 'Shan'];
+            const monthNames = ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'Iyn', 'Iyl', 'Avg', 'Sen', 'Okt', 'Noy', 'Dek'];
+
+            let html = `<table style="width: 100%; border-collapse: collapse; min-width: ${150 + dates.length * 50}px;">
+                <thead>
+                    <tr style="background: #6366f1; color: white;">
+                        <th style="padding: 10px; text-align: left; position: sticky; left: 0; background: #6366f1; min-width: 150px; z-index: 2;">Turlar</th>
+                        ${dates.map(d => {
+                            const isToday = d.getTime() === today.getTime();
+                            return `<th style="padding: 5px; text-align: center; min-width: 50px; font-size: 11px; ${isToday ? 'background: #22c55e;' : ''}">
+                                <div>${dayNames[d.getDay()]}</div>
+                                <div style="font-weight: bold;">${d.getDate()}</div>
+                                <div style="font-size: 9px;">${monthNames[d.getMonth()]}</div>
+                            </th>`;
+                        }).join('')}
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            tours.forEach(([tourId, tour], idx) => {
+                html += `<tr style="border-bottom: 1px solid #e5e7eb; ${idx % 2 ? 'background: #f9fafb;' : ''}">
+                    <td style="padding: 10px; font-weight: 500; position: sticky; left: 0; background: ${idx % 2 ? '#f9fafb' : 'white'}; z-index: 1; border-right: 2px solid #e5e7eb;">
+                        ${tour.name}
+                    </td>`;
+
+                dates.forEach(date => {
+                    const dateStr = date.toISOString().split('T')[0];
+                    const isToday = date.getTime() === today.getTime();
+
+                    // Find bookings for this tour on this date (including multi-day)
+                    const dayBookings = tour.bookings.filter(b => {
+                        const start = new Date(b.date);
+                        start.setHours(0, 0, 0, 0);
+                        const duration = b.duration || 1;
+                        const end = new Date(start);
+                        end.setDate(end.getDate() + duration - 1);
+                        return date >= start && date <= end;
+                    });
+
+                    html += `<td style="padding: 3px; text-align: center; vertical-align: top; ${isToday ? 'background: #ecfdf5;' : ''} border-left: 1px solid #e5e7eb;">`;
+
+                    dayBookings.forEach(b => {
+                        const start = new Date(b.date);
+                        start.setHours(0, 0, 0, 0);
+                        const dayNum = Math.floor((date - start) / (1000 * 60 * 60 * 24)) + 1;
+                        const duration = b.duration || 1;
+                        const isStart = dayNum === 1;
+                        const isEnd = dayNum === duration;
+
+                        html += `<div onclick="viewBookingDetails('${b.id}')"
+                            style="background: ${isStart ? '#22c55e' : '#10b981'}; color: white; padding: 2px 4px;
+                            border-radius: ${isStart ? '8px' : '0'} ${isEnd ? '8px' : '0'} ${isEnd ? '8px' : '0'} ${isStart ? '8px' : '0'};
+                            font-size: 9px; margin: 1px 0; cursor: pointer; white-space: nowrap; overflow: hidden;"
+                            title="${b.customerName} - ${b.guests?.adults || 0} kishi - $${b.totalPrice}">
+                            ${isStart ? b.customerName.split(' ')[0] : ''} ${duration > 1 ? `(${dayNum}/${duration})` : ''}
+                        </div>`;
+                    });
+
+                    html += '</td>';
+                });
+
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function exportBookingsExcel() {
+            if (!allBookingsData.length) { alert('Ma\'lumot yo\'q'); return; }
+            const sorted = [...allBookingsData].sort((a, b) => new Date(a.date) - new Date(b.date));
+            const headers = ['ID', 'Tour', 'Customer', 'Email', 'Phone', 'Date', 'Adults', 'Children', 'Price', 'Status'];
+            const rows = sorted.map(b => [
+                b.id, b.tourName, b.customerName, b.customerEmail, b.customerPhone,
+                new Date(b.date).toLocaleDateString(), b.guests?.adults || 0, b.guests?.children || 0,
+                '$' + b.totalPrice, b.status
+            ]);
+            const csv = [headers.join(','), ...rows.map(r => r.map(c => `"${c}"`).join(','))].join('\n');
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `bookings_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+
+        function exportBookingsPDF() {
+            if (!allBookingsData.length) { alert('Ma\'lumot yo\'q'); return; }
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const sorted = [...allBookingsData]
+                .filter(b => new Date(b.date) >= today)
+                .sort((a, b) => new Date(a.date) - new Date(b.date));
+            const totalRevenue = sorted.reduce((sum, b) => sum + (b.totalPrice || 0), 0);
+            const confirmedCount = sorted.filter(b => b.status === 'confirmed').length;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html><head><title>Bookings Report - Travel Bliss</title>
+                <style>
+                    body { font-family: Arial; padding: 20px; }
+                    h1 { color: #6366f1; margin-bottom: 5px; }
+                    .subtitle { color: #666; margin-bottom: 20px; }
+                    .stats { display: flex; gap: 30px; margin-bottom: 20px; padding: 15px; background: #f8f9ff; border-radius: 8px; }
+                    .stat { text-align: center; }
+                    .stat-value { font-size: 24px; font-weight: bold; color: #6366f1; }
+                    .stat-label { font-size: 12px; color: #666; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 11px; }
+                    th { background: #6366f1; color: white; }
+                    .confirmed { color: #22c55e; font-weight: bold; }
+                    .pending { color: #ff9800; font-weight: bold; }
+                    .cancelled { color: #ef4444; font-weight: bold; }
+                    .urgent { background: #fff3f3; }
+                    .days-left { font-size: 10px; color: #666; }
+                    .urgent-badge { background: #ef4444; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px; }
+                </style></head><body>
+                <h1>🌍 Travel Bliss - Bookings Report</h1>
+                <p class="subtitle">Yaratilgan: ${today.toLocaleDateString('uz-UZ', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+
+                <div class="stats">
+                    <div class="stat"><div class="stat-value">${sorted.length}</div><div class="stat-label">Jami bronlar</div></div>
+                    <div class="stat"><div class="stat-value">${confirmedCount}</div><div class="stat-label">Tasdiqlangan</div></div>
+                    <div class="stat"><div class="stat-value">$${totalRevenue.toLocaleString()}</div><div class="stat-label">Jami daromad</div></div>
+                </div>
+
+                <table>
+                    <tr>
+                        <th>#</th>
+                        <th>Tur nomi</th>
+                        <th>Mijoz</th>
+                        <th>Telefon</th>
+                        <th>Boshlanish</th>
+                        <th>Tugash</th>
+                        <th>Qolgan kun</th>
+                        <th>Mehmonlar</th>
+                        <th>Narx</th>
+                        <th>Holat</th>
+                    </tr>
+                    ${sorted.map((b, i) => {
+                        const startDate = new Date(b.date);
+                        const duration = b.duration || 1;
+                        const endDate = new Date(startDate.getTime() + (duration - 1) * 24 * 60 * 60 * 1000);
+                        const daysLeft = Math.ceil((startDate - today) / (1000 * 60 * 60 * 24));
+                        const isUrgent = daysLeft >= 0 && daysLeft <= 3;
+                        const isPast = daysLeft < 0;
+                        return `
+                        <tr class="${isUrgent ? 'urgent' : ''}">
+                            <td>${i + 1}</td>
+                            <td><strong>${b.tourName}</strong><br><span style="font-size:10px;color:#666;">${duration} kun</span></td>
+                            <td>${b.customerName}<br><span style="font-size:10px;color:#666;">${b.customerEmail}</span></td>
+                            <td>${b.customerPhone}</td>
+                            <td>${startDate.toLocaleDateString('uz-UZ')}</td>
+                            <td>${endDate.toLocaleDateString('uz-UZ')}</td>
+                            <td>${isPast ? '<span style="color:#999;">O\'tgan</span>' : isUrgent ? '<span class="urgent-badge">' + daysLeft + ' kun!</span>' : '<span class="days-left">' + daysLeft + ' kun</span>'}</td>
+                            <td>${b.guests?.adults || 0} katta${b.guests?.children ? ', ' + b.guests.children + ' bola' : ''}</td>
+                            <td><strong>$${b.totalPrice}</strong></td>
+                            <td class="${b.status}">${b.status === 'confirmed' ? '✓ Tasdiqlangan' : b.status === 'pending' ? '⏳ Kutilmoqda' : '✗ Bekor'}</td>
+                        </tr>
+                    `}).join('')}
+                </table>
+                <p style="margin-top: 20px; font-size: 11px; color: #666; text-align: center;">
+                    © ${new Date().getFullYear()} Travel Bliss Uzbekistan | silk-road-bliss.uz
+                </p>
+                </body></html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        function filterBookings() {
+            const searchTerm = document.getElementById('bookingSearchInput').value.toLowerCase().trim();
+            const tbody = document.getElementById('bookingsTableBody');
+
+            if (!allBookingsData.length) return;
+
+            const filtered = searchTerm ? allBookingsData.filter(b =>
+                (b.customerName || '').toLowerCase().includes(searchTerm) ||
+                (b.customerEmail || '').toLowerCase().includes(searchTerm) ||
+                (b.customerPhone || '').includes(searchTerm) ||
+                (b.tourName || '').toLowerCase().includes(searchTerm)
+            ) : allBookingsData;
+
+            renderBookingsTable(filtered, tbody);
+        }
+
+        function renderBookingsTable(bookings, tbody) {
+            if (bookings.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="padding: 40px; text-align: center; color: #9ca3af;">Hech narsa topilmadi</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = bookings.map(booking => `
+                <tr style="border-bottom: 1px solid #e5e7eb;">
+                    <td style="padding: 15px; color: #6b7280;">#${booking.id?.slice(-6) || 'N/A'}</td>
+                    <td style="padding: 15px; font-weight: 500; color: #374151;">${booking.tourName || 'Unknown'}</td>
+                    <td style="padding: 15px;">
+                        <div style="font-weight: 500; color: #374151;">${booking.customerName}</div>
+                        <div style="font-size: 12px; color: #6b7280;">${booking.customerEmail}</div>
+                        <div style="font-size: 12px; color: #6b7280;">${booking.customerPhone}</div>
+                    </td>
+                    <td style="padding: 15px; color: #374151;">${new Date(booking.date).toLocaleDateString()}</td>
+                    <td style="padding: 15px; color: #374151;">${booking.guests?.adults || 0} + ${booking.guests?.children || 0}</td>
+                    <td style="padding: 15px; font-weight: 600; color: #059669;">$${booking.totalPrice}</td>
+                    <td style="padding: 15px;">
+                        <span style="padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;
+                            ${booking.status === 'confirmed' ? 'background: #dcfce7; color: #166534;' :
+                              booking.status === 'pending' ? 'background: #fef3c7; color: #92400e;' :
+                              'background: #fee2e2; color: #991b1b;'}">
+                            ${booking.status}
+                        </span>
+                    </td>
+                    <td style="padding: 15px;">
+                        <button onclick="viewBookingDetails('${booking.id}')" style="background: #6366f1; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; margin-right: 5px;">View</button>
+                        ${booking.status === 'pending' ? `
+                            <button onclick="updateBookingStatus('${booking.id}', 'confirmed')" style="background: #22c55e; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; margin-right: 5px;">Confirm</button>
+                            <button onclick="updateBookingStatus('${booking.id}', 'cancelled')" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer;">Cancel</button>
+                        ` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
         async function loadBookings() {
             const tbody = document.getElementById('bookingsTableBody');
             const statusFilter = document.getElementById('statusFilter').value;
@@ -3784,12 +4569,56 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                 }
 
                 const { bookings, stats } = result.data;
+                allBookingsData = bookings; // Save for filtering
+                document.getElementById('bookingSearchInput').value = ''; // Clear search
+                renderCalendar(); // Update calendar
 
                 // Update statistics
                 document.getElementById('totalBookings').textContent = stats.total || 0;
                 document.getElementById('pendingBookings').textContent = stats.pending || 0;
                 document.getElementById('confirmedBookings').textContent = stats.confirmed || 0;
                 document.getElementById('cancelledBookings').textContent = stats.cancelled || 0;
+
+                // Show upcoming tours (7 kun ichida)
+                const today = new Date();
+                const next7Days = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+                const upcomingBookings = bookings.filter(b => {
+                    const tourDate = new Date(b.date);
+                    return b.status === 'confirmed' && tourDate >= today && tourDate <= next7Days;
+                });
+
+                const upcomingSection = document.getElementById('upcomingToursSection');
+                const upcomingList = document.getElementById('upcomingToursList');
+
+                if (upcomingBookings.length > 0) {
+                    upcomingSection.style.display = 'block';
+                    upcomingList.innerHTML = upcomingBookings.map(b => {
+                        const tourDate = new Date(b.date);
+                        const daysLeft = Math.ceil((tourDate - today) / (1000 * 60 * 60 * 24));
+                        const urgentClass = daysLeft <= 2 ? 'background: #ff6b6b;' : 'background: rgba(255,255,255,0.2);';
+                        return `
+                            <div onclick="viewBookingDetails('${b.id}')" style="background: rgba(255,255,255,0.15); border-radius: 10px; padding: 15px; backdrop-filter: blur(10px); cursor: pointer; transition: transform 0.2s, background 0.2s;" onmouseover="this.style.transform='scale(1.02)'; this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.transform='scale(1)'; this.style.background='rgba(255,255,255,0.15)'">
+                                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                    <h4 style="color: white; margin: 0; font-size: 16px;">${b.tourName}</h4>
+                                    <span style="${urgentClass} color: white; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: bold;">
+                                        ${daysLeft === 0 ? 'BUGUN!' : daysLeft === 1 ? 'ERTAGA!' : daysLeft + ' kun qoldi'}
+                                    </span>
+                                </div>
+                                <p style="color: rgba(255,255,255,0.9); margin: 5px 0; font-size: 14px;">
+                                    📅 ${tourDate.toLocaleDateString('uz-UZ', { weekday: 'long', day: 'numeric', month: 'long' })}
+                                </p>
+                                <p style="color: rgba(255,255,255,0.9); margin: 5px 0; font-size: 14px;">
+                                    👤 ${b.customerName} | 👥 ${b.guests?.adults || 0} kishi
+                                </p>
+                                <p style="color: rgba(255,255,255,0.9); margin: 5px 0; font-size: 14px;">
+                                    📞 ${b.customerPhone}
+                                </p>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    upcomingSection.style.display = 'none';
+                }
 
                 if (bookings.length === 0) {
                     tbody.innerHTML = `
@@ -3848,6 +4677,9 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                                     <button onclick="viewBookingDetails('${booking.id}')" style="padding: 6px 12px; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">
                                         View
                                     </button>
+                                    <button onclick="deleteBooking('${booking.id}')" style="padding: 6px 12px; background: #991b1b; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">
+                                        🗑
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -3865,6 +4697,28 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                         </td>
                     </tr>
                 `;
+            }
+        }
+
+        async function deleteBooking(bookingId) {
+            if (!confirm('Bronni o\'chirmoqchimisiz?')) return;
+            if (!confirm('DIQQAT! Bu amalni qaytarib bo\'lmaydi. Rostdan o\'chirilsinmi?')) return;
+
+            try {
+                const token = localStorage.getItem('accessToken');
+                const response = await fetch(`${API_URL}/bookings/${bookingId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('Bron o\'chirildi!');
+                    loadBookings();
+                } else {
+                    alert('Xatolik: ' + result.message);
+                }
+            } catch (error) {
+                alert('Xatolik: ' + error.message);
             }
         }
 
