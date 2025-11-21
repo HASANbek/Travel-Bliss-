@@ -1763,6 +1763,11 @@
                 return imageName;
             }
 
+            // If it's an uploaded file path, prepend API base URL
+            if (imageName.startsWith('/uploads/')) {
+                return 'http://localhost:4000' + imageName;
+            }
+
             // Otherwise, prepend the assets path (images are in home1 folder)
             return `assets/img/home1/${imageName}`;
         }

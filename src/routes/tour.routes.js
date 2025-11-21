@@ -8,6 +8,7 @@ const { validateTour } = require('../middlewares/validation.middleware');
 router.get('/stats', tourController.getTourStats);
 router.get('/featured', tourController.getFeaturedTours);
 router.get('/:id/seo', tourController.getTourSEO);
+router.put('/:id/seo', tourController.updateTourSEO);
 
 router
   .route('/')

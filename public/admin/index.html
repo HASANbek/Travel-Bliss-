@@ -2050,8 +2050,9 @@
                 }
 
                 // Add Content-Type if not present and it's a POST/PUT request
+                // BUT skip if body is FormData (for file uploads - browser sets correct Content-Type)
                 if (options.method && ['POST', 'PUT', 'PATCH'].includes(options.method.toUpperCase())) {
-                    if (!options.headers['Content-Type']) {
+                    if (!options.headers['Content-Type'] && !(options.body instanceof FormData)) {
                         options.headers['Content-Type'] = 'application/json';
                     }
                 }
@@ -3265,6 +3266,9 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
             const imageUrls = document.getElementById('tourImages').value.split('\n').filter(url => url.trim());
             formData.images = imageUrls;
 
+            console.log('📸 tourMediaImages:', tourMediaImages);
+            console.log('📸 textarea value:', document.getElementById('tourImages').value);
+            console.log('📸 images to save:', imageUrls);
             console.log('Tour data to save:', formData);
 
             // Check if we're editing or creating
@@ -3423,7 +3427,8 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                     return;
                 }
 
-                const tour = result.data;
+                // API returns { data: { tour: {...} } } or { data: {...} }
+                const tour = result.data.tour || result.data;
 
                 // Set modal title to Edit mode
                 document.querySelector('.add-tour-modal-header h2').textContent = '✏️ Edit Tour';
@@ -3592,7 +3597,10 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                             <!-- Header -->
                             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px 30px; border-radius: 15px 15px 0 0; display: flex; justify-content: space-between; align-items: center;">
                                 <h2 style="margin: 0; font-size: 24px;">🔍 SEO Details: ${tour.title}</h2>
-                                <button onclick="closeSEOModal()" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center;">&times;</button>
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <button onclick="toggleSEOEditMode('${tourId}')" id="seoEditBtn" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 5px;">✏️ Edit</button>
+                                    <button onclick="closeSEOModal()" style="background: rgba(255,255,255,0.2); border: none; color: white; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center;">&times;</button>
+                                </div>
                             </div>
 
                             <!-- Body -->
@@ -3651,9 +3659,14 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                                 <div style="margin-bottom: 25px;">
                                     <h4 style="color: #667eea; font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #667eea;">📘 Social Media (Open Graph)</h4>
                                     <div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: white;">
+                                        ${tour.mainImage || tour.images?.[0] ? `
+                                        <img src="${(() => { const img = tour.mainImage || tour.images[0]; return img.startsWith('http') ? img : 'http://localhost:4000' + img; })()}" alt="${tour.title}" style="width: 100%; height: 200px; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div style="display: none; width: 100%; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: 600;">📷 Image not found</div>
+                                        ` : `
                                         <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: 600;">
                                             📷 ${tour.title}
                                         </div>
+                                        `}
                                         <div style="padding: 15px;">
                                             <div style="font-size: 12px; color: #65676b; margin-bottom: 5px;">${seo.meta.canonical ? new URL(seo.meta.canonical).hostname : 'No URL'}</div>
                                             <h4 style="font-size: 16px; margin: 0 0 8px 0;">${seo.meta.ogTitle || 'No title'}</h4>
@@ -3664,7 +3677,7 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
 
                                 ${seo.score && seo.score.checks ? `
                                 <!-- SEO Checks -->
-                                <div>
+                                <div id="seoChecksSection">
                                     <h4 style="color: #667eea; font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #667eea;">✓ SEO Checklist</h4>
                                     ${seo.score.checks.map(check => `
                                         <div style="display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee;">
@@ -3677,6 +3690,46 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                                     `).join('')}
                                 </div>
                                 ` : ''}
+
+                                <!-- SEO Edit Form (Hidden by default) -->
+                                <div id="seoEditForm" style="display: none;">
+                                    <h4 style="color: #667eea; font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #667eea;">✏️ Edit SEO</h4>
+
+                                    <div style="margin-bottom: 20px;">
+                                        <label style="display: block; font-size: 14px; font-weight: 600; color: #333; margin-bottom: 8px;">SEO Title</label>
+                                        <input type="text" id="seoEditTitle" value="${(seo.meta.title || '').replace(/"/g, '&quot;')}"
+                                            style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box;"
+                                            placeholder="Enter SEO title (50-60 characters recommended)">
+                                        <div style="font-size: 12px; color: #666; margin-top: 5px;">Characters: <span id="titleCharCount">${seo.meta.title ? seo.meta.title.length : 0}</span>/60</div>
+                                    </div>
+
+                                    <div style="margin-bottom: 20px;">
+                                        <label style="display: block; font-size: 14px; font-weight: 600; color: #333; margin-bottom: 8px;">Meta Description</label>
+                                        <textarea id="seoEditDescription" rows="3"
+                                            style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box; resize: vertical;"
+                                            placeholder="Enter meta description (150-160 characters recommended)">${seo.meta.description || ''}</textarea>
+                                        <div style="font-size: 12px; color: #666; margin-top: 5px;">Characters: <span id="descCharCount">${seo.meta.description ? seo.meta.description.length : 0}</span>/160</div>
+                                    </div>
+
+                                    <div style="margin-bottom: 20px;">
+                                        <label style="display: block; font-size: 14px; font-weight: 600; color: #333; margin-bottom: 8px;">URL Slug</label>
+                                        <input type="text" id="seoEditSlug" value="${tour.slug || ''}"
+                                            style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box; font-family: monospace;"
+                                            placeholder="url-friendly-slug">
+                                    </div>
+
+                                    <div style="margin-bottom: 20px;">
+                                        <label style="display: block; font-size: 14px; font-weight: 600; color: #333; margin-bottom: 8px;">Keywords (comma separated)</label>
+                                        <input type="text" id="seoEditKeywords" value="${seo.meta.keywords && Array.isArray(seo.meta.keywords) ? seo.meta.keywords.join(', ') : ''}"
+                                            style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box;"
+                                            placeholder="keyword1, keyword2, keyword3">
+                                    </div>
+
+                                    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                                        <button onclick="toggleSEOEditMode('${tourId}')" style="background: #6c757d; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 14px;">Cancel</button>
+                                        <button onclick="saveSEO('${tourId}')" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">💾 Save SEO</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -3696,6 +3749,69 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
             const modal = document.getElementById('seoModal');
             if (modal) {
                 modal.remove();
+            }
+        }
+
+        // Toggle SEO Edit Mode
+        function toggleSEOEditMode(tourId) {
+            const editForm = document.getElementById('seoEditForm');
+            const editBtn = document.getElementById('seoEditBtn');
+
+            if (editForm.style.display === 'none') {
+                editForm.style.display = 'block';
+                editBtn.innerHTML = '👁️ View';
+
+                // Add character count listeners
+                const titleInput = document.getElementById('seoEditTitle');
+                const descInput = document.getElementById('seoEditDescription');
+
+                titleInput.addEventListener('input', () => {
+                    document.getElementById('titleCharCount').textContent = titleInput.value.length;
+                });
+                descInput.addEventListener('input', () => {
+                    document.getElementById('descCharCount').textContent = descInput.value.length;
+                });
+            } else {
+                editForm.style.display = 'none';
+                editBtn.innerHTML = '✏️ Edit';
+            }
+        }
+
+        // Save SEO
+        async function saveSEO(tourId) {
+            const title = document.getElementById('seoEditTitle').value.trim();
+            const description = document.getElementById('seoEditDescription').value.trim();
+            const slug = document.getElementById('seoEditSlug').value.trim();
+            const keywordsStr = document.getElementById('seoEditKeywords').value.trim();
+            const keywords = keywordsStr ? keywordsStr.split(',').map(k => k.trim()).filter(k => k) : [];
+
+            try {
+                const response = await fetch(`${API_URL}/tours/${tourId}/seo`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+                    },
+                    body: JSON.stringify({
+                        seoTitle: title,
+                        seoDescription: description,
+                        slug: slug,
+                        seoKeywords: keywords
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('SEO saved successfully!');
+                    closeSEOModal();
+                    loadTours(); // Refresh tours list
+                } else {
+                    alert('Failed to save SEO: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error saving SEO:', error);
+                alert('Error saving SEO: ' + error.message);
             }
         }
 

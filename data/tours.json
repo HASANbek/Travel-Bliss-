@@ -42,43 +42,43 @@
         "day": 1,
         "title": "Arrival in Samarkand",
         "description": "Pick up from hotel, visit Registan Square",
+        "image": null,
+        "imageCaption": null,
+        "city": null,
+        "accommodation": "Registan Plaza Hotel",
+        "meals": null,
         "activities": [
           "Registan Square",
           "Local dinner"
-        ],
-        "meals": "Dinner",
-        "accommodation": "Registan Plaza Hotel",
-        "transport": [
-          "Car"
         ]
       },
       {
         "day": 2,
         "title": "Historical Sites",
         "description": "Full day exploring Samarkand",
+        "image": null,
+        "imageCaption": null,
+        "city": null,
+        "accommodation": "Registan Plaza Hotel",
+        "meals": null,
         "activities": [
           "Shah-i-Zinda",
           "Bibi-Khanym Mosque",
           "Siab Bazaar"
-        ],
-        "meals": "Breakfast, Lunch, Dinner",
-        "accommodation": "Registan Plaza Hotel",
-        "transport": [
-          "Car"
         ]
       },
       {
         "day": 3,
         "title": "Departure",
         "description": "Visit Gur-Amir Mausoleum and departure",
+        "image": null,
+        "imageCaption": null,
+        "city": null,
+        "accommodation": "N/A",
+        "meals": null,
         "activities": [
           "Gur-Amir",
           "Ulugbek Observatory"
-        ],
-        "meals": "Breakfast",
-        "accommodation": "N/A",
-        "transport": [
-          "Car"
         ]
       }
     ],
@@ -95,7 +95,19 @@
     ],
     "id": "1",
     "createdAt": "2025-11-19T08:20:37.384Z",
-    "maxGroupSize": 50
+    "maxGroupSize": 50,
+    "summary": "",
+    "discountPrice": null,
+    "difficulty": "",
+    "images": [
+      "/uploads/cobalt_4-1762704441124-476311231.jpg",
+      "/uploads/safari-yurts-12-1762704441137-113066493.jpg",
+      "/uploads/yurt_camp_2-1762704441150-305089375.jpg"
+    ],
+    "languages": [],
+    "season": "All Year",
+    "highlights": [],
+    "updatedAt": "2025-11-21T08:11:42.295Z"
   },
   {
     "title": "Bukhara Heritage Tour",
