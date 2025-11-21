@@ -3856,10 +3856,20 @@ async function loadCategoryMenu() {
             if (!aboutLi) { console.log('About link not found'); return; }
 
             console.log('Adding categories to menu:', categories.map(c => c.name));
+
+            // Map slug to tour category value
+            const slugToCategoryMap = {
+                'day-trips': 'day-trip',
+                'homestays-hiking': 'hiking',
+                'adventure-tours': 'adventure',
+                'cultural-tours': 'cultural'
+            };
+
             // Load tours for each category and create dropdown
             for (const category of categories) {
-                // Fetch tours for this category using slug directly
-                const toursResponse = await fetch(`/api/tours?category=${category.slug}`);
+                // Fetch tours for this category
+                const categoryValue = slugToCategoryMap[category.slug] || category.slug;
+                const toursResponse = await fetch(`/api/tours?category=${categoryValue}`);
                 const toursResult = await toursResponse.json();
 
                 const li = document.createElement('li');
@@ -3867,7 +3877,7 @@ async function loadCategoryMenu() {
 
                 const a = document.createElement('a');
                 a.href = `#${category.slug}`;
-                a.textContent = category.name;
+                a.innerHTML = `${category.name} ▾`;
 
                 // Add click event for mobile to toggle dropdown
                 a.addEventListener('click', function(e) {
