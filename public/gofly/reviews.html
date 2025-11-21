@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews - Travel Bliss</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh; padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 20px; background: rgba(255,255,255,0.2);
+            color: white; border-radius: 50px; text-decoration: none;
+            margin-bottom: 20px; transition: all 0.3s; backdrop-filter: blur(10px);
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.3); transform: translateX(-5px); }
+        .page-card {
+            background: white; border-radius: 20px; overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 60px 40px; text-align: center;
+        }
+        .page-header h1 { font-size: 42px; margin-bottom: 15px; }
+        .page-header p { font-size: 18px; opacity: 0.9; }
+        .stats-bar {
+            display: flex; justify-content: center; gap: 40px; margin-top: 30px;
+        }
+        .stat-item { text-align: center; }
+        .stat-number { font-size: 36px; font-weight: bold; }
+        .stat-label { font-size: 14px; opacity: 0.8; }
+        .page-content { padding: 40px; }
+        .reviews-list { display: flex; flex-direction: column; gap: 20px; }
+        .review-card {
+            background: #f9fafb; border-radius: 15px; padding: 25px;
+            transition: all 0.3s;
+        }
+        .review-card:hover { box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .review-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .avatar {
+            width: 50px; height: 50px; border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 20px; font-weight: bold;
+        }
+        .reviewer-info { flex: 1; }
+        .reviewer-name { font-size: 18px; color: #333; font-weight: 600; }
+        .review-date { font-size: 13px; color: #999; }
+        .stars { color: #fbbf24; font-size: 18px; }
+        .review-text { color: #555; line-height: 1.7; }
+        .tour-tag {
+            display: inline-block; background: #e0e7ff; color: #4338ca;
+            padding: 5px 12px; border-radius: 20px; font-size: 12px; margin-top: 15px;
+        }
+        .cta-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px; border-radius: 15px; text-align: center; color: white; margin-top: 40px;
+        }
+        .btn {
+            display: inline-block; padding: 15px 40px; background: white;
+            color: #667eea; border-radius: 50px; text-decoration: none;
+            font-weight: bold; transition: all 0.3s;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 32px; }
+            .page-content { padding: 30px 20px; }
+            .stats-bar { gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="travel-agency-03.html" class="back-btn">
+            <span>&#8592;</span> Orqaga qaytish
+        </a>
+        <div class="page-card">
+            <div class="page-header">
+                <h1>Mijozlar Fikrlari</h1>
+                <p>Bizning xizmatlarimiz haqida sharhlar</p>
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <div class="stat-number">4.9</div>
+                        <div class="stat-label">O'rtacha reyting</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Sharhlar</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Mamnun mijozlar</div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-content">
+                <div id="reviewsList" class="reviews-list">
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="avatar">A</div>
+                            <div class="reviewer-info">
+                                <div class="reviewer-name">Aziz Karimov</div>
+                                <div class="review-date">2024-yil, Dekabr</div>
+                            </div>
+                            <div class="stars">★★★★★</div>
+                        </div>
+                        <p class="review-text">Samarqandga sayohat juda ajoyib bo'ldi! Gid juda bilimli va mehribon edi. Transport qulay, mehmonxona zo'r. Albatta yana qaytaman!</p>
+                        <span class="tour-tag">Samarqand 2 kunlik tur</span>
+                    </div>
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="avatar">M</div>
+                            <div class="reviewer-info">
+                                <div class="reviewer-name">Malika Rahimova</div>
+                                <div class="review-date">2024-yil, Noyabr</div>
+                            </div>
+                            <div class="stars">★★★★★</div>
+                        </div>
+                        <p class="review-text">Oilamiz bilan Xivaga bordik. Bolalar ham kattalar ham juda mamnun bo'ldi. Professional xizmat, rahmat Travel Bliss!</p>
+                        <span class="tour-tag">Xiva oilaviy tur</span>
+                    </div>
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="avatar">S</div>
+                            <div class="reviewer-info">
+                                <div class="reviewer-name">Sardor Toshmatov</div>
+                                <div class="review-date">2024-yil, Oktabr</div>
+                            </div>
+                            <div class="stars">★★★★☆</div>
+                        </div>
+                        <p class="review-text">Buxoro sayohati zo'r o'tdi. Tarixiy joylarni ko'rdik, mazali ovqatlar yedik. Faqat vaqt bir oz kam bo'ldi, 3 kun yaxshiroq bo'lardi.</p>
+                        <span class="tour-tag">Buxoro 2 kunlik tur</span>
+                    </div>
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="avatar">D</div>
+                            <div class="reviewer-info">
+                                <div class="reviewer-name">Dilnoza Usmonova</div>
+                                <div class="review-date">2024-yil, Sentyabr</div>
+                            </div>
+                            <div class="stars">★★★★★</div>
+                        </div>
+                        <p class="review-text">Chimyonga tog' sayohati hayotimda eng yaxshi tajriba bo'ldi! Tabiat go'zalligi hayratga soldi. Rahmat!</p>
+                        <span class="tour-tag">Chimyon tog' turi</span>
+                    </div>
+                </div>
+                <div class="cta-section">
+                    <h3 style="font-size:24px;margin-bottom:15px;">Sayohatingizni Bugun Boshlang!</h3>
+                    <p style="opacity:0.9;margin-bottom:25px;">Siz ham bizning baxtli mijozlarimizdan biri bo'ling</p>
+                    <a href="travel-agency-03.html" class="btn">Turlarni Ko'rish</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

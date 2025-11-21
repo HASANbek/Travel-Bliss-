@@ -325,5 +325,56 @@
             </div>
         </div>
     </div>
+    <script>
+        const API_BASE = window.location.origin;
+
+        async function loadAboutPage() {
+            try {
+                const response = await fetch(`${API_BASE}/api/pages/about`);
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    const data = result.data;
+
+                    // Title va subtitle
+                    if (data.content?.subtitle) {
+                        document.querySelector('.about-header p').textContent = data.content.subtitle;
+                    }
+
+                    // Main text
+                    if (data.content?.mainText) {
+                        const sections = document.querySelectorAll('.section-text');
+                        if (sections[0]) sections[0].textContent = data.content.mainText;
+                    }
+
+                    if (data.content?.missionText) {
+                        const sections = document.querySelectorAll('.section-text');
+                        if (sections[1]) sections[1].textContent = data.content.missionText;
+                    }
+
+                    // Stats
+                    if (data.stats) {
+                        const statItems = document.querySelectorAll('.stat-item');
+                        if (statItems[0] && data.stats.tourists) {
+                            statItems[0].querySelector('.stat-number').textContent = data.stats.tourists;
+                        }
+                        if (statItems[1] && data.stats.tours) {
+                            statItems[1].querySelector('.stat-number').textContent = data.stats.tours;
+                        }
+                        if (statItems[2] && data.stats.rating) {
+                            statItems[2].querySelector('.stat-number').textContent = data.stats.rating;
+                        }
+                        if (statItems[3] && data.stats.cities) {
+                            statItems[3].querySelector('.stat-number').textContent = data.stats.cities;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('About sahifasini yuklashda xatolik:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadAboutPage);
+    </script>
 </body>
 </html>

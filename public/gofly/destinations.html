@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destinations - Travel Bliss</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 20px; background: rgba(255,255,255,0.2);
+            color: white; border-radius: 50px; text-decoration: none;
+            margin-bottom: 20px; transition: all 0.3s; backdrop-filter: blur(10px);
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.3); transform: translateX(-5px); }
+        .page-card {
+            background: white; border-radius: 20px; overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 60px 40px; text-align: center;
+        }
+        .page-header h1 { font-size: 42px; margin-bottom: 15px; }
+        .page-header p { font-size: 18px; opacity: 0.9; }
+        .page-content { padding: 40px; }
+        .destinations-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px; margin-top: 20px;
+        }
+        .destination-card {
+            background: #f9fafb; border-radius: 15px; overflow: hidden;
+            transition: all 0.3s; cursor: pointer;
+        }
+        .destination-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .destination-img {
+            width: 100%; height: 200px; object-fit: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .destination-info { padding: 20px; }
+        .destination-name { font-size: 22px; color: #333; margin-bottom: 10px; }
+        .destination-desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 15px; }
+        .destination-meta { display: flex; justify-content: space-between; align-items: center; }
+        .tour-count { background: #e0e7ff; color: #4338ca; padding: 5px 12px; border-radius: 20px; font-size: 13px; }
+        .loading { text-align: center; padding: 60px; color: #666; font-size: 18px; }
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 32px; }
+            .page-content { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="travel-agency-03.html" class="back-btn">
+            <span>&#8592;</span> Orqaga qaytish
+        </a>
+        <div class="page-card">
+            <div class="page-header">
+                <h1>Sayohat Manzillari</h1>
+                <p>O'zbekistonning eng go'zal joylari</p>
+            </div>
+            <div class="page-content">
+                <div id="destinationsGrid" class="destinations-grid">
+                    <div class="loading">Yuklanmoqda...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const API_BASE = window.location.origin;
+        async function loadDestinations() {
+            try {
+                const response = await fetch(`${API_BASE}/api/destinations`);
+                const result = await response.json();
+                const container = document.getElementById('destinationsGrid');
+                if (result.success && result.data && result.data.length > 0) {
+                    container.innerHTML = result.data.map(d => `
+                        <div class="destination-card" onclick="window.location.href='travel-agency-03.html?destination=${d._id}'">
+                            <img src="${d.image || ''}" alt="${d.name}" class="destination-img" onerror="this.style.background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'">
+                            <div class="destination-info">
+                                <h3 class="destination-name">${d.name}</h3>
+                                <p class="destination-desc">${d.description || ''}</p>
+                                <div class="destination-meta">
+                                    <span class="tour-count">${d.tourCount || 0} ta tur</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p style="text-align:center;color:#666;">Hozircha manzillar mavjud emas</p>';
+                }
+            } catch (error) {
+                console.error('Destinations yuklashda xatolik:', error);
+                document.getElementById('destinationsGrid').innerHTML = '<p style="text-align:center;color:#666;">Yuklashda xatolik</p>';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadDestinations);
+    </script>
+</body>
+</html>

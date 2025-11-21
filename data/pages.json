@@ -1,0 +1,190 @@
+{
+  "about": {
+    "id": "about",
+    "title": "About Us",
+    "titleUz": "Biz haqimizda",
+    "heroImage": "/uploads/pages/about-hero.jpg",
+    "content": {
+      "mission": {
+        "title": "Our Mission",
+        "titleUz": "Bizning maqsadimiz",
+        "text": "To provide unforgettable travel experiences in Uzbekistan",
+        "textUz": "O'zbekistonda unutilmas sayohat tajribalarini taqdim etish"
+      },
+      "description": {
+        "title": "Who We Are",
+        "titleUz": "Biz kimamiz",
+        "text": "Travel Bliss is a premier travel agency specializing in tours across Uzbekistan. With years of experience, we offer authentic cultural experiences, comfortable accommodations, and professional guides.",
+        "textUz": "Travel Bliss - O'zbekiston bo'ylab sayohatlarga ixtisoslashgan yetakchi sayohat agentligi. Ko'p yillik tajribamiz bilan biz haqiqiy madaniy tajribalar, qulay turar joylar va professional gidlarni taklif qilamiz."
+      }
+    },
+    "stats": [
+      {
+        "number": "500+",
+        "label": "Happy Clients",
+        "labelUz": "Mamnun mijozlar"
+      },
+      {
+        "number": "50+",
+        "label": "Tour Packages",
+        "labelUz": "Tur paketlar"
+      },
+      {
+        "number": "10+",
+        "label": "Years Experience",
+        "labelUz": "Yillik tajriba"
+      },
+      {
+        "number": "20+",
+        "label": "Expert Guides",
+        "labelUz": "Tajribali gidlar"
+      }
+    ],
+    "team": [
+      {
+        "name": "Alisher Karimov",
+        "position": "Founder & CEO",
+        "positionUz": "Asoschisi va Bosh direktor",
+        "image": "/uploads/team/ceo.jpg",
+        "social": {
+          "facebook": "",
+          "instagram": "",
+          "telegram": ""
+        }
+      }
+    ],
+    "updatedAt": "2025-11-21T10:16:08.196Z"
+  },
+  "contact": {
+    "id": "contact",
+    "title": "Contact Us",
+    "titleUz": "Biz bilan bog'laning",
+    "heroImage": "/uploads/pages/contact-hero.jpg",
+    "info": {
+      "address": "123 Amir Temur Street, Tashkent, Uzbekistan",
+      "phone": "+998 90 123 45 67",
+      "email": "info@travelbliss.uz",
+      "workingHours": "Mon-Fri: 9:00 - 18:00, Sat: 10:00 - 15:00"
+    },
+    "social": {
+      "whatsapp": "+998932244333",
+      "telegram": "https://t.me/travelbliss",
+      "instagram": "https://instagram.com/travelbliss",
+      "facebook": "https://facebook.com/travelbliss",
+      "youtube": "https://youtube.com/travelbliss",
+      "tiktok": ""
+    },
+    "map": {
+      "lat": 41.311081,
+      "lng": 69.240562,
+      "zoom": 15
+    },
+    "updatedAt": "2025-11-21T10:37:12.869Z"
+  },
+  "faq": {
+    "id": "faq",
+    "title": "Frequently Asked Questions",
+    "titleUz": "Ko'p so'raladigan savollar",
+    "heroImage": "/uploads/pages/faq-hero.jpg",
+    "categories": [
+      {
+        "name": "General",
+        "nameUz": "Umumiy",
+        "questions": [
+          {
+            "question": "How do I book a tour?",
+            "questionUz": "Turni qanday buyurtma qilaman?",
+            "answer": "You can book a tour through our website by selecting your preferred tour and filling out the booking form. You can also contact us directly via phone or email.",
+            "answerUz": "Siz saytimiz orqali o'zingiz yoqtirgan turni tanlab, buyurtma formasini to'ldirish orqali tur buyurtma qilishingiz mumkin. Bundan tashqari, telefon yoki email orqali biz bilan to'g'ridan-to'g'ri bog'lanishingiz mumkin."
+          },
+          {
+            "question": "What payment methods do you accept?",
+            "questionUz": "Qanday to'lov usullarini qabul qilasiz?",
+            "answer": "We accept cash, bank transfers, and major credit cards. For international clients, we also accept PayPal and wire transfers.",
+            "answerUz": "Biz naqd pul, bank o'tkazmalari va asosiy kredit kartalarini qabul qilamiz. Xalqaro mijozlar uchun PayPal va bank o'tkazmalarini ham qabul qilamiz."
+          }
+        ]
+      },
+      {
+        "name": "Tours",
+        "nameUz": "Turlar",
+        "questions": [
+          {
+            "question": "What is included in the tour price?",
+            "questionUz": "Tur narxiga nima kiradi?",
+            "answer": "Tour prices typically include accommodation, transportation, guide services, and entrance fees to attractions. Meals and personal expenses are usually not included unless specified.",
+            "answerUz": "Tur narxlariga odatda turar joy, transport, gid xizmatlari va diqqatga sazovor joylarga kirish to'lovlari kiradi. Ovqatlanish va shaxsiy xarajatlar, agar ko'rsatilmagan bo'lsa, odatda kirmaydi."
+          },
+          {
+            "question": "Can I customize my tour?",
+            "questionUz": "Turni o'zimga moslashtirishim mumkinmi?",
+            "answer": "Yes! We offer customized tour packages tailored to your preferences, schedule, and budget. Contact us to discuss your requirements.",
+            "answerUz": "Ha! Biz sizning xohishingiz, jadvalingiz va byudjetingizga moslashtirilgan maxsus tur paketlarini taklif qilamiz. Talablaringizni muhokama qilish uchun biz bilan bog'laning."
+          }
+        ]
+      },
+      {
+        "name": "Visa & Documents",
+        "nameUz": "Viza va hujjatlar",
+        "questions": [
+          {
+            "question": "Do I need a visa to visit Uzbekistan?",
+            "questionUz": "O'zbekistonga tashrif buyurish uchun viza kerakmi?",
+            "answer": "Many countries have visa-free access to Uzbekistan. Please check the visa requirements for your nationality on our Visa page or contact your local Uzbek embassy.",
+            "answerUz": "Ko'plab mamlakatlar O'zbekistonga vizasiz kirish huquqiga ega. Iltimos, o'z fuqaroligingiz uchun viza talablarini bizning Viza sahifamizda yoki mahalliy O'zbekiston elchixonangizda tekshiring."
+          }
+        ]
+      }
+    ],
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  },
+  "visa": {
+    "id": "visa",
+    "title": "Visa Information",
+    "titleUz": "Viza ma'lumotlari",
+    "heroImage": "/uploads/pages/visa-hero.jpg",
+    "intro": {
+      "text": "Uzbekistan welcomes visitors from around the world. Many countries enjoy visa-free access, while others can easily obtain an e-visa.",
+      "textUz": "O'zbekiston butun dunyo bo'ylab mehmonlarni qabul qiladi. Ko'plab mamlakatlar vizasiz kirish imkoniyatiga ega, boshqalar esa elektron vizani osonlik bilan olishlari mumkin."
+    },
+    "visaFreeCountries": [
+      "United States",
+      "United Kingdom",
+      "Germany",
+      "France",
+      "Japan",
+      "South Korea",
+      "Israel",
+      "Turkey",
+      "Malaysia",
+      "Singapore",
+      "Indonesia"
+    ],
+    "eVisaInfo": {
+      "title": "E-Visa Information",
+      "titleUz": "Elektron viza ma'lumotlari",
+      "text": "Citizens of countries not in the visa-free list can apply for an e-visa online.",
+      "textUz": "Vizasiz ro'yxatda bo'lmagan mamlakatlar fuqarolari onlayn elektron vizaga murojaat qilishlari mumkin.",
+      "link": "https://e-visa.gov.uz",
+      "processingTime": "3-5 business days",
+      "processingTimeUz": "3-5 ish kuni",
+      "validity": "30 days",
+      "validityUz": "30 kun"
+    },
+    "requirements": [
+      {
+        "title": "Valid Passport",
+        "titleUz": "Amal qiluvchi pasport",
+        "description": "Passport must be valid for at least 3 months after your planned departure from Uzbekistan",
+        "descriptionUz": "Pasport O'zbekistondan rejalashtirilgan jo'nab ketish sanasidan keyin kamida 3 oy amal qilishi kerak"
+      },
+      {
+        "title": "Return Ticket",
+        "titleUz": "Qaytish chiptasi",
+        "description": "Proof of onward or return travel",
+        "descriptionUz": "Keyingi yoki qaytish sayohati isboti"
+      }
+    ],
+    "updatedAt": "2025-01-01T00:00:00.000Z"
+  }
+}

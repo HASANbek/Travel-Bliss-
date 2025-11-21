@@ -15,40 +15,141 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             padding: 20px;
         }
 
         .container {
-            text-align: center;
-            max-width: 600px;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
-        .card {
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .faq-card {
             background: white;
             border-radius: 20px;
-            padding: 60px 40px;
+            overflow: hidden;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
-        .icon {
-            font-size: 100px;
-            margin-bottom: 30px;
+        .faq-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
         }
 
-        h1 {
-            font-size: 36px;
+        .faq-header h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .faq-header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .faq-content {
+            padding: 40px;
+        }
+
+        .category {
+            margin-bottom: 40px;
+        }
+
+        .category-title {
+            font-size: 24px;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .faq-item {
+            background: #f9fafb;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
             color: #333;
+            transition: all 0.3s;
+        }
+
+        .faq-question:hover {
+            background: #e5e7eb;
+        }
+
+        .faq-question .icon {
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-question .icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+        }
+
+        .faq-answer p {
+            padding: 0 20px 20px;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #666;
+            font-size: 18px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+        }
+
+        .empty-state .icon {
+            font-size: 80px;
             margin-bottom: 20px;
         }
 
-        p {
-            font-size: 18px;
+        .empty-state p {
             color: #666;
-            margin-bottom: 40px;
-            line-height: 1.6;
+            font-size: 18px;
+            margin-bottom: 30px;
         }
 
         .btn {
@@ -60,8 +161,6 @@
             text-decoration: none;
             font-weight: bold;
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            margin: 0 10px;
         }
 
         .btn:hover {
@@ -69,26 +168,96 @@
             box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
-        .btn-secondary {
-            background: #f9fafb;
-            color: #667eea;
-            box-shadow: none;
-        }
+        @media (max-width: 768px) {
+            .faq-header h1 {
+                font-size: 32px;
+            }
 
-        .btn-secondary:hover {
-            background: #e5e7eb;
+            .faq-content {
+                padding: 30px 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="card">
-            <div class="icon">❓</div>
-            <h1>Ko'p So'raladigan Savollar</h1>
-            <p>FAQ bo'limi hozircha tayyorlanmoqda. Savollaringiz bo'lsa biz bilan bog'laning.</p>
-            <a href="travel-agency-03.html" class="btn">Asosiy Sahifa</a>
-            <a href="contact.html" class="btn btn-secondary">Bog'lanish</a>
+        <a href="travel-agency-03.html" class="back-btn">
+            <span>&#8592;</span> Orqaga qaytish
+        </a>
+
+        <div class="faq-card">
+            <div class="faq-header">
+                <h1>Ko'p So'raladigan Savollar</h1>
+                <p>Eng ko'p beriladigan savollarga javoblar</p>
+            </div>
+
+            <div class="faq-content" id="faqContent">
+                <div class="loading">Yuklanmoqda...</div>
+            </div>
         </div>
     </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+
+        async function loadFaqPage() {
+            try {
+                const response = await fetch(`${API_BASE}/api/pages/faq`);
+                const result = await response.json();
+                const container = document.getElementById('faqContent');
+
+                if (result.success && result.data && result.data.categories && result.data.categories.length > 0) {
+                    let html = '';
+
+                    result.data.categories.forEach(category => {
+                        html += `<div class="category">
+                            <h2 class="category-title">${category.name}</h2>`;
+
+                        if (category.questions && category.questions.length > 0) {
+                            category.questions.forEach(q => {
+                                html += `<div class="faq-item">
+                                    <div class="faq-question" onclick="toggleFaq(this)">
+                                        <span>${q.question}</span>
+                                        <span class="icon">&#9660;</span>
+                                    </div>
+                                    <div class="faq-answer">
+                                        <p>${q.answer}</p>
+                                    </div>
+                                </div>`;
+                            });
+                        }
+
+                        html += '</div>';
+                    });
+
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">&#10067;</div>
+                            <p>FAQ bo'limi hozircha tayyorlanmoqda. Savollaringiz bo'lsa biz bilan bog'laning.</p>
+                            <a href="contact.html" class="btn">Bog'lanish</a>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('FAQ yuklashda xatolik:', error);
+                document.getElementById('faqContent').innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">&#10067;</div>
+                        <p>FAQ bo'limini yuklashda xatolik yuz berdi.</p>
+                        <a href="contact.html" class="btn">Bog'lanish</a>
+                    </div>
+                `;
+            }
+        }
+
+        function toggleFaq(element) {
+            const item = element.parentElement;
+            item.classList.toggle('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', loadFaqPage);
+    </script>
 </body>
 </html>
