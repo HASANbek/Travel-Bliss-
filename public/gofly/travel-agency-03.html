@@ -594,7 +594,7 @@ a.primary-btn1 {
                             <a href="about.html">About</a>
                         </li>
                         <li>
-                            <a href="contact.html">Contact Us</a>
+                            <a href="#" onclick="openContactModal(); return false;">Contact Us</a>
                         </li>
                     </ul>
                     <div class="contact-area d-xl-none d-flex" style="gap: 15px; align-items: center; flex-direction: column; padding: 15px 0;">
@@ -4092,6 +4092,110 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Updated', badgeCount, 'yellow/orange badges to purple/blue');
     }, 100);
 });
+</script>
+
+<!-- Contact Modal -->
+<div id="contactModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:99999; overflow-y:auto; padding:20px;">
+    <div style="max-width:900px; margin:20px auto; background:#1a1a2e; border-radius:24px; position:relative; animation:slideIn 0.3s ease;">
+        <button onclick="closeContactModal()" style="position:absolute; top:15px; right:20px; background:none; border:none; color:#333; font-size:30px; cursor:pointer; z-index:10;">&times;</button>
+        <div style="background:white; padding:30px 25px 20px; border-radius:24px 24px 0 0; text-align:center;">
+                <img src="assets/img/travel-bliss-logo.png" alt="Travel Bliss" style="height:70px; margin-bottom:15px;">
+                <h2 style="color:#1a1a2e; font-size:28px; margin:0 0 8px;">Get In Touch</h2>
+                <p style="color:#666; font-size:14px; margin:0;">Have questions? We'd love to hear from you!</p>
+            </div>
+            <div style="padding:30px 40px 40px;">
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:30px;">
+                <div style="background:rgba(255,255,255,0.05); padding:30px; border-radius:16px; border:1px solid rgba(255,255,255,0.1);">
+                    <h3 style="color:white; margin-bottom:20px; font-size:18px;">Contact Information</h3>
+                    <div style="margin-bottom:15px; display:flex; align-items:center; gap:15px;">
+                        <span style="width:40px; height:40px; background:linear-gradient(135deg,#667eea,#764ba2); border-radius:10px; display:flex; align-items:center; justify-content:center;">📞</span>
+                        <div><div style="color:white; font-weight:600;">Phone</div><div id="modalPhone" style="color:rgba(255,255,255,0.7); font-size:14px;">+998 90 123 45 67</div></div>
+                    </div>
+                    <div style="margin-bottom:15px; display:flex; align-items:center; gap:15px;">
+                        <span style="width:40px; height:40px; background:linear-gradient(135deg,#f093fb,#f5576c); border-radius:10px; display:flex; align-items:center; justify-content:center;">✉️</span>
+                        <div><div style="color:white; font-weight:600;">Email</div><div id="modalEmail" style="color:rgba(255,255,255,0.7); font-size:14px;">info@travelbliss.uz</div></div>
+                    </div>
+                    <div style="margin-bottom:15px; display:flex; align-items:center; gap:15px;">
+                        <span style="width:40px; height:40px; background:linear-gradient(135deg,#4facfe,#00f2fe); border-radius:10px; display:flex; align-items:center; justify-content:center;">📍</span>
+                        <div><div style="color:white; font-weight:600;">Address</div><div id="modalAddress" style="color:rgba(255,255,255,0.7); font-size:14px;">Tashkent, Uzbekistan</div></div>
+                    </div>
+                    <div style="margin-top:25px;">
+                        <div style="color:white; font-weight:600; margin-bottom:15px;">Connect With Us</div>
+                        <div id="modalSocial" style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <a href="#" style="padding:10px 16px; background:linear-gradient(135deg,#25D366,#128C7E); color:white; border-radius:8px; text-decoration:none; font-size:13px;">💬 WhatsApp</a>
+                            <a href="#" style="padding:10px 16px; background:linear-gradient(135deg,#0088cc,#229ED9); color:white; border-radius:8px; text-decoration:none; font-size:13px;">✈️ Telegram</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background:white; padding:30px; border-radius:16px;">
+                    <h3 style="color:#1a1a2e; margin-bottom:20px; font-size:18px;">Send a Message</h3>
+                    <form id="modalContactForm" onsubmit="submitModalForm(event)">
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+                            <input type="text" placeholder="First Name *" required style="padding:12px; border:2px solid #e5e7eb; border-radius:8px; font-size:14px;">
+                            <input type="text" placeholder="Last Name *" required style="padding:12px; border:2px solid #e5e7eb; border-radius:8px; font-size:14px;">
+                        </div>
+                        <input type="email" placeholder="Email *" required style="width:100%; padding:12px; border:2px solid #e5e7eb; border-radius:8px; font-size:14px; margin-bottom:12px;">
+                        <input type="tel" placeholder="Phone" style="width:100%; padding:12px; border:2px solid #e5e7eb; border-radius:8px; font-size:14px; margin-bottom:12px;">
+                        <select style="width:100%; padding:12px; border:2px solid #e5e7eb; border-radius:8px; font-size:14px; margin-bottom:12px; color:#666;">
+                            <option value="">Select Subject</option>
+                            <option>Tour Booking</option>
+                            <option>Custom Tour</option>
+                            <option>Support</option>
+                            <option>Other</option>
+                        </select>
+                        <textarea placeholder="Your Message *" required rows="4" style="width:100%; padding:12px; border:2px solid #e5e7eb; border-radius:8px; font-size:14px; margin-bottom:15px; resize:none;"></textarea>
+                        <button type="submit" style="width:100%; padding:14px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer;">Send Message</button>
+                    </form>
+                    <div id="modalSuccess" style="display:none; padding:15px; background:#d1fae5; border-radius:8px; color:#065f46; text-align:center; margin-top:15px;">✅ Message sent successfully!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+@keyframes slideIn { from { opacity:0; transform:translateY(-30px); } to { opacity:1; transform:translateY(0); } }
+#contactModal input:focus, #contactModal textarea:focus, #contactModal select:focus { outline:none; border-color:#667eea; }
+@media(max-width:768px) { #contactModal > div > div > div:first-of-type { grid-template-columns:1fr !important; } }
+</style>
+<script>
+function openContactModal() {
+    document.getElementById('contactModal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    loadModalContact();
+}
+function closeContactModal() {
+    document.getElementById('contactModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+function submitModalForm(e) {
+    e.preventDefault();
+    document.getElementById('modalSuccess').style.display = 'block';
+    e.target.reset();
+    setTimeout(() => { document.getElementById('modalSuccess').style.display = 'none'; }, 4000);
+}
+async function loadModalContact() {
+    try {
+        const res = await fetch('/api/pages/contact');
+        const data = await res.json();
+        if (data.success && data.data) {
+            const info = data.data.info;
+            const social = data.data.social;
+            if (info?.phone) document.getElementById('modalPhone').textContent = info.phone;
+            if (info?.email) document.getElementById('modalEmail').textContent = info.email;
+            if (info?.address) document.getElementById('modalAddress').textContent = info.address;
+            if (social) {
+                let html = '';
+                if (social.whatsapp) html += `<a href="https://wa.me/${social.whatsapp.replace(/[^0-9]/g,'')}" target="_blank" style="padding:10px 16px; background:linear-gradient(135deg,#25D366,#128C7E); color:white; border-radius:8px; text-decoration:none; font-size:13px;">💬 WhatsApp</a>`;
+                if (social.telegram) html += `<a href="${social.telegram}" target="_blank" style="padding:10px 16px; background:linear-gradient(135deg,#0088cc,#229ED9); color:white; border-radius:8px; text-decoration:none; font-size:13px;">✈️ Telegram</a>`;
+                if (social.instagram) html += `<a href="${social.instagram}" target="_blank" style="padding:10px 16px; background:linear-gradient(135deg,#833AB4,#E1306C); color:white; border-radius:8px; text-decoration:none; font-size:13px;">📷 Instagram</a>`;
+                if (html) document.getElementById('modalSocial').innerHTML = html;
+            }
+        }
+    } catch (e) { console.error(e); }
+}
+document.getElementById('contactModal').addEventListener('click', function(e) { if (e.target === this) closeContactModal(); });
 </script>
 
 </body>

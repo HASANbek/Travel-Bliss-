@@ -11,12 +11,6 @@
         "text": "To provide unforgettable travel experiences in Uzbekistan",
         "textUz": "O'zbekistonda unutilmas sayohat tajribalarini taqdim etish"
       },
-      "vision": {
-        "title": "Our Vision",
-        "titleUz": "Bizning ko'rinishimiz",
-        "text": "To be the leading travel agency in Central Asia",
-        "textUz": "Markaziy Osiyoda yetakchi sayohat agentligi bo'lish"
-      },
       "description": {
         "title": "Who We Are",
         "titleUz": "Biz kimamiz",
@@ -25,10 +19,26 @@
       }
     },
     "stats": [
-      { "number": "500+", "label": "Happy Clients", "labelUz": "Mamnun mijozlar" },
-      { "number": "50+", "label": "Tour Packages", "labelUz": "Tur paketlar" },
-      { "number": "10+", "label": "Years Experience", "labelUz": "Yillik tajriba" },
-      { "number": "20+", "label": "Expert Guides", "labelUz": "Tajribali gidlar" }
+      {
+        "number": "500+",
+        "label": "Happy Clients",
+        "labelUz": "Mamnun mijozlar"
+      },
+      {
+        "number": "50+",
+        "label": "Tour Packages",
+        "labelUz": "Tur paketlar"
+      },
+      {
+        "number": "10+",
+        "label": "Years Experience",
+        "labelUz": "Yillik tajriba"
+      },
+      {
+        "number": "20+",
+        "label": "Expert Guides",
+        "labelUz": "Tajribali gidlar"
+      }
     ],
     "team": [
       {
@@ -36,10 +46,14 @@
         "position": "Founder & CEO",
         "positionUz": "Asoschisi va Bosh direktor",
         "image": "/uploads/team/ceo.jpg",
-        "social": { "facebook": "", "instagram": "", "telegram": "" }
+        "social": {
+          "facebook": "",
+          "instagram": "",
+          "telegram": ""
+        }
       }
     ],
-    "updatedAt": "2025-01-01T00:00:00.000Z"
+    "updatedAt": "2025-11-21T10:16:08.196Z"
   },
   "contact": {
     "id": "contact",
@@ -48,26 +62,24 @@
     "heroImage": "/uploads/pages/contact-hero.jpg",
     "info": {
       "address": "123 Amir Temur Street, Tashkent, Uzbekistan",
-      "addressUz": "Amir Temur ko'chasi 123, Toshkent, O'zbekiston",
       "phone": "+998 90 123 45 67",
-      "phone2": "+998 91 234 56 78",
       "email": "info@travelbliss.uz",
-      "email2": "booking@travelbliss.uz",
-      "workingHours": "Mon-Fri: 9:00 - 18:00, Sat: 10:00 - 15:00",
-      "workingHoursUz": "Dush-Jum: 9:00 - 18:00, Shan: 10:00 - 15:00"
+      "workingHours": "Mon-Fri: 9:00 - 18:00, Sat: 10:00 - 15:00"
     },
     "social": {
-      "facebook": "https://facebook.com/travelbliss",
-      "instagram": "https://instagram.com/travelbliss",
+      "whatsapp": "+998932244333",
       "telegram": "https://t.me/travelbliss",
-      "youtube": "https://youtube.com/travelbliss"
+      "instagram": "https://instagram.com/travelbliss",
+      "facebook": "https://facebook.com/travelbliss",
+      "youtube": "https://youtube.com/travelbliss",
+      "tiktok": ""
     },
     "map": {
       "lat": 41.311081,
       "lng": 69.240562,
       "zoom": 15
     },
-    "updatedAt": "2025-01-01T00:00:00.000Z"
+    "updatedAt": "2025-11-21T10:37:12.869Z"
   },
   "faq": {
     "id": "faq",
@@ -136,8 +148,17 @@
       "textUz": "O'zbekiston butun dunyo bo'ylab mehmonlarni qabul qiladi. Ko'plab mamlakatlar vizasiz kirish imkoniyatiga ega, boshqalar esa elektron vizani osonlik bilan olishlari mumkin."
     },
     "visaFreeCountries": [
-      "United States", "United Kingdom", "Germany", "France", "Japan", "South Korea",
-      "Israel", "Turkey", "Malaysia", "Singapore", "Indonesia"
+      "United States",
+      "United Kingdom",
+      "Germany",
+      "France",
+      "Japan",
+      "South Korea",
+      "Israel",
+      "Turkey",
+      "Malaysia",
+      "Singapore",
+      "Indonesia"
     ],
     "eVisaInfo": {
       "title": "E-Visa Information",

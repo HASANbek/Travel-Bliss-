@@ -1,261 +1,231 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - Travel Bliss</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
             padding: 20px;
+            overflow-x: hidden;
         }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
+        .container { max-width: 1200px; margin: 0 auto; }
         .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border-radius: 50px;
-            text-decoration: none;
-            margin-bottom: 20px;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 12px 24px; background: rgba(255,255,255,0.1);
+            color: white; border-radius: 50px; text-decoration: none;
+            margin-bottom: 30px; transition: all 0.3s; backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
         }
+        .back-btn:hover { background: rgba(255,255,255,0.2); transform: translateX(-5px); }
 
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateX(-5px);
+        .page-header {
+            text-align: center; margin-bottom: 50px; color: white;
         }
-
-        .contact-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        .page-header h1 {
+            font-size: 48px; font-weight: 700; margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff 0%, #a8edea 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
+        .page-header p { font-size: 18px; opacity: 0.8; }
 
-        .contact-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 60px 40px;
-            text-align: center;
-        }
-
-        .contact-header h1 {
-            font-size: 42px;
-            margin-bottom: 15px;
-        }
-
-        .contact-header p {
-            font-size: 18px;
-            opacity: 0.9;
-        }
-
-        .contact-content {
-            padding: 40px;
+        .contact-grid {
+            display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px;
         }
 
         .contact-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 24px; padding: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-
+        .info-title {
+            font-size: 24px; font-weight: 600; color: white; margin-bottom: 30px;
+        }
         .info-item {
-            background: #f9fafb;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
+            display: flex; align-items: flex-start; gap: 20px;
+            padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-
+        .info-item:last-of-type { border-bottom: none; }
         .info-icon {
-            font-size: 40px;
-            margin-bottom: 15px;
+            width: 50px; height: 50px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
         }
+        .info-icon.phone { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .info-icon.email { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .info-icon.address { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .info-icon.hours { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .info-content h4 { color: white; font-size: 16px; font-weight: 600; margin-bottom: 5px; }
+        .info-content p { color: rgba(255,255,255,0.7); font-size: 14px; }
 
-        .info-label {
-            font-size: 14px;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
+        .social-section { margin-top: 30px; }
+        .social-title { color: white; font-size: 18px; font-weight: 600; margin-bottom: 20px; }
+        .social-links { display: flex; gap: 12px; flex-wrap: wrap; }
+        .social-btn {
+            display: flex; align-items: center; gap: 8px;
+            padding: 12px 20px; border-radius: 12px; text-decoration: none;
+            font-size: 14px; font-weight: 500; transition: all 0.3s; color: white;
         }
+        .social-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .social-btn.whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); }
+        .social-btn.telegram { background: linear-gradient(135deg, #0088cc, #229ED9); }
+        .social-btn.instagram { background: linear-gradient(135deg, #833AB4, #E1306C, #F77737); }
 
-        .info-value {
-            font-size: 18px;
-            color: #333;
-            font-weight: 500;
+        .contact-form-card {
+            background: white; border-radius: 24px; padding: 40px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.3);
         }
-
-        .contact-form {
-            background: #f9fafb;
-            padding: 40px;
-            border-radius: 15px;
-        }
-
         .form-title {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 30px;
-            text-align: center;
+            font-size: 24px; font-weight: 600; color: #1a1a2e; margin-bottom: 30px;
         }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group.full { grid-column: span 2; }
         .form-group label {
-            display: block;
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 8px;
-            font-weight: 500;
+            display: block; margin-bottom: 8px; font-weight: 500;
+            color: #333; font-size: 14px;
         }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e5e7eb;
-            border-radius: 10px;
-            font-size: 15px;
-            font-family: inherit;
-            transition: all 0.3s;
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%; padding: 14px 18px; border: 2px solid #e5e7eb;
+            border-radius: 12px; font-size: 15px; font-family: 'Poppins', sans-serif;
+            transition: all 0.3s; background: #f9fafb;
         }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none; border-color: #667eea; background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
         }
-
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
+        .form-group textarea { resize: vertical; min-height: 120px; }
 
         .submit-btn {
-            width: 100%;
-            padding: 15px;
+            width: 100%; padding: 16px; border: none; border-radius: 12px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
+            color: white; font-size: 16px; font-weight: 600; cursor: pointer;
+            transition: all 0.3s; font-family: 'Poppins', sans-serif;
         }
-
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
         }
-
         .success-message {
-            display: none;
-            background: #d1fae5;
-            color: #065f46;
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            text-align: center;
+            display: none; padding: 16px; background: #d1fae5;
+            border-radius: 12px; color: #065f46; text-align: center;
+            margin-top: 20px; font-weight: 500;
         }
 
-        @media (max-width: 768px) {
-            .contact-header h1 {
-                font-size: 32px;
-            }
-
-            .contact-content {
-                padding: 30px 20px;
-            }
-
-            .contact-form {
-                padding: 30px 20px;
-            }
+        @media (max-width: 900px) {
+            .contact-grid { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .form-group.full { grid-column: span 1; }
+            .page-header h1 { font-size: 36px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <a href="travel-agency-03.html" class="back-btn">
-            ← Orqaga qaytish
+            <span>←</span> Back to Home
         </a>
 
-        <div class="contact-card">
-            <div class="contact-header">
-                <h1>Biz Bilan Bog'laning</h1>
-                <p>Har qanday savol yoki takliflar uchun bizga murojaat qiling</p>
+        <div class="page-header">
+            <h1>Get In Touch</h1>
+            <p>Have questions? We'd love to hear from you. Send us a message!</p>
+        </div>
+
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h3 class="info-title">Contact Information</h3>
+
+                <div class="info-item">
+                    <div class="info-icon phone">📞</div>
+                    <div class="info-content">
+                        <h4>Phone</h4>
+                        <p id="phoneValue">+998 90 123 45 67</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon email">✉️</div>
+                    <div class="info-content">
+                        <h4>Email</h4>
+                        <p id="emailValue">info@travelbliss.uz</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon address">📍</div>
+                    <div class="info-content">
+                        <h4>Address</h4>
+                        <p id="addressValue">123 Amir Temur Street, Tashkent, Uzbekistan</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon hours">🕐</div>
+                    <div class="info-content">
+                        <h4>Working Hours</h4>
+                        <p id="hoursValue">Mon-Fri: 9:00 - 18:00, Sat: 10:00 - 15:00</p>
+                    </div>
+                </div>
+
+                <div class="social-section">
+                    <h4 class="social-title">Connect With Us</h4>
+                    <div class="social-links" id="socialLinks">
+                        <a href="#" class="social-btn whatsapp">💬 WhatsApp</a>
+                        <a href="#" class="social-btn telegram">✈️ Telegram</a>
+                        <a href="#" class="social-btn instagram">📷 Instagram</a>
+                    </div>
+                </div>
             </div>
 
-            <div class="contact-content">
-                <div class="contact-info">
-                    <div class="info-item">
-                        <div class="info-icon">📞</div>
-                        <div class="info-label">Telefon</div>
-                        <div class="info-value">+998 90 123 45 67</div>
-                    </div>
-
-                    <div class="info-item">
-                        <div class="info-icon">📧</div>
-                        <div class="info-label">Email</div>
-                        <div class="info-value">info@travelbliss.uz</div>
-                    </div>
-
-                    <div class="info-item">
-                        <div class="info-icon">📍</div>
-                        <div class="info-label">Manzil</div>
-                        <div class="info-value">Toshkent, O'zbekiston</div>
-                    </div>
-                </div>
-
-                <div class="contact-form">
-                    <h2 class="form-title">Xabar Yuborish</h2>
-                    <form id="contactForm" onsubmit="handleSubmit(event)">
+            <div class="contact-form-card">
+                <h3 class="form-title">Send us a Message</h3>
+                <form id="contactForm" onsubmit="handleSubmit(event)">
+                    <div class="form-row">
                         <div class="form-group">
-                            <label for="name">Ismingiz *</label>
-                            <input type="text" id="name" required placeholder="To'liq ismingiz">
+                            <label for="firstName">First Name *</label>
+                            <input type="text" id="firstName" required placeholder="John">
                         </div>
-
+                        <div class="form-group">
+                            <label for="lastName">Last Name *</label>
+                            <input type="text" id="lastName" required placeholder="Doe">
+                        </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="email">Email *</label>
-                            <input type="email" id="email" required placeholder="emailingiz@example.com">
+                            <input type="email" id="email" required placeholder="john@example.com">
                         </div>
-
                         <div class="form-group">
-                            <label for="phone">Telefon</label>
+                            <label for="phone">Phone</label>
                             <input type="tel" id="phone" placeholder="+998 90 123 45 67">
                         </div>
-
-                        <div class="form-group">
-                            <label for="message">Xabaringiz *</label>
-                            <textarea id="message" required placeholder="Xabaringizni shu yerga yozing..."></textarea>
-                        </div>
-
-                        <button type="submit" class="submit-btn">Yuborish</button>
-
-                        <div id="successMessage" class="success-message">
-                            ✅ Xabaringiz yuborildi! Tez orada siz bilan bog'lanamiz.
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="form-group full">
+                        <label for="subject">Subject</label>
+                        <select id="subject">
+                            <option value="">Select a subject</option>
+                            <option value="booking">Tour Booking Inquiry</option>
+                            <option value="custom">Custom Tour Request</option>
+                            <option value="support">Customer Support</option>
+                            <option value="partnership">Partnership</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group full">
+                        <label for="message">Message *</label>
+                        <textarea id="message" required placeholder="Tell us how we can help you..."></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                    <div id="successMessage" class="success-message">
+                        ✅ Your message has been sent successfully! We'll get back to you soon.
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -268,25 +238,26 @@
                 const response = await fetch(`${API_BASE}/api/pages/contact`);
                 const result = await response.json();
 
-                if (result.success && result.data && result.data.info) {
+                if (result.success && result.data) {
                     const info = result.data.info;
-                    const infoItems = document.querySelectorAll('.info-item');
+                    const social = result.data.social;
 
-                    // Phone
-                    if (infoItems[0] && info.phone) {
-                        infoItems[0].querySelector('.info-value').textContent = info.phone;
-                    }
-                    // Email
-                    if (infoItems[1] && info.email) {
-                        infoItems[1].querySelector('.info-value').textContent = info.email;
-                    }
-                    // Address
-                    if (infoItems[2] && info.address) {
-                        infoItems[2].querySelector('.info-value').textContent = info.address;
+                    if (info?.phone) document.getElementById('phoneValue').textContent = info.phone;
+                    if (info?.email) document.getElementById('emailValue').textContent = info.email;
+                    if (info?.address) document.getElementById('addressValue').textContent = info.address;
+                    if (info?.workingHours) document.getElementById('hoursValue').textContent = info.workingHours;
+
+                    if (social) {
+                        const container = document.getElementById('socialLinks');
+                        let html = '';
+                        if (social.whatsapp) html += `<a href="https://wa.me/${social.whatsapp.replace(/[^0-9]/g,'')}" target="_blank" class="social-btn whatsapp">💬 WhatsApp</a>`;
+                        if (social.telegram) html += `<a href="${social.telegram}" target="_blank" class="social-btn telegram">✈️ Telegram</a>`;
+                        if (social.instagram) html += `<a href="${social.instagram}" target="_blank" class="social-btn instagram">📷 Instagram</a>`;
+                        if (html) container.innerHTML = html;
                     }
                 }
             } catch (error) {
-                console.error('Contact sahifasini yuklashda xatolik:', error);
+                console.error('Error loading contact page:', error);
             }
         }
 
