@@ -2920,10 +2920,11 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                     // Set the image URL
                     urlInput.value = result.data.imageUrl;
 
-                    // Show preview
+                    // Show preview with full URL
                     const previewDiv = dayGroup.querySelector('.day-image-preview');
                     const previewImg = previewDiv.querySelector('img');
-                    previewImg.src = result.data.imageUrl;
+                    const imgUrl = result.data.imageUrl.startsWith('http') ? result.data.imageUrl : 'http://localhost:4000' + result.data.imageUrl;
+                    previewImg.src = imgUrl;
                     previewDiv.style.display = 'block';
 
                     alert('✅ Image uploaded successfully!');
@@ -2993,7 +2994,7 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
 
                 imageCard.innerHTML = `
                     <div style="position: relative; width: 150px; height: 150px; overflow: hidden;">
-                        <img src="${url}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22150%22%3E%3Crect fill=%22%23ddd%22 width=%22150%22 height=%22150%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22%3ENo Image%3C/text%3E%3C/svg%3E';">
+                        <img src="${url.startsWith('http') ? url : (url.startsWith('/uploads') ? 'http://localhost:4000' + url : url)}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22150%22 height=%22150%22%3E%3Crect fill=%22%23ddd%22 width=%22150%22 height=%22150%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22%3ENo Image%3C/text%3E%3C/svg%3E';">
                         ${index === 0 ? '<div style="position: absolute; top: 5px; left: 5px; background: #ffc107; color: #000; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">COVER</div>' : ''}
                         <div style="position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.6); color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">#${index + 1}</div>
                     </div>
@@ -3471,10 +3472,11 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                         if (dayImageInput && dayData.image) {
                             dayImageInput.value = dayData.image;
 
-                            // Show preview
+                            // Show preview with proper URL
                             const previewDiv = dayDiv.querySelector('.day-image-preview');
                             const previewImg = previewDiv.querySelector('img');
-                            previewImg.src = dayData.image;
+                            const imgSrc = dayData.image.startsWith('http') ? dayData.image : (dayData.image.startsWith('/uploads') ? 'http://localhost:4000' + dayData.image : dayData.image);
+                            previewImg.src = imgSrc;
                             previewDiv.style.display = 'block';
                         }
 
@@ -3659,14 +3661,16 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                                 <div style="margin-bottom: 25px;">
                                     <h4 style="color: #667eea; font-size: 18px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #667eea;">📘 Social Media (Open Graph)</h4>
                                     <div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: white;">
-                                        ${tour.mainImage || tour.images?.[0] ? `
-                                        <img src="${(() => { const img = tour.mainImage || tour.images[0]; return img.startsWith('http') ? img : 'http://localhost:4000' + img; })()}" alt="${tour.title}" style="width: 100%; height: 200px; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                        <div style="display: none; width: 100%; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: 600;">📷 Image not found</div>
-                                        ` : `
-                                        <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: 600;">
-                                            📷 ${tour.title}
-                                        </div>
-                                        `}
+                                        ${(() => {
+                                            const img = tour.mainImage || (tour.images && tour.images.length > 0 ? tour.images[0] : null);
+                                            if (img) {
+                                                const imgUrl = img.startsWith('http') ? img : 'http://localhost:4000' + img;
+                                                return '<img src="' + imgUrl + '" alt="' + tour.title + '" style="width: 100%; height: 200px; object-fit: cover;" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';">' +
+                                                       '<div style="display: none; width: 100%; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: 600;">No image</div>';
+                                            } else {
+                                                return '<div style="width: 100%; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: 600;">No image uploaded</div>';
+                                            }
+                                        })()}
                                         <div style="padding: 15px;">
                                             <div style="font-size: 12px; color: #65676b; margin-bottom: 5px;">${seo.meta.canonical ? new URL(seo.meta.canonical).hostname : 'No URL'}</div>
                                             <h4 style="font-size: 16px; margin: 0 0 8px 0;">${seo.meta.ogTitle || 'No title'}</h4>
