@@ -559,6 +559,39 @@ exports.deleteBooking = asyncHandler(async (req, res, next) => {
   );
 });
 
+/**
+ * @desc    Buyurtmaga gid va haydovchi tayinlash
+ * @route   PUT /api/admin/bookings/:id/staff
+ * @access  Private/Admin
+ */
+exports.updateBookingStaff = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const { guide, driver } = req.body;
+
+  const booking = await bookingsStorage.findById(id);
+
+  if (!booking) {
+    return next(new ApiError(404, 'Buyurtma topilmadi'));
+  }
+
+  // Update booking with staff info
+  const updatedBooking = await bookingsStorage.update(id, {
+    guide: {
+      name: guide?.name || '',
+      phone: guide?.phone || ''
+    },
+    driver: {
+      name: driver?.name || '',
+      phone: driver?.phone || '',
+      vehicle: driver?.vehicle || ''
+    }
+  });
+
+  res.status(200).json(
+    new ApiResponse(200, updatedBooking, 'Xodimlar tayinlandi')
+  );
+});
+
 // ========== STATISTICS ==========
 
 /**

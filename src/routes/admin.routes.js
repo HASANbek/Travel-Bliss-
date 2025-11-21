@@ -15,6 +15,7 @@ const {
   toggleTourStatus,
   getAllBookings,
   updateBookingStatus,
+  updateBookingStaff,
   deleteBooking,
   getStatistics,
   getAllBlogs,
@@ -106,6 +107,11 @@ router.get('/bookings', getAllBookings);
 // @desc    Buyurtma statusini yangilash
 // @access  Private/Admin
 router.put('/bookings/:id/status', updateBookingStatus);
+
+// @route   PUT /api/admin/bookings/:id/staff
+// @desc    Buyurtmaga gid va haydovchi tayinlash
+// @access  Private/Admin
+router.put('/bookings/:id/staff', updateBookingStaff);
 
 // @route   DELETE /api/admin/bookings/:id
 // @desc    Buyurtmani o'chirish

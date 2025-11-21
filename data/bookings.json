@@ -1,1 +1,46 @@
-[]
+[
+  {
+    "id": "BOOK-20251121-6V71",
+    "tourId": "1",
+    "tourName": "Samarkand City Tour",
+    "customerName": "Yusufjon Yusufjon",
+    "customerEmail": "travelblissoffice@gmail.com",
+    "customerPhone": "+998932244333",
+    "pickupLocation": "tuu",
+    "date": "2025-11-22T00:00:00.000Z",
+    "guests": {
+      "adults": 2,
+      "children": 0
+    },
+    "totalPrice": 1000,
+    "specialRequests": "",
+    "userId": null,
+    "status": "confirmed",
+    "createdAt": "2025-11-21T08:48:05.191Z",
+    "updatedAt": "2025-11-21T08:54:19.385Z",
+    "confirmedAt": "2025-11-21T08:54:19.384Z",
+    "cancelledAt": null
+  },
+  {
+    "id": "BOOK-20251121-CSVG",
+    "tourId": "1",
+    "tourName": "Samarkand City Tour",
+    "customerName": "Travelbliss LLC",
+    "customerEmail": "travelblissoffice@gmail.com",
+    "customerPhone": "+998932244333",
+    "pickupLocation": "tuu",
+    "date": "2025-11-22T00:00:00.000Z",
+    "guests": {
+      "adults": 2,
+      "children": 0
+    },
+    "totalPrice": 1000,
+    "specialRequests": "",
+    "userId": null,
+    "status": "confirmed",
+    "createdAt": "2025-11-21T08:53:53.573Z",
+    "updatedAt": "2025-11-21T08:54:15.801Z",
+    "confirmedAt": "2025-11-21T08:54:15.801Z",
+    "cancelledAt": null
+  }
+]

@@ -9,6 +9,8 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -1174,7 +1176,14 @@
             <div class="page-section" id="bookingsPage">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <h2>Bookings Management</h2>
-                    <div style="display: flex; gap: 10px;">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                        <input type="text" id="bookingSearch" placeholder="Search name/email/phone..." oninput="loadBookings()" style="padding: 8px 15px; border-radius: 5px; border: 1px solid #ddd; width: 200px;">
+                        <input type="date" id="dateFilter" onchange="loadBookings()" style="padding: 8px 15px; border-radius: 5px; border: 1px solid #ddd;">
+                        <select id="sortOrder" onchange="loadBookings()" style="padding: 8px 15px; border-radius: 5px; border: 1px solid #ddd;">
+                            <option value="upcoming">Upcoming First</option>
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                        </select>
                         <select id="statusFilter" style="padding: 8px 15px; border-radius: 5px; border: 1px solid #ddd;">
                             <option value="">All Statuses</option>
                             <option value="pending">Pending</option>
@@ -1183,6 +1192,12 @@
                         </select>
                         <button onclick="loadBookings()" class="btn-primary" style="padding: 8px 20px; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer;">
                             Refresh
+                        </button>
+                        <button onclick="exportBookingsCSV()" style="padding: 8px 20px; background: #22c55e; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            Export CSV
+                        </button>
+                        <button onclick="exportBookingsPDF()" style="padding: 8px 20px; background: #ef4444; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            Export PDF
                         </button>
                     </div>
                 </div>
@@ -3623,6 +3638,9 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
         async function loadBookings() {
             const tbody = document.getElementById('bookingsTableBody');
             const statusFilter = document.getElementById('statusFilter').value;
+            const searchTerm = document.getElementById('bookingSearch')?.value?.toLowerCase() || '';
+            const dateFilter = document.getElementById('dateFilter')?.value || '';
+            const sortOrder = document.getElementById('sortOrder')?.value || 'upcoming';
 
             try {
                 let url = `${API_URL}/admin/bookings`;
@@ -3637,13 +3655,52 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                     throw new Error('Invalid API response');
                 }
 
-                const { bookings, stats } = result.data;
+                let { bookings, stats } = result.data;
 
                 // Update statistics
                 document.getElementById('totalBookings').textContent = stats.total || 0;
                 document.getElementById('pendingBookings').textContent = stats.pending || 0;
                 document.getElementById('confirmedBookings').textContent = stats.confirmed || 0;
                 document.getElementById('cancelledBookings').textContent = stats.cancelled || 0;
+
+                // Apply search filter
+                if (searchTerm) {
+                    bookings = bookings.filter(b =>
+                        b.customerName?.toLowerCase().includes(searchTerm) ||
+                        b.customerEmail?.toLowerCase().includes(searchTerm) ||
+                        b.customerPhone?.includes(searchTerm) ||
+                        b.tourName?.toLowerCase().includes(searchTerm)
+                    );
+                }
+
+                // Apply date filter
+                if (dateFilter) {
+                    bookings = bookings.filter(b => {
+                        const bDate = new Date(b.date).toISOString().split('T')[0];
+                        return bDate === dateFilter;
+                    });
+                }
+
+                // Apply sorting
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                if (sortOrder === 'upcoming') {
+                    bookings.sort((a, b) => {
+                        const dateA = new Date(a.date);
+                        const dateB = new Date(b.date);
+                        // Future dates first, sorted ascending
+                        const aIsFuture = dateA >= today;
+                        const bIsFuture = dateB >= today;
+                        if (aIsFuture && !bIsFuture) return -1;
+                        if (!aIsFuture && bIsFuture) return 1;
+                        return dateA - dateB;
+                    });
+                } else if (sortOrder === 'newest') {
+                    bookings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                } else if (sortOrder === 'oldest') {
+                    bookings.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+                }
 
                 if (bookings.length === 0) {
                     tbody.innerHTML = `
@@ -3690,17 +3747,26 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                                 </span>
                             </td>
                             <td style="padding: 15px;">
-                                <div style="display: flex; gap: 8px;">
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                                     ${booking.status === 'pending' ? `
-                                        <button onclick="updateBookingStatus('${booking.id}', 'confirmed')" style="padding: 6px 12px; background: #22c55e; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">
+                                        <button onclick="updateBookingStatus('${booking.id}', 'confirmed')" style="padding: 6px 12px; background: #22c55e; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;" title="Confirm booking">
                                             Confirm
                                         </button>
-                                        <button onclick="updateBookingStatus('${booking.id}', 'cancelled')" style="padding: 6px 12px; background: #ef4444; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">
+                                        <button onclick="updateBookingStatus('${booking.id}', 'cancelled')" style="padding: 6px 12px; background: #ef4444; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;" title="Cancel booking">
                                             Cancel
                                         </button>
                                     ` : ''}
-                                    <button onclick="viewBookingDetails('${booking.id}')" style="padding: 6px 12px; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;">
+                                    <button onclick="viewBookingDetails('${booking.id}')" style="padding: 6px 12px; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;" title="View details">
                                         View
+                                    </button>
+                                    <button onclick="assignStaff('${booking.id}')" style="padding: 6px 12px; background: #f59e0b; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;" title="Assign guide & driver">
+                                        Staff
+                                    </button>
+                                    <button onclick="sendToTelegram('${booking.id}')" style="padding: 6px 12px; background: #0088cc; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;" title="Send to Telegram">
+                                        TG
+                                    </button>
+                                    <button onclick="deleteBooking('${booking.id}')" style="padding: 6px 12px; background: #dc2626; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 12px;" title="Delete booking">
+                                        Delete
                                     </button>
                                 </div>
                             </td>
@@ -3748,6 +3814,34 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                 loadBookings(); // Reload bookings
             } catch (error) {
                 console.error('Error updating booking status:', error);
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function deleteBooking(bookingId) {
+            if (!confirm('Are you sure you want to DELETE this booking? This action cannot be undone!')) {
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('accessToken');
+                const response = await fetch(`${API_URL}/bookings/${bookingId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error(result.message || 'Failed to delete booking');
+                }
+
+                alert('Booking deleted successfully!');
+                loadBookings(); // Reload bookings
+            } catch (error) {
+                console.error('Error deleting booking:', error);
                 alert('Error: ' + error.message);
             }
         }
@@ -3810,6 +3904,22 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                         </div>
                         ` : ''}
 
+                        ${(booking.guide?.name || booking.driver?.name) ? `
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div style="background: #eff6ff; padding: 15px; border-radius: 8px;">
+                                <h4 style="margin: 0 0 10px 0; color: #6366f1;">Guide</h4>
+                                <p style="margin: 0 0 5px 0;"><strong>Name:</strong> ${booking.guide?.name || 'Not assigned'}</p>
+                                <p style="margin: 0;"><strong>Phone:</strong> ${booking.guide?.phone || '-'}</p>
+                            </div>
+                            <div style="background: #f0fdf4; padding: 15px; border-radius: 8px;">
+                                <h4 style="margin: 0 0 10px 0; color: #22c55e;">Driver</h4>
+                                <p style="margin: 0 0 5px 0;"><strong>Name:</strong> ${booking.driver?.name || 'Not assigned'}</p>
+                                <p style="margin: 0 0 5px 0;"><strong>Phone:</strong> ${booking.driver?.phone || '-'}</p>
+                                <p style="margin: 0;"><strong>Vehicle:</strong> ${booking.driver?.vehicle || '-'}</p>
+                            </div>
+                        </div>
+                        ` : ''}
+
                         <div style="background: #f9fafb; padding: 15px; border-radius: 8px;">
                             <p style="margin: 0 0 5px 0;"><strong>Created:</strong> ${new Date(booking.createdAt).toLocaleString()}</p>
                             ${booking.confirmedAt ? `<p style="margin: 0 0 5px 0;"><strong>Confirmed:</strong> ${new Date(booking.confirmedAt).toLocaleString()}</p>` : ''}
@@ -3839,6 +3949,375 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                 statusFilter.addEventListener('change', loadBookings);
             }
         });
+
+        // Send booking info to Telegram (Guide & Driver)
+        async function sendToTelegram(bookingId) {
+            try {
+                const token = localStorage.getItem('accessToken');
+                const response = await fetch(`${API_URL}/bookings/${bookingId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const result = await response.json();
+                if (!result.success) throw new Error('Booking not found');
+
+                const booking = result.data;
+                const bookingDate = new Date(booking.date).toLocaleDateString('uz-UZ', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                });
+
+                // Create message text (faqat kerakli ma'lumotlar)
+                const message = `🎯 *SAYOHAT MA'LUMOTI*
+
+📍 *Tur:* ${booking.tourName}
+📅 *Sana:* ${bookingDate}
+
+👤 *Mehmon:* ${booking.customerName}
+👥 *Mehmonlar soni:* ${booking.guests.adults} katta${booking.guests.children > 0 ? `, ${booking.guests.children} bola` : ''}
+
+🏨 *Pick up manzili:* ${booking.pickupLocation || 'Belgilanmagan'}`;
+
+                const encodedMessage = encodeURIComponent(message);
+
+                const { value: sendTo } = await Swal.fire({
+                    title: 'Telegram orqali yuborish',
+                    html: `
+                        <div style="text-align: left;">
+                            <p style="margin-bottom: 15px; color: #666;">Quyidagi ma'lumotlar yuboriladi:</p>
+                            <div style="background: #f0f0f0; padding: 10px; border-radius: 8px; font-size: 12px; white-space: pre-wrap; max-height: 200px; overflow-y: auto;">${message.replace(/\*/g, '').replace(/\n/g, '<br>')}</div>
+
+                            <h4 style="margin: 20px 0 10px; color: #0088cc;">Kimga yuborish?</h4>
+
+                            ${booking.guide?.phone ? `
+                            <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer;">
+                                <input type="checkbox" id="sendToGuide" checked style="width: 18px; height: 18px;">
+                                <span>Gid: ${booking.guide.name} (${booking.guide.phone})</span>
+                            </label>
+                            ` : '<p style="color: #999; font-size: 12px;">Gid tayinlanmagan</p>'}
+
+                            ${booking.driver?.phone ? `
+                            <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; cursor: pointer;">
+                                <input type="checkbox" id="sendToDriver" checked style="width: 18px; height: 18px;">
+                                <span>Haydovchi: ${booking.driver.name} (${booking.driver.phone})</span>
+                            </label>
+                            ` : '<p style="color: #999; font-size: 12px;">Haydovchi tayinlanmagan</p>'}
+
+                            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+                                <label style="display: block; margin-bottom: 5px; font-weight: 600;">Telegram username kiriting:</label>
+                                <input type="text" id="customTelegram" class="swal2-input" placeholder="@username" style="margin: 0; width: 100%;">
+                                <p style="font-size: 11px; color: #999; margin-top: 5px;">Masalan: @alisher_guide</p>
+                            </div>
+                        </div>
+                    `,
+                    width: '500px',
+                    showCancelButton: true,
+                    showDenyButton: true,
+                    confirmButtonText: '📋 Nusxalash',
+                    denyButtonText: '💬 WhatsApp',
+                    confirmButtonColor: '#6366f1',
+                    denyButtonColor: '#25D366',
+                    preConfirm: () => {
+                        const recipients = [];
+                        if (document.getElementById('sendToGuide')?.checked && booking.guide?.phone) {
+                            recipients.push({ name: booking.guide.name, phone: booking.guide.phone, type: 'saved' });
+                        }
+                        if (document.getElementById('sendToDriver')?.checked && booking.driver?.phone) {
+                            recipients.push({ name: booking.driver.name, phone: booking.driver.phone, type: 'saved' });
+                        }
+                        const customTg = document.getElementById('customTelegram').value.trim();
+                        if (customTg) {
+                            recipients.push({ name: 'Custom', phone: customTg, type: 'telegram' });
+                        }
+                        return { recipients, method: 'telegram' };
+                    },
+                    preDeny: () => {
+                        const recipients = [];
+                        if (document.getElementById('sendToGuide')?.checked && booking.guide?.phone) {
+                            recipients.push({ name: booking.guide.name, phone: booking.guide.phone });
+                        }
+                        if (document.getElementById('sendToDriver')?.checked && booking.driver?.phone) {
+                            recipients.push({ name: booking.driver.name, phone: booking.driver.phone });
+                        }
+                        const customTg = document.getElementById('customTelegram').value.trim();
+                        if (customTg && customTg.startsWith('+')) {
+                            recipients.push({ name: 'Custom', phone: customTg });
+                        }
+                        return { recipients, method: 'whatsapp' };
+                    }
+                });
+
+                const data = sendTo;
+
+                if (data && data.method === 'telegram') {
+                    // Nusxalash - clipboard'ga saqlash
+                    const cleanMessage = message.replace(/\*/g, '');
+                    await navigator.clipboard.writeText(cleanMessage);
+                    Swal.fire('Nusxalandi!', 'Xabar nusxalandi. Endi Telegram/WhatsApp\'da paste qiling (Ctrl+V)', 'success');
+                    return;
+                }
+
+                // WhatsApp
+                if (data && data.recipients && data.recipients.length > 0) {
+                    for (const recipient of data.recipients) {
+                        const cleanPhone = recipient.phone.replace(/[+\s-]/g, '');
+                        const waUrl = `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
+                        window.open(waUrl, '_blank');
+                    }
+                    Swal.fire('Tayyor!', 'WhatsApp ochildi', 'success');
+                } else {
+                    // Faqat nusxalash
+                    const cleanMessage = message.replace(/\*/g, '');
+                    await navigator.clipboard.writeText(cleanMessage);
+                    Swal.fire('Nusxalandi!', 'Xabar nusxalandi. Telegram/WhatsApp\'da paste qiling', 'success');
+                }
+            } catch (error) {
+                console.error('Telegram error:', error);
+                Swal.fire('Xatolik', error.message, 'error');
+            }
+        }
+
+        // Assign guide and driver to booking
+        async function assignStaff(bookingId) {
+            try {
+                // First get current booking data
+                const token = localStorage.getItem('accessToken');
+                const response = await fetch(`${API_URL}/bookings/${bookingId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const result = await response.json();
+                if (!result.success) throw new Error('Booking not found');
+
+                const booking = result.data;
+
+                const { value: staffData } = await Swal.fire({
+                    title: 'Assign Staff to Booking',
+                    html: `
+                        <div style="text-align: left;">
+                            <p style="margin-bottom: 15px; color: #666;"><strong>Tour:</strong> ${booking.tourName}<br><strong>Date:</strong> ${new Date(booking.date).toLocaleDateString()}</p>
+
+                            <h4 style="color: #6366f1; margin: 15px 0 10px;">Guide Information</h4>
+                            <div style="margin-bottom: 10px;">
+                                <label style="display: block; margin-bottom: 5px;">Guide Name:</label>
+                                <input type="text" id="guideName" class="swal2-input" value="${booking.guide?.name || ''}" placeholder="e.g., Alisher Karimov" style="margin: 0; width: 100%;">
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <label style="display: block; margin-bottom: 5px;">Guide Phone:</label>
+                                <input type="text" id="guidePhone" class="swal2-input" value="${booking.guide?.phone || ''}" placeholder="+998901234567" style="margin: 0; width: 100%;">
+                            </div>
+
+                            <h4 style="color: #22c55e; margin: 20px 0 10px;">Driver Information</h4>
+                            <div style="margin-bottom: 10px;">
+                                <label style="display: block; margin-bottom: 5px;">Driver Name:</label>
+                                <input type="text" id="driverName" class="swal2-input" value="${booking.driver?.name || ''}" placeholder="e.g., Bobur Yusupov" style="margin: 0; width: 100%;">
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <label style="display: block; margin-bottom: 5px;">Driver Phone:</label>
+                                <input type="text" id="driverPhone" class="swal2-input" value="${booking.driver?.phone || ''}" placeholder="+998901234567" style="margin: 0; width: 100%;">
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <label style="display: block; margin-bottom: 5px;">Vehicle Info:</label>
+                                <input type="text" id="vehicleInfo" class="swal2-input" value="${booking.driver?.vehicle || ''}" placeholder="e.g., Toyota Hiace, 01A123BC" style="margin: 0; width: 100%;">
+                            </div>
+                        </div>
+                    `,
+                    width: '500px',
+                    showCancelButton: true,
+                    confirmButtonText: 'Save',
+                    confirmButtonColor: '#6366f1',
+                    preConfirm: () => {
+                        return {
+                            guide: {
+                                name: document.getElementById('guideName').value,
+                                phone: document.getElementById('guidePhone').value
+                            },
+                            driver: {
+                                name: document.getElementById('driverName').value,
+                                phone: document.getElementById('driverPhone').value,
+                                vehicle: document.getElementById('vehicleInfo').value
+                            }
+                        };
+                    }
+                });
+
+                if (!staffData) return;
+
+                // Save staff assignment
+                const updateResponse = await fetch(`${API_URL}/admin/bookings/${bookingId}/staff`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(staffData)
+                });
+
+                const updateResult = await updateResponse.json();
+                if (!updateResult.success) throw new Error(updateResult.message || 'Failed to save');
+
+                Swal.fire('Success', 'Staff assigned successfully!', 'success');
+                loadBookings();
+            } catch (error) {
+                console.error('Error assigning staff:', error);
+                Swal.fire('Error', error.message, 'error');
+            }
+        }
+
+        // Export bookings to PDF with date range
+        async function exportBookingsPDF() {
+            const { value: dateRange } = await Swal.fire({
+                title: 'Select Date Range for PDF',
+                html: `
+                    <div style="display: flex; flex-direction: column; gap: 15px; text-align: left;">
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">From Date:</label>
+                            <input type="date" id="pdfFromDate" class="swal2-input" style="margin: 0; width: 100%;">
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">To Date:</label>
+                            <input type="date" id="pdfToDate" class="swal2-input" style="margin: 0; width: 100%;">
+                        </div>
+                        <p style="font-size: 12px; color: #666;">Leave empty to export all bookings</p>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Generate PDF',
+                confirmButtonColor: '#ef4444',
+                preConfirm: () => {
+                    return {
+                        fromDate: document.getElementById('pdfFromDate').value,
+                        toDate: document.getElementById('pdfToDate').value
+                    };
+                }
+            });
+
+            if (!dateRange) return;
+
+            try {
+                const response = await fetch(`${API_URL}/admin/bookings`);
+                const result = await response.json();
+                if (!result.success || !result.data) throw new Error('Failed to fetch bookings');
+
+                let bookings = result.data.bookings;
+
+                // Filter by date range
+                if (dateRange.fromDate) {
+                    const from = new Date(dateRange.fromDate);
+                    bookings = bookings.filter(b => new Date(b.date) >= from);
+                }
+                if (dateRange.toDate) {
+                    const to = new Date(dateRange.toDate);
+                    to.setHours(23, 59, 59);
+                    bookings = bookings.filter(b => new Date(b.date) <= to);
+                }
+
+                if (bookings.length === 0) {
+                    Swal.fire('No Data', 'No bookings found for selected date range', 'info');
+                    return;
+                }
+
+                // Sort by date
+                bookings.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+                // Generate PDF
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Title
+                doc.setFontSize(18);
+                doc.setTextColor(99, 102, 241);
+                doc.text('Travel Bliss - Bookings Report', 14, 20);
+
+                // Date range info
+                doc.setFontSize(10);
+                doc.setTextColor(100);
+                let rangeText = 'All Bookings';
+                if (dateRange.fromDate || dateRange.toDate) {
+                    rangeText = `Date Range: ${dateRange.fromDate || 'Start'} to ${dateRange.toDate || 'End'}`;
+                }
+                doc.text(rangeText, 14, 28);
+                doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 34);
+                doc.text(`Total Bookings: ${bookings.length}`, 14, 40);
+
+                // Table data
+                const tableData = bookings.map(b => [
+                    b.tourName.substring(0, 25),
+                    b.customerName,
+                    b.customerPhone,
+                    new Date(b.date).toLocaleDateString(),
+                    `${b.guests.adults}+${b.guests.children || 0}`,
+                    `$${b.totalPrice}`,
+                    b.status.toUpperCase()
+                ]);
+
+                doc.autoTable({
+                    startY: 46,
+                    head: [['Tour', 'Customer', 'Phone', 'Date', 'Guests', 'Price', 'Status']],
+                    body: tableData,
+                    theme: 'striped',
+                    headStyles: { fillColor: [99, 102, 241] },
+                    styles: { fontSize: 8 },
+                    columnStyles: {
+                        0: { cellWidth: 40 },
+                        6: { fontStyle: 'bold' }
+                    }
+                });
+
+                // Save PDF
+                const fileName = `bookings_${dateRange.fromDate || 'all'}_${dateRange.toDate || 'dates'}.pdf`;
+                doc.save(fileName);
+
+                Swal.fire('Success', 'PDF downloaded successfully!', 'success');
+            } catch (error) {
+                console.error('PDF export error:', error);
+                Swal.fire('Error', error.message, 'error');
+            }
+        }
+
+        // Export bookings to CSV
+        async function exportBookingsCSV() {
+            try {
+                const response = await fetch(`${API_URL}/admin/bookings`);
+                const result = await response.json();
+                if (!result.success || !result.data) {
+                    throw new Error('Failed to fetch bookings');
+                }
+                const bookings = result.data.bookings;
+                if (bookings.length === 0) {
+                    alert('No bookings to export');
+                    return;
+                }
+
+                // CSV headers
+                const headers = ['ID', 'Tour Name', 'Customer Name', 'Email', 'Phone', 'Date', 'Adults', 'Children', 'Total Price', 'Status', 'Created At'];
+
+                // CSV rows
+                const rows = bookings.map(b => [
+                    b.id,
+                    `"${b.tourName}"`,
+                    `"${b.customerName}"`,
+                    b.customerEmail,
+                    b.customerPhone,
+                    new Date(b.date).toLocaleDateString(),
+                    b.guests.adults,
+                    b.guests.children || 0,
+                    b.totalPrice,
+                    b.status,
+                    new Date(b.createdAt).toLocaleString()
+                ]);
+
+                // Create CSV content
+                const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+
+                // Download file
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `bookings_${new Date().toISOString().split('T')[0]}.csv`;
+                link.click();
+            } catch (error) {
+                console.error('Export error:', error);
+                alert('Error exporting: ' + error.message);
+            }
+        }
 
         // ========== USERS MANAGEMENT ==========
         async function loadUsers() {
