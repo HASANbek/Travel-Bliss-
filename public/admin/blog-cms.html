@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Management System - Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #f8fafc; }
+        .sidebar { width: 280px; background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); min-height: 100vh; position: fixed; left: 0; top: 0; z-index: 100; }
+        .main-content { margin-left: 280px; padding: 24px; min-height: 100vh; }
+        .card { background: white; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .btn-primary { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(99,102,241,0.4); }
+        .sidebar-item { display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: #94a3b8; cursor: pointer; transition: all 0.3s; border-radius: 10px; margin: 4px 12px; }
+        .sidebar-item:hover, .sidebar-item.active { background: rgba(99,102,241,0.2); color: white; }
+        .sidebar-item.active { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); }
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .badge-success { background: #dcfce7; color: #16a34a; }
+        .badge-warning { background: #fef3c7; color: #d97706; }
+        .badge-info { background: #dbeafe; color: #2563eb; }
+        .badge-danger { background: #fee2e2; color: #dc2626; }
+        .stat-card { background: white; border-radius: 16px; padding: 24px; position: relative; overflow: hidden; }
+        .stat-card::before { content: ''; position: absolute; top: 0; right: 0; width: 100px; height: 100px; border-radius: 50%; opacity: 0.1; }
+        .table-row:hover { background: #f8fafc; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; overflow-y: auto; }
+        .modal.active { display: flex; align-items: flex-start; justify-content: center; padding: 40px 20px; }
+        .modal-content { background: white; border-radius: 20px; width: 100%; max-width: 900px; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-btn { padding: 12px 24px; border: none; background: transparent; color: #64748b; font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .tab-btn.active { color: #6366f1; border-bottom-color: #6366f1; }
+        .input-field { width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 14px; transition: all 0.3s; }
+        .input-field:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+        .ql-editor { min-height: 200px; }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+        .action-btn { padding: 8px; border-radius: 8px; border: none; cursor: pointer; transition: all 0.2s; }
+        .action-btn:hover { transform: scale(1.1); }
+        .dropzone { border: 2px dashed #e2e8f0; border-radius: 12px; padding: 40px; text-align: center; transition: all 0.3s; cursor: pointer; }
+        .dropzone:hover { border-color: #6366f1; background: #f8fafc; }
+        .ai-btn { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); }
+        .ai-btn:hover { box-shadow: 0 4px 12px rgba(245,158,11,0.4); }
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="p-6 border-b border-slate-700">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-pen-fancy text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-white font-bold text-lg">Blog CMS</h1>
+                    <p class="text-slate-400 text-xs">Management System</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="py-4">
+            <p class="px-6 py-2 text-xs text-slate-500 uppercase tracking-wider">Main Menu</p>
+            <div class="sidebar-item active" onclick="showPage('dashboard')">
+                <i class="fas fa-chart-pie w-5"></i>
+                <span>Dashboard</span>
+            </div>
+            <div class="sidebar-item" onclick="showPage('posts')">
+                <i class="fas fa-newspaper w-5"></i>
+                <span>Blog Posts</span>
+                <span class="ml-auto bg-indigo-500 text-white text-xs px-2 py-1 rounded-full">24</span>
+            </div>
+            <div class="sidebar-item" onclick="showPage('categories')">
+                <i class="fas fa-folder w-5"></i>
+                <span>Categories</span>
+            </div>
+            <div class="sidebar-item" onclick="showPage('tags')">
+                <i class="fas fa-tags w-5"></i>
+                <span>Tags</span>
+            </div>
+            <div class="sidebar-item" onclick="showPage('comments')">
+                <i class="fas fa-comments w-5"></i>
+                <span>Comments</span>
+                <span class="ml-auto bg-orange-500 text-white text-xs px-2 py-1 rounded-full">5</span>
+            </div>
+            <div class="sidebar-item" onclick="showPage('media')">
+                <i class="fas fa-images w-5"></i>
+                <span>Media Library</span>
+            </div>
+
+            <p class="px-6 py-2 mt-4 text-xs text-slate-500 uppercase tracking-wider">AI Tools</p>
+            <div class="sidebar-item" onclick="showPage('ai-tools')">
+                <i class="fas fa-robot w-5"></i>
+                <span>AI Assistant</span>
+                <span class="ml-auto text-xs bg-gradient-to-r from-yellow-500 to-red-500 text-white px-2 py-1 rounded-full">NEW</span>
+            </div>
+
+            <p class="px-6 py-2 mt-4 text-xs text-slate-500 uppercase tracking-wider">Settings</p>
+            <div class="sidebar-item" onclick="showPage('settings')">
+                <i class="fas fa-cog w-5"></i>
+                <span>Settings</span>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800" id="pageTitle">Dashboard</h1>
+                <p class="text-slate-500 text-sm">Welcome back! Here's what's happening with your blog.</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="btn-primary flex items-center gap-2" onclick="openCreatePostModal()">
+                    <i class="fas fa-plus"></i>
+                    New Post
+                </button>
+                <div class="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center cursor-pointer">
+                    <i class="fas fa-bell text-slate-600"></i>
+                </div>
+                <div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full"></div>
+            </div>
+        </header>
+
+        <!-- Dashboard Page -->
+        <section class="page-section active" id="dashboardPage">
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="stat-card" style="border-left: 4px solid #6366f1;">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-slate-500 text-sm">Total Posts</p>
+                            <h3 class="text-3xl font-bold text-slate-800 mt-1">248</h3>
+                            <p class="text-green-500 text-sm mt-2"><i class="fas fa-arrow-up"></i> 12% this month</p>
+                        </div>
+                        <div class="w-14 h-14 bg-indigo-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-newspaper text-2xl text-indigo-500"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid #22c55e;">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-slate-500 text-sm">Total Views</p>
+                            <h3 class="text-3xl font-bold text-slate-800 mt-1">84.2K</h3>
+                            <p class="text-green-500 text-sm mt-2"><i class="fas fa-arrow-up"></i> 8% this week</p>
+                        </div>
+                        <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-eye text-2xl text-green-500"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid #f59e0b;">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-slate-500 text-sm">Comments</p>
+                            <h3 class="text-3xl font-bold text-slate-800 mt-1">1,429</h3>
+                            <p class="text-orange-500 text-sm mt-2"><i class="fas fa-clock"></i> 5 pending</p>
+                        </div>
+                        <div class="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-comments text-2xl text-orange-500"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card" style="border-left: 4px solid #ec4899;">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-slate-500 text-sm">Subscribers</p>
+                            <h3 class="text-3xl font-bold text-slate-800 mt-1">2,847</h3>
+                            <p class="text-pink-500 text-sm mt-2"><i class="fas fa-arrow-up"></i> 24 new today</p>
+                        </div>
+                        <div class="w-14 h-14 bg-pink-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-users text-2xl text-pink-500"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <div class="card p-6 lg:col-span-2">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-bold text-slate-800">Views Analytics</h3>
+                        <select class="input-field w-auto text-sm">
+                            <option>Last 7 days</option>
+                            <option>Last 30 days</option>
+                            <option>Last 90 days</option>
+                        </select>
+                    </div>
+                    <canvas id="viewsChart" height="120"></canvas>
+                </div>
+                <div class="card p-6">
+                    <h3 class="font-bold text-slate-800 mb-6">Top Categories</h3>
+                    <canvas id="categoriesChart" height="200"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Posts & Top Posts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="card p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-bold text-slate-800">Recent Posts</h3>
+                        <a href="#" class="text-indigo-500 text-sm font-medium" onclick="showPage('posts')">View All</a>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 transition cursor-pointer">
+                            <img src="https://picsum.photos/60/60?random=1" class="w-14 h-14 rounded-xl object-cover">
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-slate-800">10 Best Travel Destinations 2024</h4>
+                                <p class="text-slate-500 text-sm">Published 2 hours ago</p>
+                            </div>
+                            <span class="badge badge-success">Published</span>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 transition cursor-pointer">
+                            <img src="https://picsum.photos/60/60?random=2" class="w-14 h-14 rounded-xl object-cover">
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-slate-800">How to Plan Your Trip</h4>
+                                <p class="text-slate-500 text-sm">Draft - Last edited today</p>
+                            </div>
+                            <span class="badge badge-warning">Draft</span>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 transition cursor-pointer">
+                            <img src="https://picsum.photos/60/60?random=3" class="w-14 h-14 rounded-xl object-cover">
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-slate-800">Budget Travel Tips</h4>
+                                <p class="text-slate-500 text-sm">Scheduled for Dec 25</p>
+                            </div>
+                            <span class="badge badge-info">Scheduled</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-bold text-slate-800">Most Viewed Posts</h3>
+                        <span class="text-slate-500 text-sm">This Month</span>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4">
+                            <span class="w-8 h-8 bg-yellow-100 text-yellow-600 rounded-lg flex items-center justify-center font-bold">1</span>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-slate-800">Ultimate Guide to Bali</h4>
+                                <div class="flex items-center gap-4 text-sm text-slate-500">
+                                    <span><i class="fas fa-eye"></i> 12,485</span>
+                                    <span><i class="fas fa-comment"></i> 89</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="w-8 h-8 bg-slate-100 text-slate-600 rounded-lg flex items-center justify-center font-bold">2</span>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-slate-800">Paris on a Budget</h4>
+                                <div class="flex items-center gap-4 text-sm text-slate-500">
+                                    <span><i class="fas fa-eye"></i> 9,234</span>
+                                    <span><i class="fas fa-comment"></i> 56</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <span class="w-8 h-8 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center font-bold">3</span>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-slate-800">Japan Travel Essentials</h4>
+                                <div class="flex items-center gap-4 text-sm text-slate-500">
+                                    <span><i class="fas fa-eye"></i> 7,891</span>
+                                    <span><i class="fas fa-comment"></i> 42</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Posts Page -->
+        <section class="page-section" id="postsPage">
+            <!-- Filters -->
+            <div class="card p-4 mb-6">
+                <div class="flex flex-wrap items-center gap-4">
+                    <div class="flex-1 min-w-[200px]">
+                        <div class="relative">
+                            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="text" placeholder="Search posts..." class="input-field pl-11" id="searchPosts">
+                        </div>
+                    </div>
+                    <select class="input-field w-auto" id="filterCategory">
+                        <option value="">All Categories</option>
+                        <option>Travel</option>
+                        <option>Adventure</option>
+                        <option>Food</option>
+                        <option>Culture</option>
+                    </select>
+                    <select class="input-field w-auto" id="filterStatus">
+                        <option value="">All Status</option>
+                        <option value="published">Published</option>
+                        <option value="draft">Draft</option>
+                        <option value="scheduled">Scheduled</option>
+                        <option value="archived">Archived</option>
+                    </select>
+                    <button class="btn-primary" onclick="openCreatePostModal()">
+                        <i class="fas fa-plus mr-2"></i> New Post
+                    </button>
+                </div>
+            </div>
+
+            <!-- Posts Table -->
+            <div class="card overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th class="text-left p-4 font-semibold text-slate-600">
+                                    <input type="checkbox" class="w-4 h-4 rounded">
+                                </th>
+                                <th class="text-left p-4 font-semibold text-slate-600">Post</th>
+                                <th class="text-left p-4 font-semibold text-slate-600">Category</th>
+                                <th class="text-left p-4 font-semibold text-slate-600">Author</th>
+                                <th class="text-left p-4 font-semibold text-slate-600">Status</th>
+                                <th class="text-left p-4 font-semibold text-slate-600">Views</th>
+                                <th class="text-left p-4 font-semibold text-slate-600">Date</th>
+                                <th class="text-left p-4 font-semibold text-slate-600">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="postsTableBody">
+                            <!-- Posts will be rendered here -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination -->
+                <div class="flex items-center justify-between p-4 border-t border-slate-200">
+                    <p class="text-slate-500 text-sm">Showing 1-10 of 248 posts</p>
+                    <div class="flex items-center gap-2">
+                        <button class="px-3 py-2 border border-slate-200 rounded-lg hover:bg-slate-50"><i class="fas fa-chevron-left"></i></button>
+                        <button class="px-3 py-2 bg-indigo-500 text-white rounded-lg">1</button>
+                        <button class="px-3 py-2 border border-slate-200 rounded-lg hover:bg-slate-50">2</button>
+                        <button class="px-3 py-2 border border-slate-200 rounded-lg hover:bg-slate-50">3</button>
+                        <button class="px-3 py-2 border border-slate-200 rounded-lg hover:bg-slate-50"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Page -->
+        <section class="page-section" id="categoriesPage">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Category Form -->
+                <div class="card p-6">
+                    <h3 class="font-bold text-slate-800 mb-6" id="categoryFormTitle">Add New Category</h3>
+                    <form id="categoryForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Name</label>
+                            <input type="text" class="input-field" id="categoryName" placeholder="Category name" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Slug</label>
+                            <input type="text" class="input-field" id="categorySlug" placeholder="category-slug">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Description</label>
+                            <textarea class="input-field" id="categoryDescription" rows="3" placeholder="Category description"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Icon</label>
+                            <select class="input-field" id="categoryIcon">
+                                <option value="fa-folder">📁 Folder</option>
+                                <option value="fa-plane">✈️ Travel</option>
+                                <option value="fa-utensils">🍽️ Food</option>
+                                <option value="fa-camera">📷 Photography</option>
+                                <option value="fa-mountain">🏔️ Adventure</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary w-full">
+                            <i class="fas fa-plus mr-2"></i> Add Category
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Categories List -->
+                <div class="card p-6 lg:col-span-2">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-bold text-slate-800">All Categories</h3>
+                        <div class="relative">
+                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="text" placeholder="Search..." class="input-field pl-10 w-48">
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-slate-50">
+                                <tr>
+                                    <th class="text-left p-3 font-semibold text-slate-600">Name</th>
+                                    <th class="text-left p-3 font-semibold text-slate-600">Slug</th>
+                                    <th class="text-left p-3 font-semibold text-slate-600">Posts</th>
+                                    <th class="text-left p-3 font-semibold text-slate-600">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categoriesTableBody">
+                                <!-- Categories rendered here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tags Page -->
+        <section class="page-section" id="tagsPage">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Tag Form -->
+                <div class="card p-6">
+                    <h3 class="font-bold text-slate-800 mb-6">Add New Tag</h3>
+                    <form id="tagForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Name</label>
+                            <input type="text" class="input-field" id="tagName" placeholder="Tag name" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Slug</label>
+                            <input type="text" class="input-field" id="tagSlug" placeholder="tag-slug">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Color</label>
+                            <div class="flex gap-2">
+                                <input type="color" id="tagColor" value="#6366f1" class="w-12 h-10 rounded cursor-pointer">
+                                <input type="text" class="input-field flex-1" value="#6366f1" id="tagColorText">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary w-full">
+                            <i class="fas fa-plus mr-2"></i> Add Tag
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Tags List -->
+                <div class="card p-6 lg:col-span-2">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="font-bold text-slate-800">All Tags</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3" id="tagsContainer">
+                        <!-- Tags rendered here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comments Page -->
+        <section class="page-section" id="commentsPage">
+            <!-- Comment Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="card p-4 flex items-center gap-4">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-comments text-indigo-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-slate-500 text-sm">Total</p>
+                        <p class="text-2xl font-bold text-slate-800">1,429</p>
+                    </div>
+                </div>
+                <div class="card p-4 flex items-center gap-4">
+                    <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-clock text-orange-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-slate-500 text-sm">Pending</p>
+                        <p class="text-2xl font-bold text-slate-800">5</p>
+                    </div>
+                </div>
+                <div class="card p-4 flex items-center gap-4">
+                    <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-check text-green-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-slate-500 text-sm">Approved</p>
+                        <p class="text-2xl font-bold text-slate-800">1,412</p>
+                    </div>
+                </div>
+                <div class="card p-4 flex items-center gap-4">
+                    <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-ban text-red-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-slate-500 text-sm">Spam</p>
+                        <p class="text-2xl font-bold text-slate-800">12</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments Filter -->
+            <div class="card p-4 mb-6">
+                <div class="flex flex-wrap items-center gap-4">
+                    <button class="tab-btn active" onclick="filterComments('all', this)">All (1,429)</button>
+                    <button class="tab-btn" onclick="filterComments('pending', this)">Pending (5)</button>
+                    <button class="tab-btn" onclick="filterComments('approved', this)">Approved</button>
+                    <button class="tab-btn" onclick="filterComments('spam', this)">Spam</button>
+                    <div class="ml-auto">
+                        <input type="text" placeholder="Search comments..." class="input-field w-64">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comments List -->
+            <div class="card overflow-hidden">
+                <div id="commentsContainer">
+                    <!-- Comments rendered here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Media Library Page -->
+        <section class="page-section" id="mediaPage">
+            <!-- Upload Area -->
+            <div class="card p-6 mb-6">
+                <div class="dropzone" id="mediaDropzone">
+                    <i class="fas fa-cloud-upload-alt text-5xl text-slate-300 mb-4"></i>
+                    <p class="text-slate-600 font-medium">Drop files here or click to upload</p>
+                    <p class="text-slate-400 text-sm mt-2">Supports: JPG, PNG, GIF, WEBP (Max 10MB)</p>
+                    <input type="file" id="mediaFileInput" multiple accept="image/*" class="hidden">
+                </div>
+            </div>
+
+            <!-- Media Grid -->
+            <div class="card p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="font-bold text-slate-800">Media Library</h3>
+                    <div class="flex items-center gap-4">
+                        <select class="input-field w-auto">
+                            <option>All Media</option>
+                            <option>Images</option>
+                            <option>Videos</option>
+                        </select>
+                        <div class="flex gap-2">
+                            <button class="p-2 bg-indigo-500 text-white rounded-lg"><i class="fas fa-th"></i></button>
+                            <button class="p-2 bg-slate-200 rounded-lg"><i class="fas fa-list"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4" id="mediaGrid">
+                    <!-- Media items rendered here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Tools Page -->
+        <section class="page-section" id="ai-toolsPage">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- AI Tools Menu -->
+                <div class="card p-6">
+                    <h3 class="font-bold text-slate-800 mb-6">
+                        <i class="fas fa-robot text-indigo-500 mr-2"></i>
+                        AI Tools
+                    </h3>
+                    <div class="space-y-3">
+                        <button onclick="selectAITool('generate')" class="w-full p-4 text-left rounded-xl border-2 border-indigo-500 bg-indigo-50 transition hover:shadow-md ai-tool-btn active">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-magic text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-slate-800">Generate Article</p>
+                                    <p class="text-xs text-slate-500">Create full blog post from topic</p>
+                                </div>
+                            </div>
+                        </button>
+                        <button onclick="selectAITool('rewrite')" class="w-full p-4 text-left rounded-xl border-2 border-slate-200 transition hover:border-indigo-300 hover:shadow-md ai-tool-btn">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-sync-alt text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-slate-800">Rewrite Content</p>
+                                    <p class="text-xs text-slate-500">Improve or rephrase text</p>
+                                </div>
+                            </div>
+                        </button>
+                        <button onclick="selectAITool('seo')" class="w-full p-4 text-left rounded-xl border-2 border-slate-200 transition hover:border-indigo-300 hover:shadow-md ai-tool-btn">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-search text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-slate-800">SEO Optimizer</p>
+                                    <p class="text-xs text-slate-500">Generate SEO meta tags</p>
+                                </div>
+                            </div>
+                        </button>
+                        <button onclick="selectAITool('titles')" class="w-full p-4 text-left rounded-xl border-2 border-slate-200 transition hover:border-indigo-300 hover:shadow-md ai-tool-btn">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-lightbulb text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-slate-800">Title Ideas</p>
+                                    <p class="text-xs text-slate-500">Generate catchy titles</p>
+                                </div>
+                            </div>
+                        </button>
+                        <button onclick="selectAITool('summary')" class="w-full p-4 text-left rounded-xl border-2 border-slate-200 transition hover:border-indigo-300 hover:shadow-md ai-tool-btn">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-pink-500 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-compress-alt text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-slate-800">Summarize</p>
+                                    <p class="text-xs text-slate-500">Create article summary</p>
+                                </div>
+                            </div>
+                        </button>
+                        <button onclick="selectAITool('alttext')" class="w-full p-4 text-left rounded-xl border-2 border-slate-200 transition hover:border-indigo-300 hover:shadow-md ai-tool-btn">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-cyan-500 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-image text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-slate-800">Image Alt Text</p>
+                                    <p class="text-xs text-slate-500">Auto-generate alt text</p>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- AI Workspace -->
+                <div class="card p-6 lg:col-span-2">
+                    <div id="aiWorkspace">
+                        <!-- Generate Article Tool -->
+                        <div id="aiToolGenerate" class="ai-tool-content">
+                            <h3 class="font-bold text-slate-800 mb-6">
+                                <i class="fas fa-magic text-indigo-500 mr-2"></i>
+                                Generate Article
+                            </h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Topic / Title</label>
+                                    <input type="text" class="input-field" placeholder="e.g., Best beaches in Thailand" id="aiTopic">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Keywords (comma separated)</label>
+                                    <input type="text" class="input-field" placeholder="thailand, beaches, travel" id="aiKeywords">
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-700 mb-2">Tone</label>
+                                        <select class="input-field" id="aiTone">
+                                            <option>Professional</option>
+                                            <option>Casual</option>
+                                            <option>Friendly</option>
+                                            <option>Informative</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-700 mb-2">Length</label>
+                                        <select class="input-field" id="aiLength">
+                                            <option>Short (500 words)</option>
+                                            <option>Medium (1000 words)</option>
+                                            <option>Long (2000 words)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button onclick="generateAIContent()" class="btn-primary ai-btn w-full">
+                                    <i class="fas fa-sparkles mr-2"></i>
+                                    Generate Article
+                                </button>
+                            </div>
+                            <div id="aiResult" class="mt-6 hidden">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h4 class="font-semibold text-slate-800">Generated Content</h4>
+                                    <div class="flex gap-2">
+                                        <button class="px-3 py-1 text-sm bg-slate-100 rounded-lg hover:bg-slate-200">
+                                            <i class="fas fa-copy mr-1"></i> Copy
+                                        </button>
+                                        <button class="px-3 py-1 text-sm bg-indigo-100 text-indigo-600 rounded-lg hover:bg-indigo-200">
+                                            <i class="fas fa-plus mr-1"></i> Use
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 rounded-xl p-4 max-h-96 overflow-y-auto" id="aiResultContent">
+                                    <!-- AI result will appear here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Page -->
+        <section class="page-section" id="settingsPage">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="card p-6">
+                    <h3 class="font-bold text-slate-800 mb-6">General Settings</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Blog Title</label>
+                            <input type="text" class="input-field" value="Travel Bliss Blog">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Blog Description</label>
+                            <textarea class="input-field" rows="3">Your ultimate travel companion</textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Posts Per Page</label>
+                            <input type="number" class="input-field" value="10">
+                        </div>
+                        <button class="btn-primary w-full">Save Changes</button>
+                    </div>
+                </div>
+                <div class="card p-6">
+                    <h3 class="font-bold text-slate-800 mb-6">SEO Settings</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Default Meta Title</label>
+                            <input type="text" class="input-field" value="%title% | Travel Bliss">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Default Meta Description</label>
+                            <textarea class="input-field" rows="3"></textarea>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-slate-700">Enable Schema Markup</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-6">
+                    <h3 class="font-bold text-slate-800 mb-6">Comment Settings</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-slate-700">Enable Comments</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500"></div>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-slate-700">Require Approval</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500"></div>
+                            </label>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-slate-700">Anti-Spam Filter</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer">
+                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Create/Edit Post Modal -->
+    <div class="modal" id="postModal">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-6 rounded-t-xl">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-xl font-bold text-white" id="postModalTitle">Create New Post</h2>
+                        <p class="text-indigo-200 text-sm">Fill in the details below</p>
+                    </div>
+                    <button onclick="closePostModal()" class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/30 transition">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Tabs -->
+            <div class="border-b border-slate-200 bg-white px-6">
+                <div class="flex gap-1">
+                    <button class="tab-btn active" onclick="showPostTab('content', this)">
+                        <i class="fas fa-edit mr-2"></i>Content
+                    </button>
+                    <button class="tab-btn" onclick="showPostTab('media', this)">
+                        <i class="fas fa-image mr-2"></i>Media
+                    </button>
+                    <button class="tab-btn" onclick="showPostTab('seo', this)">
+                        <i class="fas fa-search mr-2"></i>SEO
+                    </button>
+                    <button class="tab-btn" onclick="showPostTab('settings', this)">
+                        <i class="fas fa-cog mr-2"></i>Settings
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 bg-slate-50 max-h-[60vh] overflow-y-auto">
+                <!-- Content Tab -->
+                <div id="postTabContent" class="post-tab">
+                    <div class="space-y-5">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Title *</label>
+                            <input type="text" class="input-field text-lg" id="postTitle" placeholder="Enter post title..." oninput="generateSlug()">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Slug</label>
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-500">/blog/</span>
+                                <input type="text" class="input-field flex-1" id="postSlug" placeholder="post-url-slug">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Excerpt</label>
+                            <textarea class="input-field" id="postExcerpt" rows="2" placeholder="Brief description of the post..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Content *</label>
+                            <div id="postEditor" class="bg-white rounded-xl"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Media Tab -->
+                <div id="postTabMedia" class="post-tab hidden">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Featured Image</label>
+                            <div class="dropzone" id="featuredImageDropzone">
+                                <i class="fas fa-image text-4xl text-slate-300 mb-3"></i>
+                                <p class="text-slate-600">Drop image here or click to upload</p>
+                                <input type="file" id="featuredImageInput" accept="image/*" class="hidden">
+                            </div>
+                            <div id="featuredImagePreview" class="mt-4 hidden">
+                                <img src="" class="w-full h-48 object-cover rounded-xl" id="featuredImagePreviewImg">
+                                <button onclick="removeFeaturedImage()" class="mt-2 text-red-500 text-sm">
+                                    <i class="fas fa-trash mr-1"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Gallery Images</label>
+                            <div class="dropzone" id="galleryDropzone">
+                                <i class="fas fa-images text-4xl text-slate-300 mb-3"></i>
+                                <p class="text-slate-600">Drop multiple images here</p>
+                                <input type="file" id="galleryInput" accept="image/*" multiple class="hidden">
+                            </div>
+                            <div id="galleryPreview" class="grid grid-cols-4 gap-3 mt-4">
+                                <!-- Gallery images preview -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEO Tab -->
+                <div id="postTabSeo" class="post-tab hidden">
+                    <div class="space-y-5">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="font-semibold text-slate-800">AI SEO Assistant</h4>
+                                <button onclick="generateSEO()" class="px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg text-sm font-medium hover:shadow-lg transition">
+                                    <i class="fas fa-magic mr-2"></i>Auto Generate
+                                </button>
+                            </div>
+                            <p class="text-slate-500 text-sm">Let AI generate optimized SEO meta tags based on your content</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">SEO Title</label>
+                            <input type="text" class="input-field" id="seoTitle" placeholder="SEO optimized title">
+                            <p class="text-xs text-slate-500 mt-1"><span id="seoTitleCount">0</span>/60 characters</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Meta Description</label>
+                            <textarea class="input-field" id="seoDescription" rows="3" placeholder="Meta description for search engines"></textarea>
+                            <p class="text-xs text-slate-500 mt-1"><span id="seoDescCount">0</span>/160 characters</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Keywords</label>
+                            <input type="text" class="input-field" id="seoKeywords" placeholder="keyword1, keyword2, keyword3">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Canonical URL</label>
+                            <input type="text" class="input-field" id="canonicalUrl" placeholder="https://example.com/blog/post-slug">
+                        </div>
+                        <!-- SEO Preview -->
+                        <div class="bg-white p-4 rounded-xl border border-slate-200">
+                            <p class="text-xs text-slate-500 mb-2">Search Engine Preview</p>
+                            <div class="border border-slate-200 rounded-lg p-4">
+                                <p class="text-blue-600 text-lg hover:underline cursor-pointer" id="seoPreviewTitle">Post Title - Your Site</p>
+                                <p class="text-green-700 text-sm">https://yoursite.com/blog/<span id="seoPreviewSlug">post-slug</span></p>
+                                <p class="text-slate-600 text-sm mt-1" id="seoPreviewDesc">Meta description will appear here...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="postTabSettings" class="post-tab hidden">
+                    <div class="space-y-5">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Category</label>
+                                <select class="input-field" id="postCategory">
+                                    <option value="">Select category</option>
+                                    <option value="travel">Travel</option>
+                                    <option value="adventure">Adventure</option>
+                                    <option value="food">Food & Dining</option>
+                                    <option value="culture">Culture</option>
+                                    <option value="tips">Travel Tips</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Status</label>
+                                <select class="input-field" id="postStatus">
+                                    <option value="draft">Draft</option>
+                                    <option value="published">Published</option>
+                                    <option value="scheduled">Scheduled</option>
+                                    <option value="private">Private</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="scheduleDateContainer" class="hidden">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Schedule Date & Time</label>
+                            <input type="datetime-local" class="input-field" id="scheduleDate">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Tags</label>
+                            <input type="text" class="input-field" id="postTags" placeholder="Add tags separated by comma">
+                            <div id="selectedTags" class="flex flex-wrap gap-2 mt-2">
+                                <!-- Selected tags -->
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Author</label>
+                            <select class="input-field" id="postAuthor">
+                                <option value="admin">Admin</option>
+                                <option value="editor">Editor</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-white rounded-xl border border-slate-200">
+                            <div>
+                                <p class="font-medium text-slate-800">Allow Comments</p>
+                                <p class="text-sm text-slate-500">Enable comments on this post</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" checked class="sr-only peer" id="allowComments">
+                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-6 bg-white border-t border-slate-200 rounded-b-xl flex items-center justify-between">
+                <button onclick="closePostModal()" class="px-6 py-2 border-2 border-slate-200 rounded-xl font-semibold text-slate-600 hover:bg-slate-50 transition">
+                    Cancel
+                </button>
+                <div class="flex gap-3">
+                    <button onclick="savePost('draft')" class="px-6 py-2 bg-slate-100 rounded-xl font-semibold text-slate-700 hover:bg-slate-200 transition">
+                        <i class="fas fa-save mr-2"></i>Save Draft
+                    </button>
+                    <button onclick="savePost('published')" class="btn-primary">
+                        <i class="fas fa-paper-plane mr-2"></i>Publish
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Media Preview Modal -->
+    <div class="modal" id="mediaPreviewModal">
+        <div class="modal-content max-w-2xl">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold text-slate-800">Media Details</h3>
+                    <button onclick="closeMediaPreview()" class="text-slate-400 hover:text-slate-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <img src="" id="mediaPreviewImg" class="w-full rounded-xl mb-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">File Name</label>
+                        <input type="text" class="input-field" id="mediaFileName">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Alt Text</label>
+                        <input type="text" class="input-field" id="mediaAltText">
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-slate-700 mb-1">URL</label>
+                    <div class="flex gap-2">
+                        <input type="text" class="input-field flex-1" id="mediaUrl" readonly>
+                        <button onclick="copyMediaUrl()" class="btn-primary">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button onclick="deleteMedia()" class="px-4 py-2 bg-red-100 text-red-600 rounded-lg font-medium hover:bg-red-200">
+                        <i class="fas fa-trash mr-2"></i>Delete
+                    </button>
+                    <button onclick="closeMediaPreview()" class="btn-primary">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =============================================
+        // MOCK DATA
+        // =============================================
+        const mockPosts = [
+            { id: 1, title: '10 Best Travel Destinations 2024', slug: 'best-travel-destinations-2024', category: 'Travel', author: 'Admin', status: 'published', views: 12485, date: '2024-01-15', image: 'https://picsum.photos/100/60?random=1' },
+            { id: 2, title: 'How to Plan Your Perfect Trip', slug: 'plan-perfect-trip', category: 'Tips', author: 'Editor', status: 'draft', views: 0, date: '2024-01-14', image: 'https://picsum.photos/100/60?random=2' },
+            { id: 3, title: 'Budget Travel: Complete Guide', slug: 'budget-travel-guide', category: 'Tips', author: 'Admin', status: 'scheduled', views: 0, date: '2024-01-20', image: 'https://picsum.photos/100/60?random=3' },
+            { id: 4, title: 'Ultimate Guide to Bali', slug: 'ultimate-guide-bali', category: 'Travel', author: 'Admin', status: 'published', views: 9234, date: '2024-01-10', image: 'https://picsum.photos/100/60?random=4' },
+            { id: 5, title: 'Paris on a Budget', slug: 'paris-budget', category: 'Travel', author: 'Editor', status: 'published', views: 7891, date: '2024-01-08', image: 'https://picsum.photos/100/60?random=5' },
+            { id: 6, title: 'Japan Travel Essentials', slug: 'japan-essentials', category: 'Culture', author: 'Admin', status: 'published', views: 6543, date: '2024-01-05', image: 'https://picsum.photos/100/60?random=6' },
+            { id: 7, title: 'Street Food Adventures', slug: 'street-food', category: 'Food', author: 'Editor', status: 'archived', views: 4521, date: '2023-12-20', image: 'https://picsum.photos/100/60?random=7' },
+        ];
+
+        const mockCategories = [
+            { id: 1, name: 'Travel', slug: 'travel', description: 'Travel destinations and guides', posts: 45, icon: 'fa-plane' },
+            { id: 2, name: 'Adventure', slug: 'adventure', description: 'Adventure activities', posts: 23, icon: 'fa-mountain' },
+            { id: 3, name: 'Food & Dining', slug: 'food', description: 'Food experiences', posts: 18, icon: 'fa-utensils' },
+            { id: 4, name: 'Culture', slug: 'culture', description: 'Cultural experiences', posts: 31, icon: 'fa-landmark' },
+            { id: 5, name: 'Travel Tips', slug: 'tips', description: 'Helpful travel tips', posts: 27, icon: 'fa-lightbulb' },
+        ];
+
+        const mockTags = [
+            { id: 1, name: 'Beach', slug: 'beach', count: 24, color: '#3b82f6' },
+            { id: 2, name: 'Mountains', slug: 'mountains', count: 18, color: '#22c55e' },
+            { id: 3, name: 'City Break', slug: 'city-break', count: 32, color: '#f59e0b' },
+            { id: 4, name: 'Budget', slug: 'budget', count: 41, color: '#ec4899' },
+            { id: 5, name: 'Luxury', slug: 'luxury', count: 15, color: '#8b5cf6' },
+            { id: 6, name: 'Solo Travel', slug: 'solo-travel', count: 28, color: '#06b6d4' },
+            { id: 7, name: 'Family', slug: 'family', count: 19, color: '#ef4444' },
+            { id: 8, name: 'Photography', slug: 'photography', count: 22, color: '#6366f1' },
+        ];
+
+        const mockComments = [
+            { id: 1, author: 'John Doe', email: 'john@example.com', content: 'Great article! Very helpful tips for my upcoming trip.', post: 'Ultimate Guide to Bali', date: '2024-01-15', status: 'pending', avatar: 'https://i.pravatar.cc/40?img=1' },
+            { id: 2, author: 'Sarah Smith', email: 'sarah@example.com', content: 'I loved this! Can you write more about hidden gems in Europe?', post: 'Paris on a Budget', date: '2024-01-14', status: 'approved', avatar: 'https://i.pravatar.cc/40?img=2' },
+            { id: 3, author: 'Mike Johnson', email: 'mike@example.com', content: 'The photography tips were exactly what I needed. Thanks!', post: 'Japan Travel Essentials', date: '2024-01-13', status: 'pending', avatar: 'https://i.pravatar.cc/40?img=3' },
+            { id: 4, author: 'Emily Brown', email: 'emily@example.com', content: 'Amazing content as always. Keep up the great work!', post: '10 Best Travel Destinations', date: '2024-01-12', status: 'approved', avatar: 'https://i.pravatar.cc/40?img=4' },
+            { id: 5, author: 'Spam Bot', email: 'spam@spam.com', content: 'Buy cheap watches now! Click here!', post: 'Budget Travel Guide', date: '2024-01-11', status: 'spam', avatar: 'https://i.pravatar.cc/40?img=5' },
+        ];
+
+        const mockMedia = [
+            { id: 1, name: 'beach-sunset.jpg', url: 'https://picsum.photos/300/200?random=10', size: '2.4 MB', date: '2024-01-15' },
+            { id: 2, name: 'mountain-view.jpg', url: 'https://picsum.photos/300/200?random=11', size: '1.8 MB', date: '2024-01-14' },
+            { id: 3, name: 'city-night.jpg', url: 'https://picsum.photos/300/200?random=12', size: '3.1 MB', date: '2024-01-13' },
+            { id: 4, name: 'food-market.jpg', url: 'https://picsum.photos/300/200?random=13', size: '2.0 MB', date: '2024-01-12' },
+            { id: 5, name: 'temple.jpg', url: 'https://picsum.photos/300/200?random=14', size: '2.7 MB', date: '2024-01-11' },
+            { id: 6, name: 'waterfall.jpg', url: 'https://picsum.photos/300/200?random=15', size: '1.5 MB', date: '2024-01-10' },
+            { id: 7, name: 'desert.jpg', url: 'https://picsum.photos/300/200?random=16', size: '2.2 MB', date: '2024-01-09' },
+            { id: 8, name: 'forest.jpg', url: 'https://picsum.photos/300/200?random=17', size: '1.9 MB', date: '2024-01-08' },
+        ];
+
+        // =============================================
+        // INITIALIZATION
+        // =============================================
+        let quillEditor;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Quill Editor
+            quillEditor = new Quill('#postEditor', {
+                theme: 'snow',
+                placeholder: 'Write your post content here...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['blockquote', 'code-block'],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            });
+
+            // Initialize Charts
+            initCharts();
+
+            // Render initial data
+            renderPosts();
+            renderCategories();
+            renderTags();
+            renderComments();
+            renderMedia();
+
+            // Setup dropzones
+            setupDropzones();
+
+            // Setup event listeners
+            setupEventListeners();
+        });
+
+        // =============================================
+        // NAVIGATION
+        // =============================================
+        function showPage(pageName) {
+            // Hide all pages
+            document.querySelectorAll('.page-section').forEach(page => {
+                page.classList.remove('active');
+            });
+            // Show selected page
+            document.getElementById(pageName + 'Page').classList.add('active');
+
+            // Update sidebar
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Update title
+            const titles = {
+                'dashboard': 'Dashboard',
+                'posts': 'Blog Posts',
+                'categories': 'Categories',
+                'tags': 'Tags',
+                'comments': 'Comments',
+                'media': 'Media Library',
+                'ai-tools': 'AI Assistant',
+                'settings': 'Settings'
+            };
+            document.getElementById('pageTitle').textContent = titles[pageName] || pageName;
+        }
+
+        // =============================================
+        // RENDER FUNCTIONS
+        // =============================================
+        function renderPosts() {
+            const tbody = document.getElementById('postsTableBody');
+            tbody.innerHTML = mockPosts.map(post => `
+                <tr class="table-row border-b border-slate-100">
+                    <td class="p-4"><input type="checkbox" class="w-4 h-4 rounded"></td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <img src="${post.image}" class="w-16 h-10 rounded-lg object-cover">
+                            <div>
+                                <p class="font-semibold text-slate-800">${post.title}</p>
+                                <p class="text-slate-500 text-sm">/blog/${post.slug}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-4"><span class="badge badge-info">${post.category}</span></td>
+                    <td class="p-4 text-slate-600">${post.author}</td>
+                    <td class="p-4">
+                        <span class="badge ${getStatusBadgeClass(post.status)}">${post.status}</span>
+                    </td>
+                    <td class="p-4 text-slate-600">${post.views.toLocaleString()}</td>
+                    <td class="p-4 text-slate-500 text-sm">${post.date}</td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <button onclick="editPost(${post.id})" class="action-btn bg-blue-100 text-blue-600" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="previewPost(${post.id})" class="action-btn bg-green-100 text-green-600" title="Preview">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button onclick="deletePost(${post.id})" class="action-btn bg-red-100 text-red-600" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function getStatusBadgeClass(status) {
+            const classes = {
+                'published': 'badge-success',
+                'draft': 'badge-warning',
+                'scheduled': 'badge-info',
+                'archived': 'badge-danger'
+            };
+            return classes[status] || 'badge-info';
+        }
+
+        function renderCategories() {
+            const tbody = document.getElementById('categoriesTableBody');
+            tbody.innerHTML = mockCategories.map(cat => `
+                <tr class="table-row border-b border-slate-100">
+                    <td class="p-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+                                <i class="fas ${cat.icon} text-indigo-500"></i>
+                            </div>
+                            <span class="font-medium text-slate-800">${cat.name}</span>
+                        </div>
+                    </td>
+                    <td class="p-3 text-slate-500">${cat.slug}</td>
+                    <td class="p-3"><span class="badge badge-info">${cat.posts} posts</span></td>
+                    <td class="p-3">
+                        <div class="flex gap-2">
+                            <button onclick="editCategory(${cat.id})" class="action-btn bg-blue-100 text-blue-600">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteCategory(${cat.id})" class="action-btn bg-red-100 text-red-600">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderTags() {
+            const container = document.getElementById('tagsContainer');
+            container.innerHTML = mockTags.map(tag => `
+                <div class="group relative inline-flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-medium cursor-pointer transition hover:shadow-lg" style="background: ${tag.color};">
+                    <span>#${tag.name}</span>
+                    <span class="bg-white/20 px-2 py-0.5 rounded-full text-xs">${tag.count}</span>
+                    <button onclick="deleteTag(${tag.id})" class="opacity-0 group-hover:opacity-100 ml-1 transition">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function renderComments(filter = 'all') {
+            const container = document.getElementById('commentsContainer');
+            const filtered = filter === 'all' ? mockComments : mockComments.filter(c => c.status === filter);
+
+            container.innerHTML = filtered.map(comment => `
+                <div class="p-4 border-b border-slate-100 hover:bg-slate-50 transition">
+                    <div class="flex gap-4">
+                        <img src="${comment.avatar}" class="w-10 h-10 rounded-full">
+                        <div class="flex-1">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="font-semibold text-slate-800">${comment.author}</span>
+                                    <span class="text-slate-500 text-sm ml-2">on "${comment.post}"</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="badge ${getCommentStatusBadge(comment.status)}">${comment.status}</span>
+                                    <span class="text-slate-400 text-sm">${comment.date}</span>
+                                </div>
+                            </div>
+                            <p class="text-slate-600 mt-2">${comment.content}</p>
+                            <div class="flex gap-2 mt-3">
+                                ${comment.status === 'pending' ? `
+                                    <button onclick="approveComment(${comment.id})" class="px-3 py-1 bg-green-100 text-green-600 rounded-lg text-sm font-medium hover:bg-green-200">
+                                        <i class="fas fa-check mr-1"></i>Approve
+                                    </button>
+                                    <button onclick="rejectComment(${comment.id})" class="px-3 py-1 bg-red-100 text-red-600 rounded-lg text-sm font-medium hover:bg-red-200">
+                                        <i class="fas fa-ban mr-1"></i>Reject
+                                    </button>
+                                ` : ''}
+                                <button onclick="replyComment(${comment.id})" class="px-3 py-1 bg-blue-100 text-blue-600 rounded-lg text-sm font-medium hover:bg-blue-200">
+                                    <i class="fas fa-reply mr-1"></i>Reply
+                                </button>
+                                <button onclick="deleteComment(${comment.id})" class="px-3 py-1 bg-slate-100 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-200">
+                                    <i class="fas fa-trash mr-1"></i>Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getCommentStatusBadge(status) {
+            const classes = {
+                'pending': 'badge-warning',
+                'approved': 'badge-success',
+                'rejected': 'badge-danger',
+                'spam': 'badge-danger'
+            };
+            return classes[status] || 'badge-info';
+        }
+
+        function renderMedia() {
+            const grid = document.getElementById('mediaGrid');
+            grid.innerHTML = mockMedia.map(media => `
+                <div class="group relative cursor-pointer" onclick="openMediaPreview(${media.id})">
+                    <img src="${media.url}" class="w-full h-24 object-cover rounded-xl">
+                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition rounded-xl flex items-center justify-center">
+                        <i class="fas fa-search-plus text-white text-xl"></i>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-1 truncate">${media.name}</p>
+                </div>
+            `).join('');
+        }
+
+        // =============================================
+        // CHARTS
+        // =============================================
+        function initCharts() {
+            // Views Chart
+            const viewsCtx = document.getElementById('viewsChart').getContext('2d');
+            new Chart(viewsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Views',
+                        data: [3200, 4100, 3800, 5200, 4800, 6100, 5500],
+                        borderColor: '#6366f1',
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // Categories Chart
+            const catCtx = document.getElementById('categoriesChart').getContext('2d');
+            new Chart(catCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Travel', 'Adventure', 'Food', 'Culture', 'Tips'],
+                    datasets: [{
+                        data: [45, 23, 18, 31, 27],
+                        backgroundColor: ['#6366f1', '#22c55e', '#f59e0b', '#ec4899', '#3b82f6']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
+
+        // =============================================
+        // MODAL FUNCTIONS
+        // =============================================
+        function openCreatePostModal() {
+            document.getElementById('postModal').classList.add('active');
+            document.getElementById('postModalTitle').textContent = 'Create New Post';
+        }
+
+        function closePostModal() {
+            document.getElementById('postModal').classList.remove('active');
+        }
+
+        function showPostTab(tab, btn) {
+            document.querySelectorAll('.post-tab').forEach(t => t.classList.add('hidden'));
+            document.getElementById('postTab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.remove('hidden');
+
+            document.querySelectorAll('#postModal .tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function openMediaPreview(id) {
+            const media = mockMedia.find(m => m.id === id);
+            if (media) {
+                document.getElementById('mediaPreviewImg').src = media.url;
+                document.getElementById('mediaFileName').value = media.name;
+                document.getElementById('mediaUrl').value = media.url;
+                document.getElementById('mediaPreviewModal').classList.add('active');
+            }
+        }
+
+        function closeMediaPreview() {
+            document.getElementById('mediaPreviewModal').classList.remove('active');
+        }
+
+        // =============================================
+        // POST FUNCTIONS
+        // =============================================
+        function generateSlug() {
+            const title = document.getElementById('postTitle').value;
+            const slug = title.toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-');
+            document.getElementById('postSlug').value = slug;
+            document.getElementById('seoPreviewSlug').textContent = slug;
+        }
+
+        function savePost(status) {
+            const title = document.getElementById('postTitle').value;
+            if (!title) {
+                alert('Please enter a title');
+                return;
+            }
+
+            // Simulate save
+            alert(`Post "${title}" saved as ${status}!`);
+            closePostModal();
+        }
+
+        function editPost(id) {
+            const post = mockPosts.find(p => p.id === id);
+            if (post) {
+                document.getElementById('postTitle').value = post.title;
+                document.getElementById('postSlug').value = post.slug;
+                document.getElementById('postModalTitle').textContent = 'Edit Post';
+                document.getElementById('postModal').classList.add('active');
+            }
+        }
+
+        function deletePost(id) {
+            if (confirm('Are you sure you want to delete this post?')) {
+                alert('Post deleted!');
+                renderPosts();
+            }
+        }
+
+        function previewPost(id) {
+            alert('Opening preview for post #' + id);
+        }
+
+        // =============================================
+        // COMMENT FUNCTIONS
+        // =============================================
+        function filterComments(status, btn) {
+            document.querySelectorAll('#commentsPage .tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderComments(status);
+        }
+
+        function approveComment(id) {
+            alert('Comment approved!');
+        }
+
+        function rejectComment(id) {
+            alert('Comment rejected!');
+        }
+
+        function deleteComment(id) {
+            if (confirm('Delete this comment?')) {
+                alert('Comment deleted!');
+            }
+        }
+
+        function replyComment(id) {
+            alert('Reply to comment #' + id);
+        }
+
+        // =============================================
+        // AI FUNCTIONS
+        // =============================================
+        function selectAITool(tool) {
+            document.querySelectorAll('.ai-tool-btn').forEach(btn => {
+                btn.classList.remove('active', 'border-indigo-500', 'bg-indigo-50');
+                btn.classList.add('border-slate-200');
+            });
+            event.currentTarget.classList.add('active', 'border-indigo-500', 'bg-indigo-50');
+            event.currentTarget.classList.remove('border-slate-200');
+        }
+
+        function generateAIContent() {
+            const topic = document.getElementById('aiTopic').value;
+            if (!topic) {
+                alert('Please enter a topic');
+                return;
+            }
+
+            // Show loading
+            const resultDiv = document.getElementById('aiResult');
+            const resultContent = document.getElementById('aiResultContent');
+            resultDiv.classList.remove('hidden');
+            resultContent.innerHTML = '<div class="flex items-center gap-3"><div class="animate-spin w-5 h-5 border-2 border-indigo-500 border-t-transparent rounded-full"></div> Generating content...</div>';
+
+            // Simulate AI generation
+            setTimeout(() => {
+                resultContent.innerHTML = `
+                    <h2 class="text-xl font-bold mb-4">${topic}</h2>
+                    <p class="mb-4">This is AI-generated content for your blog post about "${topic}". The content has been optimized for readability and SEO.</p>
+                    <h3 class="text-lg font-semibold mb-2">Introduction</h3>
+                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <h3 class="text-lg font-semibold mb-2">Key Points</h3>
+                    <ul class="list-disc list-inside mb-4">
+                        <li>Important point about ${topic}</li>
+                        <li>Another key insight</li>
+                        <li>Expert recommendation</li>
+                    </ul>
+                    <h3 class="text-lg font-semibold mb-2">Conclusion</h3>
+                    <p>In conclusion, ${topic} offers amazing opportunities for travelers looking for unique experiences.</p>
+                `;
+            }, 2000);
+        }
+
+        function generateSEO() {
+            const title = document.getElementById('postTitle').value || 'Your Blog Post';
+            document.getElementById('seoTitle').value = title + ' | Travel Bliss';
+            document.getElementById('seoDescription').value = 'Discover everything you need to know about ' + title.toLowerCase() + '. Expert tips, recommendations, and comprehensive guides.';
+            document.getElementById('seoKeywords').value = title.toLowerCase().split(' ').join(', ');
+            document.getElementById('seoPreviewTitle').textContent = title + ' | Travel Bliss';
+            document.getElementById('seoPreviewDesc').textContent = 'Discover everything you need to know about ' + title.toLowerCase() + '...';
+        }
+
+        // =============================================
+        // UTILITY FUNCTIONS
+        // =============================================
+        function setupDropzones() {
+            const dropzones = ['mediaDropzone', 'featuredImageDropzone', 'galleryDropzone'];
+            dropzones.forEach(id => {
+                const dropzone = document.getElementById(id);
+                if (dropzone) {
+                    dropzone.addEventListener('click', () => {
+                        const input = dropzone.querySelector('input[type="file"]');
+                        if (input) input.click();
+                    });
+                }
+            });
+        }
+
+        function setupEventListeners() {
+            // Post status change
+            const statusSelect = document.getElementById('postStatus');
+            if (statusSelect) {
+                statusSelect.addEventListener('change', function() {
+                    const scheduleContainer = document.getElementById('scheduleDateContainer');
+                    scheduleContainer.classList.toggle('hidden', this.value !== 'scheduled');
+                });
+            }
+
+            // SEO character counters
+            const seoTitle = document.getElementById('seoTitle');
+            const seoDesc = document.getElementById('seoDescription');
+            if (seoTitle) {
+                seoTitle.addEventListener('input', function() {
+                    document.getElementById('seoTitleCount').textContent = this.value.length;
+                    document.getElementById('seoPreviewTitle').textContent = this.value || 'Post Title';
+                });
+            }
+            if (seoDesc) {
+                seoDesc.addEventListener('input', function() {
+                    document.getElementById('seoDescCount').textContent = this.value.length;
+                    document.getElementById('seoPreviewDesc').textContent = this.value || 'Meta description...';
+                });
+            }
+
+            // Category form
+            const categoryForm = document.getElementById('categoryForm');
+            if (categoryForm) {
+                categoryForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Category saved!');
+                    this.reset();
+                });
+            }
+
+            // Tag form
+            const tagForm = document.getElementById('tagForm');
+            if (tagForm) {
+                tagForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Tag saved!');
+                    this.reset();
+                });
+            }
+
+            // Category name to slug
+            const categoryName = document.getElementById('categoryName');
+            if (categoryName) {
+                categoryName.addEventListener('input', function() {
+                    document.getElementById('categorySlug').value = this.value.toLowerCase().replace(/\s+/g, '-');
+                });
+            }
+
+            // Tag name to slug
+            const tagName = document.getElementById('tagName');
+            if (tagName) {
+                tagName.addEventListener('input', function() {
+                    document.getElementById('tagSlug').value = this.value.toLowerCase().replace(/\s+/g, '-');
+                });
+            }
+
+            // Tag color sync
+            const tagColor = document.getElementById('tagColor');
+            const tagColorText = document.getElementById('tagColorText');
+            if (tagColor && tagColorText) {
+                tagColor.addEventListener('input', function() {
+                    tagColorText.value = this.value;
+                });
+                tagColorText.addEventListener('input', function() {
+                    tagColor.value = this.value;
+                });
+            }
+        }
+
+        function copyMediaUrl() {
+            const url = document.getElementById('mediaUrl').value;
+            navigator.clipboard.writeText(url);
+            alert('URL copied to clipboard!');
+        }
+
+        function deleteMedia() {
+            if (confirm('Delete this media file?')) {
+                alert('Media deleted!');
+                closeMediaPreview();
+            }
+        }
+
+        function editCategory(id) {
+            const cat = mockCategories.find(c => c.id === id);
+            if (cat) {
+                document.getElementById('categoryName').value = cat.name;
+                document.getElementById('categorySlug').value = cat.slug;
+                document.getElementById('categoryDescription').value = cat.description;
+                document.getElementById('categoryFormTitle').textContent = 'Edit Category';
+            }
+        }
+
+        function deleteCategory(id) {
+            if (confirm('Delete this category?')) {
+                alert('Category deleted!');
+            }
+        }
+
+        function deleteTag(id) {
+            if (confirm('Delete this tag?')) {
+                alert('Tag deleted!');
+            }
+        }
+
+        function removeFeaturedImage() {
+            document.getElementById('featuredImagePreview').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

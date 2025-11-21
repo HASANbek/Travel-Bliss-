@@ -3788,7 +3788,7 @@ function displayHomeBlogs(blogs) {
 
     blogs.forEach((blog, index) => {
         // Support both image and featuredImage fields
-        const imageUrl = blog.image || blog.featuredImage || 'assets/img/home3/blog-img1.jpg';
+        const imageUrl = blog.image || blog.image || blog.featuredImage || 'assets/img/home3/blog-img1.jpg';
         const excerpt = blog.excerpt || blog.content?.substring(0, 100) + '...' || 'Read more about this amazing destination...';
         const formattedDate = new Date(blog.createdAt).toLocaleDateString('en-US', {
             day: '2-digit',
@@ -4094,6 +4094,141 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+
+<script>
+async function loadBlogs() {
+    try {
+        const container = document.getElementById('blogsContainer');
+        if (!container) {
+            console.error('Blog container not found');
+            return;
+        }
+
+        const response = await fetch('http://localhost:4000/api/blogs');
+        const data = await response.json();
+
+        let blogs = [];
+        if (data.success) {
+            if (Array.isArray(data.data)) {
+                blogs = data.data;
+            } else if (data.data && Array.isArray(data.data.blogs)) {
+                blogs = data.data.blogs;
+            }
+        }
+
+        // Filter published blogs and take first 3
+        const publishedBlogs = blogs.filter(blog => blog.status === 'published');
+        const displayBlogs = publishedBlogs.slice(0, 3);
+
+        if (displayBlogs.length === 0) {
+            console.log('No published blogs found');
+            return;
+        }
+
+        // Render blogs
+        container.innerHTML = displayBlogs.map((blog, index) => {
+            const cssClass = index === 0 ? 'one' : (index === 1 ? 'two' : 'three');
+            const formattedDate = new Date(blog.createdAt || Date.now()).toLocaleDateString('en-US', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+
+            return `
+            <div class="col-lg-4 col-md-6">
+                <div class="blog-card2 ${cssClass}">
+                    <div class="blog-img-wrap">
+                        <a href="blog-details.html?id=${blog._id}" class="blog-img" style="background: url('${blog.image || blog.featuredImage || 'assets/img/home3/blog-default.jpg'}'); background-size: cover; background-position: center;">
+                            <img src="${blog.image || blog.featuredImage || 'assets/img/home3/blog-default.jpg'}" alt="${blog.title}" style="opacity: 0;">
+                        </a>
+                        <a href="package.html" class="location">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                                <path d="M8.99939 0C5.40484 0 2.48047 2.92437 2.48047 6.51888C2.48047 10.9798 8.31426 17.5287 8.56264 17.8053C8.79594 18.0651 9.20326 18.0646 9.43613 17.8053C9.68451 17.5287 15.5183 10.9798 15.5183 6.51888C15.5182 2.92437 12.5939 0 8.99939 0ZM8.99939 9.79871C7.19088 9.79871 5.71959 8.32739 5.71959 6.51888C5.71959 4.71037 7.19091 3.23909 8.99939 3.23909C10.8079 3.23909 12.2791 4.71041 12.2791 6.51892C12.2791 8.32743 10.8079 9.79871 8.99939 9.79871Z"></path>
+                            </svg>
+                            ${blog.location || 'Travel Destination'}
+                        </a>
+                    </div>
+                    <div class="blog-content">
+                        <a href="javascript:void(0)" class="blog-date">${formattedDate}</a>
+                        <h4>
+                            <a href="blog-details.html?id=${blog._id}">${blog.title}</a>
+                        </h4>
+                        <p>${blog.excerpt || blog.content?.substring(0, 100) + '...'}</p>
+                        <a class="view-btn" href="blog-details.html?id=${blog._id}">
+                            View More
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                                <path d="M12.5 15L17.5 10L12.5 5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <path d="M2.5 10H17.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            `;
+        }).join('');
+
+        console.log('Blogs loaded successfully:', displayBlogs.length);
+    } catch (error) {
+        console.error('Error loading blogs:', error);
+    }
+}
+
+// Load blogs when page is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadBlogs);
+} else {
+    loadBlogs();
+}
+</script>
+
+
+<!-- Blog Detail Modal -->
+<div id="blogModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:99999; overflow-y:auto; padding:20px;">
+    <div style="max-width:900px; margin:40px auto; background:white; border-radius:16px; overflow:hidden;">
+        <div style="position:relative;">
+            <img id="blogModalImg" src="" style="width:100%; max-height:400px; object-fit:cover;">
+            <button onclick="closeBlogModal()" style="position:absolute; top:15px; right:15px; width:40px; height:40px; border-radius:50%; border:none; background:white; font-size:20px; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,0.2);">✕</button>
+        </div>
+        <div style="padding:30px;">
+            <span id="blogModalCategory" style="background:#6366f1; color:white; padding:6px 14px; border-radius:20px; font-size:13px;"></span>
+            <h1 id="blogModalTitle" style="margin:20px 0 10px; color:#1e293b; font-size:2rem;"></h1>
+            <p style="color:#64748b; margin-bottom:20px;">
+                <span id="blogModalDate"></span> • <span id="blogModalAuthor"></span>
+            </p>
+            <p id="blogModalExcerpt" style="color:#475569; font-style:italic; font-size:1.1rem; margin-bottom:25px; padding-bottom:25px; border-bottom:1px solid #e2e8f0;"></p>
+            <div id="blogModalContent" style="color:#334155; line-height:1.9; font-size:1rem;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+function openBlogModal(blogId) {
+    fetch('/api/blogs/' + blogId)
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data) {
+                const blog = data.data;
+                document.getElementById('blogModalTitle').textContent = blog.title || '';
+                document.getElementById('blogModalCategory').textContent = blog.category || 'Blog';
+                document.getElementById('blogModalAuthor').textContent = blog.author || 'Admin';
+                document.getElementById('blogModalDate').textContent = new Date(blog.createdAt).toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+                document.getElementById('blogModalExcerpt').textContent = blog.excerpt || '';
+                document.getElementById('blogModalContent').innerHTML = (blog.content || '').split(String.fromCharCode(10)).join('<br>'); //
+
+                document.getElementById('blogModalImg').src = blog.image || 'assets/img/home3/blog-default.jpg';
+                document.getElementById('blogModal').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        });
+}
+function closeBlogModal() {
+    document.getElementById('blogModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+document.getElementById('blogModal').addEventListener('click', function(e) {
+    if (e.target === this) closeBlogModal();
+});
+</script>
 </body>
 
 </html>
