@@ -7,13 +7,15 @@ const { validateTour } = require('../middlewares/validation.middleware');
 // Public routes
 router.get('/stats', tourController.getTourStats);
 router.get('/featured', tourController.getFeaturedTours);
-router.get('/:id/seo', tourController.getTourSEO);
-router.put('/:id/seo', tourController.updateTourSEO);
 
 router
   .route('/')
   .get(tourController.getAllTours)
   .post(tourController.createTour); // Temporarily disabled validation: validateTour
+
+// SEO routes - must be before /:id to avoid conflict
+router.get('/:id/seo', tourController.getTourSEO);
+router.put('/:id/seo', tourController.updateTourSEO);
 
 router
   .route('/:id')

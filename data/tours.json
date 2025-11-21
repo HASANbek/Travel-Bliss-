@@ -526,5 +526,207 @@
     "slug": "khiva-ancient-city-tour-3-days",
     "ratingsCount": 0,
     "createdAt": "2025-11-20T17:51:27.063Z"
+  },
+  {
+    "id": "1763750000000",
+    "title": "Uzbek Tours from Tashkent",
+    "description": "Experience the best of Uzbekistan starting from Tashkent. Visit the most beautiful cities and discover the rich history of the Silk Road.",
+    "destination": "Tashkent, Samarkand, Bukhara",
+    "price": 1000,
+    "discountPrice": 50,
+    "duration": 8,
+    "nights": 7,
+    "category": "cultural",
+    "difficulty": "",
+    "maxGroupSize": 15,
+    "rating": 0,
+    "ratingsCount": 0,
+    "isActive": true,
+    "isFeatured": true,
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Arrival in Tashkent",
+        "description": "Welcome to Uzbekistan! Airport pickup and hotel transfer.",
+        "image": null,
+        "imageCaption": null,
+        "city": null,
+        "accommodation": null,
+        "meals": null,
+        "activities": [
+          "Airport pickup",
+          "Hotel check-in",
+          "Welcome dinner"
+        ]
+      },
+      {
+        "day": 2,
+        "title": "Tashkent City Tour",
+        "description": "Explore the capital city of Uzbekistan.",
+        "image": null,
+        "imageCaption": null,
+        "city": null,
+        "accommodation": null,
+        "meals": null,
+        "activities": [
+          "Chorsu Bazaar",
+          "Khast Imam Complex",
+          "Metro Tour"
+        ]
+      },
+      {
+        "day": 3,
+        "title": "Train to Samarkand",
+        "description": "High-speed train to Samarkand and city exploration.",
+        "image": null,
+        "imageCaption": null,
+        "city": null,
+        "accommodation": null,
+        "meals": null,
+        "activities": [
+          "Train journey",
+          "Registan Square",
+          "Local dinner"
+        ]
+      },
+      {
+        "day": 4,
+        "title": "Samarkand Full Day",
+        "description": "Discover the jewels of Samarkand.",
+        "image": null,
+        "imageCaption": null,
+        "city": null,
+        "accommodation": null,
+        "meals": null,
+        "activities": [
+          "Shah-i-Zinda",
+          "Bibi-Khanym Mosque",
+          "Siab Bazaar"
+        ]
+      },
+      {
+        "day": 5,
+        "title": "Travel to Bukhara",
+        "description": "Journey to the ancient city of Bukhara.",
+        "image": null,
+        "imageCaption": null,
+        "city": null,
+        "accommodation": null,
+        "meals": null,
+        "activities": [
+          "Scenic drive",
+          "Arrival in Bukhara",
+          "Evening walk"
+        ]
+      },
+      {
+        "day": 6,
+        "title": "Bukhara Exploration",
+        "description": "Full day in historic Bukhara.",
+        "image": null,
+        "imageCaption": null,
+        "city": null,
+        "accommodation": null,
+        "meals": null,
+        "activities": [
+          "Ark Fortress",
+          "Kalyan Minaret",
+          "Trading Domes"
+        ]
+      },
+      {
+        "day": 7,
+        "title": "Bukhara to Tashkent",
+        "description": "Return to Tashkent by train.",
+        "image": null,
+        "imageCaption": null,
+        "city": null,
+        "accommodation": null,
+        "meals": null,
+        "activities": [
+          "Free morning",
+          "Train to Tashkent",
+          "Farewell dinner"
+        ]
+      },
+      {
+        "day": 8,
+        "title": "Departure",
+        "description": "Airport transfer and departure.",
+        "image": null,
+        "imageCaption": null,
+        "city": null,
+        "accommodation": null,
+        "meals": null,
+        "activities": [
+          "Hotel checkout",
+          "Airport transfer"
+        ]
+      }
+    ],
+    "included": [
+      "7 nights accommodation",
+      "All transfers",
+      "English-speaking guide",
+      "Entrance fees",
+      "Daily breakfast",
+      "High-speed train tickets"
+    ],
+    "excluded": [
+      "International flights",
+      "Travel insurance",
+      "Lunches and some dinners",
+      "Personal expenses"
+    ],
+    "highlights": [
+      "Registan Square in Samarkand",
+      "Ancient Bukhara Old Town",
+      "Tashkent Metro stations",
+      "High-speed Afrosiyob train"
+    ],
+    "languages": [
+      "English",
+      "Russian"
+    ],
+    "season": "All Year",
+    "slug": "uzbek-tours-from-tashkent-8-days",
+    "seo": {
+      "title": "Uzbek Tours from Tashkent 8 Days | Travel Bliss Uzbekistan",
+      "description": "Experience the best of Uzbekistan starting from Tashkent. Visit Samarkand and Bukhara. 8-day guided tour from $1000. Book your Uzbekistan adventure now!",
+      "keywords": [
+        "uzbekistan tour",
+        "tashkent tour",
+        "samarkand tour",
+        "bukhara tour",
+        "silk road tour",
+        "uzbekistan travel",
+        "central asia travel",
+        "8 day tour uzbekistan",
+        "travel bliss"
+      ],
+      "canonical": "https://travel-bliss.uz/tours/uzbek-tours-from-tashkent-8-days",
+      "ogTitle": "Uzbek Tours from Tashkent - 8 Days Adventure",
+      "ogDescription": "Experience the best of Uzbekistan. 8 days from $1000/person. Expert guides, all-inclusive.",
+      "ogImage": "https://travel-bliss.uz/images/tours/uzbekistan-tour.jpg",
+      "ogType": "website",
+      "twitterCard": "summary_large_image",
+      "twitterTitle": "Uzbek Tours from Tashkent - Experience Uzbekistan",
+      "twitterDescription": "8-day guided tour through Uzbekistan. From $1000/person. Expert guides, all-inclusive.",
+      "twitterImage": "https://travel-bliss.uz/images/tours/uzbekistan-tour.jpg"
+    },
+    "createdAt": "2025-11-21T12:00:00.000Z",
+    "summary": "",
+    "images": [
+      "/uploads/7-0-0-0-0-1584610853-1763726189713-62859229.jpg",
+      "/uploads/664ef11cb3019-1763726189723-708304167.webp",
+      "/uploads/56615c7095a656922700002d-1763726189730-627533439.jpg",
+      "/uploads/0000135063ed0f4fce9f_990x0_c-1763726189739-29787907.jpg",
+      "/uploads/aydar-camp-09-1763726189747-463209607.jpg",
+      "/uploads/aydar-camp-11-1763726189755-971385901.jpg",
+      "/uploads/cobalt_4-1763726189761-995196395.jpg",
+      "/uploads/safari-yurts-12-1763726189768-950232858.jpg",
+      "/uploads/yurt_camp_2-1763726189775-10828383.jpg"
+    ],
+    "updatedAt": "2025-11-21T11:56:33.960Z"
   }
 ]
