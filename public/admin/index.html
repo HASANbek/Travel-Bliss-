@@ -1075,6 +1075,12 @@
                 </button>
             </div>
         </div>
+        <div style="padding: 0 30px 10px 30px;">
+            <button onclick="openCalendarWindow()" style="width: 100%; padding: 15px 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 15px rgba(102,126,234,0.4); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102,126,234,0.5)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102,126,234,0.4)'">
+                <span style="font-size: 24px;">📅</span>
+                <span>Bronlar Kalendari</span>
+            </button>
+        </div>
 
         <div class="content-header">
             <h1 id="pageTitle">Dashboard</h1>
@@ -1226,22 +1232,6 @@
                         <span style="font-size: 24px;">🔔</span> Yaqinlashgan Turlar (7 kun ichida)
                     </h3>
                     <div id="upcomingToursList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;">
-                    </div>
-                </div>
-
-                <!-- Gantt Calendar Section -->
-                <div style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 30px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h3 style="margin: 0; color: #374151; display: flex; align-items: center; gap: 10px;">
-                            📅 Kalendar (Tasdiqlangan bronlar)
-                        </h3>
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <button onclick="changeCalendarWeek(-1)" style="padding: 8px 15px; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer;">← 7 kun</button>
-                            <button onclick="goToToday()" style="padding: 8px 15px; background: #22c55e; color: white; border: none; border-radius: 5px; cursor: pointer;">Bugun</button>
-                            <button onclick="changeCalendarWeek(1)" style="padding: 8px 15px; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer;">7 kun →</button>
-                        </div>
-                    </div>
-                    <div id="ganttCalendar" style="overflow-x: auto;">
                     </div>
                 </div>
 
@@ -4289,21 +4279,68 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
         let allBookingsData = []; // Global for search filtering
         let calendarStartDate = new Date();
         calendarStartDate.setHours(0, 0, 0, 0);
-        const CALENDAR_DAYS = 21; // 3 weeks visible
+        const CALENDAR_DAYS = 42; // 6 weeks visible
 
         function changeCalendarWeek(delta) {
             calendarStartDate.setDate(calendarStartDate.getDate() + (delta * 7));
-            renderCalendar();
+            renderCalendarPopup();
         }
 
         function goToToday() {
             calendarStartDate = new Date();
             calendarStartDate.setHours(0, 0, 0, 0);
-            renderCalendar();
+            renderCalendarPopup();
         }
 
-        function renderCalendar() {
-            const container = document.getElementById('ganttCalendar');
+        function openCalendarWindow() {
+            // Fetch bookings first, then open popup
+            fetch(`${API_URL}/admin/bookings`)
+                .then(res => res.json())
+                .then(result => {
+                    if (result.success && result.data) {
+                        allBookingsData = result.data.bookings;
+                        showCalendarPopup();
+                    }
+                })
+                .catch(err => {
+                    alert('Bronlarni yuklashda xatolik');
+                });
+        }
+
+        function showCalendarPopup() {
+            const popup = document.createElement('div');
+            popup.id = 'calendarPopup';
+            popup.innerHTML = `
+                <div style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; border-radius: 15px; width: 95vw; height: 90vh; max-width: 1400px; display: flex; flex-direction: column; box-shadow: 0 25px 50px rgba(0,0,0,0.3);">
+                        <div style="padding: 20px 25px; border-bottom: 2px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px 15px 0 0;">
+                            <h2 style="margin: 0; color: white; display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 28px;">📅</span> Bookings Calendar
+                            </h2>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <button onclick="changeCalendarWeek(-1)" style="padding: 10px 20px; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500;">← 7 days</button>
+                                <button onclick="goToToday()" style="padding: 10px 20px; background: #22c55e; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500;">Today</button>
+                                <button onclick="changeCalendarWeek(1)" style="padding: 10px 20px; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 500;">7 days →</button>
+                                <button onclick="closeCalendarPopup()" style="padding: 10px 15px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 18px;">✕</button>
+                            </div>
+                        </div>
+                        <div id="calendarPopupContent" style="flex: 1; overflow: auto; padding: 20px;">
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(popup);
+            renderCalendarPopup();
+        }
+
+        function closeCalendarPopup() {
+            const popup = document.getElementById('calendarPopup');
+            if (popup) popup.remove();
+        }
+
+        function renderCalendarPopup() {
+            const container = document.getElementById('calendarPopupContent');
+            if (!container) return;
             const confirmedBookings = allBookingsData.filter(b => b.status === 'confirmed');
 
             // Get unique tours
@@ -4317,7 +4354,7 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
             const tours = Object.entries(toursMap);
 
             if (tours.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">Tasdiqlangan bronlar yo\'q</p>';
+                container.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">No confirmed bookings</p>';
                 return;
             }
 
@@ -4331,19 +4368,23 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                 dates.push(d);
             }
 
-            const dayNames = ['Yak', 'Dush', 'Sesh', 'Chor', 'Pay', 'Jum', 'Shan'];
-            const monthNames = ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'Iyn', 'Iyl', 'Avg', 'Sen', 'Okt', 'Noy', 'Dek'];
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-            let html = `<table style="width: 100%; border-collapse: collapse; min-width: ${150 + dates.length * 50}px;">
+            let html = `<table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
                 <thead>
                     <tr style="background: #6366f1; color: white;">
-                        <th style="padding: 10px; text-align: left; position: sticky; left: 0; background: #6366f1; min-width: 150px; z-index: 2;">Turlar</th>
+                        <th style="padding: 8px; text-align: left; position: sticky; left: 0; background: #6366f1; width: 160px; z-index: 2;">Tours</th>
                         ${dates.map(d => {
                             const isToday = d.getTime() === today.getTime();
-                            return `<th style="padding: 5px; text-align: center; min-width: 50px; font-size: 11px; ${isToday ? 'background: #22c55e;' : ''}">
+                            const isWeekend = d.getDay() === 0 || d.getDay() === 6;
+                            let bgColor = '#6366f1';
+                            if (isToday) bgColor = '#22c55e';
+                            else if (isWeekend) bgColor = '#8b5cf6';
+                            return `<th style="padding: 4px 2px; text-align: center; width: 38px; font-size: 10px; background: ${bgColor};">
                                 <div>${dayNames[d.getDay()]}</div>
                                 <div style="font-weight: bold;">${d.getDate()}</div>
-                                <div style="font-size: 9px;">${monthNames[d.getMonth()]}</div>
+                                <div style="font-size: 8px;">${monthNames[d.getMonth()]}</div>
                             </th>`;
                         }).join('')}
                     </tr>
@@ -4351,14 +4392,15 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                 <tbody>`;
 
             tours.forEach(([tourId, tour], idx) => {
-                html += `<tr style="border-bottom: 1px solid #e5e7eb; ${idx % 2 ? 'background: #f9fafb;' : ''}">
-                    <td style="padding: 10px; font-weight: 500; position: sticky; left: 0; background: ${idx % 2 ? '#f9fafb' : 'white'}; z-index: 1; border-right: 2px solid #e5e7eb;">
+                html += `<tr style="border-bottom: 1px solid #e5e7eb;">
+                    <td style="padding: 12px; font-weight: 600; position: sticky; left: 0; background: white; z-index: 1; border-right: 2px solid #e5e7eb; white-space: nowrap;">
                         ${tour.name}
                     </td>`;
 
                 dates.forEach(date => {
                     const dateStr = date.toISOString().split('T')[0];
                     const isToday = date.getTime() === today.getTime();
+                    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
 
                     // Find bookings for this tour on this date (including multi-day)
                     const dayBookings = tour.bookings.filter(b => {
@@ -4370,7 +4412,11 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                         return date >= start && date <= end;
                     });
 
-                    html += `<td style="padding: 3px; text-align: center; vertical-align: top; ${isToday ? 'background: #ecfdf5;' : ''} border-left: 1px solid #e5e7eb;">`;
+                    let cellBg = 'white';
+                    if (isToday) cellBg = '#ecfdf5';
+                    else if (isWeekend) cellBg = '#f3e8ff';
+
+                    html += `<td style="padding: 3px; text-align: center; vertical-align: top; background: ${cellBg}; border-left: 1px solid #e5e7eb; min-height: 40px;">`;
 
                     dayBookings.forEach(b => {
                         const start = new Date(b.date);
@@ -4571,7 +4617,6 @@ Focus on Uzbekistan's rich Silk Road heritage, ancient architecture, and unique 
                 const { bookings, stats } = result.data;
                 allBookingsData = bookings; // Save for filtering
                 document.getElementById('bookingSearchInput').value = ''; // Clear search
-                renderCalendar(); // Update calendar
 
                 // Update statistics
                 document.getElementById('totalBookings').textContent = stats.total || 0;
