@@ -3835,14 +3835,16 @@ if (document.readyState === 'loading') {
 // Load categories and populate menu with dropdowns
 async function loadCategoryMenu() {
     try {
+        console.log('Loading category menu...');
         const response = await fetch('/api/categories?active=true');
         const result = await response.json();
+        console.log('Categories loaded:', result);
 
         if (result.success && result.data.categories) {
-            const categories = result.data.categories;
+            const categories = [...result.data.categories].sort((a, b) => a.order - b.order);
             const menuList = document.querySelector('.menu-list');
 
-            if (!menuList) return;
+            if (!menuList) { console.log('Menu list not found'); return; }
 
             // Remove existing category items to prevent duplicates
             menuList.querySelectorAll('.has-dropdown').forEach(item => item.remove());
@@ -3851,10 +3853,11 @@ async function loadCategoryMenu() {
             const aboutLink = Array.from(menuList.querySelectorAll('a')).find(a => a.textContent.includes('About'));
             const aboutLi = aboutLink ? aboutLink.parentElement : null;
 
-            if (!aboutLi) return;
+            if (!aboutLi) { console.log('About link not found'); return; }
 
+            console.log('Adding categories to menu:', categories.map(c => c.name));
             // Load tours for each category and create dropdown
-            for (const category of categories.reverse()) {
+            for (const category of categories) {
                 // Fetch tours for this category using slug directly
                 const toursResponse = await fetch(`/api/tours?category=${category.slug}`);
                 const toursResult = await toursResponse.json();
