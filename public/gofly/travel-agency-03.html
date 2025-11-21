@@ -585,11 +585,12 @@ a.primary-btn1 {
                             <i class="bi bi-x"></i>
                         </div>
                     </div>
-                    <ul class="menu-list">
+                    <ul class="menu-list" id="mainMenuList">
                         <li class="active">
                             <a href="travel-agency-03.html">Home</a>
                         </li>
                         <!-- Categories will be loaded dynamically here -->
+                        <li id="categoriesPlaceholder"></li>
                         <li>
                             <a href="about.html">About</a>
                         </li>
@@ -3834,7 +3835,7 @@ if (document.readyState === 'loading') {
 // Load categories and populate menu with dropdowns
 async function loadCategoryMenu() {
     try {
-        const response = await fetch('http://localhost:4000/api/categories?active=true');
+        const response = await fetch('/api/categories?active=true');
         const result = await response.json();
 
         if (result.success && result.data.categories) {
@@ -3854,16 +3855,8 @@ async function loadCategoryMenu() {
 
             // Load tours for each category and create dropdown
             for (const category of categories.reverse()) {
-                // Fetch tours for this category
-                const categoryMap = {
-                    'cultural-tours': 'cultural',
-                    'adventure-tours': 'adventure',
-                    'homestays-hiking': 'hiking',
-                    'day-trips': 'day-trip'
-                };
-
-                const categoryValue = categoryMap[category.slug];
-                const toursResponse = await fetch(`http://localhost:4000/api/tours?category=${categoryValue}`);
+                // Fetch tours for this category using slug directly
+                const toursResponse = await fetch(`/api/tours?category=${category.slug}`);
                 const toursResult = await toursResponse.json();
 
                 const li = document.createElement('li');
@@ -3885,7 +3878,7 @@ async function loadCategoryMenu() {
                 li.appendChild(a);
 
                 // Create dropdown submenu if tours exist
-                if (toursResult.success && toursResult.data.tours.length > 0) {
+                if (toursResult.success && toursResult.data && toursResult.data.tours && toursResult.data.tours.length > 0) {
                     const submenu = document.createElement('ul');
                     submenu.className = 'submenu';
 
