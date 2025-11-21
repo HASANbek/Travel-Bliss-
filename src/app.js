@@ -79,6 +79,7 @@ const destinationRoutes = require('./routes/destination.routes');
 const categoryRoutes = require('./routes/category.routes');
 const aiRoutes = require('./routes/ai.routes');
 const bookingRoutes = require('./routes/booking.routes');
+const sitemapRoutes = require('./routes/sitemap.routes');
 
 // Use routes
 app.use('/api/demo', demoRoutes);
@@ -92,6 +93,9 @@ app.use('/api/destinations', destinationRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/bookings', bookingRoutes);
+
+// SEO routes (sitemap.xml and robots.txt)
+app.use('/', sitemapRoutes);
 
 // Static files (uploads)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));

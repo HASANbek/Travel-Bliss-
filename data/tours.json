@@ -11,48 +11,74 @@
     "ratingsCount": 89,
     "isActive": true,
     "isFeatured": true,
+    "slug": "samarkand-city-tour-3-days",
+    "seo": {
+      "title": "Samarkand City Tour 3 Days | Samarkand | Travel Bliss Uzbekistan",
+      "description": "Visit the magnificent Registan Square, Ulugbek Observatory and Gur-Amir Mausoleum. 3-day guided tour from $500. All-inclusive package with expert guides. Book your Samarkand adventure now!",
+      "keywords": [
+        "samarkand tour",
+        "registan square tour",
+        "uzbekistan travel",
+        "silk road tour",
+        "samarkand city tour",
+        "central asia travel",
+        "unesco heritage uzbekistan",
+        "samarkand 3 days",
+        "cultural tour uzbekistan",
+        "travel bliss samarkand"
+      ],
+      "canonical": "https://travel-bliss.uz/tours/samarkand-city-tour-3-days",
+      "ogTitle": "Samarkand City Tour - 3 Days in Samarkand",
+      "ogDescription": "Visit the magnificent Registan Square, Ulugbek Observatory and Gur-Amir Mausoleum. Rating: 5/5 (89 reviews). From $500/person.",
+      "ogImage": "https://travel-bliss.uz/images/tours/samarkand-registan-square.jpg",
+      "ogType": "website",
+      "twitterCard": "summary_large_image",
+      "twitterTitle": "Samarkand City Tour - Experience Samarkand",
+      "twitterDescription": "3-day guided tour through Samarkand. From $500/person. Expert guides, all-inclusive.",
+      "twitterImage": "https://travel-bliss.uz/images/tours/samarkand-registan-square.jpg"
+    },
     "itinerary": [
       {
         "day": 1,
         "title": "Arrival in Samarkand",
         "description": "Pick up from hotel, visit Registan Square",
+        "image": null,
+        "imageCaption": null,
+        "city": null,
+        "accommodation": "Registan Plaza Hotel",
+        "meals": null,
         "activities": [
           "Registan Square",
           "Local dinner"
-        ],
-        "meals": "Dinner",
-        "accommodation": "Registan Plaza Hotel",
-        "transport": [
-          "Car"
         ]
       },
       {
         "day": 2,
         "title": "Historical Sites",
         "description": "Full day exploring Samarkand",
+        "image": null,
+        "imageCaption": null,
+        "city": null,
+        "accommodation": "Registan Plaza Hotel",
+        "meals": null,
         "activities": [
           "Shah-i-Zinda",
           "Bibi-Khanym Mosque",
           "Siab Bazaar"
-        ],
-        "meals": "Breakfast, Lunch, Dinner",
-        "accommodation": "Registan Plaza Hotel",
-        "transport": [
-          "Car"
         ]
       },
       {
         "day": 3,
         "title": "Departure",
         "description": "Visit Gur-Amir Mausoleum and departure",
+        "image": null,
+        "imageCaption": null,
+        "city": null,
+        "accommodation": "N/A",
+        "meals": null,
         "activities": [
           "Gur-Amir",
           "Ulugbek Observatory"
-        ],
-        "meals": "Breakfast",
-        "accommodation": "N/A",
-        "transport": [
-          "Car"
         ]
       }
     ],
@@ -69,7 +95,28 @@
     ],
     "id": "1",
     "createdAt": "2025-11-19T08:20:37.384Z",
-    "maxGroupSize": 50
+    "maxGroupSize": 50,
+    "summary": "",
+    "discountPrice": null,
+    "difficulty": "",
+    "images": [
+      {
+        "url": "/uploads/cobalt_4-1763740366201-781675044.jpg",
+        "caption": ""
+      },
+      {
+        "url": "/uploads/safari-yurts-12-1763740366214-201977766.jpg",
+        "caption": ""
+      },
+      {
+        "url": "/uploads/yurt_camp_2-1763740366223-813005945.jpg",
+        "caption": ""
+      }
+    ],
+    "languages": [],
+    "season": "All Year",
+    "highlights": [],
+    "updatedAt": "2025-11-21T15:52:49.798Z"
   },
   {
     "title": "Bukhara Heritage Tour",
@@ -127,7 +174,33 @@
     ],
     "id": "2",
     "createdAt": "2025-11-19T08:20:37.386Z",
-    "maxGroupSize": 50
+    "maxGroupSize": 50,
+    "slug": "bukhara-heritage-tour-5-days",
+    "seo": {
+      "title": "Bukhara Heritage Tour 5 Days | Bukhara | Travel Bliss Uzbekistan",
+      "description": "Explore the ancient city of Bukhara with its stunning Islamic architecture. 5-day guided tour from $450. All-inclusive package with expert guides. Book your Bukhara adventure now!",
+      "keywords": [
+        "bukhara tour",
+        "bukhara heritage",
+        "uzbekistan cultural tour",
+        "islamic architecture tour",
+        "silk road bukhara",
+        "central asia travel",
+        "unesco bukhara",
+        "ancient bukhara",
+        "bukhara 5 days",
+        "travel bliss bukhara"
+      ],
+      "canonical": "https://travel-bliss.uz/tours/bukhara-heritage-tour-5-days",
+      "ogTitle": "Bukhara Heritage Tour - 5 Days in Bukhara",
+      "ogDescription": "Explore the ancient city of Bukhara with its stunning Islamic architecture. Rating: 4.8/5 (76 reviews). From $450/person.",
+      "ogImage": "https://travel-bliss.uz/images/tours/bukhara-kalyan-minaret.jpg",
+      "ogType": "website",
+      "twitterCard": "summary_large_image",
+      "twitterTitle": "Bukhara Heritage Tour - Experience Bukhara",
+      "twitterDescription": "5-day guided tour through Bukhara. From $450/person. Expert guides, all-inclusive.",
+      "twitterImage": "https://travel-bliss.uz/images/tours/bukhara-kalyan-minaret.jpg"
+    }
   },
   {
     "title": "Chimgan Mountain Day Trip",
@@ -173,7 +246,26 @@
     ],
     "id": "3",
     "createdAt": "2025-11-19T08:20:37.388Z",
-    "maxGroupSize": 50
+    "maxGroupSize": 50,
+    "slug": "chimgan-mountain-day-trip-1-days",
+    "seo": {
+      "title": "Chimgan Mountain Day Trip 1 Days | Chimgan | Travel Bliss Uzbekistan",
+      "description": "Escape to the beautiful Chimgan Mountains near Tashkent. 1-day guided tour from $80. All-inclusive package with expert guides. Book your Chimgan adventure now!",
+      "keywords": [
+        "chimgan tour",
+        "uzbekistan travel",
+        "travel bliss"
+      ],
+      "canonical": "https://travel-bliss.uz/tours/chimgan-mountain-day-trip-1-days",
+      "ogTitle": "Chimgan Mountain Day Trip - 1 Days in Chimgan",
+      "ogDescription": "Escape to the beautiful Chimgan Mountains near Tashkent. Rating: 4.7/5 (52 reviews). From $80/person.",
+      "ogImage": "https://travel-bliss.uz/images/tours/chimgan-tour.jpg",
+      "ogType": "website",
+      "twitterCard": "summary_large_image",
+      "twitterTitle": "Chimgan Mountain Day Trip - Experience Chimgan",
+      "twitterDescription": "1-day guided tour through Chimgan. From $80/person. Expert guides, all-inclusive.",
+      "twitterImage": "https://travel-bliss.uz/images/tours/chimgan-tour.jpg"
+    }
   },
   {
     "title": "Grand Uzbekistan Tour",
@@ -238,6 +330,210 @@
     ],
     "id": "4",
     "createdAt": "2025-11-19T08:20:37.389Z",
-    "maxGroupSize": 50
+    "maxGroupSize": 50,
+    "slug": "grand-uzbekistan-tour-10-days",
+    "seo": {
+      "title": "Grand Uzbekistan Tour 10 Days | Multi-city | Travel Bliss Uzbekistan",
+      "description": "Complete 10-day journey through all major cities of Uzbekistan including Tashkent, Samarkand, Bukhara, and Khiva. 10-day guided tour from $1850. All-inclusive package with expert guides. Book your Multi-city adventure now!",
+      "keywords": [
+        "multi-city tour",
+        "uzbekistan travel",
+        "travel bliss"
+      ],
+      "canonical": "https://travel-bliss.uz/tours/grand-uzbekistan-tour-10-days",
+      "ogTitle": "Grand Uzbekistan Tour - 10 Days in Multi-city",
+      "ogDescription": "Complete 10-day journey through all major cities of Uzbekistan including Tashkent, Samarkand, Bukhara, and Khiva. Rating: 4.9/5 (79 reviews). From $1850/person.",
+      "ogImage": "https://travel-bliss.uz/images/tours/multi-city-tour.jpg",
+      "ogType": "website",
+      "twitterCard": "summary_large_image",
+      "twitterTitle": "Grand Uzbekistan Tour - Experience Multi-city",
+      "twitterDescription": "10-day guided tour through Multi-city. From $1850/person. Expert guides, all-inclusive.",
+      "twitterImage": "https://travel-bliss.uz/images/tours/multi-city-tour.jpg"
+    }
+  },
+  {
+    "id": "1763659929003",
+    "title": "Tashkent Metro and City Tour",
+    "description": "Discover Tashkent's beautiful metro stations, known as underground palaces, and explore the modern capital of Uzbekistan",
+    "destination": "Tashkent",
+    "price": 250,
+    "duration": 2,
+    "startDates": [],
+    "imageCover": "default-tour.jpg",
+    "images": [],
+    "category": "cultural",
+    "tags": [],
+    "included": [
+      "Guide",
+      "Transportation",
+      "Entrance fees"
+    ],
+    "excluded": [],
+    "languages": [],
+    "highlights": [
+      "Metro stations tour",
+      "Chorsu Bazaar",
+      "Independence Square"
+    ],
+    "locations": [],
+    "faq": [],
+    "rating": 0,
+    "isActive": true,
+    "isFeatured": false,
+    "hotSale": false,
+    "ratingsCount": 0,
+    "createdAt": "2025-11-20T17:32:09.003Z"
+  },
+  {
+    "id": "1763660016300",
+    "title": "Nukus Karakalpakstan Tour",
+    "description": "Visit the unique Savitsky Museum and explore Karakalpakstan's unique culture and Aral Sea region",
+    "destination": "Nukus",
+    "price": 400,
+    "duration": 3,
+    "startDates": [],
+    "imageCover": "default-tour.jpg",
+    "images": [],
+    "category": "cultural",
+    "tags": [],
+    "included": [],
+    "excluded": [],
+    "languages": [],
+    "highlights": [],
+    "locations": [],
+    "faq": [],
+    "rating": 0,
+    "isActive": true,
+    "isFeatured": false,
+    "hotSale": false,
+    "ratingsCount": 0,
+    "createdAt": "2025-11-20T17:33:36.300Z"
+  },
+  {
+    "id": "1763660051468",
+    "title": "Fergana Valley Cultural Tour",
+    "description": "Explore the beautiful Fergana Valley, known for its silk production, pottery, and traditional crafts",
+    "destination": "Fergana",
+    "price": 550,
+    "duration": 4,
+    "startDates": [],
+    "imageCover": "default-tour.jpg",
+    "images": [],
+    "category": "cultural",
+    "tags": [],
+    "included": [],
+    "excluded": [],
+    "languages": [],
+    "highlights": [
+      "Silk factory visit",
+      "Pottery workshops",
+      "Traditional bazaars"
+    ],
+    "locations": [],
+    "faq": [],
+    "rating": 0,
+    "isActive": true,
+    "isFeatured": false,
+    "hotSale": false,
+    "seo": {
+      "title": "Fergana Valley Cultural Tour 4 Days | Fergana | Travel Bliss",
+      "description": "Explore the beautiful Fergana Valley, known for its silk production, pottery, and traditional crafts. 4-day guided tour from $550. Book your Fergana adventure now!",
+      "keywords": [
+        "fergana tour",
+        "fergana travel",
+        "uzbekistan travel",
+        "silk road tour",
+        "central asia travel",
+        "4 day tour",
+        "cultural tour uzbekistan",
+        "travel bliss",
+        "fergana 4 days",
+        "uzbekistan tours",
+        "fergana package",
+        "uzbekistan vacation"
+      ],
+      "slug": "fergana-valley-cultural-tour-4-days",
+      "canonical": "https://travel-bliss.uz/tours/fergana-valley-cultural-tour-4-days",
+      "ogTitle": "Fergana Valley Cultural Tour - 4 Days in Fergana",
+      "ogDescription": "Explore Fergana with Travel Bliss. 4 days from $550/person. Expert guides, all-inclusive.",
+      "ogImage": "https://travel-bliss.uz/images/tours/fergana-tour.jpg",
+      "ogType": "website",
+      "twitterCard": "summary_large_image",
+      "twitterTitle": "Fergana Valley Cultural Tour - Experience Fergana",
+      "twitterDescription": "4-day guided tour through Fergana. From $550/person. Expert guides, all-inclusive.",
+      "twitterImage": "https://travel-bliss.uz/images/tours/fergana-tour.jpg"
+    },
+    "slug": "fergana-valley-cultural-tour-4-days",
+    "ratingsCount": 0,
+    "createdAt": "2025-11-20T17:34:11.468Z"
+  },
+  {
+    "id": "1763661087063",
+    "title": "Khiva Ancient City Tour",
+    "description": "Discover the ancient city of Khiva, a UNESCO World Heritage site. Walk through the Ichan Kala fortress, visit stunning madrasahs, minarets, and palaces. Experience the rich history of the Silk Road in this perfectly preserved medieval city.",
+    "destination": "Khiva",
+    "price": 450,
+    "duration": 3,
+    "difficulty": "easy",
+    "startDates": [],
+    "imageCover": "default-tour.jpg",
+    "images": [
+      "khiva-1.jpg",
+      "khiva-2.jpg"
+    ],
+    "category": "cultural",
+    "tags": [],
+    "included": [
+      "Professional guide",
+      "Entrance fees",
+      "Traditional lunch",
+      "Transportation"
+    ],
+    "excluded": [],
+    "languages": [],
+    "highlights": [
+      "Ichan Kala Fortress",
+      "Kalta Minor Minaret",
+      "Juma Mosque with 200 wooden columns",
+      "Tash Khovli Palace",
+      "Islam Khodja Minaret"
+    ],
+    "locations": [],
+    "faq": [],
+    "rating": 0,
+    "isActive": true,
+    "isFeatured": false,
+    "hotSale": false,
+    "seo": {
+      "title": "Khiva Ancient City Tour 3 Days | Khiva | Travel Bliss",
+      "description": "Discover the ancient city of Khiva, a UNESCO World Heritage site. Walk through the Ichan Kala fortre. 3-day guided tour from $450. Book your Khiva adventure now!",
+      "keywords": [
+        "khiva tour",
+        "khiva travel",
+        "uzbekistan travel",
+        "silk road tour",
+        "central asia travel",
+        "3 day tour",
+        "cultural tour uzbekistan",
+        "travel bliss",
+        "khiva 3 days",
+        "uzbekistan tours",
+        "khiva package",
+        "uzbekistan vacation"
+      ],
+      "slug": "khiva-ancient-city-tour-3-days",
+      "canonical": "https://travel-bliss.uz/tours/khiva-ancient-city-tour-3-days",
+      "ogTitle": "Khiva Ancient City Tour - 3 Days in Khiva",
+      "ogDescription": "Explore Khiva with Travel Bliss. 3 days from $450/person. Expert guides, all-inclusive.",
+      "ogImage": "https://travel-bliss.uz/images/tours/khiva-tour.jpg",
+      "ogType": "website",
+      "twitterCard": "summary_large_image",
+      "twitterTitle": "Khiva Ancient City Tour - Experience Khiva",
+      "twitterDescription": "3-day guided tour through Khiva. From $450/person. Expert guides, all-inclusive.",
+      "twitterImage": "https://travel-bliss.uz/images/tours/khiva-tour.jpg"
+    },
+    "slug": "khiva-ancient-city-tour-3-days",
+    "ratingsCount": 0,
+    "createdAt": "2025-11-20T17:51:27.063Z"
   }
 ]

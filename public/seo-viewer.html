@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Viewer - Travel Bliss</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .tours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .tour-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tour-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .tour-card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+        }
+
+        .tour-card-header h3 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .tour-card-header .destination {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .tour-card-body {
+            padding: 20px;
+        }
+
+        .seo-item {
+            margin-bottom: 15px;
+        }
+
+        .seo-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .seo-value {
+            font-size: 14px;
+            color: #333;
+            background: #f5f5f5;
+            padding: 8px 12px;
+            border-radius: 5px;
+            word-wrap: break-word;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .keyword-tag {
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+        }
+
+        .btn-view-full {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .btn-view-full:hover {
+            background: #5568d3;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 1200px;
+            margin: 40px auto;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 28px;
+        }
+
+        .btn-close {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-close:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #667eea;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: white;
+            font-size: 20px;
+        }
+
+        .error {
+            background: #ef4444;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .meta-preview {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background: #f9f9f9;
+        }
+
+        .meta-preview h4 {
+            color: #1a0dab;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .meta-preview .url {
+            color: #006621;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .meta-preview .description {
+            color: #545454;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .social-preview {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .social-preview img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .social-preview-content {
+            padding: 15px;
+        }
+
+        .social-preview-content h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .social-preview-content .url {
+            font-size: 12px;
+            color: #65676b;
+            margin-bottom: 8px;
+        }
+
+        .social-preview-content .description {
+            font-size: 13px;
+            color: #1c1e21;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 SEO Viewer - Travel Bliss</h1>
+            <p>Barcha turlarning SEO ma'lumotlarini ko'rish va tekshirish</p>
+        </div>
+
+        <div id="loading" class="loading">
+            ⏳ Turlar yuklanmoqda...
+        </div>
+
+        <div id="error" style="display: none;"></div>
+
+        <div id="tours-container" class="tours-grid" style="display: none;"></div>
+    </div>
+
+    <!-- Modal for full SEO view -->
+    <div id="seo-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">SEO Ma'lumotlari</h2>
+                <button class="btn-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- SEO data will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:4000/api';
+
+        // Load all tours
+        async function loadTours() {
+            try {
+                const response = await fetch(`${API_URL}/tours`);
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error(result.message);
+                }
+
+                const tours = result.data.tours || [];
+                displayTours(tours);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').className = 'error';
+                document.getElementById('error').textContent = `❌ Xatolik: ${error.message}`;
+            }
+        }
+
+        // Display tours in grid
+        function displayTours(tours) {
+            const container = document.getElementById('tours-container');
+            document.getElementById('loading').style.display = 'none';
+            container.style.display = 'grid';
+
+            container.innerHTML = tours.map(tour => `
+                <div class="tour-card">
+                    <div class="tour-card-header">
+                        <h3>${tour.title}</h3>
+                        <div class="destination">📍 ${tour.destination} • ${tour.duration} kun</div>
+                    </div>
+                    <div class="tour-card-body">
+                        ${tour.seo ? `
+                            <div class="seo-item">
+                                <div class="seo-label">SEO Title</div>
+                                <div class="seo-value">${tour.seo.title || 'N/A'}</div>
+                            </div>
+                            <div class="seo-item">
+                                <div class="seo-label">URL Slug</div>
+                                <div class="seo-value">${tour.slug || 'N/A'}</div>
+                            </div>
+                            <div class="seo-item">
+                                <div class="seo-label">Keywords (${(tour.seo.keywords || []).length})</div>
+                                <div class="keywords">
+                                    ${(tour.seo.keywords || []).slice(0, 5).map(kw => `
+                                        <span class="keyword-tag">${kw}</span>
+                                    `).join('')}
+                                    ${(tour.seo.keywords || []).length > 5 ? `<span class="keyword-tag">+${(tour.seo.keywords || []).length - 5}</span>` : ''}
+                                </div>
+                            </div>
+                        ` : '<p style="color: #ef4444;">⚠️ SEO ma\'lumotlari yo\'q</p>'}
+                        <button class="btn-view-full" onclick="viewFullSEO('${tour.id || tour._id}')">
+                            📊 To'liq SEO ma'lumotlari
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // View full SEO data in modal
+        async function viewFullSEO(tourId) {
+            try {
+                const response = await fetch(`${API_URL}/tours/${tourId}/seo`);
+                const result = await response.json();
+
+                if (!result.success) {
+                    throw new Error(result.message);
+                }
+
+                const { tour, seo } = result.data;
+                displayFullSEO(tour, seo);
+            } catch (error) {
+                alert(`❌ Xatolik: ${error.message}`);
+            }
+        }
+
+        // Display full SEO in modal
+        function displayFullSEO(tour, seo) {
+            document.getElementById('modal-title').textContent = `SEO: ${tour.title}`;
+            const modalBody = document.getElementById('modal-body');
+
+            modalBody.innerHTML = `
+                <!-- Google Preview -->
+                <div class="section">
+                    <div class="section-title">🔍 Google Search Preview</div>
+                    <div class="meta-preview">
+                        <h4>${seo.meta.title}</h4>
+                        <div class="url">${seo.meta.canonical}</div>
+                        <div class="description">${seo.meta.description}</div>
+                    </div>
+                </div>
+
+                <!-- Facebook Preview -->
+                <div class="section">
+                    <div class="section-title">📘 Facebook / Open Graph Preview</div>
+                    <div class="social-preview">
+                        <img src="${seo.meta.ogImage}" alt="${seo.meta.ogTitle}" onerror="this.src='https://via.placeholder.com/600x300?text=Image+Not+Found'">
+                        <div class="social-preview-content">
+                            <div class="url">${new URL(seo.meta.canonical).hostname}</div>
+                            <h4>${seo.meta.ogTitle}</h4>
+                            <div class="description">${seo.meta.ogDescription}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meta Tags -->
+                <div class="section">
+                    <div class="section-title">🏷️ Meta Tags</div>
+                    <div class="seo-item">
+                        <div class="seo-label">Title (${seo.meta.title.length} characters)</div>
+                        <div class="seo-value">${seo.meta.title}</div>
+                    </div>
+                    <div class="seo-item">
+                        <div class="seo-label">Description (${seo.meta.description.length} characters)</div>
+                        <div class="seo-value">${seo.meta.description}</div>
+                    </div>
+                    <div class="seo-item">
+                        <div class="seo-label">Canonical URL</div>
+                        <div class="seo-value">${seo.meta.canonical}</div>
+                    </div>
+                    <div class="seo-item">
+                        <div class="seo-label">Keywords (${seo.meta.keywords.length})</div>
+                        <div class="keywords">
+                            ${seo.meta.keywords.map(kw => `<span class="keyword-tag">${kw}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schema.org JSON-LD -->
+                <div class="section">
+                    <div class="section-title">📋 Schema.org Structured Data (TouristTrip)</div>
+                    <div class="code-block"><pre>${JSON.stringify(seo.schema.tour, null, 2)}</pre></div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">📋 Schema.org Breadcrumb</div>
+                    <div class="code-block"><pre>${JSON.stringify(seo.schema.breadcrumb, null, 2)}</pre></div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🏢 Schema.org Organization</div>
+                    <div class="code-block"><pre>${JSON.stringify(seo.schema.organization, null, 2)}</pre></div>
+                </div>
+
+                <!-- HTML Meta Tags Code -->
+                <div class="section">
+                    <div class="section-title">💻 HTML Meta Tags (Copy-paste ready)</div>
+                    <div class="code-block"><pre>${generateHTMLMetaTags(seo.meta)}</pre></div>
+                </div>
+            `;
+
+            document.getElementById('seo-modal').style.display = 'block';
+        }
+
+        // Generate HTML meta tags
+        function generateHTMLMetaTags(meta) {
+            return `<!-- SEO Meta Tags -->
+<title>${meta.title}</title>
+<meta name="description" content="${meta.description}">
+<meta name="keywords" content="${meta.keywords.join(', ')}">
+<link rel="canonical" href="${meta.canonical}">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="${meta.ogType}">
+<meta property="og:url" content="${meta.canonical}">
+<meta property="og:title" content="${meta.ogTitle}">
+<meta property="og:description" content="${meta.ogDescription}">
+<meta property="og:image" content="${meta.ogImage}">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="${meta.twitterCard}">
+<meta name="twitter:url" content="${meta.canonical}">
+<meta name="twitter:title" content="${meta.twitterTitle}">
+<meta name="twitter:description" content="${meta.twitterDescription}">
+<meta name="twitter:image" content="${meta.twitterImage}">`;
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('seo-modal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('seo-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Load tours on page load
+        loadTours();
+    </script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const asyncHandler = require('../utils/asyncHandler');
 const ApiResponse = require('../utils/ApiResponse');
+const aiSeoGenerator = require('../services/aiSeoGenerator');
 
 // Initialize Gemini AI
 let genAI;
@@ -154,6 +155,68 @@ exports.quickSuggestions = asyncHandler(async (req, res) => {
     console.error('AI Error:', error);
     res.status(500).json(
       new ApiResponse(500, null, `AI service error: ${error.message}`)
+    );
+  }
+});
+
+// Generate SEO for tour using AI
+exports.generateSEO = asyncHandler(async (req, res) => {
+  const tourData = req.body;
+
+  // Validate required fields
+  if (!tourData.title || !tourData.destination || !tourData.duration || !tourData.price) {
+    return res.status(400).json(
+      new ApiResponse(400, null, 'Missing required tour data: title, destination, duration, and price are required')
+    );
+  }
+
+  // Check if AI SEO generator is available
+  if (!aiSeoGenerator.isAvailable()) {
+    console.log('AI not available, using template-based SEO generation');
+
+    // Generate template-based SEO
+    const seoData = aiSeoGenerator.generateTemplateSEO(tourData);
+    const score = aiSeoGenerator.calculateSEOScore(seoData);
+
+    return res.status(200).json(
+      new ApiResponse(200, {
+        seo: seoData,
+        score: score,
+        method: 'template',
+        message: 'SEO generated using template (AI not configured)'
+      }, 'SEO generated successfully using template')
+    );
+  }
+
+  try {
+    // Generate SEO using AI
+    const seoData = await aiSeoGenerator.generateSEO(tourData);
+    const score = aiSeoGenerator.calculateSEOScore(seoData);
+
+    res.status(200).json(
+      new ApiResponse(200, {
+        seo: seoData,
+        score: score,
+        method: 'ai',
+        message: 'SEO generated successfully using AI'
+      }, 'SEO generated successfully')
+    );
+
+  } catch (error) {
+    console.error('AI SEO Generation Error:', error);
+
+    // Fallback to template-based SEO on error
+    const seoData = aiSeoGenerator.generateTemplateSEO(tourData);
+    const score = aiSeoGenerator.calculateSEOScore(seoData);
+
+    res.status(200).json(
+      new ApiResponse(200, {
+        seo: seoData,
+        score: score,
+        method: 'template_fallback',
+        message: 'SEO generated using template (AI error occurred)',
+        error: error.message
+      }, 'SEO generated using fallback template')
     );
   }
 });
