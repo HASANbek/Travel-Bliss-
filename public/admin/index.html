@@ -1324,11 +1324,380 @@ window.switchView = function(view) {
 
             <!-- Destinations Page -->
             <div class="page-section" id="destinationsPage">
-                <button class="add-tour-btn" onclick="openDestinationModal()">+ Add New Destination</button>
+                <style>
+                    .dest-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+                    .dest-title { font-size: 28px; font-weight: 700; color: #0f172a; margin: 0; }
+                    .dest-subtitle { color: #64748b; font-size: 14px; margin-top: 4px; }
+                    .dest-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+                    .stat-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+                    .stat-label { font-size: 12px; color: #64748b; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+                    .stat-value { font-size: 28px; font-weight: 700; color: #0f172a; }
+                    .stat-icon { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 12px; }
+                    .dest-card { background: white; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 20px; }
+                    .dest-filters { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 20px; }
+                    .dest-input { padding: 10px 16px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; outline: none; transition: all 0.2s; }
+                    .dest-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+                    .dest-select { padding: 10px 16px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; outline: none; background: white; cursor: pointer; }
+                    .dest-btn { padding: 10px 20px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; }
+                    .dest-btn-primary { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; }
+                    .dest-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,130,246,0.4); }
+                    .dest-btn-secondary { background: #f1f5f9; color: #475569; }
+                    .dest-btn-secondary:hover { background: #e2e8f0; }
+                    .dest-table { width: 100%; border-collapse: collapse; }
+                    .dest-table th { padding: 14px 16px; text-align: left; font-weight: 600; color: #475569; font-size: 13px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; }
+                    .dest-table td { padding: 14px 16px; border-bottom: 1px solid #f1f5f9; }
+                    .dest-table tr:hover { background: #f8fafc; }
+                    .dest-badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+                    .badge-active { background: #dcfce7; color: #16a34a; }
+                    .badge-draft { background: #fef3c7; color: #d97706; }
+                    .badge-featured { background: #eff6ff; color: #3b82f6; }
+                    .dest-actions { display: flex; gap: 8px; }
+                    .action-btn { width: 32px; height: 32px; border-radius: 8px; border: none; background: #f1f5f9; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+                    .action-btn:hover { background: #3b82f6; color: white; }
+                    .dest-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 9999; display: none; align-items: center; justify-content: center; }
+                    .dest-modal.show { display: flex; }
+                    .dest-modal-content { background: white; border-radius: 20px; max-width: 1200px; width: 95%; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; }
+                    .dest-modal-header { padding: 20px 24px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+                    .dest-modal-title { font-size: 18px; font-weight: 700; color: #0f172a; }
+                    .dest-modal-close { width: 36px; height: 36px; border-radius: 10px; border: none; background: #f1f5f9; cursor: pointer; font-size: 18px; }
+                    .dest-modal-close:hover { background: #e2e8f0; }
+                    .dest-modal-body { padding: 24px; overflow-y: auto; flex: 1; }
+                    .dest-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+                    .dest-form-group { display: flex; flex-direction: column; gap: 6px; }
+                    .dest-form-group.full { grid-column: 1 / -1; }
+                    .dest-label { font-size: 13px; font-weight: 600; color: #475569; }
+                    .dest-form-input { padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; }
+                    .dest-form-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+                    .dest-textarea { padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; resize: vertical; min-height: 100px; }
+                    .dest-editor { min-height: 200px; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; }
+                    .dest-upload-box { border: 2px dashed #cbd5e1; border-radius: 12px; padding: 32px; text-align: center; cursor: pointer; transition: all 0.2s; }
+                    .dest-upload-box:hover { border-color: #3b82f6; background: #eff6ff; }
+                    .dest-image-preview { width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px; margin-top: 8px; }
+                    .dest-gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+                    .dest-gallery-item { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; }
+                    .dest-gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+                    .dest-gallery-remove { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; border-radius: 6px; background: rgba(239,68,68,0.9); border: none; color: white; cursor: pointer; }
+                    .dest-repeater { display: flex; flex-direction: column; gap: 12px; }
+                    .dest-repeater-item { display: flex; gap: 12px; align-items: center; }
+                    .dest-tab-nav { display: flex; gap: 8px; border-bottom: 1px solid #e2e8f0; margin-bottom: 20px; }
+                    .dest-tab { padding: 12px 20px; border: none; background: transparent; font-weight: 600; color: #64748b; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
+                    .dest-tab.active { color: #3b82f6; border-bottom-color: #3b82f6; }
+                    .dest-tab-content { display: none; }
+                    .dest-tab-content.active { display: block; }
+                    .dest-toggle { width: 48px; height: 26px; background: #cbd5e1; border-radius: 13px; position: relative; cursor: pointer; transition: background 0.2s; }
+                    .dest-toggle.active { background: #3b82f6; }
+                    .dest-toggle-knob { width: 22px; height: 22px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: left 0.2s; }
+                    .dest-toggle.active .dest-toggle-knob { left: 24px; }
+                    .dest-preview-device { display: flex; gap: 12px; justify-content: center; margin-bottom: 20px; }
+                    .device-btn { padding: 8px 16px; border: 1px solid #e2e8f0; background: white; border-radius: 8px; cursor: pointer; }
+                    .device-btn.active { background: #3b82f6; color: white; border-color: #3b82f6; }
+                    .dest-preview-frame { background: #f8fafc; border-radius: 12px; padding: 20px; }
+                    .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+                    .category-item { background: #f8fafc; padding: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+                    .analytics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+                    .analytics-card { background: #f8fafc; padding: 16px; border-radius: 12px; }
+                    @media (max-width: 768px) { .dest-form-grid { grid-template-columns: 1fr; } .dest-stats { grid-template-columns: repeat(2, 1fr); } }
+                </style>
 
-                <div class="tours-table">
-                    <div id="destinationsTableContainer">
-                        <div class="loading">Loading...</div>
+                <!-- Header -->
+                <div class="dest-header">
+                    <div>
+                        <h1 class="dest-title">Destinations</h1>
+                        <p class="dest-subtitle">Manage travel destinations and locations</p>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="dest-btn dest-btn-secondary" onclick="openCategoriesModal()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>
+                            Categories
+                        </button>
+                        <button class="dest-btn dest-btn-primary" onclick="openDestinationModal()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Add Destination
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="dest-stats">
+                    <div class="stat-box">
+                        <div class="stat-icon" style="background: #eff6ff; color: #3b82f6;">🌍</div>
+                        <div class="stat-label">Total Destinations</div>
+                        <div class="stat-value" id="statTotalDest">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon" style="background: #dcfce7; color: #16a34a;">✓</div>
+                        <div class="stat-label">Active</div>
+                        <div class="stat-value" id="statActiveDest">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon" style="background: #fef3c7; color: #d97706;">⭐</div>
+                        <div class="stat-label">Featured</div>
+                        <div class="stat-value" id="statFeaturedDest">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon" style="background: #fee2e2; color: #dc2626;">📝</div>
+                        <div class="stat-label">Draft</div>
+                        <div class="stat-value" id="statDraftDest">0</div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="dest-card">
+                    <div class="dest-filters">
+                        <input type="text" class="dest-input" placeholder="Search destinations..." id="destSearch" oninput="filterDestinations()" style="flex: 1; min-width: 250px;">
+                        <select class="dest-select" id="destCountryFilter" onchange="filterDestinations()">
+                            <option value="">All Countries</option>
+                        </select>
+                        <select class="dest-select" id="destCategoryFilter" onchange="filterDestinations()">
+                            <option value="">All Categories</option>
+                        </select>
+                        <select class="dest-select" id="destStatusFilter" onchange="filterDestinations()">
+                            <option value="">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="draft">Draft</option>
+                        </select>
+                        <button class="dest-btn dest-btn-secondary" onclick="bulkDeleteDestinations()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            Bulk Delete
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="dest-card">
+                    <table class="dest-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;"><input type="checkbox" id="selectAllDest" onchange="toggleSelectAllDest()"></th>
+                                <th>Destination</th>
+                                <th>Country / City</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Featured</th>
+                                <th>Last Updated</th>
+                                <th style="width: 150px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="destinationsTableBody">
+                            <tr><td colspan="8" style="text-align: center; padding: 40px; color: #94a3b8;">No destinations found</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Add/Edit Modal -->
+                <div class="dest-modal" id="destinationModal">
+                    <div class="dest-modal-content">
+                        <div class="dest-modal-header">
+                            <h3 class="dest-modal-title" id="destModalTitle">Add New Destination</h3>
+                            <button class="dest-modal-close" onclick="closeDestinationModal()">&times;</button>
+                        </div>
+                        <div class="dest-modal-body">
+                            <!-- Tabs -->
+                            <div class="dest-tab-nav">
+                                <button class="dest-tab active" onclick="switchDestTab(0)">Basic Info</button>
+                                <button class="dest-tab" onclick="switchDestTab(1)">Description</button>
+                                <button class="dest-tab" onclick="switchDestTab(2)">Media</button>
+                                <button class="dest-tab" onclick="switchDestTab(3)">Details</button>
+                                <button class="dest-tab" onclick="switchDestTab(4)">SEO</button>
+                            </div>
+
+                            <!-- Tab 1: Basic Info -->
+                            <div class="dest-tab-content active" id="destTab0">
+                                <div class="dest-form-grid">
+                                    <div class="dest-form-group full">
+                                        <label class="dest-label">Destination Name *</label>
+                                        <input type="text" class="dest-form-input" id="destName" placeholder="e.g., Samarkand">
+                                    </div>
+                                    <div class="dest-form-group">
+                                        <label class="dest-label">Country *</label>
+                                        <input type="text" class="dest-form-input" id="destCountry" placeholder="e.g., Uzbekistan">
+                                    </div>
+                                    <div class="dest-form-group">
+                                        <label class="dest-label">City</label>
+                                        <input type="text" class="dest-form-input" id="destCity" placeholder="e.g., Samarkand">
+                                    </div>
+                                    <div class="dest-form-group">
+                                        <label class="dest-label">Category</label>
+                                        <select class="dest-form-input" id="destCategory">
+                                            <option value="">Select Category</option>
+                                            <option value="historical">Historical</option>
+                                            <option value="nature">Nature</option>
+                                            <option value="cultural">Cultural</option>
+                                            <option value="adventure">Adventure</option>
+                                        </select>
+                                    </div>
+                                    <div class="dest-form-group">
+                                        <label class="dest-label">Tags (comma separated)</label>
+                                        <input type="text" class="dest-form-input" id="destTags" placeholder="silk road, architecture, unesco">
+                                    </div>
+                                    <div class="dest-form-group full">
+                                        <label class="dest-label">Short Description *</label>
+                                        <textarea class="dest-textarea" id="destShortDesc" placeholder="Brief description (160 characters)" maxlength="160"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tab 2: Description -->
+                            <div class="dest-tab-content" id="destTab1">
+                                <div class="dest-form-group">
+                                    <label class="dest-label">Full Description *</label>
+                                    <div class="dest-editor" id="destFullDesc" contenteditable="true" placeholder="Write detailed description..."></div>
+                                </div>
+                            </div>
+
+                            <!-- Tab 3: Media -->
+                            <div class="dest-tab-content" id="destTab2">
+                                <div class="dest-form-grid">
+                                    <div class="dest-form-group full">
+                                        <label class="dest-label">Cover Image</label>
+                                        <div class="dest-upload-box" onclick="document.getElementById('destCoverInput').click()">
+                                            <input type="file" id="destCoverInput" accept="image/*" style="display: none;" onchange="handleDestCoverUpload(event)">
+                                            <div style="font-size: 32px; margin-bottom: 8px;">📸</div>
+                                            <div style="color: #64748b;">Click to upload cover image</div>
+                                            <div style="color: #94a3b8; font-size: 12px; margin-top: 4px;">JPG, PNG (Max 5MB)</div>
+                                        </div>
+                                        <img id="destCoverPreview" class="dest-image-preview" style="display: none;">
+                                    </div>
+                                    <div class="dest-form-group full">
+                                        <label class="dest-label">Gallery Images</label>
+                                        <div class="dest-upload-box" onclick="document.getElementById('destGalleryInput').click()">
+                                            <input type="file" id="destGalleryInput" accept="image/*" multiple style="display: none;" onchange="handleDestGalleryUpload(event)">
+                                            <div style="font-size: 32px; margin-bottom: 8px;">🖼️</div>
+                                            <div style="color: #64748b;">Click to upload gallery images</div>
+                                            <div style="color: #94a3b8; font-size: 12px; margin-top: 4px;">Multiple JPG, PNG (Max 5MB each)</div>
+                                        </div>
+                                        <div class="dest-gallery-grid" id="destGalleryPreview" style="margin-top: 16px;"></div>
+                                    </div>
+                                    <div class="dest-form-group full">
+                                        <label class="dest-label">Video URL (YouTube/Vimeo)</label>
+                                        <input type="text" class="dest-form-input" id="destVideoUrl" placeholder="https://youtube.com/watch?v=...">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tab 4: Details -->
+                            <div class="dest-tab-content" id="destTab3">
+                                <div class="dest-form-grid">
+                                    <div class="dest-form-group">
+                                        <label class="dest-label">Best Time to Visit</label>
+                                        <input type="text" class="dest-form-input" id="destBestTime" placeholder="e.g., March to May">
+                                    </div>
+                                    <div class="dest-form-group">
+                                        <label class="dest-label">Recommended Duration</label>
+                                        <input type="text" class="dest-form-input" id="destDuration" placeholder="e.g., 2-3 days">
+                                    </div>
+                                    <div class="dest-form-group">
+                                        <label class="dest-label">Average Cost</label>
+                                        <input type="text" class="dest-form-input" id="destCost" placeholder="e.g., $500-800">
+                                    </div>
+                                    <div class="dest-form-group">
+                                        <label class="dest-label">Local Transport</label>
+                                        <input type="text" class="dest-form-input" id="destTransport" placeholder="e.g., Metro, Taxi, Bus">
+                                    </div>
+                                    <div class="dest-form-group full">
+                                        <label class="dest-label">Must Visit Places</label>
+                                        <div class="dest-repeater" id="destMustVisit">
+                                            <div class="dest-repeater-item">
+                                                <input type="text" class="dest-form-input" placeholder="Place name" style="flex: 1;">
+                                                <button type="button" class="action-btn" onclick="removeRepeaterItem(this)" style="background: #fee2e2; color: #dc2626;">🗑</button>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="dest-btn dest-btn-secondary" onclick="addMustVisitPlace()" style="margin-top: 8px;">+ Add Place</button>
+                                    </div>
+                                    <div class="dest-form-group full">
+                                        <label class="dest-label">Weather Information</label>
+                                        <textarea class="dest-textarea" id="destWeather" placeholder="Describe typical weather conditions..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tab 5: SEO -->
+                            <div class="dest-tab-content" id="destTab4">
+                                <div class="dest-form-grid">
+                                    <div class="dest-form-group full">
+                                        <label class="dest-label">Meta Title</label>
+                                        <input type="text" class="dest-form-input" id="destMetaTitle" placeholder="SEO title (60 characters)" maxlength="60">
+                                    </div>
+                                    <div class="dest-form-group full">
+                                        <label class="dest-label">Meta Description</label>
+                                        <textarea class="dest-textarea" id="destMetaDesc" placeholder="SEO description (160 characters)" maxlength="160"></textarea>
+                                    </div>
+                                    <div class="dest-form-group">
+                                        <label class="dest-label">Slug</label>
+                                        <input type="text" class="dest-form-input" id="destSlug" placeholder="url-friendly-slug">
+                                    </div>
+                                    <div class="dest-form-group">
+                                        <label class="dest-label">Keywords</label>
+                                        <input type="text" class="dest-form-input" id="destKeywords" placeholder="keyword1, keyword2">
+                                    </div>
+                                    <div class="dest-form-group">
+                                        <label class="dest-label">Status</label>
+                                        <select class="dest-form-input" id="destStatus">
+                                            <option value="active">Active</option>
+                                            <option value="draft">Draft</option>
+                                        </select>
+                                    </div>
+                                    <div class="dest-form-group" style="display: flex; align-items: center; gap: 12px;">
+                                        <label class="dest-label" style="margin: 0;">Featured</label>
+                                        <div class="dest-toggle" id="destFeatured" onclick="toggleDestFeatured()">
+                                            <div class="dest-toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                    <div class="dest-form-group" style="display: flex; align-items: center; gap: 12px;">
+                                        <label class="dest-label" style="margin: 0;">Show on Homepage</label>
+                                        <div class="dest-toggle" id="destHomepage" onclick="toggleDestHomepage()">
+                                            <div class="dest-toggle-knob"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div style="display: flex; justify-content: space-between; margin-top: 24px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <button class="dest-btn dest-btn-secondary" onclick="previewDestination()">Preview</button>
+                                <div style="display: flex; gap: 12px;">
+                                    <button class="dest-btn dest-btn-secondary" onclick="closeDestinationModal()">Cancel</button>
+                                    <button class="dest-btn dest-btn-primary" onclick="saveDestination()">Save Destination</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Modal -->
+                <div class="dest-modal" id="previewModal">
+                    <div class="dest-modal-content">
+                        <div class="dest-modal-header">
+                            <h3 class="dest-modal-title">Preview</h3>
+                            <button class="dest-modal-close" onclick="closePreviewModal()">&times;</button>
+                        </div>
+                        <div class="dest-modal-body">
+                            <div class="dest-preview-device">
+                                <button class="device-btn active" onclick="setPreviewDevice('desktop')">🖥 Desktop</button>
+                                <button class="device-btn" onclick="setPreviewDevice('tablet')">📱 Tablet</button>
+                                <button class="device-btn" onclick="setPreviewDevice('mobile')">📱 Mobile</button>
+                            </div>
+                            <div class="dest-preview-frame" id="previewFrame">
+                                <div style="text-align: center; padding: 40px; color: #94a3b8;">Preview will appear here</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories Modal -->
+                <div class="dest-modal" id="categoriesModal">
+                    <div class="dest-modal-content" style="max-width: 600px;">
+                        <div class="dest-modal-header">
+                            <h3 class="dest-modal-title">Manage Categories</h3>
+                            <button class="dest-modal-close" onclick="closeCategoriesModal()">&times;</button>
+                        </div>
+                        <div class="dest-modal-body">
+                            <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+                                <input type="text" class="dest-form-input" id="newCategoryName" placeholder="Category name" style="flex: 1;">
+                                <button class="dest-btn dest-btn-primary" onclick="addCategory()">Add</button>
+                            </div>
+                            <div class="category-grid" id="categoriesList"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -7772,5 +8141,463 @@ function populateFolderSelects() {
         mediaFiles.unshift(newFile);
         console.log('Image added to Media Library (' + folder + '):', title);
     };
+
+    
+    // ==================== DESTINATIONS MANAGEMENT ====================
+    var destinations = [
+        { id: 'd1', name: 'Samarkand', country: 'Uzbekistan', city: 'Samarkand', category: 'historical', shortDesc: 'Ancient city on the Silk Road with stunning Islamic architecture', tags: ['silk road', 'architecture', 'unesco'], status: 'active', featured: true, homepage: true, coverImage: 'https://images.unsplash.com/photo-1596484552834-6a58f850e0a1?w=800', galleryImages: [], videoUrl: '', bestTime: 'March to May', duration: '2-3 days', cost: '$500-800', transport: 'Metro, Taxi, Bus', mustVisit: ['Registan Square', 'Shah-i-Zinda', 'Gur-e-Amir'], weather: 'Continental climate with hot summers and cold winters', metaTitle: 'Samarkand - Ancient Silk Road City', metaDesc: 'Discover Samarkand, the pearl of the Silk Road', slug: 'samarkand-uzbekistan', keywords: 'samarkand, silk road, uzbekistan', lastUpdated: '2025-11-20' },
+        { id: 'd2', name: 'Bukhara', country: 'Uzbekistan', city: 'Bukhara', category: 'cultural', shortDesc: 'Living museum with 140+ architectural monuments', tags: ['unesco', 'culture', 'history'], status: 'active', featured: false, homepage: true, coverImage: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?w=800', galleryImages: [], videoUrl: '', bestTime: 'April to June', duration: '2 days', cost: '$400-600', transport: 'Taxi, Walking', mustVisit: ['Poi Kalyan Complex', 'Ark Fortress', 'Lyabi Hauz'], weather: 'Hot dry summers, mild winters', metaTitle: 'Bukhara - Living Museum City', metaDesc: 'Explore Bukhara ancient architectural wonders', slug: 'bukhara-uzbekistan', keywords: 'bukhara, unesco, culture', lastUpdated: '2025-11-19' },
+        { id: 'd3', name: 'Khiva', country: 'Uzbekistan', city: 'Khiva', category: 'historical', shortDesc: 'Open-air museum city with perfectly preserved old town', tags: ['unesco', 'history', 'architecture'], status: 'draft', featured: false, homepage: false, coverImage: 'https://images.unsplash.com/photo-1580654842837-5d4b54eb1ca0?w=800', galleryImages: [], videoUrl: '', bestTime: 'April to June', duration: '1-2 days', cost: '$300-500', transport: 'Walking, Taxi', mustVisit: ['Itchan Kala', 'Kalta Minor', 'Tash Hauli Palace'], weather: 'Desert climate, very hot in summer', metaTitle: 'Khiva - Museum City', metaDesc: 'Visit Khiva perfectly preserved ancient city', slug: 'khiva-uzbekistan', keywords: 'khiva, museum city, unesco', lastUpdated: '2025-11-18' }
+    ];
+
+    var destinationCategories = ['Historical', 'Cultural', 'Nature', 'Adventure', 'Beach', 'Mountain'];
+    var currentDestination = null;
+    var destGalleryImages = [];
+    var destCoverImageData = '';
+    var autosaveInterval = null;
+
+    // Initialize Destinations Page
+    function initDestinations() {
+        renderDestinationsTable();
+        updateDestinationsStats();
+        populateCountryFilter();
+        populateCategoryFilter();
+        startAutosave();
+    }
+
+    // Render table
+    function renderDestinationsTable() {
+        var filtered = getFilteredDestinations();
+        var tbody = document.getElementById('destinationsTableBody');
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px; color: #94a3b8;">No destinations found</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = filtered.map(function(dest) {
+            return '<tr>' +
+                '<td><input type="checkbox" class="dest-checkbox" data-id="' + dest.id + '"></td>' +
+                '<td style="font-weight: 600;">' + dest.name + '</td>' +
+                '<td>' + dest.country + ' / ' + (dest.city || '-') + '</td>' +
+                '<td><span class="dest-badge" style="background: #eff6ff; color: #3b82f6;">' + (dest.category || '-') + '</span></td>' +
+                '<td><span class="dest-badge ' + (dest.status === 'active' ? 'badge-active' : 'badge-draft') + '">' + dest.status + '</span></td>' +
+                '<td>' + (dest.featured ? '<span class="dest-badge badge-featured">★ Featured</span>' : '-') + '</td>' +
+                '<td style="color: #64748b; font-size: 13px;">' + dest.lastUpdated + '</td>' +
+                '<td><div class="dest-actions">' +
+                    '<button class="action-btn" onclick="viewDestination(\'' + dest.id + '\')" title="View">👁</button>' +
+                    '<button class="action-btn" onclick="editDestination(\'' + dest.id + '\')" title="Edit">✏️</button>' +
+                    '<button class="action-btn" onclick="deleteDestination(\'' + dest.id + '\')" title="Delete" style="background: #fee2e2;">🗑</button>' +
+                '</div></td>' +
+            '</tr>';
+        }).join('');
+    }
+
+    // Filter destinations
+    function getFilteredDestinations() {
+        var search = document.getElementById('destSearch') ? document.getElementById('destSearch').value.toLowerCase() : '';
+        var country = document.getElementById('destCountryFilter') ? document.getElementById('destCountryFilter').value : '';
+        var category = document.getElementById('destCategoryFilter') ? document.getElementById('destCategoryFilter').value : '';
+        var status = document.getElementById('destStatusFilter') ? document.getElementById('destStatusFilter').value : '';
+
+        return destinations.filter(function(dest) {
+            var matchSearch = !search || dest.name.toLowerCase().indexOf(search) > -1 || dest.country.toLowerCase().indexOf(search) > -1;
+            var matchCountry = !country || dest.country === country;
+            var matchCategory = !category || dest.category === category;
+            var matchStatus = !status || dest.status === status;
+            return matchSearch && matchCountry && matchCategory && matchStatus;
+        });
+    }
+
+    window.filterDestinations = function() {
+        renderDestinationsTable();
+    };
+
+    // Update stats
+    function updateDestinationsStats() {
+        var total = destinations.length;
+        var active = destinations.filter(function(d) { return d.status === 'active'; }).length;
+        var featured = destinations.filter(function(d) { return d.featured; }).length;
+        var draft = destinations.filter(function(d) { return d.status === 'draft'; }).length;
+
+        var el = function(id, val) { var e = document.getElementById(id); if (e) e.textContent = val; };
+        el('statTotalDest', total);
+        el('statActiveDest', active);
+        el('statFeaturedDest', featured);
+        el('statDraftDest', draft);
+    }
+
+    // Populate filters
+    function populateCountryFilter() {
+        var countries = [...new Set(destinations.map(function(d) { return d.country; }))];
+        var select = document.getElementById('destCountryFilter');
+        if (select) {
+            select.innerHTML = '<option value="">All Countries</option>' +
+                countries.map(function(c) { return '<option value="' + c + '">' + c + '</option>'; }).join('');
+        }
+    }
+
+    function populateCategoryFilter() {
+        var select = document.getElementById('destCategoryFilter');
+        if (select) {
+            select.innerHTML = '<option value="">All Categories</option>' +
+                destinationCategories.map(function(c) { return '<option value="' + c.toLowerCase() + '">' + c + '</option>'; }).join('');
+        }
+    }
+
+    // Select all
+    window.toggleSelectAllDest = function() {
+        var checked = document.getElementById('selectAllDest').checked;
+        document.querySelectorAll('.dest-checkbox').forEach(function(cb) { cb.checked = checked; });
+    };
+
+    // Bulk delete
+    window.bulkDeleteDestinations = function() {
+        var selected = Array.from(document.querySelectorAll('.dest-checkbox:checked')).map(function(cb) { return cb.dataset.id; });
+        if (selected.length === 0) {
+            alert('Please select destinations to delete');
+            return;
+        }
+        if (confirm('Delete ' + selected.length + ' destination(s)?')) {
+            destinations = destinations.filter(function(d) { return selected.indexOf(d.id) === -1; });
+            renderDestinationsTable();
+            updateDestinationsStats();
+        }
+    };
+
+    // Modal functions
+    window.openDestinationModal = function(destId) {
+        document.getElementById('destinationModal').classList.add('show');
+        document.getElementById('destModalTitle').textContent = destId ? 'Edit Destination' : 'Add New Destination';
+
+        if (destId) {
+            currentDestination = destinations.find(function(d) { return d.id === destId; });
+            loadDestinationData(currentDestination);
+        } else {
+            currentDestination = null;
+            resetDestinationForm();
+        }
+
+        switchDestTab(0);
+    };
+
+    window.closeDestinationModal = function() {
+        document.getElementById('destinationModal').classList.remove('show');
+        resetDestinationForm();
+        stopAutosave();
+    };
+
+    window.editDestination = function(id) {
+        openDestinationModal(id);
+    };
+
+    window.viewDestination = function(id) {
+        var dest = destinations.find(function(d) { return d.id === id; });
+        if (dest) {
+            currentDestination = dest;
+            loadDestinationData(dest);
+            previewDestination();
+        }
+    };
+
+    window.deleteDestination = function(id) {
+        if (confirm('Delete this destination?')) {
+            destinations = destinations.filter(function(d) { return d.id !== id; });
+            renderDestinationsTable();
+            updateDestinationsStats();
+        }
+    };
+
+    // Load data into form
+    function loadDestinationData(dest) {
+        document.getElementById('destName').value = dest.name || '';
+        document.getElementById('destCountry').value = dest.country || '';
+        document.getElementById('destCity').value = dest.city || '';
+        document.getElementById('destCategory').value = dest.category || '';
+        document.getElementById('destTags').value = (dest.tags || []).join(', ');
+        document.getElementById('destShortDesc').value = dest.shortDesc || '';
+        document.getElementById('destFullDesc').innerHTML = dest.fullDesc || '';
+        document.getElementById('destVideoUrl').value = dest.videoUrl || '';
+        document.getElementById('destBestTime').value = dest.bestTime || '';
+        document.getElementById('destDuration').value = dest.duration || '';
+        document.getElementById('destCost').value = dest.cost || '';
+        document.getElementById('destTransport').value = dest.transport || '';
+        document.getElementById('destWeather').value = dest.weather || '';
+        document.getElementById('destMetaTitle').value = dest.metaTitle || '';
+        document.getElementById('destMetaDesc').value = dest.metaDesc || '';
+        document.getElementById('destSlug').value = dest.slug || '';
+        document.getElementById('destKeywords').value = dest.keywords || '';
+        document.getElementById('destStatus').value = dest.status || 'draft';
+
+        if (dest.featured) document.getElementById('destFeatured').classList.add('active');
+        if (dest.homepage) document.getElementById('destHomepage').classList.add('active');
+
+        if (dest.coverImage) {
+            document.getElementById('destCoverPreview').src = dest.coverImage;
+            document.getElementById('destCoverPreview').style.display = 'block';
+            destCoverImageData = dest.coverImage;
+        }
+
+        destGalleryImages = dest.galleryImages || [];
+        renderGalleryPreview();
+
+        // Must visit places
+        var mustVisitContainer = document.getElementById('destMustVisit');
+        mustVisitContainer.innerHTML = (dest.mustVisit || []).map(function(place) {
+            return '<div class="dest-repeater-item"><input type="text" class="dest-form-input" value="' + place + '" style="flex: 1;"><button type="button" class="action-btn" onclick="removeRepeaterItem(this)" style="background: #fee2e2; color: #dc2626;">🗑</button></div>';
+        }).join('');
+    }
+
+    // Reset form
+    function resetDestinationForm() {
+        document.getElementById('destName').value = '';
+        document.getElementById('destCountry').value = '';
+        document.getElementById('destCity').value = '';
+        document.getElementById('destCategory').value = '';
+        document.getElementById('destTags').value = '';
+        document.getElementById('destShortDesc').value = '';
+        document.getElementById('destFullDesc').innerHTML = '';
+        document.getElementById('destVideoUrl').value = '';
+        document.getElementById('destBestTime').value = '';
+        document.getElementById('destDuration').value = '';
+        document.getElementById('destCost').value = '';
+        document.getElementById('destTransport').value = '';
+        document.getElementById('destWeather').value = '';
+        document.getElementById('destMetaTitle').value = '';
+        document.getElementById('destMetaDesc').value = '';
+        document.getElementById('destSlug').value = '';
+        document.getElementById('destKeywords').value = '';
+        document.getElementById('destStatus').value = 'draft';
+        document.getElementById('destFeatured').classList.remove('active');
+        document.getElementById('destHomepage').classList.remove('active');
+        document.getElementById('destCoverPreview').style.display = 'none';
+        document.getElementById('destGalleryPreview').innerHTML = '';
+        document.getElementById('destMustVisit').innerHTML = '<div class="dest-repeater-item"><input type="text" class="dest-form-input" placeholder="Place name" style="flex: 1;"><button type="button" class="action-btn" onclick="removeRepeaterItem(this)" style="background: #fee2e2; color: #dc2626;">🗑</button></div>';
+
+        destGalleryImages = [];
+        destCoverImageData = '';
+    }
+
+    // Tab switching
+    window.switchDestTab = function(index) {
+        document.querySelectorAll('.dest-tab').forEach(function(tab, i) {
+            tab.classList.toggle('active', i === index);
+        });
+        document.querySelectorAll('.dest-tab-content').forEach(function(content, i) {
+            content.classList.toggle('active', i === index);
+        });
+    };
+
+    // Toggles
+    window.toggleDestFeatured = function() {
+        document.getElementById('destFeatured').classList.toggle('active');
+    };
+
+    window.toggleDestHomepage = function() {
+        document.getElementById('destHomepage').classList.toggle('active');
+    };
+
+    // Image uploads
+    window.handleDestCoverUpload = function(event) {
+        var file = event.target.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                destCoverImageData = e.target.result;
+                document.getElementById('destCoverPreview').src = e.target.result;
+                document.getElementById('destCoverPreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    window.handleDestGalleryUpload = function(event) {
+        var files = Array.from(event.target.files);
+        files.forEach(function(file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                destGalleryImages.push(e.target.result);
+                renderGalleryPreview();
+            };
+            reader.readAsDataURL(file);
+        });
+    };
+
+    function renderGalleryPreview() {
+        var container = document.getElementById('destGalleryPreview');
+        container.innerHTML = destGalleryImages.map(function(img, index) {
+            return '<div class="dest-gallery-item"><img src="' + img + '"><button class="dest-gallery-remove" onclick="removeGalleryImage(' + index + ')">&times;</button></div>';
+        }).join('');
+    }
+
+    window.removeGalleryImage = function(index) {
+        destGalleryImages.splice(index, 1);
+        renderGalleryPreview();
+    };
+
+    // Repeater
+    window.addMustVisitPlace = function() {
+        var container = document.getElementById('destMustVisit');
+        var item = document.createElement('div');
+        item.className = 'dest-repeater-item';
+        item.innerHTML = '<input type="text" class="dest-form-input" placeholder="Place name" style="flex: 1;"><button type="button" class="action-btn" onclick="removeRepeaterItem(this)" style="background: #fee2e2; color: #dc2626;">🗑</button>';
+        container.appendChild(item);
+    };
+
+    window.removeRepeaterItem = function(btn) {
+        btn.closest('.dest-repeater-item').remove();
+    };
+
+    // Save destination
+    window.saveDestination = function() {
+        var name = document.getElementById('destName').value;
+        if (!name) {
+            alert('Please enter destination name');
+            return;
+        }
+
+        var mustVisit = Array.from(document.getElementById('destMustVisit').querySelectorAll('input')).map(function(inp) { return inp.value; }).filter(function(v) { return v; });
+
+        var destData = {
+            id: currentDestination ? currentDestination.id : 'd' + Date.now(),
+            name: name,
+            country: document.getElementById('destCountry').value,
+            city: document.getElementById('destCity').value,
+            category: document.getElementById('destCategory').value,
+            tags: document.getElementById('destTags').value.split(',').map(function(t) { return t.trim(); }),
+            shortDesc: document.getElementById('destShortDesc').value,
+            fullDesc: document.getElementById('destFullDesc').innerHTML,
+            coverImage: destCoverImageData,
+            galleryImages: destGalleryImages,
+            videoUrl: document.getElementById('destVideoUrl').value,
+            bestTime: document.getElementById('destBestTime').value,
+            duration: document.getElementById('destDuration').value,
+            cost: document.getElementById('destCost').value,
+            transport: document.getElementById('destTransport').value,
+            mustVisit: mustVisit,
+            weather: document.getElementById('destWeather').value,
+            metaTitle: document.getElementById('destMetaTitle').value,
+            metaDesc: document.getElementById('destMetaDesc').value,
+            slug: document.getElementById('destSlug').value,
+            keywords: document.getElementById('destKeywords').value,
+            status: document.getElementById('destStatus').value,
+            featured: document.getElementById('destFeatured').classList.contains('active'),
+            homepage: document.getElementById('destHomepage').classList.contains('active'),
+            lastUpdated: new Date().toISOString().split('T')[0]
+        };
+
+        if (currentDestination) {
+            var index = destinations.findIndex(function(d) { return d.id === currentDestination.id; });
+            destinations[index] = destData;
+        } else {
+            destinations.push(destData);
+        }
+
+        closeDestinationModal();
+        renderDestinationsTable();
+        updateDestinationsStats();
+        populateCountryFilter();
+        alert('Destination saved!');
+    };
+
+    // Auto-save
+    function startAutosave() {
+        stopAutosave();
+        autosaveInterval = setInterval(function() {
+            if (document.getElementById('destinationModal').classList.contains('show')) {
+                console.log('Auto-saving destination...');
+                // In real app, save to localStorage or API
+            }
+        }, 30000); // every 30 seconds
+    }
+
+    function stopAutosave() {
+        if (autosaveInterval) {
+            clearInterval(autosaveInterval);
+            autosaveInterval = null;
+        }
+    }
+
+    // Preview
+    window.previewDestination = function() {
+        var previewFrame = document.getElementById('previewFrame');
+        var name = document.getElementById('destName').value || 'Destination Name';
+        var shortDesc = document.getElementById('destShortDesc').value || 'Short description';
+        var coverImg = destCoverImageData || 'https://via.placeholder.com/800x400';
+
+        previewFrame.innerHTML = '<div style="max-width: 800px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden;">' +
+            '<img src="' + coverImg + '" style="width: 100%; height: 300px; object-fit: cover;">' +
+            '<div style="padding: 24px;">' +
+                '<h1 style="font-size: 32px; margin: 0 0 12px;">' + name + '</h1>' +
+                '<p style="color: #64748b; font-size: 16px;">' + shortDesc + '</p>' +
+                '<div style="margin-top: 20px; padding: 16px; background: #f8fafc; border-radius: 8px;">' +
+                    '<div style="font-weight: 600; margin-bottom: 8px;">Must Visit Places:</div>' +
+                    '<ul style="margin: 0; padding-left: 20px;">' +
+                        Array.from(document.getElementById('destMustVisit').querySelectorAll('input')).map(function(inp) {
+                            return inp.value ? '<li>' + inp.value + '</li>' : '';
+                        }).join('') +
+                    '</ul>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+
+        document.getElementById('previewModal').classList.add('show');
+    };
+
+    window.closePreviewModal = function() {
+        document.getElementById('previewModal').classList.remove('show');
+    };
+
+    window.setPreviewDevice = function(device) {
+        var frame = document.getElementById('previewFrame');
+        var btns = document.querySelectorAll('.device-btn');
+        btns.forEach(function(btn) { btn.classList.remove('active'); });
+        event.target.classList.add('active');
+
+        if (device === 'desktop') frame.style.maxWidth = '100%';
+        if (device === 'tablet') frame.style.maxWidth = '768px';
+        if (device === 'mobile') frame.style.maxWidth = '375px';
+        frame.style.margin = '0 auto';
+    };
+
+    // Categories
+    window.openCategoriesModal = function() {
+        renderCategoriesList();
+        document.getElementById('categoriesModal').classList.add('show');
+    };
+
+    window.closeCategoriesModal = function() {
+        document.getElementById('categoriesModal').classList.remove('show');
+    };
+
+    function renderCategoriesList() {
+        var container = document.getElementById('categoriesList');
+        container.innerHTML = destinationCategories.map(function(cat, index) {
+            return '<div class="category-item"><span>' + cat + '</span><button class="action-btn" onclick="deleteCategory(' + index + ')" style="background: #fee2e2; color: #dc2626;">🗑</button></div>';
+        }).join('');
+    }
+
+    window.addCategory = function() {
+        var name = document.getElementById('newCategoryName').value.trim();
+        if (name && destinationCategories.indexOf(name) === -1) {
+            destinationCategories.push(name);
+            renderCategoriesList();
+            populateCategoryFilter();
+            document.getElementById('newCategoryName').value = '';
+        }
+    };
+
+    window.deleteCategory = function(index) {
+        if (confirm('Delete this category?')) {
+            destinationCategories.splice(index, 1);
+            renderCategoriesList();
+            populateCategoryFilter();
+        }
+    };
+
+    // Initialize on page load
+    if (document.getElementById('destinationsPage')) {
+        initDestinations();
+    }
 
     </script>
