@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - Travel Bliss</title>
 
-    <!-- Include Header CSS -->
+    <!-- Bootstrap CSS -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/bootstrap-icons.css" rel="stylesheet">
 
     <style>
-        /* Import header styles from component */
+        /* Header Styles from travel-agency-03.html */
         .header-area.style-2 {
             background: linear-gradient(to right, #f0f9ff 0%, #e0f2fe 100%);
             box-shadow: 0 2px 15px rgba(0,0,0,0.08);
@@ -21,36 +21,99 @@
         }
 
         .header-area.style-2 .header-logo img {
-            height: 45px;
-            width: auto;
-            max-width: 200px;
-            object-fit: contain;
+            width: auto !important;
+            height: 45px !important;
+            max-width: 200px !important;
+            object-fit: contain !important;
+            image-rendering: -webkit-optimize-contrast !important;
+            image-rendering: crisp-edges !important;
         }
 
         .header-area.style-2 .menu-list {
-            display: flex;
-            gap: 35px;
-            align-items: center;
-            list-style: none;
+            display: flex !important;
+            gap: 35px !important;
+            align-items: center !important;
+            list-style: none !important;
             margin: 0;
             padding: 0;
+        }
+
+        .header-area.style-2 .menu-list > li {
+            margin: 0 !important;
+            padding: 0 !important;
+            position: relative;
         }
 
         .header-area.style-2 .menu-list > li > a {
             font-size: 16px;
             font-weight: 600;
-            color: #1f2937;
+            color: #1f2937 !important;
+            padding: 8px 18px !important;
             text-decoration: none;
-            padding: 8px 18px;
-            border-radius: 8px;
             transition: all 0.3s;
+            background: transparent !important;
+            border-radius: 8px !important;
+            display: block;
         }
 
-        .header-area.style-2 .menu-list > li > a:hover,
         .header-area.style-2 .menu-list > li.active > a {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+            color: white !important;
+        }
+
+        .header-area.style-2 .menu-list > li > a:hover {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Dropdown styles */
+        .header-area.style-2 .menu-list > li.has-dropdown > a::after {
+            content: "▼";
+            font-size: 10px;
+            margin-left: 6px;
+        }
+
+        .header-area.style-2 .menu-list > li .submenu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 220px;
+            padding: 10px 0;
+            display: none;
+            z-index: 1000;
+            margin-top: 8px;
+            list-style: none;
+        }
+
+        .header-area.style-2 .menu-list > li:hover .submenu {
+            display: block;
+        }
+
+        .header-area.style-2 .menu-list > li .submenu li {
+            margin: 0;
+            padding: 0;
+        }
+
+        .header-area.style-2 .menu-list > li .submenu li a {
+            display: block;
+            padding: 10px 20px;
+            color: #1f2937;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .header-area.style-2 .menu-list > li .submenu li a:hover {
             background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             color: white;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            transform: none;
+            box-shadow: none;
         }
 
         .nav-right {
@@ -59,15 +122,68 @@
             align-items: center;
         }
 
-        .contact-info {
+        .contact-area {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .language-selector {
+            position: relative;
+        }
+
+        .language-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 600;
+            color: #1f2937;
+            padding: 5px 10px;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .language-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .language-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-top: 5px;
+            width: max-content;
+            z-index: 1000;
+        }
+
+        .language-dropdown.show {
+            display: block;
+        }
+
+        .lang-option {
             display: flex;
             align-items: center;
             gap: 8px;
+            padding: 8px 12px;
             color: #1f2937;
-            font-weight: 600;
             text-decoration: none;
+            transition: all 0.2s;
         }
 
+        .lang-option:hover {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+        }
+
+        /* Admin Button */
         .admin-btn {
             background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             color: white;
@@ -78,6 +194,93 @@
             display: none;
             align-items: center;
             gap: 6px;
+            transition: all 0.3s;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+            color: white;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        @media (max-width: 1199px) {
+            .header-area.style-2 .menu-list,
+            .contact-area,
+            .language-selector {
+                display: none !important;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .main-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 300px;
+                height: 100vh;
+                background: white;
+                box-shadow: -2px 0 15px rgba(0,0,0,0.1);
+                padding: 20px;
+                transition: right 0.3s;
+                z-index: 9999;
+                overflow-y: auto;
+            }
+
+            .main-menu.active {
+                right: 0;
+            }
+
+            .mobile-logo-area {
+                margin-bottom: 20px;
+                padding-bottom: 15px;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .menu-close-btn {
+                cursor: pointer;
+                font-size: 28px;
+                color: #1f2937;
+            }
+
+            .main-menu .menu-list {
+                flex-direction: column !important;
+                gap: 0 !important;
+                display: flex !important;
+            }
+
+            .main-menu .menu-list > li {
+                width: 100%;
+                border-bottom: 1px solid #f3f4f6;
+            }
+
+            .main-menu .menu-list > li > a {
+                padding: 16px 20px !important;
+            }
+
+            .main-menu .menu-list > li.has-dropdown .submenu {
+                position: static;
+                display: none;
+                margin-top: 0;
+                box-shadow: none;
+                background: #f9fafb;
+                border-radius: 0;
+                padding: 0;
+            }
+
+            .main-menu .menu-list > li.has-dropdown.open .submenu {
+                display: block;
+            }
         }
 
         /* Page specific styles */
@@ -185,35 +388,86 @@
     </style>
 </head>
 <body>
-    <!-- Unified Header -->
+    <!-- Header from travel-agency-03.html -->
     <header class="header-area style-2">
-        <div class="container-fluid d-flex align-items-center justify-content-between">
-            <a href="travel-agency-03.html" class="header-logo">
-                <img src="assets/img/travel-bliss-logo.png" alt="Travel Bliss">
-            </a>
-
-            <nav>
-                <ul class="menu-list">
-                    <li><a href="travel-agency-03.html">Home</a></li>
-                    <li class="active"><a href="about.html">About</a></li>
-                    <li><a href="contact.html">Contact Us</a></li>
-                </ul>
-            </nav>
-
-            <div class="nav-right">
-                <a href="tel:+998901234567" class="contact-info">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328z"/>
-                    </svg>
-                    <span>+998 90 123 45 67</span>
+        <div class="container-fluid d-flex flex-nowrap align-items-center justify-content-between">
+            <div class="logo-and-menu-area">
+                <a href="travel-agency-03.html" class="header-logo">
+                    <img src="assets/img/travel-bliss-logo.png" alt="Travel Bliss">
                 </a>
+                <div class="main-menu">
+                    <div class="mobile-logo-area d-xl-none d-flex align-items-center justify-content-between">
+                        <a href="travel-agency-03.html" class="mobile-logo-wrap">
+                            <img src="assets/img/travel-bliss-logo.png" alt="Travel Bliss" style="height: 40px;">
+                        </a>
+                        <div class="menu-close-btn">
+                            <i class="bi bi-x"></i>
+                        </div>
+                    </div>
+                    <ul class="menu-list">
+                        <li>
+                            <a href="travel-agency-03.html">Home</a>
+                        </li>
+                        <!-- Categories will be loaded dynamically here -->
+                        <li class="active">
+                            <a href="about.html">About</a>
+                        </li>
+                        <li>
+                            <a href="contact.html">Contact Us</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="contact-area d-xl-flex d-none">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="icon">
+                            <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15.5646 11.7424L13.3317 9.50954C12.5343 8.7121 11.1786 9.03111 10.8596 10.0678C10.6204 10.7855 9.82296 11.1842 9.10526 11.0247C7.51037 10.626 5.35726 8.55261 4.95854 6.87797C4.71931 6.16024 5.19778 5.36279 5.91548 5.12359C6.95216 4.80461 7.27113 3.44895 6.47369 2.65151L4.24084 0.418659C3.60288 -0.139553 2.64595 -0.139553 2.08774 0.418659L0.572591 1.93381C-0.942555 3.5287 0.73208 7.75516 4.48007 11.5032C8.22807 15.2512 12.4545 17.0056 14.0494 15.4106L15.5646 13.8955C16.1228 13.2575 16.1228 12.3006 15.5646 11.7424Z"/>
+                            </svg>
+                        </div>
+                        <a href="tel:998901234567" style="color: #1f2937; font-weight: 600; text-decoration: none;">+998 90 123 45 67</a>
+                    </div>
+                    <div class="language-selector">
+                        <button class="language-btn" onclick="toggleLanguageDropdown()">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 30'%3E%3Cdefs%3E%3CclipPath id='a'%3E%3Crect width='50' height='30'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23a)'%3E%3Crect width='50' height='30' fill='%23012169'/%3E%3Cpath d='M0,0 L50,30 M50,0 L0,30' stroke='%23FFF' stroke-width='6'/%3E%3Cpath d='M0,0 L50,30 M50,0 L0,30' stroke='%23C8102E' stroke-width='4' clip-path='url(%23a)'/%3E%3Cpath d='M25,0 V30 M0,15 H50' stroke='%23FFF' stroke-width='10'/%3E%3Cpath d='M25,0 V30 M0,15 H50' stroke='%23C8102E' stroke-width='6'/%3E%3C/g%3E%3C/svg%3E" alt="UK Flag" width="24" height="16" style="border-radius: 2px;">
+                            <span id="currentLang">EN</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="language-dropdown" id="languageDropdown">
+                            <a href="#" class="lang-option" data-lang="EN">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 30'%3E%3Cdefs%3E%3CclipPath id='a'%3E%3Crect width='50' height='30'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23a)'%3E%3Crect width='50' height='30' fill='%23012169'/%3E%3Cpath d='M0,0 L50,30 M50,0 L0,30' stroke='%23FFF' stroke-width='6'/%3E%3Cpath d='M0,0 L50,30 M50,0 L0,30' stroke='%23C8102E' stroke-width='4' clip-path='url(%23a)'/%3E%3Cpath d='M25,0 V30 M0,15 H50' stroke='%23FFF' stroke-width='10'/%3E%3Cpath d='M25,0 V30 M0,15 H50' stroke='%23C8102E' stroke-width='6'/%3E%3C/g%3E%3C/svg%3E" alt="UK" width="24" height="16" style="border-radius: 2px;">
+                                <span>English</span>
+                            </a>
+                            <a href="#" class="lang-option" data-lang="RU">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 6'%3E%3Crect width='9' height='2' fill='%23fff'/%3E%3Crect y='2' width='9' height='2' fill='%230039a6'/%3E%3Crect y='4' width='9' height='2' fill='%23d52b1e'/%3E%3C/svg%3E" alt="Russia" width="24" height="16" style="border-radius: 2px;">
+                                <span>Русский</span>
+                            </a>
+                            <a href="#" class="lang-option" data-lang="UZ">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 250'%3E%3Crect width='500' height='80' fill='%231EB53A'/%3E%3Crect y='80' width='500' height='3' fill='%23FF0000'/%3E%3Crect y='83' width='500' height='84' fill='%23FFFFFF'/%3E%3Crect y='167' width='500' height='3' fill='%23FF0000'/%3E%3Crect y='170' width='500' height='80' fill='%230099B5'/%3E%3Ccircle cx='100' cy='40' r='25' fill='%23FFFFFF'/%3E%3Ccircle cx='110' cy='40' r='20' fill='%231EB53A'/%3E%3Cpolygon points='150,25 153,34 162,34 155,40 158,49 150,43 142,49 145,40 138,34 147,34' fill='%23FFFFFF'/%3E%3Cpolygon points='180,25 183,34 192,34 185,40 188,49 180,43 172,49 175,40 168,34 177,34' fill='%23FFFFFF'/%3E%3Cpolygon points='210,25 213,34 222,34 215,40 218,49 210,43 202,49 205,40 198,34 207,34' fill='%23FFFFFF'/%3E%3Cpolygon points='165,50 168,59 177,59 170,65 173,74 165,68 157,74 160,65 153,59 162,59' fill='%23FFFFFF'/%3E%3Cpolygon points='195,50 198,59 207,59 200,65 203,74 195,68 187,74 190,65 183,59 192,59' fill='%23FFFFFF'/%3E%3C/svg%3E" alt="Uzbekistan" width="24" height="16" style="border-radius: 2px;">
+                                <span>Uzbek</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Admin Button (visible only when logged in) -->
                 <a href="/admin/" class="admin-btn" id="adminBtn">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
                     </svg>
                     <span>Admin</span>
                 </a>
+
+                <div class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <svg width="20" height="18" viewBox="0 0 20 18" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1.29445 2.8421H10.5237C11.2389 2.8421 11.8182 2.2062 11.8182 1.42105C11.8182 0.635903 11.2389 0 10.5237 0H1.29445C0.579249 0 0 0.635903 0 1.42105C0 2.2062 0.579249 2.8421 1.29445 2.8421Z"/>
+                        <path d="M1.23002 10.421H18.77C19.4496 10.421 20 9.78506 20 8.99991C20 8.21476 19.4496 7.57886 18.77 7.57886H1.23002C0.550421 7.57886 0 8.21476 0 8.99991C0 9.78506 0.550421 10.421 1.23002 10.421Z"/>
+                        <path d="M18.8052 15.1579H10.2858C9.62563 15.1579 9.09094 15.7938 9.09094 16.5789C9.09094 17.3641 9.62563 18 10.2858 18H18.8052C19.4653 18 20 17.3641 20 16.5789C20 15.7938 19.4653 15.1579 18.8052 15.1579Z"/>
+                    </svg>
+                </div>
             </div>
         </div>
     </header>
@@ -278,14 +532,123 @@
     </div>
 
     <script>
-        // Check if user is logged in
-        document.addEventListener('DOMContentLoaded', function() {
+        const API_URL = 'http://localhost:4000/api';
+
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const mainMenu = document.querySelector('.main-menu');
+            mainMenu.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking close button
+        document.querySelector('.menu-close-btn')?.addEventListener('click', toggleMobileMenu);
+
+        // Toggle language dropdown
+        function toggleLanguageDropdown() {
+            const dropdown = document.getElementById('languageDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // Change language
+        document.querySelectorAll('.lang-option').forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.preventDefault();
+                const lang = this.getAttribute('data-lang');
+                document.getElementById('currentLang').textContent = lang;
+                toggleLanguageDropdown();
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const langSelector = document.querySelector('.language-selector');
+            if (langSelector && !langSelector.contains(e.target)) {
+                document.getElementById('languageDropdown')?.classList.remove('show');
+            }
+        });
+
+        // Check admin access
+        function checkAdminAccess() {
             const token = localStorage.getItem('accessToken');
             const adminBtn = document.getElementById('adminBtn');
-
             if (token && adminBtn) {
                 adminBtn.style.display = 'flex';
             }
+        }
+
+        // Load dynamic categories
+        async function loadCategories() {
+            try {
+                const response = await fetch(`${API_URL}/categories`);
+                const result = await response.json();
+
+                if (result.success && result.data.categories) {
+                    const categories = result.data.categories;
+                    const menuList = document.querySelector('.menu-list');
+                    const aboutLi = menuList.querySelector('li.active');
+
+                    // Category mapping
+                    const categoryMap = {
+                        'cultural-tours': 'cultural',
+                        'adventure-tours': 'adventure',
+                        'homestays-hiking': 'hiking',
+                        'day-trips': 'day-trip'
+                    };
+
+                    for (const category of categories.reverse()) {
+                        const categoryValue = categoryMap[category.slug];
+
+                        // Fetch tours for this category
+                        const toursResponse = await fetch(`${API_URL}/tours?category=${categoryValue}`);
+                        const toursResult = await toursResponse.json();
+
+                        const li = document.createElement('li');
+                        li.className = 'has-dropdown';
+
+                        const a = document.createElement('a');
+                        a.href = `#${category.slug}`;
+                        a.textContent = category.name;
+
+                        // Mobile dropdown toggle
+                        a.addEventListener('click', function(e) {
+                            if (window.innerWidth < 1200) {
+                                e.preventDefault();
+                                li.classList.toggle('open');
+                            }
+                        });
+
+                        li.appendChild(a);
+
+                        // Create submenu if tours exist
+                        if (toursResult.success && toursResult.data.tours.length > 0) {
+                            const submenu = document.createElement('ul');
+                            submenu.className = 'submenu';
+
+                            toursResult.data.tours.forEach(tour => {
+                                const subLi = document.createElement('li');
+                                const subA = document.createElement('a');
+                                subA.href = `tour-details.html?id=${tour.id}`;
+                                subA.textContent = tour.title;
+                                subLi.appendChild(subA);
+                                submenu.appendChild(subLi);
+                            });
+
+                            li.appendChild(submenu);
+                        }
+
+                        // Insert before "About" li
+                        menuList.insertBefore(li, aboutLi);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAdminAccess();
+            loadCategories();
         });
     </script>
 </body>
