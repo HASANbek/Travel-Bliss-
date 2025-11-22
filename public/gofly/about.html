@@ -4,56 +4,109 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - Travel Bliss</title>
+
+    <!-- Include Header CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-icons.css" rel="stylesheet">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* Import header styles from component */
+        .header-area.style-2 {
+            background: linear-gradient(to right, #f0f9ff 0%, #e0f2fe 100%);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            padding: 6px 0;
+            position: sticky;
+            top: 0;
+            z-index: 999;
         }
 
+        .header-area.style-2 .header-logo img {
+            height: 45px;
+            width: auto;
+            max-width: 200px;
+            object-fit: contain;
+        }
+
+        .header-area.style-2 .menu-list {
+            display: flex;
+            gap: 35px;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header-area.style-2 .menu-list > li > a {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+            text-decoration: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .header-area.style-2 .menu-list > li > a:hover,
+        .header-area.style-2 .menu-list > li.active > a {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .contact-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #1f2937;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .admin-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Page specific styles */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            background: #f8fafc;
+            margin: 0;
+            padding: 0;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border-radius: 50px;
-            text-decoration: none;
-            margin-bottom: 20px;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
-        }
-
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateX(-5px);
+            padding: 40px 20px;
         }
 
         .about-card {
             background: white;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-top: 20px;
         }
 
         .about-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 80px 40px;
+            padding: 60px 40px;
             text-align: center;
+            color: white;
         }
 
         .about-header h1 {
@@ -70,44 +123,35 @@
             padding: 60px 40px;
         }
 
-        .section {
+        .about-section {
             margin-bottom: 50px;
         }
 
-        .section-title {
+        .about-section h2 {
+            color: #667eea;
             font-size: 32px;
-            color: #333;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            margin-bottom: 20px;
         }
 
-        .section-text {
-            font-size: 16px;
+        .about-section p {
+            color: #4a5568;
+            font-size: 18px;
             line-height: 1.8;
-            color: #555;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
+            gap: 30px;
+            margin-top: 40px;
         }
 
         .feature-card {
-            background: #f9fafb;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
             padding: 30px;
             border-radius: 15px;
             text-align: center;
-            transition: all 0.3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
         .feature-icon {
@@ -115,266 +159,134 @@
             margin-bottom: 15px;
         }
 
-        .feature-title {
-            font-size: 20px;
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .feature-desc {
-            font-size: 15px;
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .stats-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 50px;
-            border-radius: 15px;
-            margin: 40px 0;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 30px;
-            text-align: center;
-        }
-
-        .stat-item {
-            padding: 20px;
-        }
-
-        .stat-number {
-            font-size: 42px;
-            font-weight: bold;
+        .feature-card h3 {
+            color: #1f2937;
             margin-bottom: 10px;
         }
 
-        .stat-label {
+        .feature-card p {
+            color: #6b7280;
             font-size: 16px;
-            opacity: 0.9;
-        }
-
-        .cta-section {
-            background: #f9fafb;
-            padding: 50px;
-            border-radius: 15px;
-            text-align: center;
-        }
-
-        .cta-title {
-            font-size: 28px;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .cta-text {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 30px;
-        }
-
-        .cta-btn {
-            display: inline-block;
-            padding: 15px 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
 
         @media (max-width: 768px) {
             .about-header h1 {
-                font-size: 36px;
+                font-size: 32px;
             }
 
             .about-content {
                 padding: 40px 20px;
             }
 
-            .stats-section {
-                padding: 40px 20px;
-            }
-
-            .cta-section {
-                padding: 40px 20px;
+            .features-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="travel-agency-03.html" class="back-btn">
-            ← Orqaga qaytish
-        </a>
+    <!-- Unified Header -->
+    <header class="header-area style-2">
+        <div class="container-fluid d-flex align-items-center justify-content-between">
+            <a href="travel-agency-03.html" class="header-logo">
+                <img src="assets/img/travel-bliss-logo.png" alt="Travel Bliss">
+            </a>
 
+            <nav>
+                <ul class="menu-list">
+                    <li><a href="travel-agency-03.html">Home</a></li>
+                    <li class="active"><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </nav>
+
+            <div class="nav-right">
+                <a href="tel:+998901234567" class="contact-info">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328z"/>
+                    </svg>
+                    <span>+998 90 123 45 67</span>
+                </a>
+
+                <a href="/admin/" class="admin-btn" id="adminBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                    <span>Admin</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
         <div class="about-card">
             <div class="about-header">
-                <h1>Travel Bliss</h1>
-                <p>O'zbekiston bo'ylab eng yaxshi sayohatlaringiz</p>
+                <h1>About Travel Bliss</h1>
+                <p>Your Gateway to Uzbekistan's Silk Road</p>
             </div>
 
             <div class="about-content">
-                <div class="section">
-                    <h2 class="section-title">🌍 Biz Haqimizda</h2>
-                    <p class="section-text">
-                        Travel Bliss - bu O'zbekiston bo'ylab professional sayohat xizmatlari ko'rsatuvchi yetakchi kompaniya. Biz 2020-yildan boshlab minglab turistlarga unutilmas sayohatlar uyushtirish orqali xizmat qilib kelamiz.
+                <div class="about-section">
+                    <h2>🌍 Our Story</h2>
+                    <p>
+                        Travel Bliss was founded with a passion for sharing the rich history and culture of Uzbekistan
+                        with the world. As specialists in Silk Road tours, we provide authentic experiences that connect
+                        travelers with the heart of Central Asia.
                     </p>
-                    <p class="section-text">
-                        Bizning maqsadimiz - har bir mehmonimizga O'zbekistonning boy madaniy merosi, tarixiy yodgorliklari va go'zal tabiati bilan tanishish imkoniyatini yaratish. Biz professional gidlar jamoasi, qulay transport va sifatli xizmatlar bilan sizga eng yaxshi sayohat tajribasini taklif qilamiz.
+                    <p>
+                        From the stunning blue domes of Samarkand to the ancient streets of Bukhara, we craft journeys
+                        that go beyond typical tourism, offering deep cultural immersion and unforgettable memories.
                     </p>
                 </div>
 
-                <div class="section">
-                    <h2 class="section-title">✨ Nima Uchun Bizni Tanlashadi?</h2>
-
+                <div class="about-section">
+                    <h2>✨ What Makes Us Different</h2>
                     <div class="features-grid">
                         <div class="feature-card">
-                            <div class="feature-icon">👥</div>
-                            <div class="feature-title">Professional Gidlar</div>
-                            <div class="feature-desc">Tajribali va bilimli gidlarimiz sizga eng yaxshi sayohat tajribasini taqdim etadi</div>
+                            <div class="feature-icon">🗺️</div>
+                            <h3>Expert Guides</h3>
+                            <p>Local experts with deep knowledge of history and culture</p>
                         </div>
-
                         <div class="feature-card">
-                            <div class="feature-icon">🚗</div>
-                            <div class="feature-title">Qulay Transport</div>
-                            <div class="feature-desc">Zamonaviy va shinam transport vositalari orqali sayohat qiling</div>
+                            <div class="feature-icon">🏛️</div>
+                            <h3>Authentic Experiences</h3>
+                            <p>Real cultural immersion, not just sightseeing</p>
                         </div>
-
                         <div class="feature-card">
-                            <div class="feature-icon">💰</div>
-                            <div class="feature-title">Arzon Narxlar</div>
-                            <div class="feature-desc">Yuqori sifatli xizmatlarni eng mos narxlarda taklif qilamiz</div>
+                            <div class="feature-icon">💎</div>
+                            <h3>Quality Service</h3>
+                            <p>Small groups, personalized attention</p>
                         </div>
-
                         <div class="feature-card">
-                            <div class="feature-icon">🏨</div>
-                            <div class="feature-title">Sifatli Mehmonxonalar</div>
-                            <div class="feature-desc">Eng yaxshi va qulay mehmonxonalarda turar joy ta'minlaymiz</div>
-                        </div>
-
-                        <div class="feature-card">
-                            <div class="feature-icon">🎯</div>
-                            <div class="feature-title">Individual Yondashuv</div>
-                            <div class="feature-desc">Har bir mijozning istaklarini hisobga olgan holda sayohat rejalashtiramiz</div>
-                        </div>
-
-                        <div class="feature-card">
-                            <div class="feature-icon">⭐</div>
-                            <div class="feature-title">Yuqori Sifat</div>
-                            <div class="feature-desc">Barcha xizmatlarimiz yuqori sifat standartlariga javob beradi</div>
+                            <div class="feature-icon">🌟</div>
+                            <h3>Best Value</h3>
+                            <p>Competitive prices without compromising quality</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="stats-section">
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-number">5000+</div>
-                            <div class="stat-label">Baxtli Turistlar</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">50+</div>
-                            <div class="stat-label">Sayohat Marshrutlari</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">4.9</div>
-                            <div class="stat-label">O'rtacha Reyting</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">12</div>
-                            <div class="stat-label">Shaharlar</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <h2 class="section-title">🎯 Bizning Xizmatlar</h2>
-                    <p class="section-text">
-                        Biz turli xildagi sayohat paketlarini taklif qilamiz:
+                <div class="about-section">
+                    <h2>📍 Our Mission</h2>
+                    <p>
+                        To provide exceptional travel experiences that showcase the beauty, history, and hospitality
+                        of Uzbekistan while supporting local communities and preserving cultural heritage.
                     </p>
-                    <ul style="font-size: 16px; line-height: 2; color: #555; margin-left: 40px;">
-                        <li>1 kunlik shahar turlari</li>
-                        <li>Ko'p kunlik madaniy sayohatlar</li>
-                        <li>Tog'larda sarguzasht turlari</li>
-                        <li>Maxsus guruh va individual turlar</li>
-                        <li>Transport va mehmonxona bronlash</li>
-                        <li>Professional fotografiya xizmati</li>
-                    </ul>
-                </div>
-
-                <div class="cta-section">
-                    <h2 class="cta-title">Sayohatingizni Bugun Boshlang! 🚀</h2>
-                    <p class="cta-text">
-                        Bizning professional jamoamiz sizga eng yaxshi sayohat tajribasini taqdim etishga tayyor
-                    </p>
-                    <a href="travel-agency-03.html" class="cta-btn">📦 Turlarni Ko'rish</a>
-                    <a href="contact.html" class="cta-btn" style="margin-left: 15px;">📞 Bog'lanish</a>
                 </div>
             </div>
         </div>
     </div>
+
     <script>
-        const API_BASE = window.location.origin;
+        // Check if user is logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('accessToken');
+            const adminBtn = document.getElementById('adminBtn');
 
-        async function loadAboutPage() {
-            try {
-                const response = await fetch(`${API_BASE}/api/pages/about`);
-                const result = await response.json();
-
-                if (result.success && result.data) {
-                    const data = result.data;
-
-                    // Title va subtitle
-                    if (data.content?.subtitle) {
-                        document.querySelector('.about-header p').textContent = data.content.subtitle;
-                    }
-
-                    // Main text
-                    if (data.content?.mainText) {
-                        const sections = document.querySelectorAll('.section-text');
-                        if (sections[0]) sections[0].textContent = data.content.mainText;
-                    }
-
-                    if (data.content?.missionText) {
-                        const sections = document.querySelectorAll('.section-text');
-                        if (sections[1]) sections[1].textContent = data.content.missionText;
-                    }
-
-                    // Stats
-                    if (data.stats) {
-                        const statItems = document.querySelectorAll('.stat-item');
-                        if (statItems[0] && data.stats.tourists) {
-                            statItems[0].querySelector('.stat-number').textContent = data.stats.tourists;
-                        }
-                        if (statItems[1] && data.stats.tours) {
-                            statItems[1].querySelector('.stat-number').textContent = data.stats.tours;
-                        }
-                        if (statItems[2] && data.stats.rating) {
-                            statItems[2].querySelector('.stat-number').textContent = data.stats.rating;
-                        }
-                        if (statItems[3] && data.stats.cities) {
-                            statItems[3].querySelector('.stat-number').textContent = data.stats.cities;
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('About sahifasini yuklashda xatolik:', error);
+            if (token && adminBtn) {
+                adminBtn.style.display = 'flex';
             }
-        }
-
-        document.addEventListener('DOMContentLoaded', loadAboutPage);
+        });
     </script>
 </body>
 </html>

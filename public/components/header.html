@@ -1,0 +1,376 @@
+<!-- Travel Bliss Unified Header Component -->
+<!-- Usage: Include this file in all public pages -->
+
+<!-- Required CSS (add to head section) -->
+<link href="/gofly/assets/css/bootstrap.min.css" rel="stylesheet">
+<link href="/gofly/assets/css/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+/* Header Unified Styles */
+.header-area.style-2 {
+    background: linear-gradient(to right, #f0f9ff 0%, #e0f2fe 100%);
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    padding: 6px 0;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.header-area.style-2 .header-logo img {
+    height: 45px;
+    width: auto;
+    max-width: 200px;
+    object-fit: contain;
+}
+
+.header-area.style-2 .menu-list {
+    display: flex;
+    gap: 35px;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.header-area.style-2 .menu-list > li > a {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.header-area.style-2 .menu-list > li > a:hover {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.header-area.style-2 .menu-list > li.active > a {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.nav-right {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.nav-right .contact-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #1f2937;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.language-selector {
+    position: relative;
+}
+
+.language-btn {
+    background: transparent;
+    border: 1px solid #e5e7eb;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #1f2937;
+    transition: all 0.3s;
+}
+
+.language-btn:hover {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+}
+
+.language-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-top: 5px;
+    min-width: 150px;
+    z-index: 1000;
+}
+
+.language-dropdown.show {
+    display: block;
+}
+
+.lang-option {
+    display: block;
+    padding: 10px 15px;
+    color: #1f2937;
+    text-decoration: none;
+    transition: all 0.2s;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.lang-option:last-child {
+    border-bottom: none;
+}
+
+.lang-option:hover {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+}
+
+/* Admin Button Styles */
+.admin-btn {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    display: none; /* Hidden by default, shown if logged in */
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s;
+}
+
+.admin-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+    color: white;
+}
+
+/* Mobile Menu */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #1f2937;
+}
+
+@media (max-width: 1199px) {
+    .header-area.style-2 .menu-list,
+    .nav-right .contact-info,
+    .language-selector {
+        display: none;
+    }
+
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    .mobile-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 300px;
+        height: 100vh;
+        background: white;
+        box-shadow: -2px 0 15px rgba(0,0,0,0.1);
+        padding: 20px;
+        transition: right 0.3s;
+        z-index: 9999;
+    }
+
+    .mobile-menu.active {
+        right: 0;
+    }
+
+    .mobile-menu .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    .mobile-menu ul {
+        list-style: none;
+        padding: 40px 0 0 0;
+        margin: 0;
+    }
+
+    .mobile-menu ul li {
+        margin-bottom: 10px;
+    }
+
+    .mobile-menu ul li a {
+        display: block;
+        padding: 12px 15px;
+        color: #1f2937;
+        text-decoration: none;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s;
+    }
+
+    .mobile-menu ul li a:hover,
+    .mobile-menu ul li.active a {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+    }
+}
+</style>
+
+<!-- Header HTML -->
+<header class="header-area style-2">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+        <!-- Logo -->
+        <a href="/gofly/travel-agency-03.html" class="header-logo">
+            <img src="/gofly/assets/img/travel-bliss-logo.png" alt="Travel Bliss">
+        </a>
+
+        <!-- Main Navigation -->
+        <nav>
+            <ul class="menu-list">
+                <li id="nav-home">
+                    <a href="/gofly/travel-agency-03.html">Home</a>
+                </li>
+                <!-- Dynamic categories will be inserted here -->
+                <li id="nav-about">
+                    <a href="/gofly/about.html">About</a>
+                </li>
+                <li id="nav-contact">
+                    <a href="/gofly/contact.html">Contact Us</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Right Navigation -->
+        <div class="nav-right">
+            <!-- Phone -->
+            <a href="tel:+998901234567" class="contact-info">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328z"/>
+                </svg>
+                <span>+998 90 123 45 67</span>
+            </a>
+
+            <!-- Language Selector -->
+            <div class="language-selector">
+                <button class="language-btn" onclick="toggleLanguageDropdown()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                    <span id="currentLang">EN</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="language-dropdown" id="languageDropdown">
+                    <a href="#" class="lang-option" onclick="changeLang('EN')">🇬🇧 English</a>
+                    <a href="#" class="lang-option" onclick="changeLang('UZ')">🇺🇿 O'zbekcha</a>
+                    <a href="#" class="lang-option" onclick="changeLang('RU')">🇷🇺 Русский</a>
+                </div>
+            </div>
+
+            <!-- Admin Button (shown only if logged in) -->
+            <a href="/admin/" class="admin-btn" id="adminBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                </svg>
+                <span>Admin</span>
+            </a>
+
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                ☰
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+    <button class="close-btn" onclick="toggleMobileMenu()">✕</button>
+    <ul>
+        <li class="active"><a href="/gofly/travel-agency-03.html">Home</a></li>
+        <!-- Dynamic categories will be inserted here -->
+        <li><a href="/gofly/about.html">About</a></li>
+        <li><a href="/gofly/contact.html">Contact Us</a></li>
+        <li>
+            <a href="tel:+998901234567">📞 +998 90 123 45 67</a>
+        </li>
+        <!-- Admin button in mobile (shown if logged in) -->
+        <li id="mobileAdminLi" style="display: none;">
+            <a href="/admin/">👤 Admin Panel</a>
+        </li>
+    </ul>
+</div>
+
+<!-- Header JavaScript -->
+<script>
+// Language Selector
+function toggleLanguageDropdown() {
+    const dropdown = document.getElementById('languageDropdown');
+    dropdown.classList.toggle('show');
+}
+
+function changeLang(lang) {
+    document.getElementById('currentLang').textContent = lang;
+    toggleLanguageDropdown();
+    // Here you can add language change logic
+    console.log('Language changed to:', lang);
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    const langSelector = document.querySelector('.language-selector');
+    if (langSelector && !langSelector.contains(e.target)) {
+        document.getElementById('languageDropdown').classList.remove('show');
+    }
+});
+
+// Mobile Menu Toggle
+function toggleMobileMenu() {
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileMenu.classList.toggle('active');
+}
+
+// Check if user is logged in (Admin button visibility)
+function checkAdminAccess() {
+    const token = localStorage.getItem('accessToken');
+    const adminBtn = document.getElementById('adminBtn');
+    const mobileAdminLi = document.getElementById('mobileAdminLi');
+
+    if (token) {
+        if (adminBtn) adminBtn.style.display = 'flex';
+        if (mobileAdminLi) mobileAdminLi.style.display = 'block';
+    }
+}
+
+// Set active menu item based on current page
+function setActiveMenuItem() {
+    const currentPath = window.location.pathname;
+    const menuItems = document.querySelectorAll('.menu-list > li');
+
+    menuItems.forEach(item => {
+        item.classList.remove('active');
+        const link = item.querySelector('a');
+        if (link && currentPath.includes(link.getAttribute('href'))) {
+            item.classList.add('active');
+        }
+    });
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    checkAdminAccess();
+    setActiveMenuItem();
+});
+</script>
