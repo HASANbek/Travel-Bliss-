@@ -779,7 +779,7 @@ a.primary-btn1 {
         <!-- Main Banner Swiper -->
         <div class="banner-swiper-container">
             <div class="swiper banner-main-swiper">
-                <div class="swiper-wrapper">
+                <div class="swiper-wrapper" id="homepage-destinations-container">
                     <div class="swiper-slide">
                         <img src="assets/img/home1/tour-package-img1.jpg" alt="Samarkand Registan">
                     </div>
@@ -2194,7 +2194,7 @@ a.primary-btn1 {
 
         <!-- See All Destinations Link -->
         <div class="text-center" style="margin-top: 50px;">
-            <a href="destination-details.html" class="see-all-link">
+            <a href="destinations.html" class="see-all-link">
                 See all destinations
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -2208,7 +2208,7 @@ a.primary-btn1 {
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize Swiper
-    const destinationsSwiper = new Swiper('.explore-destinations-slider', {
+    window.destinationsSwiper = new Swiper('.explore-destinations-slider', {
         slidesPerView: 1,
         spaceBetween: 30,
         loop: true,
@@ -4229,6 +4229,7 @@ document.getElementById('blogModal').addEventListener('click', function(e) {
     if (e.target === this) closeBlogModal();
 });
 </script>
+<script src="assets/js/homepage-destinations-api.js"></script>
 </body>
 
 </html>
