@@ -8190,7 +8190,12 @@ function populateFolderSelects() {
                         metaDesc: dest.metaDesc || '',
                         slug: dest.slug || '',
                         keywords: dest.keywords || '',
-                        lastUpdated: dest.updatedAt ? new Date(dest.updatedAt).toISOString().split('T')[0] : ''
+                        lastUpdated: dest.updatedAt ? new Date(dest.updatedAt).toISOString().split('T')[0] : '',
+                        // Complex fields
+                        popularPlaces: dest.popularPlaces || [],
+                        features: dest.features || [],
+                        seasons: dest.seasons || [],
+                        faq: dest.faq || []
                     };
                 });
                 renderDestinationsTable();
@@ -8552,7 +8557,12 @@ function populateFolderSelects() {
             keywords: document.getElementById('destKeywords').value,
             isActive: status === 'active',
             isFeatured: document.getElementById('destFeatured').classList.contains('active'),
-            homepage: document.getElementById('destHomepage').classList.contains('active')
+            homepage: document.getElementById('destHomepage').classList.contains('active'),
+            // Preserve complex fields from existing destination
+            popularPlaces: currentDestination ? currentDestination.popularPlaces : [],
+            features: currentDestination ? currentDestination.features : [],
+            seasons: currentDestination ? currentDestination.seasons : [],
+            faq: currentDestination ? currentDestination.faq : []
         };
 
         try {
