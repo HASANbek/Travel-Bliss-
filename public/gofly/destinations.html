@@ -31,24 +31,42 @@
         .page-header h1 { font-size: 42px; margin-bottom: 15px; }
         .page-header p { font-size: 18px; opacity: 0.9; }
         .page-content { padding: 40px; }
+        .filter-bar {
+            display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;
+        }
+        .filter-select {
+            padding: 10px 16px; border: 2px solid #e5e7eb; border-radius: 10px;
+            font-size: 14px; background: white; cursor: pointer; transition: all 0.3s;
+        }
+        .filter-select:hover { border-color: #667eea; }
         .destinations-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 30px; margin-top: 20px;
         }
         .destination-card {
             background: #f9fafb; border-radius: 15px; overflow: hidden;
-            transition: all 0.3s; cursor: pointer;
+            transition: all 0.3s; cursor: pointer; position: relative;
         }
         .destination-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
         .destination-img {
             width: 100%; height: 200px; object-fit: cover;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
+        .featured-badge {
+            position: absolute; top: 15px; right: 15px;
+            background: #fbbf24; color: #92400e; padding: 6px 12px;
+            border-radius: 20px; font-size: 12px; font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
         .destination-info { padding: 20px; }
-        .destination-name { font-size: 22px; color: #333; margin-bottom: 10px; }
-        .destination-desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 15px; }
+        .destination-name { font-size: 22px; color: #333; margin-bottom: 8px; }
+        .destination-location { font-size: 13px; color: #6b7280; margin-bottom: 10px; display: flex; align-items: center; gap: 4px; }
+        .destination-desc { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 15px;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .destination-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+        .tag { background: #e0e7ff; color: #4338ca; padding: 4px 10px; border-radius: 12px; font-size: 12px; }
         .destination-meta { display: flex; justify-content: space-between; align-items: center; }
-        .tour-count { background: #e0e7ff; color: #4338ca; padding: 5px 12px; border-radius: 20px; font-size: 13px; }
+        .category-badge { background: #dbeafe; color: #1e40af; padding: 5px 12px; border-radius: 20px; font-size: 13px; text-transform: capitalize; }
         .loading { text-align: center; padding: 60px; color: #666; font-size: 18px; }
         @media (max-width: 768px) {
             .page-header h1 { font-size: 32px; }
@@ -67,6 +85,19 @@
                 <p>O'zbekistonning eng go'zal joylari</p>
             </div>
             <div class="page-content">
+                <div class="filter-bar">
+                    <select id="categoryFilter" class="filter-select" onchange="filterDestinations()">
+                        <option value="">Barcha kategoriyalar</option>
+                    </select>
+                    <select id="countryFilter" class="filter-select" onchange="filterDestinations()">
+                        <option value="">Barcha mamlakatlar</option>
+                    </select>
+                    <select id="statusFilter" class="filter-select" onchange="filterDestinations()">
+                        <option value="">Barchasi</option>
+                        <option value="active">Faol</option>
+                        <option value="featured">Featured</option>
+                    </select>
+                </div>
                 <div id="destinationsGrid" class="destinations-grid">
                     <div class="loading">Yuklanmoqda...</div>
                 </div>
@@ -75,32 +106,91 @@
     </div>
     <script>
         const API_BASE = window.location.origin;
+        let allDestinations = [];
+
         async function loadDestinations() {
             try {
                 const response = await fetch(`${API_BASE}/api/destinations`);
                 const result = await response.json();
-                const container = document.getElementById('destinationsGrid');
-                if (result.success && result.data && result.data.length > 0) {
-                    container.innerHTML = result.data.map(d => `
-                        <div class="destination-card" onclick="window.location.href='travel-agency-03.html?destination=${d._id}'">
-                            <img src="${d.image || ''}" alt="${d.name}" class="destination-img" onerror="this.style.background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'">
-                            <div class="destination-info">
-                                <h3 class="destination-name">${d.name}</h3>
-                                <p class="destination-desc">${d.description || ''}</p>
-                                <div class="destination-meta">
-                                    <span class="tour-count">${d.tourCount || 0} ta tur</span>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('');
+
+                if (result.success && result.data && result.data.destinations) {
+                    allDestinations = result.data.destinations.filter(d => d.isActive);
+                    populateFilters();
+                    renderDestinations();
                 } else {
-                    container.innerHTML = '<p style="text-align:center;color:#666;">Hozircha manzillar mavjud emas</p>';
+                    document.getElementById('destinationsGrid').innerHTML = '<p style="text-align:center;color:#666;">Hozircha manzillar mavjud emas</p>';
                 }
             } catch (error) {
                 console.error('Destinations yuklashda xatolik:', error);
                 document.getElementById('destinationsGrid').innerHTML = '<p style="text-align:center;color:#666;">Yuklashda xatolik</p>';
             }
         }
+
+        function populateFilters() {
+            // Categories
+            const categories = [...new Set(allDestinations.map(d => d.category).filter(c => c))];
+            const categoryFilter = document.getElementById('categoryFilter');
+            categoryFilter.innerHTML = '<option value="">Barcha kategoriyalar</option>' +
+                categories.map(c => `<option value="${c}">${c.charAt(0).toUpperCase() + c.slice(1)}</option>`).join('');
+
+            // Countries
+            const countries = [...new Set(allDestinations.map(d => d.country).filter(c => c))];
+            const countryFilter = document.getElementById('countryFilter');
+            countryFilter.innerHTML = '<option value="">Barcha mamlakatlar</option>' +
+                countries.map(c => `<option value="${c}">${c}</option>`).join('');
+        }
+
+        function filterDestinations() {
+            const category = document.getElementById('categoryFilter').value;
+            const country = document.getElementById('countryFilter').value;
+            const status = document.getElementById('statusFilter').value;
+
+            const filtered = allDestinations.filter(d => {
+                if (category && d.category !== category) return false;
+                if (country && d.country !== country) return false;
+                if (status === 'featured' && !d.isFeatured) return false;
+                return true;
+            });
+
+            renderDestinations(filtered);
+        }
+
+        function renderDestinations(destinations = allDestinations) {
+            const container = document.getElementById('destinationsGrid');
+
+            if (destinations.length === 0) {
+                container.innerHTML = '<p style="text-align:center;color:#666;">Hech qanday natija topilmadi</p>';
+                return;
+            }
+
+            container.innerHTML = destinations.map(d => {
+                const image = d.coverImage || d.heroImage || '';
+                const desc = d.shortDesc || d.tagline || d.description || '';
+                const tags = (d.tags || []).slice(0, 3);
+                const location = [d.city, d.country].filter(x => x).join(', ');
+
+                return `
+                    <div class="destination-card" onclick="window.location.href='destination-details.html?id=${d._id}'">
+                        ${d.isFeatured ? '<div class="featured-badge">⭐ Featured</div>' : ''}
+                        <img src="${image}" alt="${d.name}" class="destination-img" onerror="this.style.background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'">
+                        <div class="destination-info">
+                            <h3 class="destination-name">${d.name}</h3>
+                            ${location ? `<div class="destination-location">📍 ${location}</div>` : ''}
+                            <p class="destination-desc">${desc}</p>
+                            ${tags.length > 0 ? `
+                                <div class="destination-tags">
+                                    ${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                                </div>
+                            ` : ''}
+                            <div class="destination-meta">
+                                ${d.category ? `<span class="category-badge">${d.category}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
         document.addEventListener('DOMContentLoaded', loadDestinations);
     </script>
 </body>
