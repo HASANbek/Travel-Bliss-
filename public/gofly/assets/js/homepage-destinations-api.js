@@ -1,9 +1,5 @@
-// API Configuration - use existing API_BASE if available
-if (typeof API_BASE === 'undefined') {
-    var API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'http://localhost:4000'
-        : '';
-}
+// API_BASE is defined globally in gofly-api.js
+// No need to redeclare it here
 
 // Country code to flag emoji mapping
 const countryFlags = {
