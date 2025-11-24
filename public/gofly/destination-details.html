@@ -621,20 +621,62 @@
         }
 
         function displayDestination(dest) {
+            // Update Page Title
+            document.title = (dest.metaTitle || dest.name + ' - Travel Bliss');
+
             // Update Hero Section
-            document.getElementById('destinationName').textContent = dest.name;
-            document.getElementById('destinationTagline').textContent = dest.tagline;
+            document.getElementById('destinationName').textContent = dest.name || 'Destination';
+            document.getElementById('destinationTagline').textContent = dest.tagline || dest.shortDesc || '';
 
             // Update Info Cards
-            document.getElementById('capitalInfo').textContent = dest.capital;
-            document.getElementById('currencyInfo').textContent = dest.currency;
-            document.getElementById('languageInfo').textContent = dest.language;
+            document.getElementById('capitalInfo').textContent = dest.capital || '-';
+            document.getElementById('currencyInfo').textContent = dest.currency || '-';
+            document.getElementById('languageInfo').textContent = dest.language || '-';
 
             // Update Description
-            document.getElementById('destinationDescription').textContent = dest.description;
+            document.getElementById('destinationDescription').textContent = dest.description || dest.shortDesc || '';
 
-            // The rest (Popular Places, Features, Seasons, FAQ) would be updated here
-            // For now we keep static content as fallback
+            // Update Popular Places if data exists
+            if (dest.popularPlaces && dest.popularPlaces.length > 0) {
+                var placesRow = document.querySelectorAll('.section-spacing')[2].querySelector('.row');
+                if (placesRow) {
+                    placesRow.innerHTML = dest.popularPlaces.map(function(place) {
+                        return '<div class="col-md-6 col-lg-3"><div class="place-card"><img src="' + place.image + '" alt="' + place.name + '" class="place-image" onerror="this.src=\'https://via.placeholder.com/400x200\'"><div class="place-content"><h3 class="place-title">' + place.name + '</h3><p class="place-description">' + place.description + '</p><a href="' + place.mapLink + '" target="_blank" class="map-link">📍 View on Map</a></div></div></div>';
+                    }).join('');
+                }
+            }
+
+            // Update Features if data exists
+            if (dest.features && dest.features.length > 0) {
+                var featuresRow = document.querySelectorAll('.section-spacing')[3].querySelector('.row');
+                if (featuresRow) {
+                    featuresRow.innerHTML = dest.features.map(function(feature) {
+                        return '<div class="col-md-4"><div class="feature-card"><div class="feature-icon">' + feature.icon + '</div><h3 class="feature-title">' + feature.title + '</h3><p class="feature-description">' + feature.description + '</p></div></div>';
+                    }).join('');
+                }
+            }
+
+            // Update Seasons if data exists
+            if (dest.seasons && dest.seasons.length > 0) {
+                var seasonsSection = document.querySelectorAll('.section-spacing')[4];
+                if (seasonsSection) {
+                    var seasonsHTML = dest.seasons.map(function(season) {
+                        return '<div class="season-card"><div class="season-header"><div class="season-icon">' + season.icon + '</div><div><div class="season-title">' + season.name + ' (' + season.months + ')</div><div class="season-weather">Temperature: ' + season.temperature + '</div></div></div><p class="season-description">' + season.description + '</p></div>';
+                    }).join('');
+                    seasonsSection.innerHTML = '<h2 class="section-title">Best Time to Visit</h2>' + seasonsHTML;
+                }
+            }
+
+            // Update FAQ if data exists
+            if (dest.faq && dest.faq.length > 0) {
+                var faqSection = document.querySelectorAll('.section-spacing')[5];
+                if (faqSection) {
+                    var faqHTML = dest.faq.map(function(item) {
+                        return '<div class="faq-item"><div class="faq-question">' + item.question + '</div><div class="faq-answer">' + item.answer + '</div></div>';
+                    }).join('');
+                    faqSection.innerHTML = '<h2 class="section-title">Frequently Asked Questions</h2>' + faqHTML;
+                }
+            }
         }
 
         // Load destination data when page loads
