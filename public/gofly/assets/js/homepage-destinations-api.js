@@ -1,7 +1,9 @@
-// API Configuration
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:4000'
-    : '';
+// API Configuration - use existing API_BASE if available
+if (typeof API_BASE === 'undefined') {
+    var API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:4000'
+        : '';
+}
 
 // Country code to flag emoji mapping
 const countryFlags = {
