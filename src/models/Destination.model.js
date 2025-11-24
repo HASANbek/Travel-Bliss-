@@ -16,7 +16,6 @@ const destinationSchema = new mongoose.Schema({
   },
   tagline: {
     type: String,
-    required: [true, 'A destination must have a tagline'],
     trim: true,
     maxlength: [200, 'Tagline cannot exceed 200 characters']
   },
@@ -30,24 +29,73 @@ const destinationSchema = new mongoose.Schema({
     required: [true, 'A destination must have a country'],
     trim: true
   },
+  city: {
+    type: String,
+    trim: true
+  },
   capital: {
     type: String,
-    required: true,
     trim: true
   },
   currency: {
     type: String,
-    required: true,
     trim: true
   },
   language: {
     type: String,
-    required: true,
     trim: true
+  },
+  category: {
+    type: String,
+    trim: true,
+    lowercase: true
+  },
+  tags: [{
+    type: String,
+    trim: true
+  }],
+  shortDesc: {
+    type: String,
+    trim: true,
+    maxlength: [500, 'Short description cannot exceed 500 characters']
   },
   heroImage: {
     type: String,
     default: 'default-destination.jpg'
+  },
+  coverImage: {
+    type: String
+  },
+  galleryImages: [{
+    type: String
+  }],
+  videoUrl: {
+    type: String,
+    trim: true
+  },
+  bestTime: {
+    type: String,
+    trim: true
+  },
+  duration: {
+    type: String,
+    trim: true
+  },
+  cost: {
+    type: String,
+    trim: true
+  },
+  transport: {
+    type: String,
+    trim: true
+  },
+  mustVisit: [{
+    type: String,
+    trim: true
+  }],
+  weather: {
+    type: String,
+    trim: true
   },
   popularPlaces: [{
     name: {
@@ -113,11 +161,27 @@ const destinationSchema = new mongoose.Schema({
       required: true
     }
   }],
+  metaTitle: {
+    type: String,
+    trim: true
+  },
+  metaDesc: {
+    type: String,
+    trim: true
+  },
+  keywords: {
+    type: String,
+    trim: true
+  },
   isActive: {
     type: Boolean,
     default: true
   },
   isFeatured: {
+    type: Boolean,
+    default: false
+  },
+  homepage: {
     type: Boolean,
     default: false
   }
@@ -144,6 +208,7 @@ destinationSchema.pre('save', function(next) {
 destinationSchema.index({ slug: 1 });
 destinationSchema.index({ country: 1 });
 destinationSchema.index({ isActive: 1 });
+destinationSchema.index({ category: 1 });
 
 const Destination = mongoose.model('Destination', destinationSchema);
 

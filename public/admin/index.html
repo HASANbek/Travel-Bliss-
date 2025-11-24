@@ -8143,25 +8143,72 @@ function populateFolderSelects() {
     };
 
     
-    // ==================== DESTINATIONS MANAGEMENT ====================
-    var destinations = [
-        { id: 'd1', name: 'Samarkand', country: 'Uzbekistan', city: 'Samarkand', category: 'historical', shortDesc: 'Ancient city on the Silk Road with stunning Islamic architecture', tags: ['silk road', 'architecture', 'unesco'], status: 'active', featured: true, homepage: true, coverImage: 'https://images.unsplash.com/photo-1596484552834-6a58f850e0a1?w=800', galleryImages: [], videoUrl: '', bestTime: 'March to May', duration: '2-3 days', cost: '$500-800', transport: 'Metro, Taxi, Bus', mustVisit: ['Registan Square', 'Shah-i-Zinda', 'Gur-e-Amir'], weather: 'Continental climate with hot summers and cold winters', metaTitle: 'Samarkand - Ancient Silk Road City', metaDesc: 'Discover Samarkand, the pearl of the Silk Road', slug: 'samarkand-uzbekistan', keywords: 'samarkand, silk road, uzbekistan', lastUpdated: '2025-11-20' },
-        { id: 'd2', name: 'Bukhara', country: 'Uzbekistan', city: 'Bukhara', category: 'cultural', shortDesc: 'Living museum with 140+ architectural monuments', tags: ['unesco', 'culture', 'history'], status: 'active', featured: false, homepage: true, coverImage: 'https://images.unsplash.com/photo-1565008576549-57569a49371d?w=800', galleryImages: [], videoUrl: '', bestTime: 'April to June', duration: '2 days', cost: '$400-600', transport: 'Taxi, Walking', mustVisit: ['Poi Kalyan Complex', 'Ark Fortress', 'Lyabi Hauz'], weather: 'Hot dry summers, mild winters', metaTitle: 'Bukhara - Living Museum City', metaDesc: 'Explore Bukhara ancient architectural wonders', slug: 'bukhara-uzbekistan', keywords: 'bukhara, unesco, culture', lastUpdated: '2025-11-19' },
-        { id: 'd3', name: 'Khiva', country: 'Uzbekistan', city: 'Khiva', category: 'historical', shortDesc: 'Open-air museum city with perfectly preserved old town', tags: ['unesco', 'history', 'architecture'], status: 'draft', featured: false, homepage: false, coverImage: 'https://images.unsplash.com/photo-1580654842837-5d4b54eb1ca0?w=800', galleryImages: [], videoUrl: '', bestTime: 'April to June', duration: '1-2 days', cost: '$300-500', transport: 'Walking, Taxi', mustVisit: ['Itchan Kala', 'Kalta Minor', 'Tash Hauli Palace'], weather: 'Desert climate, very hot in summer', metaTitle: 'Khiva - Museum City', metaDesc: 'Visit Khiva perfectly preserved ancient city', slug: 'khiva-uzbekistan', keywords: 'khiva, museum city, unesco', lastUpdated: '2025-11-18' }
-    ];
-
+        // ==================== DESTINATIONS MANAGEMENT ====================
+    var destinations = [];
     var destinationCategories = ['Historical', 'Cultural', 'Nature', 'Adventure', 'Beach', 'Mountain'];
     var currentDestination = null;
     var destGalleryImages = [];
     var destCoverImageData = '';
     var autosaveInterval = null;
+    var isLoading = false;
+
+    // API Base URL
+    var API_BASE = window.location.origin;
+
+    // Load destinations from API
+    async function loadDestinations() {
+        try {
+            isLoading = true;
+            const response = await fetch(API_BASE + '/api/destinations');
+            const result = await response.json();
+
+            if (result.success && result.data.destinations) {
+                // Map backend data to admin panel format
+                destinations = result.data.destinations.map(function(dest) {
+                    return {
+                        id: dest._id,
+                        name: dest.name,
+                        country: dest.country,
+                        city: dest.city || '',
+                        category: dest.category || '',
+                        shortDesc: dest.shortDesc || dest.tagline || '',
+                        fullDesc: dest.description || '',
+                        tags: dest.tags || [],
+                        status: dest.isActive ? 'active' : 'draft',
+                        featured: dest.isFeatured || false,
+                        homepage: dest.homepage || false,
+                        coverImage: dest.coverImage || dest.heroImage || '',
+                        galleryImages: dest.galleryImages || [],
+                        videoUrl: dest.videoUrl || '',
+                        bestTime: dest.bestTime || '',
+                        duration: dest.duration || '',
+                        cost: dest.cost || '',
+                        transport: dest.transport || '',
+                        mustVisit: dest.mustVisit || [],
+                        weather: dest.weather || '',
+                        metaTitle: dest.metaTitle || '',
+                        metaDesc: dest.metaDesc || '',
+                        slug: dest.slug || '',
+                        keywords: dest.keywords || '',
+                        lastUpdated: dest.updatedAt ? new Date(dest.updatedAt).toISOString().split('T')[0] : ''
+                    };
+                });
+                renderDestinationsTable();
+                updateDestinationsStats();
+                populateCountryFilter();
+                populateCategoryFilter();
+            }
+        } catch (error) {
+            console.error('Error loading destinations:', error);
+            alert('Failed to load destinations. Using offline mode.');
+        } finally {
+            isLoading = false;
+        }
+    }
 
     // Initialize Destinations Page
     function initDestinations() {
-        renderDestinationsTable();
-        updateDestinationsStats();
-        populateCountryFilter();
-        populateCategoryFilter();
+        loadDestinations();
         startAutosave();
     }
 
@@ -8169,6 +8216,11 @@ function populateFolderSelects() {
     function renderDestinationsTable() {
         var filtered = getFilteredDestinations();
         var tbody = document.getElementById('destinationsTableBody');
+
+        if (isLoading) {
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px; color: #64748b;">Loading destinations...</td></tr>';
+            return;
+        }
 
         if (filtered.length === 0) {
             tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px; color: #94a3b8;">No destinations found</td></tr>';
@@ -8252,16 +8304,23 @@ function populateFolderSelects() {
     };
 
     // Bulk delete
-    window.bulkDeleteDestinations = function() {
+    window.bulkDeleteDestinations = async function() {
         var selected = Array.from(document.querySelectorAll('.dest-checkbox:checked')).map(function(cb) { return cb.dataset.id; });
         if (selected.length === 0) {
             alert('Please select destinations to delete');
             return;
         }
-        if (confirm('Delete ' + selected.length + ' destination(s)?')) {
-            destinations = destinations.filter(function(d) { return selected.indexOf(d.id) === -1; });
-            renderDestinationsTable();
-            updateDestinationsStats();
+        if (!confirm('Delete ' + selected.length + ' destination(s)?')) return;
+
+        try {
+            for (var i = 0; i < selected.length; i++) {
+                await fetch(API_BASE + '/api/destinations/' + selected[i], { method: 'DELETE' });
+            }
+            await loadDestinations();
+            alert('Destinations deleted successfully!');
+        } catch (error) {
+            console.error('Error deleting destinations:', error);
+            alert('Failed to delete some destinations');
         }
     };
 
@@ -8300,11 +8359,20 @@ function populateFolderSelects() {
         }
     };
 
-    window.deleteDestination = function(id) {
-        if (confirm('Delete this destination?')) {
-            destinations = destinations.filter(function(d) { return d.id !== id; });
-            renderDestinationsTable();
-            updateDestinationsStats();
+    window.deleteDestination = async function(id) {
+        if (!confirm('Delete this destination?')) return;
+
+        try {
+            const response = await fetch(API_BASE + '/api/destinations/' + id, { method: 'DELETE' });
+            if (response.ok) {
+                await loadDestinations();
+                alert('Destination deleted successfully!');
+            } else {
+                throw new Error('Failed to delete');
+            }
+        } catch (error) {
+            console.error('Error deleting destination:', error);
+            alert('Failed to delete destination');
         }
     };
 
@@ -8329,8 +8397,8 @@ function populateFolderSelects() {
         document.getElementById('destKeywords').value = dest.keywords || '';
         document.getElementById('destStatus').value = dest.status || 'draft';
 
-        if (dest.featured) document.getElementById('destFeatured').classList.add('active');
-        if (dest.homepage) document.getElementById('destHomepage').classList.add('active');
+        document.getElementById('destFeatured').classList.toggle('active', dest.featured);
+        document.getElementById('destHomepage').classList.toggle('active', dest.homepage);
 
         if (dest.coverImage) {
             document.getElementById('destCoverPreview').src = dest.coverImage;
@@ -8449,7 +8517,7 @@ function populateFolderSelects() {
     };
 
     // Save destination
-    window.saveDestination = function() {
+    window.saveDestination = async function() {
         var name = document.getElementById('destName').value;
         if (!name) {
             alert('Please enter destination name');
@@ -8457,17 +8525,20 @@ function populateFolderSelects() {
         }
 
         var mustVisit = Array.from(document.getElementById('destMustVisit').querySelectorAll('input')).map(function(inp) { return inp.value; }).filter(function(v) { return v; });
+        var status = document.getElementById('destStatus').value;
 
+        // Map admin panel data to backend format
         var destData = {
-            id: currentDestination ? currentDestination.id : 'd' + Date.now(),
             name: name,
+            tagline: document.getElementById('destShortDesc').value,
+            description: document.getElementById('destFullDesc').innerHTML,
             country: document.getElementById('destCountry').value,
             city: document.getElementById('destCity').value,
             category: document.getElementById('destCategory').value,
-            tags: document.getElementById('destTags').value.split(',').map(function(t) { return t.trim(); }),
+            tags: document.getElementById('destTags').value.split(',').map(function(t) { return t.trim(); }).filter(function(t) { return t; }),
             shortDesc: document.getElementById('destShortDesc').value,
-            fullDesc: document.getElementById('destFullDesc').innerHTML,
             coverImage: destCoverImageData,
+            heroImage: destCoverImageData,
             galleryImages: destGalleryImages,
             videoUrl: document.getElementById('destVideoUrl').value,
             bestTime: document.getElementById('destBestTime').value,
@@ -8478,26 +8549,34 @@ function populateFolderSelects() {
             weather: document.getElementById('destWeather').value,
             metaTitle: document.getElementById('destMetaTitle').value,
             metaDesc: document.getElementById('destMetaDesc').value,
-            slug: document.getElementById('destSlug').value,
             keywords: document.getElementById('destKeywords').value,
-            status: document.getElementById('destStatus').value,
-            featured: document.getElementById('destFeatured').classList.contains('active'),
-            homepage: document.getElementById('destHomepage').classList.contains('active'),
-            lastUpdated: new Date().toISOString().split('T')[0]
+            isActive: status === 'active',
+            isFeatured: document.getElementById('destFeatured').classList.contains('active'),
+            homepage: document.getElementById('destHomepage').classList.contains('active')
         };
 
-        if (currentDestination) {
-            var index = destinations.findIndex(function(d) { return d.id === currentDestination.id; });
-            destinations[index] = destData;
-        } else {
-            destinations.push(destData);
-        }
+        try {
+            var url = API_BASE + '/api/destinations' + (currentDestination ? '/' + currentDestination.id : '');
+            var method = currentDestination ? 'PUT' : 'POST';
 
-        closeDestinationModal();
-        renderDestinationsTable();
-        updateDestinationsStats();
-        populateCountryFilter();
-        alert('Destination saved!');
+            var response = await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(destData)
+            });
+
+            if (response.ok) {
+                closeDestinationModal();
+                await loadDestinations();
+                alert('Destination saved successfully!');
+            } else {
+                var error = await response.json();
+                throw new Error(error.message || 'Failed to save destination');
+            }
+        } catch (error) {
+            console.error('Error saving destination:', error);
+            alert('Failed to save destination: ' + error.message);
+        }
     };
 
     // Auto-save
@@ -8505,10 +8584,10 @@ function populateFolderSelects() {
         stopAutosave();
         autosaveInterval = setInterval(function() {
             if (document.getElementById('destinationModal').classList.contains('show')) {
-                console.log('Auto-saving destination...');
-                // In real app, save to localStorage or API
+                console.log('Auto-save running...');
+                // Auto-save can be enhanced to save draft automatically
             }
-        }, 30000); // every 30 seconds
+        }, 30000);
     }
 
     function stopAutosave() {
