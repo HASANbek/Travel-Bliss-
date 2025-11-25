@@ -8165,6 +8165,7 @@ function populateFolderSelects() {
             if (result.success && result.data.destinations) {
                 // Map backend data to admin panel format
                 destinations = result.data.destinations.map(function(dest) {
+                    console.log('Loading destination:', dest.name, 'ID:', dest._id, 'Length:', dest._id.length);
                     return {
                         id: dest._id,
                         name: dest.name,
